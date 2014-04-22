@@ -1,0 +1,10 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+out/
+doc/
+
+# Java
+*.class
+hs_err_pid*
