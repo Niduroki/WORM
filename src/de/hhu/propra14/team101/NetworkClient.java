@@ -26,10 +26,10 @@ public class NetworkClient {
     private String send (String data) {
         if (this.user_id != 0) {
             // We're signed in, send our user id, too
-            return "...";
+            return "123";
         } else {
             // We're not signed in yet
-            return "...";
+            return "123";
         }
     }
 
