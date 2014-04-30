@@ -1,5 +1,9 @@
 package de.hhu.propra14.team101;
 
+/**
+ * Class to do networking on the client side
+ */
+
 public class NetworkClient {
 
     private int port;
