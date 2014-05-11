@@ -63,7 +63,7 @@ public class Main extends Application{
     public void start (Stage primaryStage){
         primaryStage.setTitle("SPIELNAME");
         GridPane grid =new GridPane ();
-        grid.setAlignment(Pos.TOP_LEFT);
+        grid.setAlignment(Pos.CENTER_LEFT);
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
@@ -74,25 +74,25 @@ public class Main extends Application{
 
         Button btn = new Button("      START      ");
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.TOP_LEFT);
+        hbBtn.setAlignment(Pos.CENTER_LEFT);
         hbBtn.getChildren().add(btn);
         grid.add(hbBtn, 1, 2);
 
         Button btn1 = new Button("MULTIPLAYER");
         hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.TOP_LEFT);
+        hbBtn.setAlignment(Pos.CENTER_LEFT);
         hbBtn.getChildren().add(btn1);
         grid.add(hbBtn, 1, 4);
 
         Button btn2 = new Button("   OPTIONEN  ");
         hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.TOP_LEFT);
+        hbBtn.setAlignment(Pos.CENTER_LEFT);
         hbBtn.getChildren().add(btn2);
         grid.add(hbBtn, 1, 6);
 
         Button btn3 = new Button("  VERLASSEN  ");
         hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.TOP_LEFT);
+        hbBtn.setAlignment(Pos.CENTER_LEFT);
         hbBtn.getChildren().add(btn3);
         grid.add(hbBtn, 1, 8);
 
