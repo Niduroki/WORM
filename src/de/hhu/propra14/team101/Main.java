@@ -10,12 +10,16 @@ public class Main {
         GUI GUI;
         SettingSaves SettingSaves;
         Physics Physics;
-        Worms[] WormArray = new Worms[5];
+        Worm[] WormArray = new Worm[5];
+        Terrain Terrain;
 
         Network = new NetworkClient(12345, "123.123.123.123");
         GUI = new GUI();
         SettingSaves = new SettingSaves();
         Physics = new Physics();
+        Terrain = new Terrain();
+
+        //Terrain.draw(gc);
 
         System.out.println("Hello world");
     }

@@ -1,5 +1,7 @@
 package de.hhu.propra14.team101;
 
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * Class to create terrain with
  */
@@ -93,5 +95,5 @@ abstract public class AbstractTerrainObject {
     /**
      * Draws the object
      */
-    abstract public void draw ();
+    abstract public void draw (GraphicsContext gc);
 }

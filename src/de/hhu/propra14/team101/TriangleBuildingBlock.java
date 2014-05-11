@@ -1,5 +1,8 @@
 package de.hhu.propra14.team101;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 /**
  * Class to create terrain with
  */
@@ -29,7 +32,8 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
     /**
      * Draws the block
      */
-    public void draw () {
+    public void draw (GraphicsContext gc) {
+        gc.setFill(Color.web(Integer.toHexString(this.color)));
         //
     }
 }
