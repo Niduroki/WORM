@@ -23,6 +23,14 @@ public class Terrain {
         ObjectArray[12][18] = new TriangleBuildingBlock(120, 180, false);
         ObjectArray[12][19] = new SquareBuildingBlock(120, 190);
         ObjectArray[13][19] = new TriangleBuildingBlock(130, 190, false);
+        ObjectArray[15][19] = new Obstacle(150, 190);
+        ObjectArray[15][18] = new Obstacle(150, 180);
+        ObjectArray[15][17] = new Obstacle(150, 170);
+
+        ObjectArray[1][18] = new Worm(10, 180);
+        ObjectArray[4][18] = new Worm(40, 180);
+        ObjectArray[20][18] = new Worm(200, 180);
+        ObjectArray[26][18] = new Worm(260, 180);
     }
 
     /**
