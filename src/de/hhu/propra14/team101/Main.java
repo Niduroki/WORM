@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
@@ -39,26 +40,13 @@ import javafx.stage.Stage;
  * Main class, that starts the program
  */
 
-public class Main extends Application{
-    public static void main (String[] args) {
-        launch(args);
-        NetworkClient Network;
-        GUI GUI;
-        SettingSaves SettingSaves;
-        Physics Physics;
-        Worm[] WormArray = new Worm[5];
-        Terrain Terrain;
+public class Main extends Application
+{
+    private Canvas field;
+    private Terrain terrain;
 
-        Network = new NetworkClient(12345, "123.123.123.123");
-        GUI = new GUI();
-        SettingSaves = new SettingSaves();
-        Physics = new Physics();
-        Terrain = new Terrain();
 
-        //Terrain.draw(gc);
 
-        System.out.println("Hello world");
-    }
     @Override
     public void start (Stage primaryStage){
         primaryStage.setTitle("SPIELNAME");
@@ -70,7 +58,6 @@ public class Main extends Application{
         Text scenetitle = new Text("SPIELNAME");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
-
 
         Button btn = new Button("      START      ");
         HBox hbBtn = new HBox(10);
@@ -96,11 +83,15 @@ public class Main extends Application{
         hbBtn.getChildren().add(btn3);
         grid.add(hbBtn, 1, 8);
 
+        field  = new Canvas(400, 300);
+        grid.add(field, 2, 0, 1, 9);
+        terrain = new Terrain();
+
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent e) {
-
+                terrain.draw(field.getGraphicsContext2D());
             }
         });
 
