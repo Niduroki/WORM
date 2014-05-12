@@ -40,12 +40,18 @@ import javafx.stage.Stage;
  * Main class, that starts the program
  */
 
-public class Main extends Application
-{
+public class Main extends Application {
     private Canvas field;
     private Terrain terrain;
 
+    public static void main (String[] args) {
+        launch(args);
+    }
 
+    /**
+     * @param primaryStage
+     * Shows the main GUI
+     */
 
     @Override
     public void start (Stage primaryStage){
@@ -100,4 +106,36 @@ public class Main extends Application
         primaryStage.show();
 
     }
+
+
+    /**
+     * @param stageName
+     * Starts the game
+     */
+    public void startGame (Stage stageName) {
+        Physics Physics;
+        Worm[] WormArray = new Worm[5];
+        Terrain Terrain;
+
+        Physics = new Physics();
+
+        // Create and draw the terrain
+        Terrain = new Terrain();
+        //Terrain.draw(gc);
+
+        // Create and draw some worms
+        WormArray[0] = new Worm(100, 50);
+        WormArray[1] = new Worm(120, 40);
+        WormArray[2] = new Worm(140, 40);
+        WormArray[3] = new Worm(170, 60);
+        WormArray[4] = new Worm(180, 50);
+        for (int i = 0; i < WormArray.length; i++) {
+            //WormArray[i].draw(gc);
+        }
+    }
+
+    public void updateGame (Stage stageName) {
+        //
+    }
 }
+

@@ -12,24 +12,53 @@ import java.io.InputStreamReader;
  * Class to create Worms
  */
 
-public class Worm extends  AbstractTerrainObject
-{
-    public Weapons[] WeaponArray = new Weapons[10];
+public class Worm {
 
-    public Worm(int x, int y)
-    {
-        super(x, y);
+    public Weapons[] WeaponArray;
+
+    public int health = 100;
+
+    protected int x_coord;
+
+    protected int y_coord;
+
+    public Worm (int x_coord, int y_coord) {
+        this.x_coord = x_coord;
+        this.y_coord = y_coord;
     }
 
     /**
-     * Draws the object
-     *
-     * @param gc
+     * @param gc Canvas to draw on
+     * Draws the worm
      */
-    @Override
-    public void draw(GraphicsContext gc)
-    {
-            Image image = new Image("worm.gif");
-            gc.drawImage(image, this.x_coord, this.y_coord);
+    public void draw (GraphicsContext gc) {
+        Image image = new Image("worm.gif");
+        gc.drawImage(image, this.x_coord, this.y_coord);
+    }
+
+    public void move (char direction) {
+        if (direction == 'l') {
+            this.x_coord -= 5;
+            // Send movement-left to the server
+        } else if (direction == 'r') {
+            this.x_coord += 5;
+            // Send movement-right to the server
+        }
+    }
+
+    public void jump (char direction) {
+        //
+    }
+
+    public void loseHealth (int amount) {
+        this.health -= amount;
+
+        if (this.health <= 0) {
+            this.die();
+        }
+    }
+
+    public void die () {
+        //
     }
 }
