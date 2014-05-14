@@ -2,12 +2,12 @@ package de.hhu.propra14.team101;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public class Grenade  extends Weapons {
+public class AtomicBomb  extends Weapons {
 
-    public Grenade() {
-        this.name = "Grenade";
-        this.damage = 20;
-        this.radius = 3.0;
+    public AtomicBomb() {
+        this.name = "Atomic bomb";
+        this.damage = 25;
+        this.radius = 20.5;
     }
 
     public void fire() {

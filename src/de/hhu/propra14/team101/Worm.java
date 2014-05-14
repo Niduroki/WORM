@@ -29,7 +29,7 @@ public class Worm {
         this.y_coord = y_coord;
         this.WeaponArray = new Weapons[3];
         WeaponArray[0] = new Bazooka();
-        WeaponArray[1] = new Atomicbomb();
+        WeaponArray[1] = new AtomicBomb();
         WeaponArray[2] = new Grenade();
     }
 

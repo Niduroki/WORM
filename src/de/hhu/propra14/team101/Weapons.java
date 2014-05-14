@@ -1,5 +1,7 @@
 package de.hhu.propra14.team101;
 
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * Class to supply weapons
  */
@@ -13,4 +15,6 @@ abstract public class Weapons {
     public double radius;
 
     abstract public void fire ();
+
+    abstract public void draw (GraphicsContext gc);
 }
