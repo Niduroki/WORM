@@ -27,10 +27,10 @@ public class Terrain {
         ObjectArray[15][18] = new Obstacle(150, 180);
         ObjectArray[15][17] = new Obstacle(150, 170);
 
-        ObjectArray[1][18] = new Worm(10, 180);
+        /*ObjectArray[1][18] = new Worm(10, 180);
         ObjectArray[4][18] = new Worm(40, 180);
         ObjectArray[20][18] = new Worm(200, 180);
-        ObjectArray[26][18] = new Worm(260, 180);
+        ObjectArray[26][18] = new Worm(260, 180);*/
     }
 
     /**

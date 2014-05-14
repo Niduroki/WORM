@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
@@ -41,8 +42,9 @@ import javafx.stage.Stage;
  */
 
 public class Main extends Application {
-    private Canvas field;
-    private Terrain terrain;
+
+    protected GridPane grid;
+    private Stage primaryStage;
 
     public static void main (String[] args) {
         launch(args);
@@ -54,65 +56,131 @@ public class Main extends Application {
      */
 
     @Override
-    public void start (Stage primaryStage){
-        primaryStage.setTitle("SPIELNAME");
-        GridPane grid =new GridPane ();
-        grid.setAlignment(Pos.CENTER_LEFT);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
-        Text scenetitle = new Text("SPIELNAME");
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(scenetitle, 0, 0, 2, 1);
+    public void start (final Stage primaryStage){
+        primaryStage.setTitle("Name");
+        this.grid = new GridPane();
+        this.grid.setAlignment(Pos.CENTER_LEFT);
+        this.grid.setHgap(10);
+        this.grid.setVgap(10);
+        this.grid.setPadding(new Insets(25, 25, 25, 25));
 
-        Button btn = new Button("      START      ");
-        HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
-        hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 1, 2);
+        this.addMainButtons();
 
-        Button btn1 = new Button("MULTIPLAYER");
-        hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
-        hbBtn.getChildren().add(btn1);
-        grid.add(hbBtn, 1, 4);
-
-        Button btn2 = new Button("   OPTIONEN  ");
-        hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
-        hbBtn.getChildren().add(btn2);
-        grid.add(hbBtn, 1, 6);
-
-        Button btn3 = new Button("  VERLASSEN  ");
-        hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
-        hbBtn.getChildren().add(btn3);
-        grid.add(hbBtn, 1, 8);
-
-        field  = new Canvas(400, 300);
-        grid.add(field, 2, 0, 1, 9);
-        terrain = new Terrain();
-
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-                terrain.draw(field.getGraphicsContext2D());
-            }
-        });
-
+        this.primaryStage = primaryStage;
         Scene scene = new Scene(grid, 575,400);
         primaryStage.setScene(scene);
         primaryStage.show();
 
     }
 
+    private void addMainButtons() {
+        // Clean up
+        grid.getChildren().clear();
+
+        // Create buttons and other objects
+        Text scenetitle = new Text("Name");
+        Button startbtn = new Button("Start");
+        Button multibtn = new Button("Multiplayer");
+        Button optionsbtn = new Button("Options");
+        Button exitbtn = new Button("Exit");
+
+        // Configure each object
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
+        // Add the objects
+        this.grid.add(scenetitle, 0, 0, 2, 1);
+        this.grid.add(startbtn, 1, 2);
+        this.grid.add(multibtn, 1, 4);
+        this.grid.add(optionsbtn, 1, 6);
+        this.grid.add(exitbtn, 1, 8);
+
+        startbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Canvas field  = new Canvas(400, 300);
+                grid.getChildren().clear();
+                grid.add(field, 0, 0);
+                startGame(field.getGraphicsContext2D());
+            }
+        });
+
+        multibtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                //
+            }
+        });
+
+        optionsbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addOptionsButtons();
+            }
+        });
+
+        exitbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                primaryStage.close();
+            }
+        });
+    }
+
+    private void addOptionsButtons() {
+        // Clean up
+        this.grid.getChildren().clear();
+
+        // Create buttons and other objects
+        Text scenetitle = new Text("Options");
+        Button option1btn = new Button("Zigzag the flux");
+        Button option2btn = new Button("Overclock the proton");
+        Button option3btn = new Button("Exterminate the dalek");
+        Button returnbtn = new Button("Return");
+
+        // Configure each object
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
+        // Add the objects
+        this.grid.add(scenetitle, 0, 0, 2, 1);
+        this.grid.add(option1btn, 1, 2);
+        this.grid.add(option2btn, 1, 4);
+        this.grid.add(option3btn, 1, 6);
+        this.grid.add(returnbtn, 1, 8);
+
+        option1btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                //
+            }
+        });
+
+        option2btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                //
+            }
+        });
+
+        option3btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                //
+            }
+        });
+
+        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addMainButtons();
+            }
+        });
+    }
 
     /**
-     * @param stageName
-     * Starts the game
+     * @param gc
+     * Starts the gameplay
      */
-    public void startGame (Stage stageName) {
+    public void startGame (GraphicsContext gc) { //Stage stageName) {
         Physics Physics;
         Worm[] WormArray = new Worm[5];
         Terrain Terrain;
@@ -121,16 +189,16 @@ public class Main extends Application {
 
         // Create and draw the terrain
         Terrain = new Terrain();
-        //Terrain.draw(gc);
+        Terrain.draw(gc);
 
         // Create and draw some worms
-        WormArray[0] = new Worm(100, 50);
-        WormArray[1] = new Worm(120, 40);
-        WormArray[2] = new Worm(140, 40);
-        WormArray[3] = new Worm(170, 60);
-        WormArray[4] = new Worm(180, 50);
+        WormArray[0] = new Worm(50, 180);
+        WormArray[1] = new Worm(110, 160);
+        WormArray[2] = new Worm(200, 180);
+        WormArray[3] = new Worm(250, 180);
+        WormArray[4] = new Worm(300, 180);
         for (int i = 0; i < WormArray.length; i++) {
-            //WormArray[i].draw(gc);
+            WormArray[i].draw(gc);
         }
     }
 
