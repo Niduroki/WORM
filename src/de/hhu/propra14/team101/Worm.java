@@ -16,6 +16,8 @@ public class Worm {
 
     public Weapons[] WeaponArray;
 
+    public int armor = 0;
+
     public int health = 100;
 
     protected int x_coord;
@@ -25,6 +27,10 @@ public class Worm {
     public Worm (int x_coord, int y_coord) {
         this.x_coord = x_coord;
         this.y_coord = y_coord;
+        this.WeaponArray = new Weapons[3];
+        WeaponArray[0] = new Bazooka();
+        WeaponArray[1] = new Atomicbomb();
+        WeaponArray[2] = new Grenade();
     }
 
     /**
