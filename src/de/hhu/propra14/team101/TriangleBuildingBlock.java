@@ -34,13 +34,11 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
      */
     public void draw (GraphicsContext gc) {
         gc.setFill(Color.web(Integer.toHexString(this.color)));
-        if(this.getSlopedLeft() == true)
-        {
+        if (this.slopedLeft) {
             double[] xPoints = {this.x_coord, this.x_coord + this.size, this.x_coord + this.size};
-            double[] yPoints = {this.y_coord+this.size,this.y_coord,this.y_coord+this.size};
-            gc.fillPolygon(xPoints,yPoints,3);
-        } else
-        {
+            double[] yPoints = {this.y_coord + this.size, this.y_coord, this.y_coord + this.size};
+            gc.fillPolygon(xPoints, yPoints,3);
+        } else {
             double[] xPoints = {this.x_coord + this.size, this.x_coord, this.x_coord};
             double[] yPoints = {this.y_coord + this.size, this.y_coord, this.y_coord + this.size};
             gc.fillPolygon(xPoints, yPoints, 3);

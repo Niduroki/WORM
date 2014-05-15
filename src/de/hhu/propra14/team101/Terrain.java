@@ -10,13 +10,18 @@ public class Terrain {
     private AbstractTerrainObject[][] ObjectArray;
 
     public Terrain () {
+        // TODO load this from a file instead
+        MapSaves mapLoader = new MapSaves();
+        //this.ObjectArray = mapLoader.load("Flatlands.ymp");
         this.ObjectArray = new AbstractTerrainObject[40][30];
 
+        // TODO this should be removed then
         for (int i = 0; i < 40; i++) {
             for (int j = 20; j < 30; j++) {
                 ObjectArray[i][j] = new SquareBuildingBlock(i * 10, j * 10);
             }
         }
+
         ObjectArray[10][19] = new TriangleBuildingBlock(100, 190, true);
         ObjectArray[11][18] = new TriangleBuildingBlock(110, 180, true);
         ObjectArray[11][19] = new SquareBuildingBlock(110, 190);
@@ -26,11 +31,6 @@ public class Terrain {
         ObjectArray[15][19] = new Obstacle(150, 190);
         ObjectArray[15][18] = new Obstacle(150, 180);
         ObjectArray[15][17] = new Obstacle(150, 170);
-
-        /*ObjectArray[1][18] = new Worm(10, 180);
-        ObjectArray[4][18] = new Worm(40, 180);
-        ObjectArray[20][18] = new Worm(200, 180);
-        ObjectArray[26][18] = new Worm(260, 180);*/
     }
 
     /**

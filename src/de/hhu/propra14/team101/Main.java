@@ -180,25 +180,25 @@ public class Main extends Application {
      * @param gc
      * Starts the gameplay
      */
-    public void startGame (GraphicsContext gc) { //Stage stageName) {
-        Physics Physics;
-        Worm[] WormArray = new Worm[5];
-        Terrain Terrain;
+    public void startGame (GraphicsContext gc) {
+        Physics physics;
+        Worm[] wormArray = new Worm[5];
+        Terrain terrain;
 
-        Physics = new Physics();
+        physics = new Physics();
 
         // Create and draw the terrain
-        Terrain = new Terrain();
-        Terrain.draw(gc);
+        terrain = new Terrain();
+        terrain.draw(gc);
 
         // Create and draw some worms
-        WormArray[0] = new Worm(50, 180);
-        WormArray[1] = new Worm(110, 160);
-        WormArray[2] = new Worm(200, 180);
-        WormArray[3] = new Worm(250, 180);
-        WormArray[4] = new Worm(300, 180);
-        for (int i = 0; i < WormArray.length; i++) {
-            WormArray[i].draw(gc);
+        wormArray[0] = new Worm(50, 180);
+        wormArray[1] = new Worm(110, 160);
+        wormArray[2] = new Worm(200, 180);
+        wormArray[3] = new Worm(250, 180);
+        wormArray[4] = new Worm(300, 180);
+        for (int i = 0; i < wormArray.length; i++) {
+            wormArray[i].draw(gc);
         }
     }
 
