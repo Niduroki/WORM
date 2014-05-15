@@ -13,11 +13,11 @@ public class Terrain {
         // TODO load this from a file instead
         MapSaves mapLoader = new MapSaves();
         //this.ObjectArray = mapLoader.load("Flatlands.ymp");
-        this.ObjectArray = new AbstractTerrainObject[40][30];
+        this.ObjectArray = new AbstractTerrainObject[60][40];
 
         // TODO this should be removed then
-        for (int i = 0; i < 40; i++) {
-            for (int j = 20; j < 30; j++) {
+        for (int i = 0; i < 60; i++) {
+            for (int j = 20; j < 40; j++) {
                 ObjectArray[i][j] = new SquareBuildingBlock(i * 10, j * 10);
             }
         }

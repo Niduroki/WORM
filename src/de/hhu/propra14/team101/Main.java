@@ -9,32 +9,23 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
-import javafx.scene.effect.Glow;
-import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 
 /**
@@ -59,15 +50,17 @@ public class Main extends Application {
     public void start (final Stage primaryStage){
         primaryStage.setTitle("Name");
         this.grid = new GridPane();
-        this.grid.setAlignment(Pos.CENTER_LEFT);
+        this.grid.setAlignment(Pos.CENTER);
         this.grid.setHgap(10);
         this.grid.setVgap(10);
         this.grid.setPadding(new Insets(25, 25, 25, 25));
 
         this.addMainButtons();
 
+        //this.grid.setGridLinesVisible(true);
+
         this.primaryStage = primaryStage;
-        Scene scene = new Scene(grid, 575,400);
+        Scene scene = new Scene(grid, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -97,7 +90,7 @@ public class Main extends Application {
         startbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Canvas field  = new Canvas(400, 300);
+                Canvas field  = new Canvas(600, 400);
                 grid.getChildren().clear();
                 grid.add(field, 0, 0);
                 startGame(field.getGraphicsContext2D());
@@ -136,15 +129,21 @@ public class Main extends Application {
         Button option2btn = new Button("Overclock the proton");
         Button option3btn = new Button("Exterminate the dalek");
         Button returnbtn = new Button("Return");
+        TextField textField = new TextField();
+        ComboBox selection = new ComboBox();
+        CheckBox checkBox = new CheckBox();
 
         // Configure each object
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
         this.grid.add(scenetitle, 0, 0, 2, 1);
-        this.grid.add(option1btn, 1, 2);
-        this.grid.add(option2btn, 1, 4);
-        this.grid.add(option3btn, 1, 6);
+        this.grid.add(textField, 1, 2);
+        this.grid.add(option1btn, 2, 2);
+        this.grid.add(selection, 1, 4);
+        this.grid.add(option2btn, 2, 4);
+        this.grid.add(checkBox, 1, 6);
+        this.grid.add(option3btn, 2, 6);
         this.grid.add(returnbtn, 1, 8);
 
         option1btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -181,6 +180,30 @@ public class Main extends Application {
      * Starts the gameplay
      */
     public void startGame (GraphicsContext gc) {
+
+        final EventHandler<KeyEvent> keypressHandler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                    // Close the game
+                    addMainButtons();
+                    // Remove this handler, so we can't "reset" in main menu
+                    primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
+                } else if (keyEvent.getCode() == KeyCode.LEFT) {
+                    // Move left
+                } else if (keyEvent.getCode() == KeyCode.RIGHT) {
+                    // Move right
+                } else if (keyEvent.getCode() == KeyCode.I) {
+                    // Show the inventory
+                } else if (keyEvent.getCode() == KeyCode.N) {
+                    // TODO temporary hack to start a next round
+                } else if (keyEvent.getCode() == KeyCode.M) {
+                    // TODO temporary hack to load a new map
+                }
+            }
+        };
+        this.primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keypressHandler);
+
         Physics physics;
         Worm[] wormArray = new Worm[5];
         Terrain terrain;
