@@ -73,6 +73,22 @@ public class Game {
     }
 
     /**
+     * Get number of level, which is selected.
+     */
+    public int getSelectedLevelNumber()
+    {
+        return selectedLevelNumber;
+    }
+
+    /**
+     * Get count of levels.
+     */
+    public int getCountLevel()
+    {
+        return levels.size();
+    }
+
+    /**
      * Add a level. Overwrites level, if level number exists.
      * @param level The new level.
      * @exception java.lang.IllegalArgumentException if level number is negative
@@ -117,6 +133,8 @@ public class Game {
      * @param gc GraphicsContext to draw the level.
      */
     public void draw(GraphicsContext gc) {
+        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+
         levels.get(selectedLevelNumber).getTerrain().draw(gc);
 
         for(int i = 0; i < players.size();i++)
@@ -128,10 +146,15 @@ public class Game {
         }
     }
 
-    /*
+    /**
     * Start the level and initialize terrain and worms.
+    * @exception java.lang.IllegalArgumentException if levelNumber does not exist.
     */
     public void startLevel(int levelNumber, GraphicsContext gc) {
+        if(levelNumber >= levels.size() || levelNumber < 0)
+        {
+            throw new IllegalArgumentException("Level does not exist.");
+        }
         selectedLevelNumber = levelNumber;
         levels.get(selectedLevelNumber).setWormsStartPosition(players);
 

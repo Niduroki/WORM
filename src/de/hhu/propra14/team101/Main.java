@@ -33,7 +33,8 @@ import javafx.scene.text.Text;
  */
 public class Main extends Application {
 
-    private Game game;
+    protected Canvas field;
+    protected Game game;
     protected GridPane grid;
     private Stage primaryStage;
 
@@ -88,7 +89,7 @@ public class Main extends Application {
         startbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Canvas field  = new Canvas(600, 400); new Canvas();
+                field  = new Canvas(600, 400);
                 grid.getChildren().clear();
                 grid.add(field, 0, 0);
                 startGameplay(field.getGraphicsContext2D());
@@ -199,6 +200,12 @@ public class Main extends Application {
                 } else if(keyEvent.getCode() == KeyCode.L)
                 {
                     //switch to next level
+                    if(game.getSelectedLevelNumber() + 1 < game.getCountLevel())
+                    {
+                        game.startLevel(game.getSelectedLevelNumber() + 1, field.getGraphicsContext2D());
+                    } else {
+                        game.startLevel(0, field.getGraphicsContext2D());
+                    }
                 }
             }
         };
