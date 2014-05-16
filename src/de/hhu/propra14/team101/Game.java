@@ -33,6 +33,9 @@ public class Game {
             terrain1.addTerrainObject(new SquareBuildingBlock(i, terrain1.getHeight()-2));
         }
         terrain1.addTerrainObject(new Obstacle(7, terrain1.getHeight()-3));
+        terrain1.addTerrainObject(new TriangleBuildingBlock(0, terrain1.getHeight()-3, false));
+        terrain1.addTerrainObject(new TriangleBuildingBlock(terrain1.getWidth()-1, terrain1.getHeight()-3, true));
+
         Level level1 = new Level(terrain1, 0);
         for(int i = 5; i < 35;i += 5) {
             level1.addWormStartPosition(i, terrain1.getHeight() -4);

@@ -36,22 +36,26 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
         gc.setFill(Color.web(Integer.toHexString(this.color)));
         if (this.getSlopedLeft()) {
             double[] xPoints = {
-                    this.xCoordinate,
-                    this.xCoordinate + TriangleBuildingBlock.getSize(),
-                    xCoordinate + TriangleBuildingBlock.getSize()
+                    this.xCoordinate * TriangleBuildingBlock.getSize(),
+                    this.xCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize(),
+                    this.xCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize()
             };
             double[] yPoints = {
-                    this.yCoordinate + TriangleBuildingBlock.getSize(),
-                    yCoordinate,
-                    yCoordinate + TriangleBuildingBlock.getSize()
+                    this.yCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize(),
+                    this.yCoordinate * TriangleBuildingBlock.getSize(),
+                    this.yCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize()
             };
             gc.fillPolygon(xPoints, yPoints, 3);
         } else {
-            double[] xPoints = {this.xCoordinate + TriangleBuildingBlock.getSize(), this.xCoordinate, this.xCoordinate};
+            double[] xPoints = {
+                    this.xCoordinate * TriangleBuildingBlock.getSize(),
+                    this.xCoordinate * TriangleBuildingBlock.getSize(),
+                    this.xCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize()
+            };
             double[] yPoints = {
-                    this.yCoordinate + TriangleBuildingBlock.getSize(),
-                    this.yCoordinate,
-                    this.yCoordinate + TriangleBuildingBlock.getSize()
+                    this.yCoordinate * TriangleBuildingBlock.getSize(),
+                    this.yCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize(),
+                    this.yCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize()
             };
             gc.fillPolygon(xPoints, yPoints, 3);
         }
