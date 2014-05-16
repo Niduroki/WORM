@@ -5,46 +5,69 @@ import javafx.scene.canvas.GraphicsContext;
 /**
  * Class to create terrain
  */
-
 public class Terrain {
-    private AbstractTerrainObject[][] ObjectArray;
+    private AbstractTerrainObject[][] terrainObjects;
+    private int width;
+    private int height;
 
-    public Terrain () {
+    public Terrain (int width, int height) {
         // TODO load this from a file instead
-        MapSaves mapLoader = new MapSaves();
+        //MapSaves mapLoader = new MapSaves();
         //this.ObjectArray = mapLoader.load("Flatlands.ymp");
-        this.ObjectArray = new AbstractTerrainObject[60][40];
+        this.terrainObjects = new AbstractTerrainObject[width][height];
+        this.width = width;
+        this.height = height;
+    }
 
-        // TODO this should be removed then
-        for (int i = 0; i < 60; i++) {
-            for (int j = 20; j < 40; j++) {
-                ObjectArray[i][j] = new SquareBuildingBlock(i * 10, j * 10);
-            }
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void addTerrainObject(AbstractTerrainObject object, int xCoordinate, int yCoordinate)
+    {
+        if (xCoordinate < 0 || xCoordinate > width || yCoordinate < 0 || yCoordinate > height) {
+            throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
         }
 
-        ObjectArray[10][19] = new TriangleBuildingBlock(100, 190, true);
-        ObjectArray[11][18] = new TriangleBuildingBlock(110, 180, true);
-        ObjectArray[11][19] = new SquareBuildingBlock(110, 190);
-        ObjectArray[12][18] = new TriangleBuildingBlock(120, 180, false);
-        ObjectArray[12][19] = new SquareBuildingBlock(120, 190);
-        ObjectArray[13][19] = new TriangleBuildingBlock(130, 190, false);
-        ObjectArray[15][19] = new Obstacle(150, 190);
-        ObjectArray[15][18] = new Obstacle(150, 180);
-        ObjectArray[15][17] = new Obstacle(150, 170);
+        terrainObjects[xCoordinate][yCoordinate] = object;
     }
 
     /**
-     * @param gc GraphicsContext to draw on
      * Draws the terrain
+     * @param gc GraphicsContext to draw on
      */
     public void draw (GraphicsContext gc) {
-        for (int i = 0; i < ObjectArray.length; i++) {
-            for (int j = 0; j < ObjectArray[i].length; j++) {
-                if(ObjectArray[i][j] != null)
-                {
-                    ObjectArray[i][j].draw(gc);
+        for (int i = 0; i < terrainObjects.length; i++) {
+            for (int j = 0; j < terrainObjects[i].length; j++) {
+                if (terrainObjects[i][j] != null) {
+                    terrainObjects[i][j].draw(gc, i, j);
                 }
             }
         }
+    }
+
+    public boolean isTerrain(int xCoordinate, int yCoordinate) {
+        if (xCoordinate < 0 || xCoordinate > width || yCoordinate < 0 || yCoordinate > height) {
+            throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
+        }
+
+        if (terrainObjects[xCoordinate][yCoordinate] == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void removeTerrainObject(int xCoordinate, int yCoordinate) {
+        if (xCoordinate < 0 || xCoordinate > width || yCoordinate < 0 || yCoordinate > height) {
+            throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
+        }
+
+        SquareBuildingBlock dummy = null;
+        this.terrainObjects[xCoordinate][yCoordinate] = dummy;
     }
 }

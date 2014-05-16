@@ -14,15 +14,11 @@ public class Obstacle extends AbstractTerrainObject {
 
     protected boolean destructibility = false;
 
-    public Obstacle (int x, int y) {
-        super(x, y);
-    }
-
     /**
      * Draws the obstacle
      */
-    public void draw (GraphicsContext gc) {
+    public void draw (GraphicsContext gc, int xCoordinate, int yCoordinate) {
         gc.setFill(Color.web(Integer.toHexString(this.color)));
-        gc.fillOval(this.x_coord, this.y_coord, this.size, this.size);
+        gc.fillOval(xCoordinate * this.getSize(), yCoordinate * this.getSize(), this.getSize(), this.getSize());
     }
 }

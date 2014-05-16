@@ -31,9 +31,9 @@ import javafx.scene.text.Text;
 /**
  * Main class, that starts the program
  */
-
 public class Main extends Application {
 
+    private Game game;
     protected GridPane grid;
     private Stage primaryStage;
 
@@ -45,7 +45,6 @@ public class Main extends Application {
      * @param primaryStage
      * Shows the main GUI
      */
-
     @Override
     public void start (final Stage primaryStage){
         primaryStage.setTitle("Name");
@@ -63,7 +62,6 @@ public class Main extends Application {
         Scene scene = new Scene(grid, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
 
     private void addMainButtons() {
@@ -90,10 +88,10 @@ public class Main extends Application {
         startbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Canvas field  = new Canvas(600, 400);
+                Canvas field  = new Canvas(600, 400); new Canvas();
                 grid.getChildren().clear();
                 grid.add(field, 0, 0);
-                startGame(field.getGraphicsContext2D());
+                startGameplay(field.getGraphicsContext2D());
             }
         });
 
@@ -176,10 +174,9 @@ public class Main extends Application {
     }
 
     /**
-     * @param gc
      * Starts the gameplay
      */
-    public void startGame (GraphicsContext gc) {
+    public void startGameplay(GraphicsContext gc) {
 
         final EventHandler<KeyEvent> keypressHandler = new EventHandler<KeyEvent>() {
             @Override
@@ -199,30 +196,16 @@ public class Main extends Application {
                     // TODO temporary hack to start a next round
                 } else if (keyEvent.getCode() == KeyCode.M) {
                     // TODO temporary hack to load a new map
+                } else if(keyEvent.getCode() == KeyCode.L)
+                {
+                    //switch to next level
                 }
             }
         };
         this.primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keypressHandler);
 
-        Physics physics;
-        Worm[] wormArray = new Worm[5];
-        Terrain terrain;
-
-        physics = new Physics();
-
-        // Create and draw the terrain
-        terrain = new Terrain();
-        terrain.draw(gc);
-
-        // Create and draw some worms
-        wormArray[0] = new Worm(50, 180);
-        wormArray[1] = new Worm(110, 160);
-        wormArray[2] = new Worm(200, 180);
-        wormArray[3] = new Worm(250, 180);
-        wormArray[4] = new Worm(300, 180);
-        for (int i = 0; i < wormArray.length; i++) {
-            wormArray[i].draw(gc);
-        }
+        game = new Game();
+        game.startLevel(0, gc);
     }
 
     public void updateGame (Stage stageName) {

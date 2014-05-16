@@ -16,8 +16,8 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
 
     protected boolean slopedLeft = true;
 
-    public TriangleBuildingBlock (int x, int y, boolean slopedLeft) {
-        super(x, y);
+    public TriangleBuildingBlock (boolean slopedLeft) {
+        super();
         this.slopedLeft = slopedLeft;
     }
 
@@ -32,15 +32,15 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
     /**
      * Draws the block
      */
-    public void draw (GraphicsContext gc) {
+    public void draw (GraphicsContext gc, int xCoordinate, int yCoordinate) {
         gc.setFill(Color.web(Integer.toHexString(this.color)));
-        if (this.slopedLeft) {
-            double[] xPoints = {this.x_coord, this.x_coord + this.size, this.x_coord + this.size};
-            double[] yPoints = {this.y_coord + this.size, this.y_coord, this.y_coord + this.size};
-            gc.fillPolygon(xPoints, yPoints,3);
+        if (this.getSlopedLeft()) {
+            double[] xPoints = {xCoordinate, xCoordinate + this.getSize(), xCoordinate + this.getSize()};
+            double[] yPoints = {yCoordinate + this.getSize(), yCoordinate, yCoordinate + this.getSize()};
+            gc.fillPolygon(xPoints, yPoints, 3);
         } else {
-            double[] xPoints = {this.x_coord + this.size, this.x_coord, this.x_coord};
-            double[] yPoints = {this.y_coord + this.size, this.y_coord, this.y_coord + this.size};
+            double[] xPoints = {xCoordinate + this.getSize(), xCoordinate, xCoordinate};
+            double[] yPoints = {yCoordinate + this.getSize(), yCoordinate, yCoordinate + this.getSize()};
             gc.fillPolygon(xPoints, yPoints, 3);
         }
 

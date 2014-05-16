@@ -6,57 +6,26 @@ import javafx.scene.canvas.GraphicsContext;
  * Class to create terrain with
  */
 abstract public class AbstractTerrainObject {
-
-    protected int x_coord;
-
-    protected int y_coord;
-
-    protected int size;
+    protected static int size = 10;
 
     protected int color;
 
     protected boolean destructible;
 
     /**
-     * @param x X-Coordinate of the object
-     * @param y Y-Coordinate of the object
-     */
-    public AbstractTerrainObject (int x, int y) {
-        this.x_coord = x;
-        this.y_coord = y;
-    }
-
-    /**
-     * @param coords Coordinates [0] is X [1] is Y
-     * Sets coordinates
-     */
-    public void setCoords (int[] coords) {
-        this.x_coord = coords[0];
-        this.y_coord = coords[1];
-    }
-
-    /**
-     * @return Coordinates [0] is X [1] is Y
-     * Gets coordinates
-     */
-    public int[] getCoords () {
-        return new int[]{this.x_coord, this.y_coord};
-    }
-
-    /**
      * @param size Size for the object
      * Sets the size
      */
-    public void setSize (int size) {
-        this.size = size;
+    public static void setSize (int size) {
+        AbstractTerrainObject.size = size;
     }
 
     /**
      * @return Size of the object
      * Gets the size
      */
-    public int getSize () {
-        return this.size;
+    public static int getSize () {
+        return AbstractTerrainObject.size;
     }
 
     /**
@@ -95,5 +64,5 @@ abstract public class AbstractTerrainObject {
     /**
      * Draws the object
      */
-    abstract public void draw (GraphicsContext gc);
+    abstract public void draw (GraphicsContext gc, int xCoordinate, int yCoordinate);
 }

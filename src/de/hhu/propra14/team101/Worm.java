@@ -20,17 +20,35 @@ public class Worm {
 
     public int health = 100;
 
-    protected int x_coord;
+    protected int x_coord = 0;
 
-    protected int y_coord;
+    protected int y_coord = 0;
 
-    public Worm (int x_coord, int y_coord) {
-        this.x_coord = x_coord;
-        this.y_coord = y_coord;
+    public Worm () {
         this.WeaponArray = new Weapons[3];
         WeaponArray[0] = new Bazooka();
         WeaponArray[1] = new AtomicBomb();
         WeaponArray[2] = new Grenade();
+    }
+
+    public int getXCoordinate()
+    {
+        return x_coord;
+    }
+
+    public void setXCoordinate(int xCoordinate)
+    {
+        x_coord = xCoordinate;
+    }
+
+    public int getYCoordinate()
+    {
+        return y_coord;
+    }
+
+    public void setYCoordinate(int yCoordinate)
+    {
+        y_coord = yCoordinate;
     }
 
     /**
@@ -38,7 +56,7 @@ public class Worm {
      * Draws the worm
      */
     public void draw (GraphicsContext gc) {
-        Image image = new Image("de/hhu/propra14/team101/resources/worm.gif");
+        Image image = new Image("resources/worm.gif");
         gc.drawImage(image, this.x_coord, this.y_coord);
     }
 
