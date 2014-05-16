@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101;
 
+import java.io.FileNotFoundException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 import javafx.application.Application;
@@ -89,7 +90,7 @@ public class Main extends Application {
         startbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                field  = new Canvas(600, 400);
+                field = new Canvas(600, 400);
                 grid.getChildren().clear();
                 grid.add(field, 0, 0);
                 startGameplay(field.getGraphicsContext2D());
@@ -195,13 +196,15 @@ public class Main extends Application {
                     // Show the inventory
                 } else if (keyEvent.getCode() == KeyCode.N) {
                     // TODO temporary hack to start a next round
-                } else if (keyEvent.getCode() == KeyCode.M) {
-                    // TODO temporary hack to load a new map
-                } else if(keyEvent.getCode() == KeyCode.L)
-                {
+                } else if (keyEvent.getCode() == KeyCode.S) {
+                    // Test saving
+                    //MapSaves saver = new MapSaves();
+                    //saver.save(game.getLevel(0).getTerrain(), "Map1.yml");
+                    //saver.save(game.getLevel(1).getTerrain(), "Map2.yml");
+                    //saver.save(game.getLevel(2).getTerrain(), "Map3.yml");
+                } else if(keyEvent.getCode() == KeyCode.L) {
                     //switch to next level
-                    if(game.getSelectedLevelNumber() + 1 < game.getCountLevel())
-                    {
+                    if (game.getSelectedLevelNumber() + 1 < game.getCountLevel()) {
                         game.startLevel(game.getSelectedLevelNumber() + 1, field.getGraphicsContext2D());
                     } else {
                         game.startLevel(0, field.getGraphicsContext2D());

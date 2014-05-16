@@ -6,9 +6,11 @@ import javafx.scene.canvas.GraphicsContext;
  * Class to create terrain
  */
 public class Terrain {
-    private AbstractTerrainObject[][] terrainObjects;
+    protected AbstractTerrainObject[][] terrainObjects;
     private int width;
     private int height;
+
+    protected String theme;
 
     /**
      * Initialize a new terrain.

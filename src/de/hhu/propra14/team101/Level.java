@@ -69,7 +69,7 @@ public class Level {
     public void addWormStartPosition(int xPosition, int yPosition)
     {
         int[] position = new int[2];
-       position[0] = xPosition;
+        position[0] = xPosition;
         position[1] = yPosition;
         wormStartPoints.add(position);
     }
