@@ -12,6 +12,35 @@ abstract public class AbstractTerrainObject {
 
     protected boolean destructible;
 
+    protected int xCoordinate;
+    protected int yCoordinate;
+
+    /**
+     * @param x X-Coordinate of the object
+     * @param y Y-Coordinate of the object
+     */
+    public AbstractTerrainObject (int x, int y) {
+        this.xCoordinate = x;
+        this.yCoordinate = y;
+    }
+
+    /**
+     * @param coords Coordinates [0] is X [1] is Y
+     * Sets coordinates
+     */
+    public void setCoords (int[] coords) {
+        this.xCoordinate = coords[0];
+        this.yCoordinate = coords[1];
+    }
+
+    /**
+     * @return Coordinates [0] is X [1] is Y
+     * Gets coordinates
+     */
+    public int[] getCoords () {
+        return new int[]{this.xCoordinate, this.yCoordinate};
+    }
+
     /**
      * @param size Size for the object
      * Sets the size
@@ -64,5 +93,5 @@ abstract public class AbstractTerrainObject {
     /**
      * Draws the object
      */
-    abstract public void draw (GraphicsContext gc, int xCoordinate, int yCoordinate);
+    abstract public void draw (GraphicsContext gc);
 }

@@ -27,12 +27,12 @@ public class Game {
 
         //level1
         Terrain terrain1 = new Terrain(60, 40);
-        for(int i = 0; i < 60; i++)
+        for(int i = 0; i < terrain1.getWidth(); i++)
         {
-            terrain1.addTerrainObject(new SquareBuildingBlock(), i, terrain1.getHeight()- 1);
-            terrain1.addTerrainObject(new SquareBuildingBlock(), i, terrain1.getHeight() -2);
+            terrain1.addTerrainObject(new SquareBuildingBlock(i, terrain1.getHeight()-1));
+            terrain1.addTerrainObject(new SquareBuildingBlock(i, terrain1.getHeight()-2));
         }
-        terrain1.addTerrainObject(new Obstacle(), 7, terrain1.getHeight() -3);
+        terrain1.addTerrainObject(new Obstacle(7, terrain1.getHeight()-3));
         Level level1 = new Level(terrain1, 0);
         for(int i = 5; i < 35;i += 5) {
             level1.addWormStartPosition(i, terrain1.getHeight() -4);
@@ -43,12 +43,12 @@ public class Game {
         Terrain terrain2 = new Terrain(60, 40);
         for(int i = 0; i < 60; i++)
         {
-            terrain2.addTerrainObject(new SquareBuildingBlock(), i, terrain2.getHeight()- 1);
-            terrain2.addTerrainObject(new SquareBuildingBlock(), i, terrain2.getHeight()- 2);
-            terrain2.addTerrainObject(new SquareBuildingBlock(), i, terrain2.getHeight()- 3);
+            terrain2.addTerrainObject(new SquareBuildingBlock(i, terrain2.getHeight()- 1));
+            terrain2.addTerrainObject(new SquareBuildingBlock(i, terrain2.getHeight()- 2));
+            terrain2.addTerrainObject(new SquareBuildingBlock(i, terrain2.getHeight()- 3));
         }
-        terrain2.addTerrainObject(new Obstacle(), 7, terrain2.getHeight()- 4);
-        terrain2.addTerrainObject(new Obstacle(), 7, terrain2.getHeight()- 5);
+        terrain2.addTerrainObject(new Obstacle(7, terrain2.getHeight()- 4));
+        terrain2.addTerrainObject(new Obstacle(7, terrain2.getHeight()- 5));
         Level level2 = new Level(terrain2, 1);
         for(int i = 4; i < 35;i += 5) {
             level2.addWormStartPosition(i, terrain2.getHeight()- 5);
@@ -59,12 +59,12 @@ public class Game {
         Terrain terrain3 = new Terrain(60, 40);
         for(int i = 0; i < 55; i++)
         {
-            terrain3.addTerrainObject(new SquareBuildingBlock(), i, terrain3.getHeight()- 1);
-            terrain3.addTerrainObject(new SquareBuildingBlock(), i, terrain3.getHeight()- 2);
-            terrain3.addTerrainObject(new SquareBuildingBlock(), i, terrain3.getHeight()- 3);
+            terrain3.addTerrainObject(new SquareBuildingBlock(i, terrain3.getHeight()- 1));
+            terrain3.addTerrainObject(new SquareBuildingBlock(i, terrain3.getHeight()- 2));
+            terrain3.addTerrainObject(new SquareBuildingBlock(i, terrain3.getHeight()- 3));
         }
-        terrain3.addTerrainObject(new Obstacle(), 7, terrain3.getHeight()- 4);
-        terrain3.addTerrainObject(new Obstacle(), 7, terrain3.getHeight()- 5);
+        terrain3.addTerrainObject(new Obstacle(7, terrain3.getHeight()- 4));
+        terrain3.addTerrainObject(new Obstacle(7, terrain3.getHeight()- 5));
         Level level3 = new Level(terrain3, 2);
         for(int i = 4; i < 35;i += 5) {
             level3.addWormStartPosition(i, terrain3.getHeight()- 5);

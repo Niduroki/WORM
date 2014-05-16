@@ -14,10 +14,10 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
 
     protected boolean destructibility = true;
 
-    protected boolean slopedLeft = true;
+    protected boolean slopedLeft;
 
-    public TriangleBuildingBlock (boolean slopedLeft) {
-        super();
+    public TriangleBuildingBlock (int x, int y, boolean slopedLeft) {
+        super(x, y);
         this.slopedLeft = slopedLeft;
     }
 
@@ -32,15 +32,27 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
     /**
      * Draws the block
      */
-    public void draw (GraphicsContext gc, int xCoordinate, int yCoordinate) {
+    public void draw (GraphicsContext gc) {
         gc.setFill(Color.web(Integer.toHexString(this.color)));
         if (this.getSlopedLeft()) {
-            double[] xPoints = {xCoordinate, xCoordinate + this.getSize(), xCoordinate + this.getSize()};
-            double[] yPoints = {yCoordinate + this.getSize(), yCoordinate, yCoordinate + this.getSize()};
+            double[] xPoints = {
+                    this.xCoordinate,
+                    this.xCoordinate + TriangleBuildingBlock.getSize(),
+                    xCoordinate + TriangleBuildingBlock.getSize()
+            };
+            double[] yPoints = {
+                    this.yCoordinate + TriangleBuildingBlock.getSize(),
+                    yCoordinate,
+                    yCoordinate + TriangleBuildingBlock.getSize()
+            };
             gc.fillPolygon(xPoints, yPoints, 3);
         } else {
-            double[] xPoints = {xCoordinate + this.getSize(), xCoordinate, xCoordinate};
-            double[] yPoints = {yCoordinate + this.getSize(), yCoordinate, yCoordinate + this.getSize()};
+            double[] xPoints = {this.xCoordinate + TriangleBuildingBlock.getSize(), this.xCoordinate, this.xCoordinate};
+            double[] yPoints = {
+                    this.yCoordinate + TriangleBuildingBlock.getSize(),
+                    this.yCoordinate,
+                    this.yCoordinate + TriangleBuildingBlock.getSize()
+            };
             gc.fillPolygon(xPoints, yPoints, 3);
         }
 

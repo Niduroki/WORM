@@ -41,8 +41,11 @@ public class Terrain {
     /**
      * Add a terrain object.
      */
-    public void addTerrainObject(AbstractTerrainObject object, int xCoordinate, int yCoordinate)
+    public void addTerrainObject(AbstractTerrainObject object)
     {
+        int xCoordinate = object.xCoordinate;
+        int yCoordinate = object.yCoordinate;
+
         if (xCoordinate < 0 || xCoordinate > width || yCoordinate < 0 || yCoordinate > height) {
             throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
         }
@@ -58,7 +61,7 @@ public class Terrain {
         for (int i = 0; i < terrainObjects.length; i++) {
             for (int j = 0; j < terrainObjects[i].length; j++) {
                 if (terrainObjects[i][j] != null) {
-                    terrainObjects[i][j].draw(gc, i, j);
+                    terrainObjects[i][j].draw(gc);
                 }
             }
         }

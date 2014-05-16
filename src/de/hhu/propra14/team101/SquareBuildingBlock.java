@@ -14,11 +14,20 @@ public class SquareBuildingBlock extends AbstractTerrainObject {
 
     protected boolean destructibility = true;
 
+    public SquareBuildingBlock (int x, int y) {
+        super(x, y);
+    }
+
     /**
      * Draws the block
      */
-    public void draw (GraphicsContext gc, int xCoordinate, int yCoordinate) {
+    public void draw (GraphicsContext gc) {
         gc.setFill(Color.web(Integer.toHexString(this.color)));
-        gc.fillRect(xCoordinate * this.getSize(), yCoordinate * getSize(), this.getSize(), this.getSize());
+        gc.fillRect(
+                this.xCoordinate * SquareBuildingBlock.getSize(),
+                this.yCoordinate * SquareBuildingBlock.getSize(),
+                SquareBuildingBlock.getSize(),
+                SquareBuildingBlock.getSize()
+        );
     }
 }
