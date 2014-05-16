@@ -1,16 +1,20 @@
 package de.hhu.propra14.team101;
 
+import com.sun.istack.internal.Nullable;
 import javafx.scene.canvas.*;
 import java.util.*;
 
 /**
- *
+ * Game class to manage players, levels etc.
  */
 public class Game {
     private ArrayList<Player> players = new ArrayList<Player>();
     private ArrayList<Level> levels = new ArrayList<Level>();
     private int selectedLevelNumber;
 
+    /**
+    * Initialize a new game.
+    */
     public Game() {
         //TODO: Remove hard-coded players and levels
         //player 1
@@ -45,7 +49,7 @@ public class Game {
         }
         terrain2.addTerrainObject(new Obstacle(), 7, terrain2.getHeight()- 4);
         terrain2.addTerrainObject(new Obstacle(), 7, terrain2.getHeight()- 5);
-        Level level2 = new Level(terrain2, 0);
+        Level level2 = new Level(terrain2, 1);
         for(int i = 4; i < 35;i += 5) {
             level2.addWormStartPosition(i, terrain2.getHeight()- 5);
         }
@@ -61,19 +65,55 @@ public class Game {
         }
         terrain3.addTerrainObject(new Obstacle(), 7, terrain3.getHeight()- 4);
         terrain3.addTerrainObject(new Obstacle(), 7, terrain3.getHeight()- 5);
-        Level level3 = new Level(terrain3, 0);
+        Level level3 = new Level(terrain3, 2);
         for(int i = 4; i < 35;i += 5) {
             level3.addWormStartPosition(i, terrain3.getHeight()- 5);
         }
         levels.add(level3);
     }
 
-    public void addLevel(Level level, int index)
+    /**
+     * Add a level. Overwrites level, if level number exists.
+     * @param level The new level.
+     * @exception java.lang.IllegalArgumentException if level number is negative
+     */
+    public void addLevel(Level level)
     {
-        levels.add(index, level);
+        if(level.getNumber() < 0)
+        {
+            throw new IllegalArgumentException("level number must be positive or null");
+        }
+
+        if(level.getNumber() < levels.size())
+        {
+            levels.set(level.getNumber(), level);
+        } else {
+            int index;
+            for(index = levels.size(); index < level.getNumber(); index++) {
+                levels.add(null);
+            }
+            levels.add(level);
+        }
     }
 
     /**
+     * Gets a level.
+     * @param number the level number
+     * @return a specific level
+     * @exception java.lang.IllegalArgumentException
+     */
+    @Nullable
+    public Level getLevel(int number) {
+        if(number >= levels.size() || number < 0)
+        {
+            throw new IllegalArgumentException("number has to exist");
+        }
+
+        return  levels.get(number);
+    }
+
+    /**
+     * Draw the level.
      * @param gc GraphicsContext to draw the level.
      */
     public void draw(GraphicsContext gc) {
@@ -88,6 +128,9 @@ public class Game {
         }
     }
 
+    /*
+    * Start the level and initialize terrain and worms.
+    */
     public void startLevel(int levelNumber, GraphicsContext gc) {
         selectedLevelNumber = levelNumber;
         levels.get(selectedLevelNumber).setWormsStartPosition(players);
