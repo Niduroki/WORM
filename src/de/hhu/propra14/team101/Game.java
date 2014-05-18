@@ -13,12 +13,15 @@ public class Game {
     private ArrayList<Player> players = new ArrayList<Player>();
     private ArrayList<Level> levels = new ArrayList<Level>();
     private int selectedLevelNumber;
+    private Terrain currentTerrain;
+    public int round = 0;
+    public int turnOfPlayer = 0;
 
     /**
     * Initialize a new game.
     */
     public Game() {
-        //TODO: Remove hard-coded players and levels
+        //TODO: Remove hard-coded players
         //player 1
         Worm[] wormsPlayer1 = {new Worm(), new Worm(), new Worm()};
         players.add(new Player(wormsPlayer1,"Local"));
@@ -122,21 +125,53 @@ public class Game {
     }
 
     /**
+     * Gets the current terrain.
+     * @return the current terrain
+     */
+    public Terrain getCurrentTerrain() {
+        return currentTerrain;
+    }
+
+    /**
+     * Sets the current terrain.
+     * @param terrain Terrain to be used
+    */
+    public void setCurrentTerrain(Terrain terrain) {
+        this.currentTerrain = terrain;
+    }
+
+    /**
+     * Gets the players
+     * @return ArrayList of players
+     */
+    public ArrayList<Player> getPlayers() {
+        return this.players;
+    }
+
+    /**
+     * Sets the players
+     * @param players ArrayList of players
+     */
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    /**
      * Draw the level.
      * @param gc GraphicsContext to draw the level.
      */
     public void draw(GraphicsContext gc) {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
-        levels.get(selectedLevelNumber).getTerrain().draw(gc);
+        this.currentTerrain.draw(gc);
 
-        for(int i = 0; i < players.size();i++)
-        {
-            for(int indexWorms = 0;indexWorms < players.get(i).wormArray.length;indexWorms++)
-            {
+        for (int i = 0; i < players.size();i++) {
+            for(int indexWorms = 0;indexWorms < players.get(i).wormArray.length;indexWorms++) {
                 players.get(i).wormArray[indexWorms].draw(gc);
             }
         }
+
+        // TODO draw any flying weapons here
     }
 
     /**
@@ -149,6 +184,7 @@ public class Game {
             throw new IllegalArgumentException("Level does not exist.");
         }
         selectedLevelNumber = levelNumber;
+        this.currentTerrain = levels.get(selectedLevelNumber).getTerrain();
         levels.get(selectedLevelNumber).setWormsStartPosition(players);
 
         draw(gc);

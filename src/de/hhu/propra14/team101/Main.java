@@ -197,12 +197,18 @@ public class Main extends Application {
                 } else if (keyEvent.getCode() == KeyCode.N) {
                     // TODO temporary hack to start a next round
                 } else if (keyEvent.getCode() == KeyCode.S) {
-                    // Test saving
-                    //MapSaves saver = new MapSaves();
-                    //saver.save(game.getLevel(0).getTerrain(), "Map1.yml");
-                    //saver.save(game.getLevel(1).getTerrain(), "Map2.yml");
-                    //saver.save(game.getLevel(2).getTerrain(), "Map3.yml");
-                } else if(keyEvent.getCode() == KeyCode.L) {
+                    // Save a game
+                    GameSaves saver = new GameSaves();
+                    saver.save(game, "Game1.yml");
+                } else if (keyEvent.getCode() == KeyCode.L) {
+                    // Load a game
+                    GameSaves loader = new GameSaves();
+                    try {
+                        loader.load("Game1.yml");
+                    } catch (FileNotFoundException e) {
+                        //
+                    }
+                } else if(keyEvent.getCode() == KeyCode.M) {
                     //switch to next level
                     if (game.getSelectedLevelNumber() + 1 < game.getCountLevel()) {
                         game.startLevel(game.getSelectedLevelNumber() + 1, field.getGraphicsContext2D());

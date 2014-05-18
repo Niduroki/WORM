@@ -1,25 +1,13 @@
 package de.hhu.propra14.team101;
 
-import org.yaml.snakeyaml.Yaml;
-
 import java.io.*;
 import java.util.*;
-import java.util.function.BooleanSupplier;
 
 /**
  * Class to load and save maps
  */
 
-public class MapSaves {
-
-    private Yaml yaml;
-
-    /**
-     * Initializes with a Yaml object
-     */
-    public MapSaves() {
-        this.yaml = new Yaml();
-    }
+public class MapSaves extends AbstractSaver {
 
     /**
      * @param path Path to load from
@@ -40,9 +28,8 @@ public class MapSaves {
      * @param path path to save to
      */
     public void save (Terrain terrain, String path) {
-        Yaml yaml = new Yaml();
         StringWriter writer = new StringWriter();
-        yaml.dump(this.serialize(terrain), writer);
+        this.yaml.dump(this.serialize(terrain), writer);
         try {
             FileWriter file = new FileWriter(path);
             file.write(writer.toString());
@@ -52,7 +39,7 @@ public class MapSaves {
         }
     }
 
-    private Object[][] serialize (Terrain terrain) {
+    public Object[][] serialize (Terrain terrain) {
         /** 2-dimensional array to store terrain in.*/
         Object[][] result = new Object[terrain.getWidth()][terrain.getHeight()];
 
@@ -77,7 +64,7 @@ public class MapSaves {
         return result;
     }
 
-    private Terrain deserialize (ArrayList<ArrayList<Map>> input) {
+    public Terrain deserialize (ArrayList<ArrayList<Map>> input) {
         Terrain terrain = new Terrain(input.size(), input.get(0).size());
         for (int i=0; i<input.size(); i++) {
             for (int j=0; j<input.get(i).size(); j++) {

@@ -5,4 +5,6 @@ Also see Classes-Sketch.png
 Some magical key-combinations:
  - Esc to return to main menu
  - N to start a new round
- - L to change the map
+ - M to change the map
+ - S to save a game
+ - L to load a game

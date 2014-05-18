@@ -8,13 +8,7 @@ import java.io.FileNotFoundException;
  * Class to load and save settings
  */
 
-public class SettingSaves {
-
-    private Yaml yaml;
-
-    public SettingSaves() {
-        this.yaml = new Yaml();
-    }
+public class SettingSaves extends AbstractSaver {
 
     /**
      * @param data Settings data

@@ -18,9 +18,6 @@ public class Terrain {
      * @param height height of terrain. measurement size of a block.
      */
     public Terrain (int width, int height) {
-        // TODO load this from a file instead
-        //MapSaves mapLoader = new MapSaves();
-        //this.ObjectArray = mapLoader.load("Flatlands.ymp");
         this.terrainObjects = new AbstractTerrainObject[width][height];
         this.width = width;
         this.height = height;
