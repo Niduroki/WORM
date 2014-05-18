@@ -1,14 +1,13 @@
 package de.hhu.propra14.team101;
 
 import java.io.FileNotFoundException;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.TimelineBuilder;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
@@ -248,12 +247,8 @@ public class Main extends Application {
         final Duration oneFrameAmt = Duration.millis(1000 / 60);
         final KeyFrame oneFrame = new KeyFrame(oneFrameAmt,
                 new EventHandler() {
-
-                    @Override
-                    public void handle(javafx.event.ActionEvent event) {
-
-                    game.draw(field.getGraphicsContext2D());
-
+                    public void handle(Event event) {
+                        game.draw(field.getGraphicsContext2D());
                     }
                 }); // oneFrame
 
