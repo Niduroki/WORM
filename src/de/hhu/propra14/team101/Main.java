@@ -66,6 +66,7 @@ public class Main extends Application {
         Scene scene = new Scene(grid, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
+        grid.setStyle("-fx-background-color: #00BFFF");
     }
 
     private void addMainButtons() {
