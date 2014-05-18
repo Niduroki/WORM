@@ -3,6 +3,10 @@ package de.hhu.propra14.team101;
 import java.io.FileNotFoundException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.TimelineBuilder;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 
 /**
@@ -239,7 +244,24 @@ public class Main extends Application {
     }
 
     public void updateGame (Stage stageName) {
-        //
+        final Duration oneFrameAmt = Duration.millis(1000 / 60);
+        final KeyFrame oneFrame = new KeyFrame(oneFrameAmt,
+                new EventHandler() {
+
+                    @Override
+                    public void handle(javafx.event.ActionEvent event) {
+
+                    game.draw(field.getGraphicsContext2D());
+
+                    }
+                }); // oneFrame
+
+// sets the game world's game loop (Timeline)
+        TimelineBuilder.create()
+                .cycleCount(Animation.INDEFINITE)
+                .keyFrames(oneFrame)
+                .build()
+                .play();
     }
 }
 
