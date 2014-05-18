@@ -8,3 +8,6 @@ doc/
 # Java
 *.class
 hs_err_pid*
+
+# Own files
+settings.yml

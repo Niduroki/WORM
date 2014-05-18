@@ -1,8 +1,8 @@
 package de.hhu.propra14.team101;
 
-import org.yaml.snakeyaml.Yaml;
-
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class to load and save settings
@@ -14,15 +14,24 @@ public class SettingSaves extends AbstractSaver {
      * @param data Settings data
      * @param path Path to save to
      */
-    public void save(String[][] data, String path) throws FileNotFoundException {
-        //
+    public void save(Map data, String path) {
+        StringWriter writer = new StringWriter();
+        yaml.dump(data, writer);
+        try {
+            FileWriter file = new FileWriter(path);
+            file.write(writer.toString());
+            file.close();
+        } catch (java.io.IOException e) {
+            //
+        }
     }
 
     /**
      * @param path Path to settings file
      */
-    public String[][] load(String path) {
-        //
-        return new String[1][1];
+    public Map load(String path) throws FileNotFoundException {
+        InputStream input = new FileInputStream(new File(path));
+        Map<String, Object> data = (Map<String, Object>) this.yaml.load(input);
+        return data;
     }
 }

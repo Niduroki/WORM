@@ -1,6 +1,9 @@
 package de.hhu.propra14.team101;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import javafx.animation.Animation;
@@ -139,51 +142,52 @@ public class Main extends Application {
 
         // Create buttons and other objects
         Text scenetitle = new Text("Options");
-        Button option1btn = new Button("Zigzag the flux");
-        Button option2btn = new Button("Overclock the proton");
-        Button option3btn = new Button("Exterminate the dalek");
-        Button returnbtn = new Button("Return");
-        TextField textField = new TextField();
-        ComboBox selection = new ComboBox();
-        CheckBox checkBox = new CheckBox();
+        Text title1 = new Text("ZigZag");
+        Text title2 = new Text("Proton");
+        Button returnbtn = new Button("Save & Return");
+
+        final ComboBox<String> selection = new ComboBox<String>();
+        selection.getItems().addAll("Overclock", "Normal", "Underclock");
+        selection.setValue("Normal");
+        final CheckBox checkBox = new CheckBox("Exterminate Dalek");
+        String initialValue;
+        SettingSaves loader = new SettingSaves();
+        try {
+            Map<String, Object> data = (Map<String, Object>) loader.load("settings.yml");
+            initialValue = (String) data.get("zigzag");
+            selection.setValue(data.get("proton").toString());
+            checkBox.setSelected(Boolean.parseBoolean(data.get("dalek").toString()));
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldn't find settings file!");
+            initialValue = "";
+        } catch (NullPointerException e) {
+            System.out.println("Missing setting!");
+            initialValue = "";
+        }
+
+        final TextField textField = new TextField(initialValue);
 
         // Configure each object
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
         this.grid.add(scenetitle, 0, 0, 2, 1);
-        this.grid.add(textField, 1, 2);
-        this.grid.add(option1btn, 2, 2);
-        this.grid.add(selection, 1, 4);
-        this.grid.add(option2btn, 2, 4);
+        this.grid.add(title1, 1, 2);
+        this.grid.add(textField, 2, 2);
+        this.grid.add(title2, 1, 4);
+        this.grid.add(selection, 2, 4);
         this.grid.add(checkBox, 1, 6);
-        this.grid.add(option3btn, 2, 6);
         this.grid.add(returnbtn, 1, 8);
-
-        option1btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                //
-            }
-        });
-
-        option2btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                //
-            }
-        });
-
-        option3btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                //
-            }
-        });
 
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                SettingSaves saver = new SettingSaves();
+                Map<String, Object> data = new HashMap<String, Object>();
+                data.put("zigzag", textField.getText());
+                data.put("proton", selection.getValue());
+                data.put("dalek", checkBox.selectedProperty().getValue());
+                saver.save(data, "settings.yml");
                 addMainButtons();
             }
         });
