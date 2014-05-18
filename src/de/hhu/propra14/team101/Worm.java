@@ -56,7 +56,7 @@ public class Worm {
      * Draws the worm
      */
     public void draw (GraphicsContext gc) {
-        Image image = new Image("resources/worm.gif");
+        Image image = new Image("resources/wurm.gif");
         gc.drawImage(image, this.x_coord, this.y_coord);
     }
 
