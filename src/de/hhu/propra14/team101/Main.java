@@ -3,12 +3,11 @@ package de.hhu.propra14.team101;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.TimelineBuilder;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -243,24 +242,22 @@ public class Main extends Application {
 
         game = new Game();
         game.startLevel(0, gc);
-        updateGame(primaryStage);
+        updateGame();
     }
 
-    public void updateGame (Stage stageName) {
+    public void updateGame () {
         final Duration oneFrameAmt = Duration.millis(1000 / 60);
-        final KeyFrame oneFrame = new KeyFrame(oneFrameAmt,
+        final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
                 new EventHandler() {
                     public void handle(Event event) {
                         redraw(field.getGraphicsContext2D());
                     }
-                }); // oneFrame
+                });
 
-        // sets the game world's game loop (Timeline)
-        TimelineBuilder.create()
-                .cycleCount(Animation.INDEFINITE)
-                .keyFrames(oneFrame)
-                .build()
-                .play();
+        // Construct a timeline with the mainloop
+        Timeline timeline = new Timeline(keyFrame);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
     private void redraw (GraphicsContext gc) {
