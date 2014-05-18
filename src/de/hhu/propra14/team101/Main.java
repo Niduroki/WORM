@@ -218,12 +218,13 @@ public class Main extends Application {
                 } else if (keyEvent.getCode() == KeyCode.S) {
                     // Save a game
                     GameSaves saver = new GameSaves();
-                    saver.save(game, "Game1.yml");
+                    saver.save(game, "GameSave.yml");
                 } else if (keyEvent.getCode() == KeyCode.L) {
                     // Load a game
                     GameSaves loader = new GameSaves();
                     try {
-                        loader.load("Game1.yml");
+                        game = loader.load("GameSave.yml");
+                        game.draw(field.getGraphicsContext2D());
                     } catch (FileNotFoundException e) {
                         //
                     }

@@ -3,10 +3,10 @@ package de.hhu.propra14.team101;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class to create Worms
@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 
 public class Worm {
 
-    public Weapons[] WeaponArray;
+    public Weapons[] weaponArray;
 
     public int armor = 0;
 
@@ -25,10 +25,10 @@ public class Worm {
     protected int y_coord = 0;
 
     public Worm () {
-        this.WeaponArray = new Weapons[3];
-        WeaponArray[0] = new Bazooka();
-        WeaponArray[1] = new AtomicBomb();
-        WeaponArray[2] = new Grenade();
+        this.weaponArray = new Weapons[3];
+        this.weaponArray[0] = new Bazooka();
+        this.weaponArray[1] = new AtomicBomb();
+        this.weaponArray[2] = new Grenade();
     }
 
     public int getXCoordinate()
@@ -84,5 +84,34 @@ public class Worm {
 
     public void die () {
         //
+    }
+
+    public Map serialize() {
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("x", this.x_coord);
+        data.put("y", this.y_coord);
+        data.put("armor", this.armor);
+        data.put("health", this.health);
+        ArrayList<Map> weapons = new ArrayList<Map>();
+        for (int i=0; i<this.weaponArray.length; i++) {
+            weapons.add(this.weaponArray[i].serialize());
+        }
+        data.put("weapons", weapons);
+        return data;
+    }
+
+    public static Worm deserialize(Map input) {
+        Worm result = new Worm();
+        result.x_coord = (Integer) input.get("x");
+        result.y_coord = (Integer) input.get("y");
+        result.armor = (Integer) input.get("armor");
+        result.health = (Integer) input.get("health");
+        ArrayList<Map> rawWeapons = new ArrayList<Map>();
+        Weapons[] weaponArray = new Weapons[rawWeapons.size()];
+        for (int i=0; i<rawWeapons.size(); i++) {
+            weaponArray[i] = Weapons.deserialize(rawWeapons.get(i));
+        }
+        result.weaponArray = weaponArray;
+        return result;
     }
 }

@@ -19,7 +19,7 @@ public class GameSaves extends AbstractSaver {
         MapSaves mapSaver = new MapSaves();
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("terrain", mapSaver.serialize(game.getCurrentTerrain()));
-        data.put("players", game.getPlayers());
+        data.put("players", this.serializePlayerArray(game.getPlayers()));
         data.put("round", game.round);
         data.put("turn_of_player", game.turnOfPlayer);
         StringWriter writer = new StringWriter();
@@ -42,9 +42,46 @@ public class GameSaves extends AbstractSaver {
         Map<String, Object> data = (Map<String, Object>) this.yaml.load(input);
         Game game = new Game();
         game.setCurrentTerrain(mapSaver.deserialize((ArrayList<ArrayList<Map>>) data.get("terrain")));
-        game.setPlayers((ArrayList<Player>) data.get("players"));
+        game.setPlayers(this.deserializePlayerArray((ArrayList<Map>) data.get("players")));
         game.round = (Integer) data.get("round");
         game.turnOfPlayer = (Integer) data.get("turn_of_player");
         return game;
+    }
+
+    private Object[] serializePlayerArray(ArrayList<Player> playerArray) {
+        Object[] result = new Object[playerArray.size()];
+        for (int i=0; i<playerArray.size(); i++) {
+            result[i] = this.serializePlayer(playerArray.get(i));
+        }
+        return result;
+    }
+
+    private ArrayList<Player> deserializePlayerArray(ArrayList<Map> input) {
+        ArrayList<Player> result = new ArrayList<Player>();
+        for (int i=0; i<input.size(); i++) {
+            result.add(deserializePlayer(input.get(i)));
+        }
+        return result;
+    }
+
+    private Map serializePlayer(Player player) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("type", player.type);
+        ArrayList<Map> wormArray = new ArrayList<Map>();
+        for (int i=0; i<player.wormArray.length; i++) {
+            wormArray.add(player.wormArray[i].serialize());
+        }
+        map.put("worm_array", wormArray);
+        return map;
+    }
+
+    private Player deserializePlayer(Map input) {
+        ArrayList<Map> rawWorms = new ArrayList<Map>();
+        rawWorms = (ArrayList<Map>) input.get("worm_array");
+        Worm[] wormArray = new Worm[rawWorms.size()];
+        for (int i=0; i<rawWorms.size(); i++) {
+            wormArray[i] = Worm.deserialize(rawWorms.get(i));
+        }
+        return new Player(wormArray, (String)input.get("type"));
     }
 }
