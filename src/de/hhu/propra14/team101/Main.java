@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,16 +15,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -71,11 +70,26 @@ public class Main extends Application {
         grid.getChildren().clear();
 
         // Create buttons and other objects
+        BorderPane border = new BorderPane();
+        border.setPadding(new Insets(20, 0, 20, 20));
+
         Text scenetitle = new Text("Name");
         Button startbtn = new Button("Start");
         Button multibtn = new Button("Multiplayer");
         Button optionsbtn = new Button("Options");
         Button exitbtn = new Button("Exit");
+
+
+        startbtn.setMaxWidth(Double.MAX_VALUE);
+        multibtn.setMaxWidth(Double.MAX_VALUE);
+        optionsbtn.setMaxWidth(Double.MAX_VALUE);
+        exitbtn.setMaxWidth(Double.MAX_VALUE);
+
+        VBox vbButtons = new VBox();
+        vbButtons.setSpacing(10);
+        vbButtons.setPadding(new Insets(0, 20, 10, 20));
+        vbButtons.getChildren().addAll(startbtn, multibtn, optionsbtn, exitbtn);
+
 
         // Configure each object
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
