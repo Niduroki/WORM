@@ -164,6 +164,7 @@ public class Game {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
         this.currentTerrain.draw(gc);
+        gc.fillText(String.valueOf(this.round),300,20);
 
         for (int i = 0; i < players.size();i++) {
             for(int indexWorms = 0;indexWorms < players.get(i).wormArray.length;indexWorms++) {
@@ -173,6 +174,8 @@ public class Game {
 
         // TODO draw any flying weapons here
     }
+
+
 
     /**
     * Start the level and initialize terrain and worms.

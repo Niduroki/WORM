@@ -214,6 +214,7 @@ public class Main extends Application {
                 } else if (keyEvent.getCode() == KeyCode.I) {
                     // Show the inventory
                 } else if (keyEvent.getCode() == KeyCode.N) {
+                    game.round += 1;
                     // TODO temporary hack to start a next round
                 } else if (keyEvent.getCode() == KeyCode.S) {
                     // Save a game
