@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101;
 
 import java.io.FileNotFoundException;
+import java.util.Random;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -223,7 +224,7 @@ public class Main extends Application {
                     GameSaves loader = new GameSaves();
                     try {
                         game = loader.load("GameSave.yml");
-                        game.draw(field.getGraphicsContext2D());
+                        //game.draw(field.getGraphicsContext2D());
                     } catch (FileNotFoundException e) {
                         //
                     }
@@ -241,6 +242,7 @@ public class Main extends Application {
 
         game = new Game();
         game.startLevel(0, gc);
+        updateGame(primaryStage);
     }
 
     public void updateGame (Stage stageName) {
@@ -248,16 +250,22 @@ public class Main extends Application {
         final KeyFrame oneFrame = new KeyFrame(oneFrameAmt,
                 new EventHandler() {
                     public void handle(Event event) {
-                        game.draw(field.getGraphicsContext2D());
+                        redraw(field.getGraphicsContext2D());
                     }
                 }); // oneFrame
 
-// sets the game world's game loop (Timeline)
+        // sets the game world's game loop (Timeline)
         TimelineBuilder.create()
                 .cycleCount(Animation.INDEFINITE)
                 .keyFrames(oneFrame)
                 .build()
                 .play();
+    }
+
+    private void redraw (GraphicsContext gc) {
+        this.game.draw(gc);
+        //Random rand = new Random();
+        //game.getCurrentTerrain().removeTerrainObject(rand.nextInt(60), rand.nextInt(40));
     }
 }
 
