@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,8 @@ abstract public class Weapons {
     public double damage;
     /** Radius of the weapon */
     public double radius;
+    /** Graphic of the weapon */
+    public Image image;
 
     abstract public void fire ();
 
