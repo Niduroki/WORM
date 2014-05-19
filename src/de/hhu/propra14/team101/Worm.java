@@ -82,7 +82,7 @@ public class Worm {
     }
 
     public void die () {
-        //
+        // TODO is this needed? Worm should be removed on death
     }
 
     public Map serialize() {

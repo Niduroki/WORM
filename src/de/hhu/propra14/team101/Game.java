@@ -175,7 +175,15 @@ public class Game {
         // TODO draw any flying weapons here
     }
 
-
+    public void nextRound() {
+        this.round += 1;
+        this.players.get(turnOfPlayer).selectNextWorm();
+        if (this.turnOfPlayer == this.players.size()-1) {
+            this.turnOfPlayer = 0;
+        } else {
+            this.turnOfPlayer += 1;
+        }
+    }
 
     /**
     * Start the level and initialize terrain and worms.

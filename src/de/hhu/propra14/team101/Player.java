@@ -3,7 +3,8 @@ package de.hhu.propra14.team101;
 
 public class Player {
 
-    public Worm[] wormArray;
+    public Worm[] wormArray; // TODO should we use an ArrayList<Worm> here to make deleting worms more easy?
+    public int currentWorm = 0;
 
     /**
      * Whether the player is playing _this_ game, is on a network, or an AI
@@ -23,6 +24,17 @@ public class Player {
             /*throw WrongTypeException(){
                 //
             }*/
+        }
+    }
+
+    /**
+     * Selects the next worm
+     */
+    public void selectNextWorm() {
+        if (this.currentWorm == this.wormArray.length-1) {
+            this.currentWorm = 0;
+        } else {
+            this.currentWorm += 1;
         }
     }
 }

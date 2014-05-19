@@ -207,14 +207,15 @@ public class Main extends Application {
                     // Remove this handler, so we can't "reset" in main menu
                     primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
                 } else if (keyEvent.getCode() == KeyCode.LEFT) {
-                    // Move left
+                    int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
+                    game.getPlayers().get(game.turnOfPlayer).wormArray[currentWorm].move('l');
                 } else if (keyEvent.getCode() == KeyCode.RIGHT) {
-                    // Move right
+                    int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
+                    game.getPlayers().get(game.turnOfPlayer).wormArray[currentWorm].move('r');
                 } else if (keyEvent.getCode() == KeyCode.I) {
                     // Show the inventory
                 } else if (keyEvent.getCode() == KeyCode.N) {
-                    game.round += 1;
-                    // TODO temporary hack to start a next round
+                    game.nextRound();
                 } else if (keyEvent.getCode() == KeyCode.S) {
                     // Save a game
                     GameSaves saver = new GameSaves();
