@@ -12,7 +12,7 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
 
     protected int color = 0x883300; // Dirt-ish html-color
 
-    protected boolean destructibility = true;
+    protected boolean destructible = true;
 
     protected boolean slopedLeft;
 
