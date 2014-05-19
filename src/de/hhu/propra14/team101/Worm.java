@@ -61,6 +61,10 @@ public class Worm {
     public void draw (GraphicsContext gc) {
         Image image = new Image("resources/wurm.gif");
         gc.drawImage(image, this.x_coord, this.y_coord);
+        gc.fillText("H"+String.valueOf(this.health), this.x_coord, this.y_coord-4);
+        if (this.armor != 0) {
+            gc.fillText("A" + String.valueOf(this.armor), this.x_coord, this.y_coord-14);
+        }
     }
 
     /**
