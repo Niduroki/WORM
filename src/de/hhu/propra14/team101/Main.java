@@ -39,6 +39,8 @@ public class Main extends Application {
     protected Game game;
     protected GridPane grid;
     private Stage primaryStage;
+    private int jumping = 0;
+    private Worm jumpingWorm;
 
     public static void main (String[] args) {
         launch(args);
@@ -206,6 +208,13 @@ public class Main extends Application {
                     addMainButtons();
                     // Remove this handler, so we can't "reset" in main menu
                     primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
+                } else if (keyEvent.getCode() == KeyCode.UP) {
+                    // Don't do weird double-jumps
+                    if (jumping == 0) {
+                        int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
+                        jumping = 4;
+                        jumpingWorm = game.getPlayers().get(game.turnOfPlayer).wormArray[currentWorm];
+                    }
                 } else if (keyEvent.getCode() == KeyCode.LEFT) {
                     int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
                     game.getPlayers().get(game.turnOfPlayer).wormArray[currentWorm].move('l');
@@ -262,6 +271,10 @@ public class Main extends Application {
     }
 
     private void redraw (GraphicsContext gc) {
+        if (this.jumping != 0) {
+            jumpingWorm.jump();
+            this.jumping -= 1;
+        }
         this.game.draw(gc);
         //Random rand = new Random();
         //game.getCurrentTerrain().removeTerrainObject(rand.nextInt(60), rand.nextInt(40));
