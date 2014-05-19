@@ -27,6 +27,7 @@ players:
     - {damage: 25.0, name: Atomic bomb, radius: 20.5}
     - {damage: 20.0, name: Grenade, radius: 3.0}
   type: Local
+  current_worm: 0
 - worm_array:
   - armor: 0
     x: 190
@@ -53,6 +54,7 @@ players:
     - {damage: 25.0, name: Atomic bomb, radius: 20.5}
     - {damage: 20.0, name: Grenade, radius: 3.0}
   type: Local
+  current_worm: 0
 terrain:
 - - null
   - null
