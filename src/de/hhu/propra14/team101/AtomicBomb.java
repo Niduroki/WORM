@@ -2,7 +2,7 @@ package de.hhu.propra14.team101;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public class AtomicBomb  extends Weapons {
+public class AtomicBomb extends Weapons {
 
     public AtomicBomb() {
         this.name = "Atomic bomb";
@@ -10,12 +10,8 @@ public class AtomicBomb  extends Weapons {
         this.radius = 20.5;
     }
 
-    public void fire() {
-        //
-    }
-
-    public void draw(GraphicsContext gc) {
-        //
+    public Bullet fire(int[][] path) {
+        return new Bullet(path, this);
     }
 }
 

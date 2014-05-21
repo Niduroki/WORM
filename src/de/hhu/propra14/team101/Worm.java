@@ -15,6 +15,8 @@ public class Worm {
 
     public ArrayList<Weapons> weaponList;
 
+    public int size = 10;
+
     public int armor = 0;
 
     public int health = 100;
@@ -158,13 +160,14 @@ public class Worm {
         }
     }
 
-    public void fireWeapon() {
-        this.weaponList.get(this.currentWeapon).fire();
+    public Bullet fireWeapon(int[] target) {
+        Bullet bullet = this.weaponList.get(this.currentWeapon).fire(Physics.calcLinearPath(new int[]{this.x_coord, this.y_coord}, target));
         this.weaponList.remove(this.currentWeapon);
         // Prevent pointing on a nonexistant weapon
         if (this.currentWeapon != 0 ) {
             this.currentWeapon -= 1;
         }
+        return bullet;
     }
 
     public void loseHealth (int amount) {

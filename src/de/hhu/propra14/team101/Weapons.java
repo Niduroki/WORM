@@ -20,9 +20,7 @@ abstract public class Weapons {
     /** Graphic of the weapon */
     public Image image;
 
-    abstract public void fire ();
-
-    abstract public void draw (GraphicsContext gc);
+    abstract public Bullet fire (int[][] path);
 
     public Map serialize() {
         Map<String, Object> data = new HashMap<String, Object>();
@@ -33,17 +31,20 @@ abstract public class Weapons {
     }
 
     public static Weapons deserialize(Map input) {
-        // TODO
-        return new Weapons() {
-            @Override
-            public void fire() {
-
-            }
-
-            @Override
-            public void draw(GraphicsContext gc) {
-
-            }
-        };
+        if (input.get("name") == "Atomic Bomb") {
+            return new AtomicBomb();
+        } else if (input.get("name") == "Bazooka") {
+            return new Bazooka();
+        } else if (input.get("name") == "Grenade") {
+            return new Grenade();
+        } else {
+            System.out.println("Weapons.deserialize: Unknown weapon");
+            return new Weapons() {
+                @Override
+                public Bullet fire(int[][] path) {
+                    return new Bullet(path, this);
+                }
+            };
+        }
     }
 }

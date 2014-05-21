@@ -10,11 +10,7 @@ public class Bazooka extends Weapons {
         this.radius = 5.5;
     }
 
-    public void fire() {
-        //
-    }
-
-    public void draw(GraphicsContext gc) {
-        //
+    public Bullet fire(int[][] path) {
+        return new Bullet(path, this);
     }
 }

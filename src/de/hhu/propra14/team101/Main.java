@@ -203,8 +203,11 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.isSecondaryButtonDown()) {
-                    System.out.println(mouseEvent.getX());
-                    System.out.println(mouseEvent.getY());
+                    Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
+                    // Don't fire without a weapon
+                    if (currentWorm.weaponList.size() != 0) {
+                        game.addBullet(currentWorm.fireWeapon(new int[]{(int) mouseEvent.getX(), (int) mouseEvent.getY()}));
+                    }
                 }
             }
         };

@@ -2,6 +2,7 @@ package de.hhu.propra14.team101;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  * Class for a flying bullet
@@ -30,18 +31,37 @@ public class Bullet {
      * Move the bullet
      * @param gc Canvas to draw on
      * @param game Game to check for collisions
+     * @param shooter who shoot the bullet (he's immune to collision)
      * @return whether the bullet hit something and should be removed
      */
     public boolean move (GraphicsContext gc, Game game) {
+        // We're out of the playfield
+        if (this.currentTime == this.path.length) {
+            return true;
+        }
+
+        boolean collision = false;
         for (int i=0; i<game.getPlayers().size(); i++) {
             Player player = game.getPlayers().get(i);
             for (int j=0; j<player.wormList.size(); j++) {
-                // TODO check for collisions
+                Worm currentWorm = player.wormList.get(j);
+                if (
+                        Physics.checkCollision(
+                                currentWorm.getXCoordinate(),
+                                currentWorm.getYCoordinate(),
+                                currentWorm.size,
+                                this.path[currentTime][0],
+                                this.path[currentTime][1],
+                                5
+                        )
+                ) {
+                    collision = true;
+                    currentWorm.loseHealth((int) this.weapon.damage);
+                }
             }
         }
-        boolean collision = false;
+
         if (collision) {
-            // TODO Do damage, destroy terrain, etc.
             return true;
         } else {
             this.draw(gc);
@@ -51,6 +71,8 @@ public class Bullet {
     }
 
     private void draw (GraphicsContext gc) {
-        gc.drawImage(this.weapon.image, this.path[currentTime][0], this.path[currentTime][1]);
+        gc.setFill(Color.RED);
+        gc.fillRect(this.path[currentTime][0], this.path[currentTime][1], 5, 5);
+        //gc.drawImage(this.weapon.image, this.path[currentTime][0], this.path[currentTime][1]);
     }
 }

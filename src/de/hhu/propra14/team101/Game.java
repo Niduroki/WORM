@@ -12,7 +12,7 @@ import java.util.*;
 public class Game {
     private ArrayList<Player> players = new ArrayList<Player>();
     private ArrayList<Level> levels = new ArrayList<Level>();
-    private ArrayList<Bullet> bullets = new ArrayList<>();
+    private Bullet bullet;
     private int selectedLevelNumber;
     private Terrain currentTerrain;
     public int round = 0;
@@ -140,6 +140,10 @@ public class Game {
         }
     }
 
+    public void addBullet (Bullet bullet) {
+        this.bullet = bullet;
+    }
+
     /**
      * Gets a level.
      * @param number the level number
@@ -198,7 +202,14 @@ public class Game {
         this.currentTerrain.draw(gc);
         gc.fillText(String.valueOf(this.round),300,20);
         Worm currentWorm = players.get(turnOfPlayer).wormList.get(players.get(turnOfPlayer).currentWorm);
-        gc.fillText("Current weapon: "+currentWorm.weaponList.get(currentWorm.currentWeapon).name, 0, 10);
+
+        String text;
+        if (currentWorm.weaponList.size() == 0) {
+            text = "No weapon";
+        } else {
+            text = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
+        }
+        gc.fillText("Current weapon: "+text, 0, 10);
 
         for (int i = 0; i < players.size();i++) {
             for(int indexWorms = 0; indexWorms < players.get(i).wormList.size(); indexWorms++) {
@@ -206,15 +217,11 @@ public class Game {
             }
         }
 
-        ArrayList toRemove = new ArrayList();
-        for (int i=0; i<bullets.size(); i++) {
-            // If move() returns true it hit something and should be removed
-            if (bullets.get(i).move(gc, this)) {
-                toRemove.add(i);
+        if (this.bullet != null) {
+            boolean collision = this.bullet.move(gc, this, new int[]{turnOfPlayer, players.get(turnOfPlayer).currentWorm});
+            if (collision) {
+                this.bullet = null;
             }
-        }
-        for (int i=0; i<toRemove.size(); i++) {
-            bullets.remove(toRemove.get(i));
         }
     }
 
