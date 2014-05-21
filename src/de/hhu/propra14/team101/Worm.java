@@ -13,11 +13,13 @@ import java.util.Map;
 
 public class Worm {
 
-    public Weapons[] weaponArray;
+    public ArrayList<Weapons> weaponList;
 
     public int armor = 0;
 
     public int health = 100;
+
+    public int currentWeapon = 0;
 
     protected int x_coord = 0;
 
@@ -28,10 +30,10 @@ public class Worm {
     private int jumpProcess = 0;
 
     public Worm () {
-        this.weaponArray = new Weapons[3];
-        this.weaponArray[0] = new Bazooka();
-        this.weaponArray[1] = new AtomicBomb();
-        this.weaponArray[2] = new Grenade();
+        this.weaponList = new ArrayList<>();
+        this.weaponList.add(new Bazooka());
+        this.weaponList.add(new AtomicBomb());
+        this.weaponList.add(new Grenade());
     }
 
     public int getXCoordinate()
@@ -140,6 +142,31 @@ public class Worm {
         }
     }
 
+    public void nextWeapon() {
+        if (this.currentWeapon == this.weaponList.size()-1) {
+            this.currentWeapon = 0;
+        } else {
+            this.currentWeapon += 1;
+        }
+    }
+
+    public void prevWeapon() {
+        if (this.currentWeapon == 0) {
+            this.currentWeapon = this.weaponList.size()-1;
+        } else {
+            this.currentWeapon -= 1;
+        }
+    }
+
+    public void fireWeapon() {
+        this.weaponList.get(this.currentWeapon).fire();
+        this.weaponList.remove(this.currentWeapon);
+        // Prevent pointing on a nonexistant weapon
+        if (this.currentWeapon != 0 ) {
+            this.currentWeapon -= 1;
+        }
+    }
+
     public void loseHealth (int amount) {
         this.health -= amount;
 
@@ -160,8 +187,8 @@ public class Worm {
         data.put("health", this.health);
         data.put("orientation", this.orientation);
         ArrayList<Map> weapons = new ArrayList<Map>();
-        for (int i=0; i<this.weaponArray.length; i++) {
-            weapons.add(this.weaponArray[i].serialize());
+        for (int i=0; i<this.weaponList.size(); i++) {
+            weapons.add(this.weaponList.get(i).serialize());
         }
         data.put("weapons", weapons);
         return data;
@@ -175,11 +202,11 @@ public class Worm {
         result.health = (Integer) input.get("health");
         result.orientation = input.get("orientation").toString().charAt(0);
         ArrayList<Map> rawWeapons = new ArrayList<Map>();
-        Weapons[] weaponArray = new Weapons[rawWeapons.size()];
+        ArrayList<Weapons> weaponList = new ArrayList<>();
         for (int i=0; i<rawWeapons.size(); i++) {
-            weaponArray[i] = Weapons.deserialize(rawWeapons.get(i));
+            weaponList.add(Weapons.deserialize(rawWeapons.get(i)));
         }
-        result.weaponArray = weaponArray;
+        result.weaponList = weaponList;
         return result;
     }
 }

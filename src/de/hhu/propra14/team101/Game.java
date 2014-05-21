@@ -197,6 +197,8 @@ public class Game {
 
         this.currentTerrain.draw(gc);
         gc.fillText(String.valueOf(this.round),300,20);
+        Worm currentWorm = players.get(turnOfPlayer).wormList.get(players.get(turnOfPlayer).currentWorm);
+        gc.fillText("Current weapon: "+currentWorm.weaponList.get(currentWorm.currentWeapon).name, 0, 10);
 
         for (int i = 0; i < players.size();i++) {
             for(int indexWorms = 0; indexWorms < players.get(i).wormList.size(); indexWorms++) {

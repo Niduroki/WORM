@@ -213,10 +213,11 @@ public class Main extends Application {
             @Override
             public void handle(ScrollEvent scrollEvent) {
                 // Scrolled up
+                Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
                 if (scrollEvent.getDeltaY() > 0) {
-                    System.out.println(scrollEvent.getDeltaY());
+                    currentWorm.nextWeapon();
                 } else if (scrollEvent.getDeltaY() < 0) { // Scrolled down
-                    System.out.println(scrollEvent.getDeltaY());
+                    currentWorm.prevWeapon();
                 }
             }
         };
