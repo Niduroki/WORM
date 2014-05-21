@@ -12,6 +12,7 @@ import java.util.*;
 public class Game {
     private ArrayList<Player> players = new ArrayList<Player>();
     private ArrayList<Level> levels = new ArrayList<Level>();
+    private ArrayList<Bullet> bullets = new ArrayList<>();
     private int selectedLevelNumber;
     private Terrain currentTerrain;
     public int round = 0;
@@ -203,7 +204,16 @@ public class Game {
             }
         }
 
-        // TODO draw any flying weapons here
+        ArrayList toRemove = new ArrayList();
+        for (int i=0; i<bullets.size(); i++) {
+            // If move() returns true it hit something and should be removed
+            if (bullets.get(i).move(gc, this)) {
+                toRemove.add(i);
+            }
+        }
+        for (int i=0; i<toRemove.size(); i++) {
+            bullets.remove(toRemove.get(i));
+        }
     }
 
     public void nextRound() {

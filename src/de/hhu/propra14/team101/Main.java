@@ -16,8 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
@@ -200,14 +199,38 @@ public class Main extends Application {
      */
     public void startGameplay(GraphicsContext gc) {
 
+        final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (mouseEvent.isSecondaryButtonDown()) {
+                    System.out.println(mouseEvent.getX());
+                    System.out.println(mouseEvent.getY());
+                }
+            }
+        };
+
+        final EventHandler<ScrollEvent> scrollHandler = new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent scrollEvent) {
+                // Scrolled up
+                if (scrollEvent.getDeltaY() > 0) {
+                    System.out.println(scrollEvent.getDeltaY());
+                } else if (scrollEvent.getDeltaY() < 0) { // Scrolled down
+                    System.out.println(scrollEvent.getDeltaY());
+                }
+            }
+        };
+
         final EventHandler<KeyEvent> keypressHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.ESCAPE) {
                     // Close the game
                     addMainButtons();
-                    // Remove this handler, so we can't "reset" in main menu
+                    // Remove old handlers
                     primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
+                    primaryStage.getScene().removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+                    primaryStage.getScene().removeEventHandler(MouseEvent.ANY, mouseHandler);
                 } else if (keyEvent.getCode() == KeyCode.UP) {
                     // Don't do weird double-jumps
                     if (jumping == 0) {
@@ -247,7 +270,10 @@ public class Main extends Application {
                 }
             }
         };
+
         this.primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keypressHandler);
+        this.primaryStage.getScene().addEventHandler(MouseEvent.ANY, mouseHandler);
+        this.primaryStage.getScene().addEventHandler(ScrollEvent.SCROLL, scrollHandler);
 
         game = new Game();
         game.startLevel(0, gc);

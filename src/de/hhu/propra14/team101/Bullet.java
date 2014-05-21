@@ -30,10 +30,24 @@ public class Bullet {
      * Move the bullet
      * @param gc Canvas to draw on
      * @param game Game to check for collisions
+     * @return whether the bullet hit something and should be removed
      */
-    public void move (GraphicsContext gc, Game game) {
-        // TODO check for collisions
-        this.draw(gc);
+    public boolean move (GraphicsContext gc, Game game) {
+        for (int i=0; i<game.getPlayers().size(); i++) {
+            Player player = game.getPlayers().get(i);
+            for (int j=0; j<player.wormList.size(); j++) {
+                // TODO check for collisions
+            }
+        }
+        boolean collision = false;
+        if (collision) {
+            // TODO Do damage, destroy terrain, etc.
+            return true;
+        } else {
+            this.draw(gc);
+            this.currentTime += 1;
+            return false;
+        }
     }
 
     private void draw (GraphicsContext gc) {
