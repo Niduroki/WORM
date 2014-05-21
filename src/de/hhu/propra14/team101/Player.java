@@ -1,9 +1,11 @@
 package de.hhu.propra14.team101;
 
 
+import java.util.ArrayList;
+
 public class Player {
 
-    public Worm[] wormArray; // TODO should we use an ArrayList<Worm> here to make deleting worms more easy?
+    public ArrayList<Worm> wormList;
     public int currentWorm = 0;
 
     /**
@@ -13,11 +15,11 @@ public class Player {
     public String type;
 
     /**
-     * @param wormArray Worms that belong to the player
+     * @param wormList Worms that belong to the player wrapped in an ArrayList
      * @param type Possible values: "AI", "Local", "Network"
      */
-    public Player(Worm[] wormArray, String type) {
-        this.wormArray = wormArray;
+    public Player(ArrayList<Worm> wormList, String type) {
+        this.wormList = wormList;
         if (type.equals("AI") || type.equals("Local") || type.equals("Network")) {
             this.type = type;
         } else {
@@ -31,7 +33,7 @@ public class Player {
      * Selects the next worm
      */
     public void selectNextWorm() {
-        if (this.currentWorm == this.wormArray.length-1) {
+        if (this.currentWorm == this.wormList.size()-1) {
             this.currentWorm = 0;
         } else {
             this.currentWorm += 1;

@@ -69,8 +69,8 @@ public class GameSaves extends AbstractSaver {
         map.put("type", player.type);
         map.put("current_worm", player.currentWorm);
         ArrayList<Map> wormArray = new ArrayList<Map>();
-        for (int i=0; i<player.wormArray.length; i++) {
-            wormArray.add(player.wormArray[i].serialize());
+        for (int i=0; i<player.wormList.size(); i++) {
+            wormArray.add(player.wormList.get(i).serialize());
         }
         map.put("worm_array", wormArray);
         return map;
@@ -79,11 +79,11 @@ public class GameSaves extends AbstractSaver {
     private Player deserializePlayer(Map input) {
         ArrayList<Map> rawWorms = new ArrayList<Map>();
         rawWorms = (ArrayList<Map>) input.get("worm_array");
-        Worm[] wormArray = new Worm[rawWorms.size()];
+        ArrayList<Worm> wormList = new ArrayList<>();
         for (int i=0; i<rawWorms.size(); i++) {
-            wormArray[i] = Worm.deserialize(rawWorms.get(i));
+            wormList.add(Worm.deserialize(rawWorms.get(i)));
         }
-        Player player = new Player(wormArray, (String)input.get("type"));
+        Player player = new Player(wormList, (String)input.get("type"));
         player.currentWorm = (Integer) input.get("current_worm");
         return player;
     }

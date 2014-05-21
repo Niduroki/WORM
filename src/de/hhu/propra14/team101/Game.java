@@ -23,11 +23,17 @@ public class Game {
     public Game() {
         //TODO: Remove hard-coded players
         //player 1
-        Worm[] wormsPlayer1 = {new Worm(), new Worm(), new Worm()};
+        ArrayList<Worm> wormsPlayer1 = new ArrayList<>();
+        for (int i=0; i<3; i++) {
+            wormsPlayer1.add(new Worm());
+        }
         players.add(new Player(wormsPlayer1,"Local"));
 
         //player 2
-        Worm[] wormsPlayer2 = {new Worm(), new Worm(), new Worm()};
+        ArrayList<Worm> wormsPlayer2 = new ArrayList<>();
+        for (int i=0; i<3; i++) {
+            wormsPlayer2.add(new Worm());
+        }
         players.add(new Player(wormsPlayer2,"Local"));
 
 
@@ -167,8 +173,8 @@ public class Game {
         gc.fillText(String.valueOf(this.round),300,20);
 
         for (int i = 0; i < players.size();i++) {
-            for(int indexWorms = 0;indexWorms < players.get(i).wormArray.length;indexWorms++) {
-                players.get(i).wormArray[indexWorms].draw(gc);
+            for(int indexWorms = 0; indexWorms < players.get(i).wormList.size(); indexWorms++) {
+                players.get(i).wormList.get(indexWorms).draw(gc);
             }
         }
 

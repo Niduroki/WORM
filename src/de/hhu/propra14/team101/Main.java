@@ -213,14 +213,14 @@ public class Main extends Application {
                     if (jumping == 0) {
                         int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
                         jumping = 4;
-                        jumpingWorm = game.getPlayers().get(game.turnOfPlayer).wormArray[currentWorm];
+                        jumpingWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm);
                     }
                 } else if (keyEvent.getCode() == KeyCode.LEFT) {
                     int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
-                    game.getPlayers().get(game.turnOfPlayer).wormArray[currentWorm].move('l');
+                    game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('l');
                 } else if (keyEvent.getCode() == KeyCode.RIGHT) {
                     int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
-                    game.getPlayers().get(game.turnOfPlayer).wormArray[currentWorm].move('r');
+                    game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('r');
                 } else if (keyEvent.getCode() == KeyCode.I) {
                     // Show the inventory
                 } else if (keyEvent.getCode() == KeyCode.N) {

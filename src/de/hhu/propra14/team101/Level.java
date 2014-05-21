@@ -92,11 +92,11 @@ public class Level {
         int indexStartPosition = 0;
         for(int index = 0; index < players.size(); index++)
         {
-            for(int indexWorm = 0; indexWorm < players.get(index).wormArray.length; indexWorm++)
+            for(int indexWorm = 0; indexWorm < players.get(index).wormList.size(); indexWorm++)
             {
                 if(indexStartPosition < wormStartPoints.size()) {
-                    players.get(index).wormArray[indexWorm].setXCoordinate(wormStartPoints.get(indexStartPosition)[0]*AbstractTerrainObject.getSize());
-                    players.get(index).wormArray[indexWorm].setYCoordinate(wormStartPoints.get(indexStartPosition)[1]*AbstractTerrainObject.getSize());
+                    players.get(index).wormList.get(indexWorm).setXCoordinate(wormStartPoints.get(indexStartPosition)[0]*AbstractTerrainObject.getSize());
+                    players.get(index).wormList.get(indexWorm).setYCoordinate(wormStartPoints.get(indexStartPosition)[1]*AbstractTerrainObject.getSize());
                     indexStartPosition++;
                 }
             }
