@@ -2,6 +2,10 @@ package de.hhu.propra14.team101;
 
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Class to create terrain
  */
@@ -92,5 +96,65 @@ public class Terrain {
 
         SquareBuildingBlock dummy = null;
         this.terrainObjects[xCoordinate][yCoordinate] = dummy;
+    }
+
+    /**
+     * @return
+     */
+    public Object[][] serialize () {
+        /** 2-dimensional array to store terrain in.*/
+        Object[][] result = new Object[this.getWidth()][this.getHeight()];
+
+        for (int i=0; i<this.getWidth(); i++) {
+            for (int j=0; j<this.getHeight(); j++) {
+                AbstractTerrainObject workingBlock = this.terrainObjects[i][j];
+                if (workingBlock != null) {
+                    HashMap<String, Object> map = new HashMap<String, Object>();
+                    map.put("color", workingBlock.getColor());
+                    map.put("coords", workingBlock.getCoords());
+                    map.put("destructibility", workingBlock.getDestructible());
+                    map.put("class", workingBlock.getClass().getName());
+                    // Save slope if we have a triangle
+                    if (workingBlock.getClass().getName().equals("de.hhu.propra14.team101.TriangleBuildingBlock")) {
+                        TriangleBuildingBlock tmp = (TriangleBuildingBlock) this.terrainObjects[i][j];
+                        map.put("slopedLeft", tmp.getSlopedLeft());
+                    }
+                    result[i][j] = map;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static Terrain deserialize (ArrayList<ArrayList<Map>> input) {
+        Terrain terrain = new Terrain(input.size(), input.get(0).size());
+        for (int i=0; i<input.size(); i++) {
+            for (int j=0; j<input.get(i).size(); j++) {
+                if (input.get(i).get(j) != null) {
+                    //Rebuild the block
+                    Map workingMap = input.get(i).get(j);
+                    boolean destructibility = Boolean.parseBoolean(workingMap.get("destructibility").toString());
+                    Integer color = (Integer) workingMap.get("color");
+                    ArrayList<Integer> coords = (ArrayList<Integer>) workingMap.get("coords");
+                    if (workingMap.get("class").equals("de.hhu.propra14.team101.SquareBuildingBlock")) {
+                        SquareBuildingBlock workingBlock = new SquareBuildingBlock(coords.get(0), coords.get(1));
+                        workingBlock.setDestructible(destructibility);
+                        terrain.addTerrainObject(workingBlock);
+                    } else if (workingMap.get("class").equals("de.hhu.propra14.team101.TriangleBuildingBlock")) {
+                        boolean slopedLeft = Boolean.parseBoolean(workingMap.get("slopedLeft").toString());
+                        TriangleBuildingBlock workingBlock = new TriangleBuildingBlock(coords.get(0), coords.get(1), slopedLeft);
+                        workingBlock.setDestructible(destructibility);
+                        terrain.addTerrainObject(workingBlock);
+                    } else if (workingMap.get("class").equals("de.hhu.propra14.team101.Obstacle")) {
+                        Obstacle workingBlock = new Obstacle(coords.get(0), coords.get(1));
+                        workingBlock.setDestructible(destructibility);
+                        terrain.addTerrainObject(workingBlock);
+                    } else {
+                        System.out.println("MapSaves.deserialize:Unknown block");
+                    }
+                }
+            }
+        }
+        return terrain;
     }
 }

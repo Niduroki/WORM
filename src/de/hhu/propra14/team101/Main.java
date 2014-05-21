@@ -234,7 +234,6 @@ public class Main extends Application {
                     GameSaves loader = new GameSaves();
                     try {
                         game = loader.load("GameSave.yml");
-                        //game.draw(field.getGraphicsContext2D());
                     } catch (FileNotFoundException e) {
                         //
                     }

@@ -37,41 +37,66 @@ public class Game {
         players.add(new Player(wormsPlayer2,"Local"));
 
 
-        MapSaves loader = new MapSaves();
+        LevelSaves loader = new LevelSaves();
         try {
-            Terrain terrain1 = loader.load("maps/Map1.yml");
-            Level level1 = new Level(terrain1, 0);
-            for(int i = 5; i < 35;i += 5) {
-                level1.addWormStartPosition(i, terrain1.getHeight()-5);
-            }
-            levels.add(level1);
+            levels.add(loader.load("maps/Map1.yml"));
+            levels.add(loader.load("maps/Map2.yml"));
+            levels.add(loader.load("maps/Map3.yml"));
         } catch (FileNotFoundException e) {
             //
         }
 
-
-        try {
-            Terrain terrain2 = loader.load("maps/Map2.yml");
-            Level level2 = new Level(terrain2, 0);
-            for(int i = 4; i < 35;i += 5) {
-                level2.addWormStartPosition(i, terrain2.getHeight()-5);
-            }
-            levels.add(level2);
-        } catch (FileNotFoundException e) {
-            //
+        // Hard coded levels - if save-files change uncomment this and save this structure
+        /*
+        //level1
+        Terrain terrain1 = new Terrain(60, 40);
+        for(int i = 0; i < terrain1.getWidth(); i++)
+        {
+            terrain1.addTerrainObject(new SquareBuildingBlock(i, terrain1.getHeight()-1));
+            terrain1.addTerrainObject(new SquareBuildingBlock(i, terrain1.getHeight()-2));
         }
+        terrain1.addTerrainObject(new Obstacle(7, terrain1.getHeight()-3));
+        terrain1.addTerrainObject(new TriangleBuildingBlock(0, terrain1.getHeight()-3, false));
+        terrain1.addTerrainObject(new TriangleBuildingBlock(terrain1.getWidth()-1, terrain1.getHeight()-3, true));
 
-
-        try {
-            Terrain terrain3 = loader.load("maps/Map3.yml");
-            Level level3 = new Level(terrain3, 0);
-            for(int i = 4; i < 35;i += 5) {
-                level3.addWormStartPosition(i, terrain3.getHeight()-5);
-            }
-            levels.add(level3);
-        } catch (FileNotFoundException e) {
-            //
+        Level level1 = new Level(terrain1, 0);
+        for(int i = 5; i < 35;i += 5) {
+            level1.addWormStartPosition(new Coordinate(i, terrain1.getHeight() -4));
         }
+        levels.add(level1);
+
+        //level2
+        Terrain terrain2 = new Terrain(60, 40);
+        for(int i = 0; i < 60; i++)
+        {
+            terrain2.addTerrainObject(new SquareBuildingBlock(i, terrain2.getHeight()- 1));
+            terrain2.addTerrainObject(new SquareBuildingBlock(i, terrain2.getHeight()- 2));
+            terrain2.addTerrainObject(new SquareBuildingBlock(i, terrain2.getHeight()- 3));
+        }
+        terrain2.addTerrainObject(new Obstacle(7, terrain2.getHeight()- 4));
+        terrain2.addTerrainObject(new Obstacle(7, terrain2.getHeight()- 5));
+        Level level2 = new Level(terrain2, 1);
+        for(int i = 4; i < 35;i += 5) {
+            level2.addWormStartPosition(new Coordinate(i, terrain2.getHeight()- 5));
+        }
+        levels.add(level2);
+
+        //level3
+        Terrain terrain3 = new Terrain(60, 40);
+        for(int i = 0; i < 55; i++) {
+            terrain3.addTerrainObject(new SquareBuildingBlock(i, terrain3.getHeight()- 1));
+            terrain3.addTerrainObject(new SquareBuildingBlock(i, terrain3.getHeight()- 2));
+            terrain3.addTerrainObject(new SquareBuildingBlock(i, terrain3.getHeight()- 3));
+        }
+        terrain3.addTerrainObject(new Obstacle(7, terrain3.getHeight()- 4));
+        terrain3.addTerrainObject(new Obstacle(7, terrain3.getHeight()- 5));
+        Level level3 = new Level(terrain3, 2);
+        for(int i = 4; i < 35;i += 5) {
+            level3.addWormStartPosition(new Coordinate(i, terrain3.getHeight()- 5));
+        }
+        levels.add(level3);
+        */
+
     }
 
     /**

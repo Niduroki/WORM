@@ -16,9 +16,8 @@ public class GameSaves extends AbstractSaver {
      * @param path Path to save to
      */
     public void save(Game game, String path) {
-        MapSaves mapSaver = new MapSaves();
         Map<String, Object> data = new HashMap<String, Object>();
-        data.put("terrain", mapSaver.serialize(game.getCurrentTerrain()));
+        data.put("terrain", game.getCurrentTerrain().serialize());
         data.put("players", this.serializePlayerArray(game.getPlayers()));
         data.put("round", game.round);
         data.put("turn_of_player", game.turnOfPlayer);
@@ -37,11 +36,10 @@ public class GameSaves extends AbstractSaver {
      * @param path Path to save file
      */
     public Game load(String path) throws FileNotFoundException {
-        MapSaves mapSaver = new MapSaves();
         InputStream input = new FileInputStream(new File(path));
         Map<String, Object> data = (Map<String, Object>) this.yaml.load(input);
         Game game = new Game();
-        game.setCurrentTerrain(mapSaver.deserialize((ArrayList<ArrayList<Map>>) data.get("terrain")));
+        game.setCurrentTerrain(Terrain.deserialize((ArrayList<ArrayList<Map>>) data.get("terrain")));
         game.setPlayers(this.deserializePlayerArray((ArrayList<Map>) data.get("players")));
         game.round = (Integer) data.get("round");
         game.turnOfPlayer = (Integer) data.get("turn_of_player");

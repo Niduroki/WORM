@@ -10,15 +10,13 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
 
     protected int size = 10;
 
-    protected int color = 0x883300; // Dirt-ish html-color
-
-    protected boolean destructible = true;
-
     protected boolean slopedLeft;
 
     public TriangleBuildingBlock (int x, int y, boolean slopedLeft) {
         super(x, y);
         this.slopedLeft = slopedLeft;
+        this.color = 0x883300; // Dirt-ish html-color
+        this.destructible = true;
     }
 
     public void setSlopedLeft (boolean slopedLeft) {

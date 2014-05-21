@@ -10,12 +10,10 @@ public class Obstacle extends AbstractTerrainObject {
 
     protected int size = 10;
 
-    protected int color = 0x777777; // Stone-ish html-color
-
-    protected boolean destructible = false;
-
     public Obstacle (int x, int y) {
         super(x, y);
+        this.color = 0x777777; // Stone-ish html-color
+        this.destructible = false;
     }
 
     /**

@@ -8,7 +8,7 @@ import java.util.*;
 public class Level {
     private Terrain terrain;
     private int levelNumber;
-    private ArrayList<int[]> wormStartPoints = new ArrayList<int[]>();
+    private ArrayList<int[]> wormStartPoints = new ArrayList<>();
 
     /**
      * Initialized a new level.
@@ -102,5 +102,25 @@ public class Level {
             }
         }
         //TODO: set positions randomized, when more worms than positions
+    }
+
+    public Map<String, Object> serialize () {
+        Map<String, Object> result = new HashMap<>();
+        result.put("level_number", this.levelNumber);
+        result.put("spawns", wormStartPoints);
+        result.put("terrain", this.terrain.serialize());
+        return result;
+    }
+
+    public static Level deserialize (Map<String, Object> input) {
+        Terrain terrain = Terrain.deserialize((ArrayList<ArrayList<Map>>) input.get("terrain"));
+        ArrayList spawns = (ArrayList) input.get("spawns");
+        int levelNumber = (int) input.get("level_number");
+        Level result = new Level(terrain, levelNumber);
+        for (int i=0; i<spawns.size(); i++) {
+            ArrayList currentSpawn = (ArrayList) spawns.get(i);
+            result.addWormStartPosition((int)currentSpawn.get(0), (int)currentSpawn.get(1));
+        }
+        return result;
     }
 }

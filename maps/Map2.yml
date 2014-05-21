@@ -1,3 +1,13 @@
+level_number: 1
+spawns:
+- [4, 35]
+- [9, 35]
+- [14, 35]
+- [19, 35]
+- [24, 35]
+- [29, 35]
+- [34, 35]
+terrain:
 - - null
   - null
   - null
@@ -36,15 +46,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [0, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [0, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [0, 39]
 - - null
@@ -85,15 +95,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [1, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [1, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [1, 39]
 - - null
@@ -134,15 +144,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [2, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [2, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [2, 39]
 - - null
@@ -183,15 +193,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [3, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [3, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [3, 39]
 - - null
@@ -232,15 +242,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [4, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [4, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [4, 39]
 - - null
@@ -281,15 +291,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [5, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [5, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [5, 39]
 - - null
@@ -330,15 +340,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [6, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [6, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [6, 39]
 - - null
@@ -377,23 +387,23 @@
   - null
   - null
   - destructibility: false
-    color: 0
+    color: 7829367
     class: de.hhu.propra14.team101.Obstacle
     coords: [7, 35]
   - destructibility: false
-    color: 0
+    color: 7829367
     class: de.hhu.propra14.team101.Obstacle
     coords: [7, 36]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [7, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [7, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [7, 39]
 - - null
@@ -434,15 +444,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [8, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [8, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [8, 39]
 - - null
@@ -483,15 +493,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [9, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [9, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [9, 39]
 - - null
@@ -532,15 +542,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [10, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [10, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [10, 39]
 - - null
@@ -581,15 +591,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [11, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [11, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [11, 39]
 - - null
@@ -630,15 +640,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [12, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [12, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [12, 39]
 - - null
@@ -679,15 +689,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [13, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [13, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [13, 39]
 - - null
@@ -728,15 +738,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [14, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [14, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [14, 39]
 - - null
@@ -777,15 +787,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [15, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [15, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [15, 39]
 - - null
@@ -826,15 +836,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [16, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [16, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [16, 39]
 - - null
@@ -875,15 +885,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [17, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [17, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [17, 39]
 - - null
@@ -924,15 +934,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [18, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [18, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [18, 39]
 - - null
@@ -973,15 +983,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [19, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [19, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [19, 39]
 - - null
@@ -1022,15 +1032,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [20, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [20, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [20, 39]
 - - null
@@ -1071,15 +1081,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [21, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [21, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [21, 39]
 - - null
@@ -1120,15 +1130,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [22, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [22, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [22, 39]
 - - null
@@ -1169,15 +1179,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [23, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [23, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [23, 39]
 - - null
@@ -1218,15 +1228,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [24, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [24, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [24, 39]
 - - null
@@ -1267,15 +1277,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [25, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [25, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [25, 39]
 - - null
@@ -1316,15 +1326,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [26, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [26, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [26, 39]
 - - null
@@ -1365,15 +1375,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [27, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [27, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [27, 39]
 - - null
@@ -1414,15 +1424,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [28, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [28, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [28, 39]
 - - null
@@ -1463,15 +1473,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [29, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [29, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [29, 39]
 - - null
@@ -1512,15 +1522,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [30, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [30, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [30, 39]
 - - null
@@ -1561,15 +1571,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [31, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [31, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [31, 39]
 - - null
@@ -1610,15 +1620,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [32, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [32, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [32, 39]
 - - null
@@ -1659,15 +1669,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [33, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [33, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [33, 39]
 - - null
@@ -1708,15 +1718,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [34, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [34, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [34, 39]
 - - null
@@ -1757,15 +1767,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [35, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [35, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [35, 39]
 - - null
@@ -1806,15 +1816,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [36, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [36, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [36, 39]
 - - null
@@ -1855,15 +1865,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [37, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [37, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [37, 39]
 - - null
@@ -1904,15 +1914,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [38, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [38, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [38, 39]
 - - null
@@ -1953,15 +1963,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [39, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [39, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [39, 39]
 - - null
@@ -2002,15 +2012,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [40, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [40, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [40, 39]
 - - null
@@ -2051,15 +2061,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [41, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [41, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [41, 39]
 - - null
@@ -2100,15 +2110,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [42, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [42, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [42, 39]
 - - null
@@ -2149,15 +2159,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [43, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [43, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [43, 39]
 - - null
@@ -2198,15 +2208,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [44, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [44, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [44, 39]
 - - null
@@ -2247,15 +2257,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [45, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [45, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [45, 39]
 - - null
@@ -2296,15 +2306,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [46, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [46, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [46, 39]
 - - null
@@ -2345,15 +2355,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [47, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [47, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [47, 39]
 - - null
@@ -2394,15 +2404,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [48, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [48, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [48, 39]
 - - null
@@ -2443,15 +2453,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [49, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [49, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [49, 39]
 - - null
@@ -2492,15 +2502,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [50, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [50, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [50, 39]
 - - null
@@ -2541,15 +2551,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [51, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [51, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [51, 39]
 - - null
@@ -2590,15 +2600,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [52, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [52, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [52, 39]
 - - null
@@ -2639,15 +2649,15 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [53, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [53, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [53, 39]
 - - null
@@ -2688,29 +2698,259 @@
   - null
   - null
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [54, 37]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [54, 38]
   - destructibility: true
-    color: 0
+    color: 8925952
     class: de.hhu.propra14.team101.SquareBuildingBlock
     coords: [54, 39]
-- [null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  null, null, null, null, null, null, null, null, null, null, null, null]
-- [null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  null, null, null, null, null, null, null, null, null, null, null, null]
-- [null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  null, null, null, null, null, null, null, null, null, null, null, null]
-- [null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  null, null, null, null, null, null, null, null, null, null, null, null]
-- [null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  null, null, null, null, null, null, null, null, null, null, null, null]
+- - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [55, 37]
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [55, 38]
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [55, 39]
+- - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [56, 37]
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [56, 38]
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [56, 39]
+- - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [57, 37]
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [57, 38]
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [57, 39]
+- - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [58, 37]
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [58, 38]
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [58, 39]
+- - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [59, 37]
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [59, 38]
+  - destructibility: true
+    color: 8925952
+    class: de.hhu.propra14.team101.SquareBuildingBlock
+    coords: [59, 39]
