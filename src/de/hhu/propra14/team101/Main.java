@@ -40,6 +40,7 @@ public class Main extends Application {
     private Stage primaryStage;
     private int jumping = 0;
     private Worm jumpingWorm;
+    private Timeline timeline;
 
     public static void main (String[] args) {
         launch(args);
@@ -194,6 +195,40 @@ public class Main extends Application {
         });
     }
 
+    private void winScreen(String winner) {
+        // Clean up
+        grid.getChildren().clear();
+
+        // Create buttons and other objects
+        BorderPane border = new BorderPane();
+        border.setPadding(new Insets(20, 0, 20, 20));
+
+        Text scenetitle = new Text("Player "+winner+" won!");
+        Button returnbtn = new Button("Return");
+
+        returnbtn.setMaxWidth(Double.MAX_VALUE);
+
+        VBox vbButtons = new VBox();
+        vbButtons.setSpacing(10);
+        vbButtons.setPadding(new Insets(0, 20, 10, 20));
+        vbButtons.getChildren().add(returnbtn);
+
+
+        // Configure each object
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
+        // Add the objects
+        this.grid.add(scenetitle, 0, 0, 2, 1);
+        this.grid.add(returnbtn, 1, 2);
+
+        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addMainButtons();
+            }
+        });
+    }
+
     /**
      * Starts the gameplay
      */
@@ -203,10 +238,13 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.isSecondaryButtonDown()) {
-                    Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
-                    // Don't fire without a weapon
-                    if (currentWorm.weaponList.size() != 0) {
-                        game.addBullet(currentWorm.fireWeapon(new int[]{(int) mouseEvent.getX(), (int) mouseEvent.getY()}));
+                    if (game.turnOfPlayer < game.getPlayers().size()) {
+                        Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
+                        // Don't fire without a weapon
+                        if (currentWorm.weaponList.size() != 0) {
+                            game.addBullet(currentWorm.fireWeapon(new int[]{(int) mouseEvent.getX(), (int) mouseEvent.getY()}));
+                            game.bulletFired = true;
+                        }
                     }
                 }
             }
@@ -230,6 +268,7 @@ public class Main extends Application {
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.ESCAPE) {
                     // Close the game
+                    timeline.stop();
                     addMainButtons();
                     // Remove old handlers
                     primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
@@ -294,9 +333,9 @@ public class Main extends Application {
                 });
 
         // Construct a timeline with the mainloop
-        Timeline timeline = new Timeline(keyFrame);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        this.timeline = new Timeline(keyFrame);
+        this.timeline.setCycleCount(Animation.INDEFINITE);
+        this.timeline.play();
     }
 
     private void redraw (GraphicsContext gc) {
@@ -304,7 +343,13 @@ public class Main extends Application {
             jumpingWorm.jump();
             this.jumping -= 1;
         }
-        this.game.draw(gc);
+        // We have a winner
+        if (game.getPlayers().size() == 1) {
+            this.timeline.stop();
+            this.winScreen(game.getPlayers().get(0).name);
+        } else {
+            this.game.draw(gc);
+        }
         //Random rand = new Random();
         //game.getCurrentTerrain().removeTerrainObject(rand.nextInt(60), rand.nextInt(40));
     }

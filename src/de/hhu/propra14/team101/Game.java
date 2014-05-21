@@ -2,6 +2,7 @@ package de.hhu.propra14.team101;
 
 import com.sun.istack.internal.Nullable;
 import javafx.scene.canvas.*;
+import javafx.scene.paint.Color;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -13,6 +14,7 @@ public class Game {
     private ArrayList<Player> players = new ArrayList<Player>();
     private ArrayList<Level> levels = new ArrayList<Level>();
     private Bullet bullet;
+    public boolean bulletFired = false;
     private int selectedLevelNumber;
     private Terrain currentTerrain;
     public int round = 0;
@@ -28,14 +30,20 @@ public class Game {
         for (int i=0; i<3; i++) {
             wormsPlayer1.add(new Worm());
         }
-        players.add(new Player(wormsPlayer1,"Local"));
+        Player player1 = new Player(wormsPlayer1,"Local");
+        player1.name = "player1";
+        player1.color = Color.GREEN;
+        players.add(player1);
 
         //player 2
         ArrayList<Worm> wormsPlayer2 = new ArrayList<>();
         for (int i=0; i<3; i++) {
             wormsPlayer2.add(new Worm());
         }
-        players.add(new Player(wormsPlayer2,"Local"));
+        Player player2 = new Player(wormsPlayer2,"Local");
+        player2.name = "player2";
+        player2.color = Color.BLUE;
+        players.add(player2);
 
 
         LevelSaves loader = new LevelSaves();
@@ -213,19 +221,39 @@ public class Game {
 
         for (int i = 0; i < players.size();i++) {
             for(int indexWorms = 0; indexWorms < players.get(i).wormList.size(); indexWorms++) {
-                players.get(i).wormList.get(indexWorms).draw(gc);
+                players.get(i).wormList.get(indexWorms).draw(gc, players.get(i).color);
             }
         }
 
         if (this.bullet != null) {
-            boolean collision = this.bullet.move(gc, this, new int[]{turnOfPlayer, players.get(turnOfPlayer).currentWorm});
+            boolean collision = this.bullet.move(gc, this);
             if (collision) {
                 this.bullet = null;
+            }
+        }
+        if (this.bullet == null && this.bulletFired) {
+            this.nextRound();
+        }
+
+        // Remove dead players
+        for (int i=0; i<players.size(); i++) {
+            if (players.get(i).wormList.size() == 0) {
+                players.remove(i);
+            }
+        }
+
+        // Remove dead worms
+        for (int i=0; i<players.size(); i++) {
+            for (int j=0; j<players.get(i).wormList.size(); j++) {
+                if (players.get(i).wormList.get(j).health <= 0) {
+                    players.get(i).wormList.remove(j);
+                }
             }
         }
     }
 
     public void nextRound() {
+        this.bulletFired = false;
         this.round += 1;
         this.players.get(turnOfPlayer).selectNextWorm();
         if (this.turnOfPlayer == this.players.size()-1) {

@@ -1,12 +1,16 @@
 package de.hhu.propra14.team101;
 
 
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 
 public class Player {
 
     public ArrayList<Worm> wormList;
     public int currentWorm = 0;
+    public String name;
+    public Color color;
 
     /**
      * Whether the player is playing _this_ game, is on a network, or an AI

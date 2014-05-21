@@ -31,7 +31,6 @@ public class Bullet {
      * Move the bullet
      * @param gc Canvas to draw on
      * @param game Game to check for collisions
-     * @param shooter who shoot the bullet (he's immune to collision)
      * @return whether the bullet hit something and should be removed
      */
     public boolean move (GraphicsContext gc, Game game) {
@@ -56,7 +55,7 @@ public class Bullet {
                         )
                 ) {
                     collision = true;
-                    currentWorm.loseHealth((int) this.weapon.damage);
+                    currentWorm.health -= (int) this.weapon.damage;
                 }
             }
         }

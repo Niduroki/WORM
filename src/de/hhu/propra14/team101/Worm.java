@@ -2,6 +2,7 @@ package de.hhu.propra14.team101;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +36,9 @@ public class Worm {
         this.weaponList = new ArrayList<>();
         this.weaponList.add(new Bazooka());
         this.weaponList.add(new AtomicBomb());
+        this.weaponList.add(new AtomicBomb());
+        this.weaponList.add(new AtomicBomb());
+        this.weaponList.add(new AtomicBomb());
         this.weaponList.add(new Grenade());
     }
 
@@ -62,9 +66,10 @@ public class Worm {
      * @param gc Canvas to draw on
      * Draws the worm
      */
-    public void draw (GraphicsContext gc) {
+    public void draw (GraphicsContext gc, Color color) {
         Image image = new Image("resources/worm.gif");
         gc.drawImage(image, this.x_coord, this.y_coord);
+        gc.setFill(color);
         gc.fillText("H"+String.valueOf(this.health), this.x_coord, this.y_coord-4);
         if (this.armor != 0) {
             gc.fillText("A" + String.valueOf(this.armor), this.x_coord, this.y_coord-14);
@@ -168,18 +173,6 @@ public class Worm {
             this.currentWeapon -= 1;
         }
         return bullet;
-    }
-
-    public void loseHealth (int amount) {
-        this.health -= amount;
-
-        if (this.health <= 0) {
-            this.die();
-        }
-    }
-
-    public void die () {
-        // TODO is this needed? Worm should be removed on death
     }
 
     public Map serialize() {
