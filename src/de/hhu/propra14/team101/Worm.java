@@ -67,7 +67,7 @@ public class Worm {
      * Draws the worm
      */
     public void draw (GraphicsContext gc, Color color) {
-        Image image = new Image("resources/worm.gif");
+        Image image = new Image("worm.gif");
         gc.drawImage(image, this.x_coord, this.y_coord);
         gc.setFill(color);
         gc.fillText("H"+String.valueOf(this.health), this.x_coord, this.y_coord-4);
