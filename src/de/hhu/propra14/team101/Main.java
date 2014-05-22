@@ -39,8 +39,8 @@ public class Main extends Application {
     protected Game game;
     protected GridPane grid;
     private Stage primaryStage;
-    private int jumping = 0;
-    private Worm jumpingWorm;
+    //private int jumping = 0;
+    //private Worm jumpingWorm;
     private Timeline timeline;
 
     public static void main (String[] args) {
@@ -277,11 +277,12 @@ public class Main extends Application {
                     primaryStage.getScene().removeEventHandler(MouseEvent.ANY, mouseHandler);
                 } else if (keyEvent.getCode() == KeyCode.UP) {
                     // Don't do weird double-jumps
-                    if (jumping == 0) {
-                        int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
-                        jumping = 4;
-                        jumpingWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm);
-                    }
+                    //TODO: Add jumping again with physics
+                    //if (jumping == 0) {
+                    //    int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
+                    //    jumping = 4;
+                    //    jumpingWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm);
+                    //}
                 } else if (keyEvent.getCode() == KeyCode.LEFT) {
                     int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
                     game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('l');
@@ -321,15 +322,20 @@ public class Main extends Application {
 
         game = new Game();
         game.startLevel(0, gc);
-        updateGame();
-    }
 
-    public void updateGame () {
+        //Prepare updating game
         final Duration oneFrameAmt = Duration.millis(1000 / 60);
         final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
                 new EventHandler() {
                     public void handle(Event event) {
-                        redraw(field.getGraphicsContext2D());
+                        if(game.isGameFinished())
+                        {
+                           stopUpdating();
+                           winScreen(game.getPlayers().get(0).name);
+                        } else{
+                            game.updateGame(field.getGraphicsContext2D());
+                        }
+                       
                     }
                 });
 
@@ -339,20 +345,9 @@ public class Main extends Application {
         this.timeline.play();
     }
 
-    private void redraw (GraphicsContext gc) {
-        if (this.jumping != 0) {
-            jumpingWorm.jump();
-            this.jumping -= 1;
-        }
-        // We have a winner
-        if (game.getPlayers().size() == 1) {
-            this.timeline.stop();
-            this.winScreen(game.getPlayers().get(0).name);
-        } else {
-            this.game.draw(gc);
-        }
-        //Random rand = new Random();
-        //game.getCurrentTerrain().removeTerrainObject(rand.nextInt(60), rand.nextInt(40));
+    private void stopUpdating() {
+        this.timeline.stop();
+        this.winScreen(game.getPlayers().get(0).name);
     }
 }
 

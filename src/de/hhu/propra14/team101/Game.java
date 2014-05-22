@@ -16,6 +16,8 @@ public class Game {
     private ArrayList<Level> levels = new ArrayList<Level>();
     private Bullet bullet;
     public boolean bulletFired = false;
+    private boolean gameFinished = false;
+    private boolean gameChanged = false;
     private int selectedLevelNumber;
     private Terrain currentTerrain;
     public int round = 0;
@@ -34,7 +36,7 @@ public class Game {
         Player player1 = new Player(wormsPlayer1,"Local");
         player1.name = "player1";
         player1.color = Color.GREEN;
-        players.add(player1);
+        this.getPlayers().add(player1);
 
         //player 2
         ArrayList<Worm> wormsPlayer2 = new ArrayList<>();
@@ -44,7 +46,7 @@ public class Game {
         Player player2 = new Player(wormsPlayer2,"Local");
         player2.name = "player2";
         player2.color = Color.BLUE;
-        players.add(player2);
+        this.getPlayers().add(player2);
 
 
         LevelSaves loader = new LevelSaves();
@@ -147,10 +149,14 @@ public class Game {
             }
             levels.add(level);
         }
+
+        gameChanged = true;
     }
 
     public void addBullet (Bullet bullet) {
         this.bullet = bullet;
+
+        gameChanged = true;
     }
 
     /**
@@ -166,6 +172,7 @@ public class Game {
             throw new IllegalArgumentException("number has to exist");
         }
 
+        gameChanged = true;
         return  levels.get(number);
     }
 
@@ -174,7 +181,12 @@ public class Game {
      * @return the current terrain
      */
     public Terrain getCurrentTerrain() {
+        gameChanged = true;
         return currentTerrain;
+    }
+
+    public boolean isGameFinished() {
+        return gameFinished;
     }
 
     /**
@@ -183,6 +195,8 @@ public class Game {
     */
     public void setCurrentTerrain(Terrain terrain) {
         this.currentTerrain = terrain;
+
+        gameChanged = true;
     }
 
     /**
@@ -190,6 +204,7 @@ public class Game {
      * @return ArrayList of players
      */
     public ArrayList<Player> getPlayers() {
+        gameChanged = true;
         return this.players;
     }
 
@@ -199,69 +214,91 @@ public class Game {
      */
     public void setPlayers(ArrayList<Player> players) {
         this.players = players;
+
+        gameChanged = true;
     }
 
     /**
      * Draw the level.
      * @param gc GraphicsContext to draw the level.
      */
-    public void draw(GraphicsContext gc) {
+    private void draw(GraphicsContext gc) {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
         this.currentTerrain.draw(gc);
         gc.fillText(String.valueOf(this.round),300,20);
-        Worm currentWorm = players.get(turnOfPlayer).wormList.get(players.get(turnOfPlayer).currentWorm);
 
-        String text;
-        if (currentWorm.weaponList.size() == 0) {
-            text = "No weapon";
-        } else {
-            text = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
-        }
-        gc.fillText("Current weapon: "+text, 0, 10);
-
-        for (int i = 0; i < players.size();i++) {
-            for(int indexWorms = 0; indexWorms < players.get(i).wormList.size(); indexWorms++) {
-                players.get(i).wormList.get(indexWorms).draw(gc, players.get(i).color);
+        for (int i = 0; i < this.getPlayers().size();i++) {
+            for(int indexWorms = 0; indexWorms < this.getPlayers().get(i).wormList.size(); indexWorms++) {
+                this.getPlayers().get(i).wormList.get(indexWorms).draw(gc, this.getPlayers().get(i).color);
             }
         }
+    }
 
-        if (this.bullet != null) {
-            boolean collision = this.bullet.move(gc, this);
-            if (collision) {
-                this.bullet = null;
+    /**
+     * Update game
+     */
+    public void updateGame(GraphicsContext gc)
+    {
+        if(gameChanged) {
+            Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
+
+            String text;
+            if (currentWorm.weaponList.size() == 0) {
+                text = "No weapon";
+            } else {
+                text = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
             }
-        }
-        if (this.bullet == null && this.bulletFired) {
-            this.nextRound();
-        }
+            gc.fillText("Current weapon: "+text, 0, 10);
 
-        // Remove dead players
-        for (int i=0; i<players.size(); i++) {
-            if (players.get(i).wormList.size() == 0) {
-                players.remove(i);
-            }
-        }
-
-        // Remove dead worms
-        for (int i=0; i<players.size(); i++) {
-            for (int j=0; j<players.get(i).wormList.size(); j++) {
-                if (players.get(i).wormList.get(j).health <= 0) {
-                    players.get(i).wormList.remove(j);
+            if (this.bullet != null) {
+                boolean collision = this.bullet.move(gc, this);
+                if (collision) {
+                    this.bullet = null;
                 }
             }
+            if (this.bullet == null && this.bulletFired) {
+                this.nextRound();
+            }
+
+            // Remove dead players
+            for (int i=0; i<this.getPlayers().size(); i++) {
+                if (this.getPlayers().get(i).wormList.size() == 0) {
+                    this.getPlayers().remove(i);
+                }
+            }
+
+            // Remove dead worms
+            for (int i=0; i<this.getPlayers().size(); i++) {
+                for (int j=0; j<this.getPlayers().get(i).wormList.size(); j++) {
+                    if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
+                        this.getPlayers().get(i).wormList.remove(j);
+                    }
+                }
+            }
+
+            if(this.getPlayers().size() == 1)
+            {
+                gameFinished = true;
+            }
         }
+
+        draw(gc);
+
+        gameChanged =false;
     }
 
     public void nextRound() {
         this.bulletFired = false;
         this.round += 1;
-        this.players.get(turnOfPlayer).selectNextWorm();
-        if (this.turnOfPlayer == this.players.size()-1) {
+        this.getPlayers().get(turnOfPlayer).selectNextWorm();
+        if (this.turnOfPlayer == this.getPlayers().size()-1) {
             this.turnOfPlayer = 0;
         } else {
             this.turnOfPlayer += 1;
         }
+
+        gameChanged = true;
     }
 
     /**
@@ -275,7 +312,9 @@ public class Game {
         }
         selectedLevelNumber = levelNumber;
         this.currentTerrain = levels.get(selectedLevelNumber).getTerrain();
-        levels.get(selectedLevelNumber).setWormsStartPosition(players);
+        levels.get(selectedLevelNumber).setWormsStartPosition(this.getPlayers());
+
+        gameChanged = true;
 
         draw(gc);
     }
