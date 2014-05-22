@@ -1,5 +1,7 @@
 package de.hhu.propra14.team101;
 
+import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
+
 import java.util.*;
 
 /**
@@ -95,7 +97,7 @@ public class Level {
             for(int indexWorm = 0; indexWorm < players.get(index).wormList.size(); indexWorm++)
             {
                 if(indexStartPosition < wormStartPoints.size()) {
-                    players.get(index).wormList.get(indexWorm).setXCoordinate(wormStartPoints.get(indexStartPosition)[0]*AbstractTerrainObject.getSize());
+                    players.get(index).wormList.get(indexWorm).setXCoordinate(wormStartPoints.get(indexStartPosition)[0]* AbstractTerrainObject.getSize());
                     players.get(index).wormList.get(indexWorm).setYCoordinate(wormStartPoints.get(indexStartPosition)[1]*AbstractTerrainObject.getSize());
                     indexStartPosition++;
                 }

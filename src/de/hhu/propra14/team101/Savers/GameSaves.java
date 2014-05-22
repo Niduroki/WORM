@@ -1,4 +1,9 @@
-package de.hhu.propra14.team101;
+package de.hhu.propra14.team101.Savers;
+
+import de.hhu.propra14.team101.Game;
+import de.hhu.propra14.team101.Player;
+import de.hhu.propra14.team101.Savers.AbstractSaver;
+import de.hhu.propra14.team101.Terrain;
 
 import java.io.*;
 import java.util.ArrayList;

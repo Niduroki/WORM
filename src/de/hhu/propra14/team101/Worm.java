@@ -1,5 +1,9 @@
 package de.hhu.propra14.team101;
 
+import de.hhu.propra14.team101.Weapons.AbstractWeapon;
+import de.hhu.propra14.team101.Weapons.AtomicBomb;
+import de.hhu.propra14.team101.Weapons.Bazooka;
+import de.hhu.propra14.team101.Weapons.Grenade;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -14,7 +18,7 @@ import java.util.Map;
 
 public class Worm {
 
-    public ArrayList<Weapons> weaponList;
+    public ArrayList<AbstractWeapon> weaponList;
 
     public int size = 10;
 
@@ -198,9 +202,9 @@ public class Worm {
         result.health = (Integer) input.get("health");
         result.orientation = input.get("orientation").toString().charAt(0);
         ArrayList<Map> rawWeapons = new ArrayList<Map>();
-        ArrayList<Weapons> weaponList = new ArrayList<>();
+        ArrayList<AbstractWeapon> weaponList = new ArrayList<>();
         for (int i=0; i<rawWeapons.size(); i++) {
-            weaponList.add(Weapons.deserialize(rawWeapons.get(i)));
+            weaponList.add(AbstractWeapon.deserialize(rawWeapons.get(i)));
         }
         result.weaponList = weaponList;
         return result;

@@ -1,8 +1,9 @@
-package de.hhu.propra14.team101;
+package de.hhu.propra14.team101.Weapons;
 
-import javafx.scene.canvas.GraphicsContext;
+import de.hhu.propra14.team101.Bullet;
+import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 
-public class Bazooka extends Weapons {
+public class Bazooka extends AbstractWeapon {
 
     public Bazooka() {
         this.name = "Bazooka";

@@ -1,5 +1,9 @@
 package de.hhu.propra14.team101;
 
+import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
+import de.hhu.propra14.team101.TerrainObjects.Obstacle;
+import de.hhu.propra14.team101.TerrainObjects.SquareBuildingBlock;
+import de.hhu.propra14.team101.TerrainObjects.TriangleBuildingBlock;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -44,10 +48,9 @@ public class Terrain {
     /**
      * Add a terrain object.
      */
-    public void addTerrainObject(AbstractTerrainObject object)
-    {
-        int xCoordinate = object.xCoordinate;
-        int yCoordinate = object.yCoordinate;
+    public void addTerrainObject(AbstractTerrainObject object) {
+        int xCoordinate = object.getCoords()[0];
+        int yCoordinate = object.getCoords()[1];
 
         if (xCoordinate < 0 || xCoordinate > width || yCoordinate < 0 || yCoordinate > height) {
             throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
@@ -115,7 +118,7 @@ public class Terrain {
                     map.put("destructibility", workingBlock.getDestructible());
                     map.put("class", workingBlock.getClass().getName());
                     // Save slope if we have a triangle
-                    if (workingBlock.getClass().getName().equals("de.hhu.propra14.team101.TriangleBuildingBlock")) {
+                    if (workingBlock.getClass().getName().equals("de.hhu.propra14.team101.TerrainObjects.TriangleBuildingBlock")) {
                         TriangleBuildingBlock tmp = (TriangleBuildingBlock) this.terrainObjects[i][j];
                         map.put("slopedLeft", tmp.getSlopedLeft());
                     }
@@ -136,16 +139,16 @@ public class Terrain {
                     boolean destructibility = Boolean.parseBoolean(workingMap.get("destructibility").toString());
                     Integer color = (Integer) workingMap.get("color");
                     ArrayList<Integer> coords = (ArrayList<Integer>) workingMap.get("coords");
-                    if (workingMap.get("class").equals("de.hhu.propra14.team101.SquareBuildingBlock")) {
+                    if (workingMap.get("class").equals("de.hhu.propra14.team101.TerrainObjects.SquareBuildingBlock")) {
                         SquareBuildingBlock workingBlock = new SquareBuildingBlock(coords.get(0), coords.get(1));
                         workingBlock.setDestructible(destructibility);
                         terrain.addTerrainObject(workingBlock);
-                    } else if (workingMap.get("class").equals("de.hhu.propra14.team101.TriangleBuildingBlock")) {
+                    } else if (workingMap.get("class").equals("de.hhu.propra14.team101.TerrainObjects.TriangleBuildingBlock")) {
                         boolean slopedLeft = Boolean.parseBoolean(workingMap.get("slopedLeft").toString());
                         TriangleBuildingBlock workingBlock = new TriangleBuildingBlock(coords.get(0), coords.get(1), slopedLeft);
                         workingBlock.setDestructible(destructibility);
                         terrain.addTerrainObject(workingBlock);
-                    } else if (workingMap.get("class").equals("de.hhu.propra14.team101.Obstacle")) {
+                    } else if (workingMap.get("class").equals("de.hhu.propra14.team101.TerrainObjects.Obstacle")) {
                         Obstacle workingBlock = new Obstacle(coords.get(0), coords.get(1));
                         workingBlock.setDestructible(destructibility);
                         terrain.addTerrainObject(workingBlock);

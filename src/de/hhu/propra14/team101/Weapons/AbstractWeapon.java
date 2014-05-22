@@ -1,6 +1,6 @@
-package de.hhu.propra14.team101;
+package de.hhu.propra14.team101.Weapons;
 
-import javafx.scene.canvas.GraphicsContext;
+import de.hhu.propra14.team101.Bullet;
 import javafx.scene.image.Image;
 
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Map;
  * Class to supply weapons
  */
 
-abstract public class Weapons {
+abstract public class AbstractWeapon {
     /** Name of the weapon */
     public String name;
     /** Damage of the weapon */
@@ -30,7 +30,7 @@ abstract public class Weapons {
         return data;
     }
 
-    public static Weapons deserialize(Map input) {
+    public static AbstractWeapon deserialize(Map input) {
         if (input.get("name") == "Atomic Bomb") {
             return new AtomicBomb();
         } else if (input.get("name") == "Bazooka") {
@@ -38,8 +38,8 @@ abstract public class Weapons {
         } else if (input.get("name") == "Grenade") {
             return new Grenade();
         } else {
-            System.out.println("Weapons.deserialize: Unknown weapon");
-            return new Weapons() {
+            System.out.println("AbstractWeapon.deserialize: Unknown weapon");
+            return new AbstractWeapon() {
                 @Override
                 public Bullet fire(int[][] path) {
                     return new Bullet(path, this);

@@ -1,4 +1,4 @@
-package de.hhu.propra14.team101;
+package de.hhu.propra14.team101.Savers;
 
 import org.yaml.snakeyaml.Yaml;
 

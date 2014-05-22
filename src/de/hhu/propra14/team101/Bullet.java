@@ -1,7 +1,7 @@
 package de.hhu.propra14.team101;
 
+import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
@@ -12,7 +12,7 @@ public class Bullet {
     public int[][] path;
 
     /** What weapon we are */
-    public Weapons weapon;
+    public AbstractWeapon weapon;
 
     /** What time of path we are at now */
     public int currentTime = 0;
@@ -22,7 +22,7 @@ public class Bullet {
      * Contructs a bullet
      *
      */
-    public Bullet(int[][] path, Weapons weapon) {
+    public Bullet(int[][] path, AbstractWeapon weapon) {
         this.path = path;
         this.weapon = weapon;
     }

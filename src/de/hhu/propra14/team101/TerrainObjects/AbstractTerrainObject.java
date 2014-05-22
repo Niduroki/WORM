@@ -1,4 +1,4 @@
-package de.hhu.propra14.team101;
+package de.hhu.propra14.team101.TerrainObjects;
 
 import javafx.scene.canvas.GraphicsContext;
 

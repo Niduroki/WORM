@@ -3,8 +3,9 @@ package de.hhu.propra14.team101;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
+import de.hhu.propra14.team101.Savers.GameSaves;
+import de.hhu.propra14.team101.Savers.SettingSaves;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
