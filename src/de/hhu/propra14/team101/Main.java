@@ -131,6 +131,13 @@ public class Main extends Application {
             }
         });
 
+        startbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addPlayerButtons();
+            }
+        });
+
         exitbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -191,6 +198,64 @@ public class Main extends Application {
                 data.put("proton", selection.getValue());
                 data.put("dalek", checkBox.selectedProperty().getValue());
                 saver.save(data, "settings.yml");
+                addMainButtons();
+            }
+        });
+    }
+    private void addPlayerButtons() {
+        // Clean up
+        this.grid.getChildren().clear();
+
+        // Create buttons and other objects
+        Text scenetitle = new Text("Player 1");
+        Text title1 = new Text("Name");
+        Text title2 = new Text("Color");
+        Button startbtn = new Button("Start");
+        Button backbtn = new Button("Back");
+        Button addplayerbtn = new Button("Another Player");
+
+        final ComboBox<String> selection = new ComboBox<String>();
+        selection.getItems().addAll("Red", "Green", "Blue", "Yellow");
+        selection.setValue("Blue");
+        final CheckBox checkBox = new CheckBox("Atomic Bomb");
+        final CheckBox checkBox2 = new CheckBox("Grenade");
+        final CheckBox checkBox3 = new CheckBox("Bazooka");
+        String initialValue;
+        initialValue = "";
+        final TextField textField = new TextField(initialValue);
+        textField.setMaxSize(100,20);
+
+        // Configure each object
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
+        // Add the objects
+        this.grid.add(scenetitle, 0, 0, 2, 1);
+        this.grid.add(title1, 1, 2);
+        this.grid.add(textField, 2, 2);
+        this.grid.add(title2, 1, 4);
+        this.grid.add(selection, 2, 4);
+        this.grid.add(checkBox, 1, 6);
+        this.grid.add(checkBox2, 2, 6);
+        this.grid.add(checkBox3, 3, 6);
+        this.grid.add(startbtn, 3, 8);
+        this.grid.add(backbtn, 1, 8);
+        this.grid.add(addplayerbtn, 2, 8);
+
+        startbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                field = new Canvas(600, 400);
+                grid.getChildren().clear();
+                grid.add(field, 0, 0);
+                startGameplay(field.getGraphicsContext2D());
+            }
+        });
+
+        backbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                SettingSaves saver = new SettingSaves();
+                Map<String, Object> data = new HashMap<String, Object>();
                 addMainButtons();
             }
         });
