@@ -152,7 +152,7 @@ public class Main extends Application {
 
         // Create buttons and other objects
         Text scenetitle = new Text("Options");
-        Text title1 = new Text("ZigZag");
+        Text title1 = new Text("Multiplayer Server");
         Text title2 = new Text("Proton");
         Button returnbtn = new Button("Save & Return");
 
@@ -164,15 +164,15 @@ public class Main extends Application {
         SettingSaves loader = new SettingSaves();
         try {
             Map<String, Object> data = (Map<String, Object>) loader.load("settings.yml");
-            initialValue = (String) data.get("zigzag");
+            initialValue = data.get("multiplayer_server").toString();
             selection.setValue(data.get("proton").toString());
             checkBox.setSelected(Boolean.parseBoolean(data.get("dalek").toString()));
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find settings file!");
-            initialValue = "";
+            initialValue = "schaepers.it";
         } catch (NullPointerException e) {
             System.out.println("Missing setting!");
-            initialValue = "";
+            initialValue = "schaepers.it";
         }
 
         final TextField textField = new TextField(initialValue);
@@ -194,7 +194,7 @@ public class Main extends Application {
             public void handle(ActionEvent actionEvent) {
                 SettingSaves saver = new SettingSaves();
                 Map<String, Object> data = new HashMap<String, Object>();
-                data.put("zigzag", textField.getText());
+                data.put("multiplayer_server", textField.getText());
                 data.put("proton", selection.getValue());
                 data.put("dalek", checkBox.selectedProperty().getValue());
                 saver.save(data, "settings.yml");
