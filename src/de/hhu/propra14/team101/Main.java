@@ -115,6 +115,7 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent e) {
                 addPlayerButtons();
+                players = new ArrayList<>();
             }
         });
 
