@@ -201,9 +201,10 @@ public class Main extends Application {
     private void addPlayerButtons() {
         // Clean up
         this.grid.getChildren().clear();
+        Integer currentPlayer = this.players.size()+1;
 
         // Create buttons and other objects
-        Text scenetitle = new Text("Player 1");
+        Text scenetitle = new Text( "Player " + currentPlayer.toString());
         Text title1 = new Text("Name");
         Text title2 = new Text("Color");
         Button startbtn = new Button("Start");
@@ -295,6 +296,8 @@ public class Main extends Application {
                 tmpPlayer.color = color;
                 tmpPlayer.name = nameField.getText();
                 players.add(tmpPlayer);
+                addPlayerButtons();
+
             }
         });
 
