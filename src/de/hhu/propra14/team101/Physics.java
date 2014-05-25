@@ -1,6 +1,8 @@
 package de.hhu.propra14.team101;
 
 
+import java.util.ArrayList;
+
 public class Physics {
     private Vector directionVector;
     private double xCoordinate;
@@ -18,6 +20,15 @@ public class Physics {
     {
         xCoordinate = this.getXCoordinate()+directionVector.getXCoordinate();
         yCoordinate = this.getYCoordinate()+directionVector.getYCoordinate();
+    }
+
+    public Worm hasCollision(Worm currentWorm, ArrayList<Worm> worms) {
+        for(Worm worm: worms) {
+            if(worm != currentWorm && worm.isHitted(xCoordinate, yCoordinate)) {
+                return worm;
+            }
+        }
+        return null;
     }
 
     public double getXCoordinate(){

@@ -265,6 +265,17 @@ public class Game {
             }
         } else {
             bullet.physics.move();
+            ArrayList<Worm> wormArrayList = new ArrayList<>();
+            for(Player playerItem: this.getPlayers())
+            {
+                wormArrayList.addAll(playerItem.wormList);
+            }
+            Worm collisionWorm = bullet.physics.hasCollision(currentWorm, wormArrayList);
+            if(collisionWorm != null) {
+                collisionWorm.health -= bullet.weapon.damage;
+                bulletFired = false;
+                nextRound();
+            }
         }
 
         draw(gc);

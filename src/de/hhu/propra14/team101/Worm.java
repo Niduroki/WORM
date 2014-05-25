@@ -174,6 +174,16 @@ public class Worm {
         return bullet;
     }
 
+    public boolean isHitted(double xCoordinate, double yCoordinate) {
+        if (this.getXCoordinate() < xCoordinate && this.getXCoordinate() + 30 > xCoordinate) {
+            if (this.getYCoordinate() < yCoordinate && this.getYCoordinate() + 30 > yCoordinate) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public Map serialize() {
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("x", this.x_coord);
