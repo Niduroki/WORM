@@ -5,7 +5,7 @@ import de.hhu.propra14.team101.Savers.LevelSaves;
 import javafx.scene.canvas.*;
 
 import javafx.scene.image.Image;
-
+import javafx.scene.paint.Color;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -193,6 +193,22 @@ public class Game {
         Image image = new Image("Background.jpg");
         gc.drawImage(image, 0.0, 0.0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
+        Worm currentWorm;
+        try {
+            currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
+        } catch (IndexOutOfBoundsException e) {
+            return;
+        }
+
+        String text;
+        if (currentWorm.weaponList.size() == 0) {
+            text = "No weapon";
+        } else {
+            text = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
+        }
+        gc.setFill(Color.BLACK);
+        gc.fillText("Current weapon: " + text, 0, 10);
+
         this.currentTerrain.draw(gc);
         gc.fillText(String.valueOf(this.round), 300, 20);
 
@@ -210,42 +226,36 @@ public class Game {
      * Update game
      */
     public void updateGame(GraphicsContext gc) {
-        Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
 
-        if (!bulletFired) {
-            String text;
-            if (currentWorm.weaponList.size() == 0) {
-                text = "No weapon";
-            } else {
-                text = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
+        //if (!bulletFired) {
+
+        // Remove dead players
+        for (int i = 0; i < this.getPlayers().size(); i++) {
+            if (this.getPlayers().get(i).wormList.size() == 0) {
+                this.getPlayers().remove(i);
             }
-            gc.fillText("Current weapon: " + text, 0, 10);
+        }
 
-            // Remove dead players
-            for (int i = 0; i < this.getPlayers().size(); i++) {
-                if (this.getPlayers().get(i).wormList.size() == 0) {
-                    this.getPlayers().remove(i);
+        // Remove dead worms
+        for (int i = 0; i < this.getPlayers().size(); i++) {
+            for (int j = 0; j < this.getPlayers().get(i).wormList.size(); j++) {
+                if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
+                    this.getPlayers().get(i).wormList.remove(j);
                 }
             }
+        }
 
-            // Remove dead worms
-            for (int i = 0; i < this.getPlayers().size(); i++) {
-                for (int j = 0; j < this.getPlayers().get(i).wormList.size(); j++) {
-                    if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
-                        this.getPlayers().get(i).wormList.remove(j);
-                    }
-                }
-            }
+        if (this.getPlayers().size() == 1) {
+            this.gameFinished = true;
+        }
 
-            if (this.getPlayers().size() == 1) {
-                gameFinished = true;
-            }
-        } else {
+        if (bulletFired) {
             bullet.physics.move();
             ArrayList<Worm> wormArrayList = new ArrayList<>();
             for (Player playerItem : this.getPlayers()) {
                 wormArrayList.addAll(playerItem.wormList);
             }
+<<<<<<< HEAD
             Collision collision = bullet.physics.hasCollision(currentWorm, wormArrayList, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
             if(collision != null) {
                 switch (collision.getType()) {
@@ -262,9 +272,16 @@ public class Game {
                         bullet.physics = Physics.Revert(bullet.physics);
                         break;
                 }
+=======
+            Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
+            Worm collisionWorm = bullet.physics.hasCollision(currentWorm, wormArrayList);
+            if (collisionWorm != null) {
+                collisionWorm.health -= bullet.weapon.damage;
+                bulletFired = false;
+                nextRound();
+>>>>>>> Fix some IndexOutOfBounds exceptions on endgame
             }
         }
-
         draw(gc);
     }
 
