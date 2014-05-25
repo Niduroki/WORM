@@ -20,7 +20,7 @@ public class Worm {
 
     public ArrayList<AbstractWeapon> weaponList;
 
-    public int size = 10;
+    public int size = 25;
 
     public int armor = 0;
 
@@ -69,7 +69,7 @@ public class Worm {
      */
     public void draw (GraphicsContext gc, Color color) {
         Image image = new Image("worm.gif");
-        gc.drawImage(image, this.x_coord, this.y_coord);
+        gc.drawImage(image, this.x_coord, this.y_coord, this.size, this.size);
         gc.setFill(color);
         gc.fillText("H"+String.valueOf(this.health), this.x_coord, this.y_coord-4);
         if (this.armor != 0) {
@@ -172,8 +172,8 @@ public class Worm {
     }
 
     public boolean isHitted(double xCoordinate, double yCoordinate) {
-        if (this.getXCoordinate() < xCoordinate && this.getXCoordinate() + 30 > xCoordinate) {
-            if (this.getYCoordinate() < yCoordinate && this.getYCoordinate() + 30 > yCoordinate) {
+        if (this.getXCoordinate() < xCoordinate && this.getXCoordinate() + this.size > xCoordinate) {
+            if (this.getYCoordinate() < yCoordinate && this.getYCoordinate() + this.size > yCoordinate) {
                 return true;
             }
         }

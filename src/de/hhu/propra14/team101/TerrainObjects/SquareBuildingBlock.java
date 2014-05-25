@@ -22,7 +22,6 @@ public class SquareBuildingBlock extends AbstractTerrainObject {
      */
     public void draw (GraphicsContext gc) {
         Image image = new Image("ground.jpg");
-        gc.drawImage(image, this.xCoordinate*this.size, this.yCoordinate*this.size);
-
+        gc.drawImage(image, this.xCoordinate*this.size, this.yCoordinate*this.size, this.size, this.size);
     }
 }
