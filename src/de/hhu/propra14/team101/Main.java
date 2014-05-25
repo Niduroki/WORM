@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.scene.paint.Color;
 
 
 /**
@@ -42,6 +44,8 @@ public class Main extends Application {
     //private int jumping = 0;
     //private Worm jumpingWorm;
     private Timeline timeline;
+    private ArrayList<Player> players = new ArrayList<>();
+
 
     public static void main (String[] args) {
         launch(args);
@@ -110,10 +114,7 @@ public class Main extends Application {
         startbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                field = new Canvas(600, 400);
-                grid.getChildren().clear();
-                grid.add(field, 0, 0);
-                startGameplay(field.getGraphicsContext2D());
+                addPlayerButtons();
             }
         });
 
@@ -131,12 +132,7 @@ public class Main extends Application {
             }
         });
 
-        startbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                addPlayerButtons();
-            }
-        });
+
 
         exitbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -214,16 +210,14 @@ public class Main extends Application {
         Button backbtn = new Button("Back");
         Button addplayerbtn = new Button("Another Player");
 
-        final ComboBox<String> selection = new ComboBox<String>();
-        selection.getItems().addAll("Red", "Green", "Blue", "Yellow");
-        selection.setValue("Blue");
-        final CheckBox checkBox = new CheckBox("Atomic Bomb");
-        final CheckBox checkBox2 = new CheckBox("Grenade");
-        final CheckBox checkBox3 = new CheckBox("Bazooka");
-        String initialValue;
-        initialValue = "";
-        final TextField textField = new TextField(initialValue);
-        textField.setMaxSize(100,20);
+        final ComboBox<String> colorSelection = new ComboBox<String>();
+        colorSelection.getItems().addAll("Red", "Green", "Blue", "Yellow");
+        colorSelection.setValue("Blue");
+        final CheckBox weaponBox1 = new CheckBox("Atomic Bomb");
+        final CheckBox weaponBox2 = new CheckBox("Grenade");
+        final CheckBox weaponBox3 = new CheckBox("Bazooka");
+        final TextField nameField = new TextField();
+        nameField.setMaxSize(100, 20);
 
         // Configure each object
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -231,12 +225,12 @@ public class Main extends Application {
         // Add the objects
         this.grid.add(scenetitle, 0, 0, 2, 1);
         this.grid.add(title1, 1, 2);
-        this.grid.add(textField, 2, 2);
+        this.grid.add(nameField, 2, 2);
         this.grid.add(title2, 1, 4);
-        this.grid.add(selection, 2, 4);
-        this.grid.add(checkBox, 1, 6);
-        this.grid.add(checkBox2, 2, 6);
-        this.grid.add(checkBox3, 3, 6);
+        this.grid.add(colorSelection, 2, 4);
+        this.grid.add(weaponBox1, 1, 6);
+        this.grid.add(weaponBox2, 2, 6);
+        this.grid.add(weaponBox3, 3, 6);
         this.grid.add(startbtn, 3, 8);
         this.grid.add(backbtn, 1, 8);
         this.grid.add(addplayerbtn, 2, 8);
@@ -259,6 +253,31 @@ public class Main extends Application {
                 addMainButtons();
             }
         });
+        addplayerbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ArrayList<Worm> wormsList = new ArrayList<>();
+                for (int i=0; i<3; i++) {
+                    wormsList.add(new Worm());
+                }
+                Player tmpPlayer = new Player(wormsList, "Local");
+                Color color;
+                if (colorSelection.getValue().equals("Red")) {
+                    color = Color.RED;
+                }else if (colorSelection.getValue().equals("Blue")) {
+                    color = Color.BLUE;
+                }else if (colorSelection.getValue().equals("Green")) {
+                    color = Color.GREEN;
+                }else if (colorSelection.getValue().equals("Yellow")) {
+                    color = Color.YELLOW;
+                } else color = Color.GREY; {
+                }
+                tmpPlayer.color = color;
+                tmpPlayer.name = nameField.getText();
+                players.add(tmpPlayer);
+            }
+        });
+
     }
 
     private void winScreen(String winner) {
