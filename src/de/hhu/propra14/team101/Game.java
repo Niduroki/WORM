@@ -255,7 +255,7 @@ public class Game {
             for (Player playerItem : this.getPlayers()) {
                 wormArrayList.addAll(playerItem.wormList);
             }
-<<<<<<< HEAD
+            Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
             Collision collision = bullet.physics.hasCollision(currentWorm, wormArrayList, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
             if(collision != null) {
                 switch (collision.getType()) {
@@ -272,14 +272,6 @@ public class Game {
                         bullet.physics = Physics.Revert(bullet.physics);
                         break;
                 }
-=======
-            Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
-            Worm collisionWorm = bullet.physics.hasCollision(currentWorm, wormArrayList);
-            if (collisionWorm != null) {
-                collisionWorm.health -= bullet.weapon.damage;
-                bulletFired = false;
-                nextRound();
->>>>>>> Fix some IndexOutOfBounds exceptions on endgame
             }
         }
         draw(gc);
