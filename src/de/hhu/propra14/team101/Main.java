@@ -465,7 +465,7 @@ public class Main extends Application {
         game.startLevel(0, gc);
 
         //Prepare updating game
-        final Duration oneFrameAmt = Duration.millis(1000 / 60);
+        final Duration oneFrameAmt = Duration.millis(60);
         final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
                 new EventHandler() {
                     public void handle(Event event) {
@@ -475,6 +475,7 @@ public class Main extends Application {
                            winScreen(game.getPlayers().get(0).name);
                         } else{
                             game.updateGame(field.getGraphicsContext2D());
+                            System.out.println("Ausgabe");
                         }
                        
                     }

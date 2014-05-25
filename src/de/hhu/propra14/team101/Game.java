@@ -7,7 +7,6 @@ import javafx.scene.canvas.*;
 import javafx.scene.image.Image;
 
 
-
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -29,7 +28,7 @@ public class Game {
      * Initialize a new game.
      */
     public Game(ArrayList players) {
-        for (int i=0; i<players.size(); i++) {
+        for (int i = 0; i < players.size(); i++) {
             this.getPlayers().add((Player) players.get(i));
         }
 
@@ -202,8 +201,7 @@ public class Game {
                 this.getPlayers().get(i).wormList.get(indexWorms).draw(gc, this.getPlayers().get(i).color);
             }
         }
-        if(bulletFired)
-        {
+        if (bulletFired) {
             bullet.draw(gc);
         }
     }
@@ -214,7 +212,7 @@ public class Game {
     public void updateGame(GraphicsContext gc) {
         Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
 
-        if(!bulletFired) {
+        if (!bulletFired) {
             String text;
             if (currentWorm.weaponList.size() == 0) {
                 text = "No weapon";
@@ -245,15 +243,25 @@ public class Game {
         } else {
             bullet.physics.move();
             ArrayList<Worm> wormArrayList = new ArrayList<>();
-            for(Player playerItem: this.getPlayers())
-            {
+            for (Player playerItem : this.getPlayers()) {
                 wormArrayList.addAll(playerItem.wormList);
             }
-            Worm collisionWorm = bullet.physics.hasCollision(currentWorm, wormArrayList);
-            if(collisionWorm != null) {
-                collisionWorm.health -= bullet.weapon.damage;
-                bulletFired = false;
-                nextRound();
+            Collision collision = bullet.physics.hasCollision(currentWorm, wormArrayList, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+            if(collision != null) {
+                switch (collision.getType()) {
+                    case Worm:
+                        ((Worm) collision.getCollisionElement()).health -= bullet.weapon.damage;
+                        bulletFired = false;
+                        nextRound();
+                        break;
+                    case TopOrDown:
+                        bulletFired = false;
+                        nextRound();
+                        break;
+                    case LeftOrRight:
+                        bullet.physics = Physics.Revert(bullet.physics);
+                        break;
+                }
             }
         }
 
