@@ -245,38 +245,12 @@ public class Main extends Application {
             startbtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    weapons = new ArrayList<>();
-                    if (weaponBox1.selectedProperty().getValue()) {
-                        weapons.add(new AtomicBomb());
-                    }
-                    if (weaponBox2.selectedProperty().getValue()) {
-                        weapons.add(new Grenade());
-                    }
-                    if (weaponBox3.selectedProperty().getValue()) {
-                        weapons.add(new Bazooka());
-                    }
+                    Map<String, Boolean> weaponMap = new HashMap<String, Boolean>();
+                    weaponMap.put("AtomicBomb", weaponBox1.selectedProperty().getValue());
+                    weaponMap.put("Grenade", weaponBox2.selectedProperty().getValue());
+                    weaponMap.put("Bazooka", weaponBox3.selectedProperty().getValue());
 
-                    ArrayList<Worm> wormsList = new ArrayList<>();
-                    for (int i = 0; i < 3; i++) {
-                        wormsList.add(new Worm(weapons));
-                    }
-                    Player tmpPlayer = new Player(wormsList, "Local");
-                    Color color;
-                    if (colorSelection.getValue().equals("Red")) {
-                        color = Color.RED;
-                    } else if (colorSelection.getValue().equals("Blue")) {
-                        color = Color.BLUE;
-                    } else if (colorSelection.getValue().equals("Green")) {
-                        color = Color.GREEN;
-                    } else if (colorSelection.getValue().equals("Yellow")) {
-                        color = Color.YELLOW;
-                    } else {
-                        color = Color.GREY;
-                    }
-                    tmpPlayer.color = color;
-                    tmpPlayer.name = nameField.getText();
-                    players.add(tmpPlayer);
-
+                    players.add(parsePlayerSelection(weaponMap, colorSelection.getValue(), nameField.getText()));
 
                     field = new Canvas(600, 400);
                     grid.getChildren().clear();
@@ -301,41 +275,50 @@ public class Main extends Application {
             addplayerbtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    weapons = new ArrayList<>();
-                    if (weaponBox1.selectedProperty().getValue()){
-                        weapons.add(new AtomicBomb());
-                    }
-                    if (weaponBox2.selectedProperty().getValue()){
-                        weapons.add(new Grenade());
-                    }
-                    if (weaponBox3.selectedProperty().getValue()){
-                        weapons.add(new Bazooka());
-                    }
+                    Map<String, Boolean> weaponMap = new HashMap<String, Boolean>();
+                    weaponMap.put("AtomicBomb", weaponBox1.selectedProperty().getValue());
+                    weaponMap.put("Grenade", weaponBox2.selectedProperty().getValue());
+                    weaponMap.put("Bazooka", weaponBox3.selectedProperty().getValue());
 
-                    ArrayList<Worm> wormsList = new ArrayList<>();
-                    for (int i = 0; i < 3; i++) {
-                        wormsList.add(new Worm(weapons));
-                    }
-                    Player tmpPlayer = new Player(wormsList, "Local");
-                    Color color;
-                    if (colorSelection.getValue().equals("Red")) {
-                        color = Color.RED;
-                    } else if (colorSelection.getValue().equals("Blue")) {
-                        color = Color.BLUE;
-                    } else if (colorSelection.getValue().equals("Green")) {
-                        color = Color.GREEN;
-                    } else if (colorSelection.getValue().equals("Yellow")) {
-                        color = Color.YELLOW;
-                    } else {
-                        color = Color.GREY;
-                    }
-                    tmpPlayer.color = color;
-                    tmpPlayer.name = nameField.getText();
-                    players.add(tmpPlayer);
+                    players.add(parsePlayerSelection(weaponMap, colorSelection.getValue(), nameField.getText()));
                     addPlayerButtons();
                 }
             });
         }
+    }
+
+    private Player parsePlayerSelection(Map<String, Boolean> weaponMap, String colorName, String playerName) {
+        weapons = new ArrayList<>();
+        if (weaponMap.get("AtomicBomb")) {
+            weapons.add(new AtomicBomb());
+        }
+        if (weaponMap.get("Grenade")) {
+            weapons.add(new Grenade());
+        }
+        if (weaponMap.get("Bazooka")) {
+            weapons.add(new Bazooka());
+        }
+
+        ArrayList<Worm> wormsList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            wormsList.add(new Worm(weapons));
+        }
+        Player tmpPlayer = new Player(wormsList, "Local");
+        Color color;
+        if (colorName.equals("Red")) {
+            color = Color.RED;
+        } else if (colorName.equals("Blue")) {
+            color = Color.BLUE;
+        } else if (colorName.equals("Green")) {
+            color = Color.GREEN;
+        } else if (colorName.equals("Yellow")) {
+            color = Color.YELLOW;
+        } else {
+            color = Color.GREY;
+        }
+        tmpPlayer.color = color;
+        tmpPlayer.name = playerName;
+        return tmpPlayer;
     }
 
     private void winScreen(String winner) {
