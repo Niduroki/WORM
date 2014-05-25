@@ -44,7 +44,7 @@ public class Main extends Application {
     //private int jumping = 0;
     //private Worm jumpingWorm;
     private Timeline timeline;
-    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> players;
 
 
     public static void main (String[] args) {
@@ -114,8 +114,8 @@ public class Main extends Application {
         startbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                addPlayerButtons();
                 players = new ArrayList<>();
+                addPlayerButtons();
             }
         });
 
@@ -210,7 +210,6 @@ public class Main extends Application {
         Text title2 = new Text("Color");
         Button startbtn = new Button("Start");
         Button backbtn = new Button("Back");
-        Button addplayerbtn = new Button("Another Player");
 
         final ComboBox<String> colorSelection = new ComboBox<String>();
         colorSelection.getItems().addAll("Red", "Green", "Blue", "Yellow");
@@ -235,26 +234,27 @@ public class Main extends Application {
         this.grid.add(weaponBox3, 3, 6);
         this.grid.add(startbtn, 3, 8);
         this.grid.add(backbtn, 1, 8);
-        this.grid.add(addplayerbtn, 2, 8);
+
 
         startbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 ArrayList<Worm> wormsList = new ArrayList<>();
-                for (int i=0; i<3; i++) {
+                for (int i = 0; i < 3; i++) {
                     wormsList.add(new Worm());
                 }
                 Player tmpPlayer = new Player(wormsList, "Local");
                 Color color;
                 if (colorSelection.getValue().equals("Red")) {
                     color = Color.RED;
-                }else if (colorSelection.getValue().equals("Blue")) {
+                } else if (colorSelection.getValue().equals("Blue")) {
                     color = Color.BLUE;
-                }else if (colorSelection.getValue().equals("Green")) {
+                } else if (colorSelection.getValue().equals("Green")) {
                     color = Color.GREEN;
-                }else if (colorSelection.getValue().equals("Yellow")) {
+                } else if (colorSelection.getValue().equals("Yellow")) {
                     color = Color.YELLOW;
-                } else color = Color.GREY; {
+                } else {
+                    color = Color.GREY;
                 }
                 tmpPlayer.color = color;
                 tmpPlayer.name = nameField.getText();
@@ -270,41 +270,44 @@ public class Main extends Application {
         backbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                SettingSaves saver = new SettingSaves();
-                Map<String, Object> data = new HashMap<String, Object>();
                 addMainButtons();
             }
         });
 
-        if (players.size() <= 2){
-        addplayerbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                ArrayList<Worm> wormsList = new ArrayList<>();
-                for (int i=0; i<3; i++) {
-                    wormsList.add(new Worm());
-                }
-                Player tmpPlayer = new Player(wormsList, "Local");
-                Color color;
-                if (colorSelection.getValue().equals("Red")) {
-                    color = Color.RED;
-                }else if (colorSelection.getValue().equals("Blue")) {
-                    color = Color.BLUE;
-                }else if (colorSelection.getValue().equals("Green")) {
-                    color = Color.GREEN;
-                }else if (colorSelection.getValue().equals("Yellow")) {
-                    color = Color.YELLOW;
-                } else color = Color.GREY; {
-                }
-                tmpPlayer.color = color;
-                tmpPlayer.name = nameField.getText();
-                players.add(tmpPlayer);
-                addPlayerButtons();
+        if (players.size() <= 2) {
+            Button addplayerbtn = new Button("Another Player");
 
-            }
-        });
+            this.grid.add(addplayerbtn, 2, 8);
 
-    }}
+            addplayerbtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    ArrayList<Worm> wormsList = new ArrayList<>();
+                    for (int i = 0; i < 3; i++) {
+                        wormsList.add(new Worm());
+                    }
+                    Player tmpPlayer = new Player(wormsList, "Local");
+                    Color color;
+                    if (colorSelection.getValue().equals("Red")) {
+                        color = Color.RED;
+                    } else if (colorSelection.getValue().equals("Blue")) {
+                        color = Color.BLUE;
+                    } else if (colorSelection.getValue().equals("Green")) {
+                        color = Color.GREEN;
+                    } else if (colorSelection.getValue().equals("Yellow")) {
+                        color = Color.YELLOW;
+                    } else {
+                        color = Color.GREY;
+                    }
+                    tmpPlayer.color = color;
+                    tmpPlayer.name = nameField.getText();
+                    players.add(tmpPlayer);
+                    addPlayerButtons();
+
+                }
+            });
+        }
+    }
 
     private void winScreen(String winner) {
         // Clean up
@@ -429,7 +432,7 @@ public class Main extends Application {
         this.primaryStage.getScene().addEventHandler(MouseEvent.ANY, mouseHandler);
         this.primaryStage.getScene().addEventHandler(ScrollEvent.SCROLL, scrollHandler);
 
-        game = new Game();
+        game = new Game(players);
         game.startLevel(0, gc);
 
         //Prepare updating game

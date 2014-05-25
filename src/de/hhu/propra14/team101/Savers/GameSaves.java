@@ -43,9 +43,8 @@ public class GameSaves extends AbstractSaver {
     public Game load(String path) throws FileNotFoundException {
         InputStream input = new FileInputStream(new File(path));
         Map<String, Object> data = (Map<String, Object>) this.yaml.load(input);
-        Game game = new Game();
+        Game game = new Game(this.deserializePlayerArray((ArrayList<Map>) data.get("players")));
         game.setCurrentTerrain(Terrain.deserialize((ArrayList<ArrayList<Map>>) data.get("terrain")));
-        game.setPlayers(this.deserializePlayerArray((ArrayList<Map>) data.get("players")));
         game.round = (Integer) data.get("round");
         game.turnOfPlayer = (Integer) data.get("turn_of_player");
         return game;
