@@ -238,6 +238,26 @@ public class Main extends Application {
         startbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                ArrayList<Worm> wormsList = new ArrayList<>();
+                for (int i=0; i<3; i++) {
+                    wormsList.add(new Worm());
+                }
+                Player tmpPlayer = new Player(wormsList, "Local");
+                Color color;
+                if (colorSelection.getValue().equals("Red")) {
+                    color = Color.RED;
+                }else if (colorSelection.getValue().equals("Blue")) {
+                    color = Color.BLUE;
+                }else if (colorSelection.getValue().equals("Green")) {
+                    color = Color.GREEN;
+                }else if (colorSelection.getValue().equals("Yellow")) {
+                    color = Color.YELLOW;
+                } else color = Color.GREY; {
+                }
+                tmpPlayer.color = color;
+                tmpPlayer.name = nameField.getText();
+                players.add(tmpPlayer);
+
                 field = new Canvas(600, 400);
                 grid.getChildren().clear();
                 grid.add(field, 0, 0);
