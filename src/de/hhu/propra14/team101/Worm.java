@@ -38,12 +38,9 @@ public class Worm {
 
     public Worm (ArrayList weapons) {
         this.weaponList = new ArrayList<>();
-        this.weaponList.add(new Bazooka());
-        this.weaponList.add(new AtomicBomb());
-        this.weaponList.add(new AtomicBomb());
-        this.weaponList.add(new AtomicBomb());
-        this.weaponList.add(new AtomicBomb());
-        this.weaponList.add(new Grenade());
+        for (int i=0; i<weapons.size(); i++) {
+            this.weaponList.add((AbstractWeapon)weapons.get(i));
+        }
     }
 
     public int getXCoordinate()

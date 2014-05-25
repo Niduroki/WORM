@@ -213,7 +213,6 @@ public class Main extends Application {
         Text scenetitle = new Text( "Player " + currentPlayer.toString());
         Text title1 = new Text("Name");
         Text title2 = new Text("Color");
-        Button startbtn = new Button("Start");
         Button backbtn = new Button("Back");
 
         final ComboBox<String> colorSelection = new ComboBox<String>();
@@ -237,41 +236,55 @@ public class Main extends Application {
         this.grid.add(weaponBox1, 1, 6);
         this.grid.add(weaponBox2, 2, 6);
         this.grid.add(weaponBox3, 3, 6);
-        this.grid.add(startbtn, 3, 8);
         this.grid.add(backbtn, 1, 8);
 
+        if (players.size() != 0) {
+            Button startbtn = new Button("Start");
+            this.grid.add(startbtn, 3, 8);
 
-        startbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                ArrayList<Worm> wormsList = new ArrayList<>();
-                for (int i = 0; i < 3; i++) {
-                    wormsList.add(new Worm(weapons));
+            startbtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    weapons = new ArrayList<>();
+                    if (weaponBox1.selectedProperty().getValue()) {
+                        weapons.add(new AtomicBomb());
+                    }
+                    if (weaponBox2.selectedProperty().getValue()) {
+                        weapons.add(new Grenade());
+                    }
+                    if (weaponBox3.selectedProperty().getValue()) {
+                        weapons.add(new Bazooka());
+                    }
+
+                    ArrayList<Worm> wormsList = new ArrayList<>();
+                    for (int i = 0; i < 3; i++) {
+                        wormsList.add(new Worm(weapons));
+                    }
+                    Player tmpPlayer = new Player(wormsList, "Local");
+                    Color color;
+                    if (colorSelection.getValue().equals("Red")) {
+                        color = Color.RED;
+                    } else if (colorSelection.getValue().equals("Blue")) {
+                        color = Color.BLUE;
+                    } else if (colorSelection.getValue().equals("Green")) {
+                        color = Color.GREEN;
+                    } else if (colorSelection.getValue().equals("Yellow")) {
+                        color = Color.YELLOW;
+                    } else {
+                        color = Color.GREY;
+                    }
+                    tmpPlayer.color = color;
+                    tmpPlayer.name = nameField.getText();
+                    players.add(tmpPlayer);
+
+
+                    field = new Canvas(600, 400);
+                    grid.getChildren().clear();
+                    grid.add(field, 0, 0);
+                    startGameplay(field.getGraphicsContext2D());
                 }
-                Player tmpPlayer = new Player(wormsList, "Local");
-                Color color;
-                if (colorSelection.getValue().equals("Red")) {
-                    color = Color.RED;
-                } else if (colorSelection.getValue().equals("Blue")) {
-                    color = Color.BLUE;
-                } else if (colorSelection.getValue().equals("Green")) {
-                    color = Color.GREEN;
-                } else if (colorSelection.getValue().equals("Yellow")) {
-                    color = Color.YELLOW;
-                } else {
-                    color = Color.GREY;
-                }
-                tmpPlayer.color = color;
-                tmpPlayer.name = nameField.getText();
-                players.add(tmpPlayer);
-
-
-                field = new Canvas(600, 400);
-                grid.getChildren().clear();
-                grid.add(field, 0, 0);
-                startGameplay(field.getGraphicsContext2D());
-            }
-        });
+            });
+        }
 
         backbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -288,6 +301,17 @@ public class Main extends Application {
             addplayerbtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
+                    weapons = new ArrayList<>();
+                    if (weaponBox1.selectedProperty().getValue()){
+                        weapons.add(new AtomicBomb());
+                    }
+                    if (weaponBox2.selectedProperty().getValue()){
+                        weapons.add(new Grenade());
+                    }
+                    if (weaponBox3.selectedProperty().getValue()){
+                        weapons.add(new Bazooka());
+                    }
+
                     ArrayList<Worm> wormsList = new ArrayList<>();
                     for (int i = 0; i < 3; i++) {
                         wormsList.add(new Worm(weapons));
@@ -309,29 +333,6 @@ public class Main extends Application {
                     tmpPlayer.name = nameField.getText();
                     players.add(tmpPlayer);
                     addPlayerButtons();
-
-
-                    if (weaponBox1.selectedProperty().getValue()){
-                        weapons.add(new AtomicBomb());
-                    }
-                    if (weaponBox2.selectedProperty().getValue()){
-                        weapons.add(new Grenade());
-                    }
-                    if (weaponBox3.selectedProperty().getValue()){
-                        weapons.add(new Bazooka());
-                    }
-
-
-                    if (weaponBox1.selectedProperty().getValue()){
-                        weapons.add(new AtomicBomb());
-                    }
-                    if (weaponBox2.selectedProperty().getValue()){
-                        weapons.add(new Grenade());
-                    }
-                    if (weaponBox3.selectedProperty().getValue()){
-                        weapons.add(new Bazooka());
-                    }
-
                 }
             });
         }
