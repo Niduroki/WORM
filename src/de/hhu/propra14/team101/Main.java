@@ -7,6 +7,10 @@ import java.util.Map;
 
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
+import de.hhu.propra14.team101.Weapons.AbstractWeapon;
+import de.hhu.propra14.team101.Weapons.AtomicBomb;
+import de.hhu.propra14.team101.Weapons.Bazooka;
+import de.hhu.propra14.team101.Weapons.Grenade;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -44,7 +48,8 @@ public class Main extends Application {
     //private int jumping = 0;
     //private Worm jumpingWorm;
     private Timeline timeline;
-    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> players;
+    private ArrayList<AbstractWeapon> weapons;
 
 
     public static void main (String[] args) {
@@ -114,6 +119,7 @@ public class Main extends Application {
         startbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                players = new ArrayList<>();
                 addPlayerButtons();
             }
         });
@@ -201,14 +207,13 @@ public class Main extends Application {
     private void addPlayerButtons() {
         // Clean up
         this.grid.getChildren().clear();
+        Integer currentPlayer = this.players.size()+1;
 
         // Create buttons and other objects
-        Text scenetitle = new Text("Player 1");
+        Text scenetitle = new Text( "Player " + currentPlayer.toString());
         Text title1 = new Text("Name");
         Text title2 = new Text("Color");
-        Button startbtn = new Button("Start");
         Button backbtn = new Button("Back");
-        Button addplayerbtn = new Button("Another Player");
 
         final ComboBox<String> colorSelection = new ComboBox<String>();
         colorSelection.getItems().addAll("Red", "Green", "Blue", "Yellow");
@@ -231,53 +236,106 @@ public class Main extends Application {
         this.grid.add(weaponBox1, 1, 6);
         this.grid.add(weaponBox2, 2, 6);
         this.grid.add(weaponBox3, 3, 6);
-        this.grid.add(startbtn, 3, 8);
         this.grid.add(backbtn, 1, 8);
-        this.grid.add(addplayerbtn, 2, 8);
 
-        startbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                field = new Canvas(600, 400);
-                grid.getChildren().clear();
-                grid.add(field, 0, 0);
-                startGameplay(field.getGraphicsContext2D());
-            }
-        });
+        if (players.size() != 0) {
+            Button startbtn = new Button("Start");
+            this.grid.add(startbtn, 3, 8);
+
+            startbtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    weapons = new ArrayList<>();
+                    if (weaponBox1.selectedProperty().getValue()) {
+                        weapons.add(new AtomicBomb());
+                    }
+                    if (weaponBox2.selectedProperty().getValue()) {
+                        weapons.add(new Grenade());
+                    }
+                    if (weaponBox3.selectedProperty().getValue()) {
+                        weapons.add(new Bazooka());
+                    }
+
+                    ArrayList<Worm> wormsList = new ArrayList<>();
+                    for (int i = 0; i < 3; i++) {
+                        wormsList.add(new Worm(weapons));
+                    }
+                    Player tmpPlayer = new Player(wormsList, "Local");
+                    Color color;
+                    if (colorSelection.getValue().equals("Red")) {
+                        color = Color.RED;
+                    } else if (colorSelection.getValue().equals("Blue")) {
+                        color = Color.BLUE;
+                    } else if (colorSelection.getValue().equals("Green")) {
+                        color = Color.GREEN;
+                    } else if (colorSelection.getValue().equals("Yellow")) {
+                        color = Color.YELLOW;
+                    } else {
+                        color = Color.GREY;
+                    }
+                    tmpPlayer.color = color;
+                    tmpPlayer.name = nameField.getText();
+                    players.add(tmpPlayer);
+
+
+                    field = new Canvas(600, 400);
+                    grid.getChildren().clear();
+                    grid.add(field, 0, 0);
+                    startGameplay(field.getGraphicsContext2D());
+                }
+            });
+        }
 
         backbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                SettingSaves saver = new SettingSaves();
-                Map<String, Object> data = new HashMap<String, Object>();
                 addMainButtons();
             }
         });
-        addplayerbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                ArrayList<Worm> wormsList = new ArrayList<>();
-                for (int i=0; i<3; i++) {
-                    wormsList.add(new Worm());
-                }
-                Player tmpPlayer = new Player(wormsList, "Local");
-                Color color;
-                if (colorSelection.getValue().equals("Red")) {
-                    color = Color.RED;
-                }else if (colorSelection.getValue().equals("Blue")) {
-                    color = Color.BLUE;
-                }else if (colorSelection.getValue().equals("Green")) {
-                    color = Color.GREEN;
-                }else if (colorSelection.getValue().equals("Yellow")) {
-                    color = Color.YELLOW;
-                } else color = Color.GREY; {
-                }
-                tmpPlayer.color = color;
-                tmpPlayer.name = nameField.getText();
-                players.add(tmpPlayer);
-            }
-        });
 
+        if (players.size() <= 2) {
+            Button addplayerbtn = new Button("Another Player");
+
+            this.grid.add(addplayerbtn, 2, 8);
+
+            addplayerbtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    weapons = new ArrayList<>();
+                    if (weaponBox1.selectedProperty().getValue()){
+                        weapons.add(new AtomicBomb());
+                    }
+                    if (weaponBox2.selectedProperty().getValue()){
+                        weapons.add(new Grenade());
+                    }
+                    if (weaponBox3.selectedProperty().getValue()){
+                        weapons.add(new Bazooka());
+                    }
+
+                    ArrayList<Worm> wormsList = new ArrayList<>();
+                    for (int i = 0; i < 3; i++) {
+                        wormsList.add(new Worm(weapons));
+                    }
+                    Player tmpPlayer = new Player(wormsList, "Local");
+                    Color color;
+                    if (colorSelection.getValue().equals("Red")) {
+                        color = Color.RED;
+                    } else if (colorSelection.getValue().equals("Blue")) {
+                        color = Color.BLUE;
+                    } else if (colorSelection.getValue().equals("Green")) {
+                        color = Color.GREEN;
+                    } else if (colorSelection.getValue().equals("Yellow")) {
+                        color = Color.YELLOW;
+                    } else {
+                        color = Color.GREY;
+                    }
+                    tmpPlayer.color = color;
+                    tmpPlayer.name = nameField.getText();
+                    players.add(tmpPlayer);
+                    addPlayerButtons();
+                }
+            });
+        }
     }
 
     private void winScreen(String winner) {
@@ -403,7 +461,7 @@ public class Main extends Application {
         this.primaryStage.getScene().addEventHandler(MouseEvent.ANY, mouseHandler);
         this.primaryStage.getScene().addEventHandler(ScrollEvent.SCROLL, scrollHandler);
 
-        game = new Game();
+        game = new Game(players);
         game.startLevel(0, gc);
 
         //Prepare updating game

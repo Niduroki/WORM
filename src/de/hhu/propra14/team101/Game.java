@@ -3,8 +3,10 @@ package de.hhu.propra14.team101;
 import com.sun.istack.internal.Nullable;
 import de.hhu.propra14.team101.Savers.LevelSaves;
 import javafx.scene.canvas.*;
+
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
+
+
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -26,28 +28,10 @@ public class Game {
     /**
      * Initialize a new game.
      */
-    public Game() {
-        //TODO: Remove hard-coded players
-        //player 1
-        ArrayList<Worm> wormsPlayer1 = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            wormsPlayer1.add(new Worm());
+    public Game(ArrayList players) {
+        for (int i=0; i<players.size(); i++) {
+            this.getPlayers().add((Player) players.get(i));
         }
-        Player player1 = new Player(wormsPlayer1, "Local");
-        player1.name = "player1";
-        player1.color = Color.GREEN;
-        this.getPlayers().add(player1);
-
-        //player 2
-        ArrayList<Worm> wormsPlayer2 = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            wormsPlayer2.add(new Worm());
-        }
-        Player player2 = new Player(wormsPlayer2, "Local");
-        player2.name = "player2";
-        player2.color = Color.BLUE;
-        this.getPlayers().add(player2);
-
 
         LevelSaves loader = new LevelSaves();
         try {
@@ -200,15 +184,6 @@ public class Game {
     }
 
     /**
-     * Sets the players
-     *
-     * @param players ArrayList of players
-     */
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
-    }
-
-    /**
      * Draw the level.
      *
      * @param gc GraphicsContext to draw the level.
@@ -269,6 +244,17 @@ public class Game {
             }
         } else {
             bullet.physics.move();
+            ArrayList<Worm> wormArrayList = new ArrayList<>();
+            for(Player playerItem: this.getPlayers())
+            {
+                wormArrayList.addAll(playerItem.wormList);
+            }
+            Worm collisionWorm = bullet.physics.hasCollision(currentWorm, wormArrayList);
+            if(collisionWorm != null) {
+                collisionWorm.health -= bullet.weapon.damage;
+                bulletFired = false;
+                nextRound();
+            }
         }
 
         draw(gc);
