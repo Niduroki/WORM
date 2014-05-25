@@ -275,6 +275,8 @@ public class Main extends Application {
                 addMainButtons();
             }
         });
+
+        if (players.size() <= 2){
         addplayerbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -302,7 +304,7 @@ public class Main extends Application {
             }
         });
 
-    }
+    }}
 
     private void winScreen(String winner) {
         // Clean up
