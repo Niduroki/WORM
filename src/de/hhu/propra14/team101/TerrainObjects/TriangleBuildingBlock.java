@@ -34,7 +34,7 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
     public void draw (GraphicsContext gc) {
 
         if (this.getSlopedLeft()) {
-            Image image = new Image("ground-triangle-right.png");
+            Image image = new Image("ground-triangle-left.png");
             gc.drawImage(image, this.xCoordinate*this.size, this.yCoordinate*this.size);
         } else {
             Image image = new Image("ground-triangle-left.png");
