@@ -7,6 +7,10 @@ import java.util.Map;
 
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
+import de.hhu.propra14.team101.Weapons.AbstractWeapon;
+import de.hhu.propra14.team101.Weapons.AtomicBomb;
+import de.hhu.propra14.team101.Weapons.Bazooka;
+import de.hhu.propra14.team101.Weapons.Grenade;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -45,6 +49,7 @@ public class Main extends Application {
     //private Worm jumpingWorm;
     private Timeline timeline;
     private ArrayList<Player> players;
+    private ArrayList<AbstractWeapon> weapons;
 
 
     public static void main (String[] args) {
@@ -241,7 +246,7 @@ public class Main extends Application {
             public void handle(ActionEvent e) {
                 ArrayList<Worm> wormsList = new ArrayList<>();
                 for (int i = 0; i < 3; i++) {
-                    wormsList.add(new Worm());
+                    wormsList.add(new Worm(weapons));
                 }
                 Player tmpPlayer = new Player(wormsList, "Local");
                 Color color;
@@ -259,6 +264,7 @@ public class Main extends Application {
                 tmpPlayer.color = color;
                 tmpPlayer.name = nameField.getText();
                 players.add(tmpPlayer);
+
 
                 field = new Canvas(600, 400);
                 grid.getChildren().clear();
@@ -284,7 +290,7 @@ public class Main extends Application {
                 public void handle(ActionEvent actionEvent) {
                     ArrayList<Worm> wormsList = new ArrayList<>();
                     for (int i = 0; i < 3; i++) {
-                        wormsList.add(new Worm());
+                        wormsList.add(new Worm(weapons));
                     }
                     Player tmpPlayer = new Player(wormsList, "Local");
                     Color color;
@@ -303,6 +309,28 @@ public class Main extends Application {
                     tmpPlayer.name = nameField.getText();
                     players.add(tmpPlayer);
                     addPlayerButtons();
+
+
+                    if (weaponBox1.selectedProperty().getValue()){
+                        weapons.add(new AtomicBomb());
+                    }
+                    if (weaponBox2.selectedProperty().getValue()){
+                        weapons.add(new Grenade());
+                    }
+                    if (weaponBox3.selectedProperty().getValue()){
+                        weapons.add(new Bazooka());
+                    }
+
+
+                    if (weaponBox1.selectedProperty().getValue()){
+                        weapons.add(new AtomicBomb());
+                    }
+                    if (weaponBox2.selectedProperty().getValue()){
+                        weapons.add(new Grenade());
+                    }
+                    if (weaponBox3.selectedProperty().getValue()){
+                        weapons.add(new Bazooka());
+                    }
 
                 }
             });

@@ -36,7 +36,7 @@ public class Worm {
 
     private int jumpProcess = 0;
 
-    public Worm () {
+    public Worm (ArrayList weapons) {
         this.weaponList = new ArrayList<>();
         this.weaponList.add(new Bazooka());
         this.weaponList.add(new AtomicBomb());
@@ -200,18 +200,17 @@ public class Worm {
     }
 
     public static Worm deserialize(Map input) {
-        Worm result = new Worm();
-        result.x_coord = (Integer) input.get("x");
-        result.y_coord = (Integer) input.get("y");
-        result.armor = (Integer) input.get("armor");
-        result.health = (Integer) input.get("health");
-        result.orientation = input.get("orientation").toString().charAt(0);
         ArrayList<Map> rawWeapons = new ArrayList<Map>();
         ArrayList<AbstractWeapon> weaponList = new ArrayList<>();
         for (int i=0; i<rawWeapons.size(); i++) {
             weaponList.add(AbstractWeapon.deserialize(rawWeapons.get(i)));
         }
-        result.weaponList = weaponList;
+        Worm result = new Worm(weaponList);
+        result.x_coord = (Integer) input.get("x");
+        result.y_coord = (Integer) input.get("y");
+        result.armor = (Integer) input.get("armor");
+        result.health = (Integer) input.get("health");
+        result.orientation = input.get("orientation").toString().charAt(0);
         return result;
     }
 }
