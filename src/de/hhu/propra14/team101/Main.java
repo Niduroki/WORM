@@ -16,7 +16,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -456,15 +455,15 @@ public class Main extends Application {
         //Prepare updating game
         final Duration oneFrameAmt = Duration.millis(60);
         final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
-                new EventHandler() {
-                    public void handle(Event event) {
+                new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
                         if(game.isGameFinished())
                         {
                            stopUpdating();
                            winScreen(game.getPlayers().get(0).name);
                         } else{
                             game.updateGame(field.getGraphicsContext2D());
-                            System.out.println("Ausgabe");
+                            //System.out.println("Ausgabe");
                         }
                        
                     }
