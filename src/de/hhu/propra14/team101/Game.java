@@ -17,33 +17,32 @@ public class Game {
     private Bullet bullet;
     public boolean bulletFired = false;
     private boolean gameFinished = false;
-    private boolean gameChanged = false;
     private int selectedLevelNumber;
     private Terrain currentTerrain;
     public int round = 0;
     public int turnOfPlayer = 0;
 
     /**
-    * Initialize a new game.
-    */
+     * Initialize a new game.
+     */
     public Game() {
         //TODO: Remove hard-coded players
         //player 1
         ArrayList<Worm> wormsPlayer1 = new ArrayList<>();
-        for (int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             wormsPlayer1.add(new Worm());
         }
-        Player player1 = new Player(wormsPlayer1,"Local");
+        Player player1 = new Player(wormsPlayer1, "Local");
         player1.name = "player1";
         player1.color = Color.GREEN;
         this.getPlayers().add(player1);
 
         //player 2
         ArrayList<Worm> wormsPlayer2 = new ArrayList<>();
-        for (int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             wormsPlayer2.add(new Worm());
         }
-        Player player2 = new Player(wormsPlayer2,"Local");
+        Player player2 = new Player(wormsPlayer2, "Local");
         player2.name = "player2";
         player2.color = Color.BLUE;
         this.getPlayers().add(player2);
@@ -114,74 +113,66 @@ public class Game {
     /**
      * Get number of level, which is selected.
      */
-    public int getSelectedLevelNumber()
-    {
+    public int getSelectedLevelNumber() {
         return selectedLevelNumber;
     }
 
     /**
      * Get count of levels.
      */
-    public int getCountLevel()
-    {
+    public int getCountLevel() {
         return levels.size();
     }
 
     /**
      * Add a level. Overwrites level, if level number exists.
+     *
      * @param level The new level.
-     * @exception java.lang.IllegalArgumentException if level number is negative
+     * @throws java.lang.IllegalArgumentException if level number is negative
      */
-    public void addLevel(Level level)
-    {
-        if(level.getNumber() < 0)
-        {
+    public void addLevel(Level level) {
+        if (level.getNumber() < 0) {
             throw new IllegalArgumentException("level number must be positive or null");
         }
 
-        if(level.getNumber() < levels.size())
-        {
+        if (level.getNumber() < levels.size()) {
             levels.set(level.getNumber(), level);
         } else {
             int index;
-            for(index = levels.size(); index < level.getNumber(); index++) {
+            for (index = levels.size(); index < level.getNumber(); index++) {
                 levels.add(null);
             }
             levels.add(level);
         }
-
-        gameChanged = true;
     }
 
-    public void addBullet (Bullet bullet) {
+    public void fireBullet(Bullet bullet) {
         this.bullet = bullet;
-
-        gameChanged = true;
+        bulletFired = true;
     }
 
     /**
      * Gets a level.
+     *
      * @param number the level number
      * @return a specific level
-     * @exception java.lang.IllegalArgumentException
+     * @throws java.lang.IllegalArgumentException
      */
     @Nullable
     public Level getLevel(int number) {
-        if(number >= levels.size() || number < 0)
-        {
+        if (number >= levels.size() || number < 0) {
             throw new IllegalArgumentException("number has to exist");
         }
 
-        gameChanged = true;
-        return  levels.get(number);
+        return levels.get(number);
     }
 
     /**
      * Gets the current terrain.
+     *
      * @return the current terrain
      */
     public Terrain getCurrentTerrain() {
-        gameChanged = true;
         return currentTerrain;
     }
 
@@ -191,130 +182,116 @@ public class Game {
 
     /**
      * Sets the current terrain.
+     *
      * @param terrain Terrain to be used
-    */
+     */
     public void setCurrentTerrain(Terrain terrain) {
         this.currentTerrain = terrain;
-
-        gameChanged = true;
     }
 
     /**
      * Gets the players
+     *
      * @return ArrayList of players
      */
     public ArrayList<Player> getPlayers() {
-        gameChanged = true;
         return this.players;
     }
 
     /**
      * Sets the players
+     *
      * @param players ArrayList of players
      */
     public void setPlayers(ArrayList<Player> players) {
         this.players = players;
-
-        gameChanged = true;
     }
 
     /**
      * Draw the level.
+     *
      * @param gc GraphicsContext to draw the level.
      */
     private void draw(GraphicsContext gc) {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
         this.currentTerrain.draw(gc);
-        gc.fillText(String.valueOf(this.round),300,20);
+        gc.fillText(String.valueOf(this.round), 300, 20);
 
-        for (int i = 0; i < this.getPlayers().size();i++) {
-            for(int indexWorms = 0; indexWorms < this.getPlayers().get(i).wormList.size(); indexWorms++) {
+        for (int i = 0; i < this.getPlayers().size(); i++) {
+            for (int indexWorms = 0; indexWorms < this.getPlayers().get(i).wormList.size(); indexWorms++) {
                 this.getPlayers().get(i).wormList.get(indexWorms).draw(gc, this.getPlayers().get(i).color);
             }
+        }
+        if(bulletFired)
+        {
+            bullet.draw(gc);
         }
     }
 
     /**
      * Update game
      */
-    public void updateGame(GraphicsContext gc)
-    {
-        if(gameChanged) {
-            Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
+    public void updateGame(GraphicsContext gc) {
+        Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
 
+        if(!bulletFired) {
             String text;
             if (currentWorm.weaponList.size() == 0) {
                 text = "No weapon";
             } else {
                 text = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
             }
-            gc.fillText("Current weapon: "+text, 0, 10);
-
-            if (this.bullet != null) {
-                boolean collision = this.bullet.move(gc, this);
-                if (collision) {
-                    this.bullet = null;
-                }
-            }
-            if (this.bullet == null && this.bulletFired) {
-                this.nextRound();
-            }
+            gc.fillText("Current weapon: " + text, 0, 10);
 
             // Remove dead players
-            for (int i=0; i<this.getPlayers().size(); i++) {
+            for (int i = 0; i < this.getPlayers().size(); i++) {
                 if (this.getPlayers().get(i).wormList.size() == 0) {
                     this.getPlayers().remove(i);
                 }
             }
 
             // Remove dead worms
-            for (int i=0; i<this.getPlayers().size(); i++) {
-                for (int j=0; j<this.getPlayers().get(i).wormList.size(); j++) {
+            for (int i = 0; i < this.getPlayers().size(); i++) {
+                for (int j = 0; j < this.getPlayers().get(i).wormList.size(); j++) {
                     if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
                         this.getPlayers().get(i).wormList.remove(j);
                     }
                 }
             }
 
-            if(this.getPlayers().size() == 1)
-            {
+            if (this.getPlayers().size() == 1) {
                 gameFinished = true;
             }
+        } else {
+            bullet.physics.move();
         }
 
         draw(gc);
-
-        gameChanged =false;
     }
 
     public void nextRound() {
-        this.bulletFired = false;
         this.round += 1;
         this.getPlayers().get(turnOfPlayer).selectNextWorm();
-        if (this.turnOfPlayer == this.getPlayers().size()-1) {
+        if (this.turnOfPlayer == this.getPlayers().size() - 1) {
             this.turnOfPlayer = 0;
         } else {
             this.turnOfPlayer += 1;
         }
-
-        gameChanged = true;
     }
 
     /**
-    * Start the level and initialize terrain and worms.
-    * @exception java.lang.IllegalArgumentException if levelNumber does not exist.
-    */
+     * Start the level and initialize terrain and worms.
+     *
+     * @throws java.lang.IllegalArgumentException if levelNumber does not exist.
+     */
     public void startLevel(int levelNumber, GraphicsContext gc) {
-        if(levelNumber >= levels.size() || levelNumber < 0)
-        {
+        if (levelNumber >= levels.size() || levelNumber < 0) {
             throw new IllegalArgumentException("Level does not exist.");
         }
         selectedLevelNumber = levelNumber;
         this.currentTerrain = levels.get(selectedLevelNumber).getTerrain();
         levels.get(selectedLevelNumber).setWormsStartPosition(this.getPlayers());
-
-        gameChanged = true;
 
         draw(gc);
     }

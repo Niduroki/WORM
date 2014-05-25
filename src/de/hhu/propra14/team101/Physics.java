@@ -1,34 +1,31 @@
 package de.hhu.propra14.team101;
 
-import java.util.Vector;
 
 public class Physics {
-    public static int[][] calcLinearPath(int[] start, int[] target) {
-        //Vector<int[]> vector = new Vector<>();
-        int[][] path = new int[2][2];
-        path[0][0] = start[0];
-        path[0][1] = start[1];
-        path[1][0] = target[0];
-        path[1][1] = target[1];
-        return path;
+    private Vector directionVector;
+    private double xCoordinate;
+    private double yCoordinate;
+
+    public Physics(double startPosX, double startPosY, double posXDirection, double posYDirection)
+    {
+        directionVector = new Vector(startPosX, startPosY, posXDirection, posYDirection);
+        directionVector.normalize();
+        xCoordinate = startPosX;
+        yCoordinate = startPosY;
     }
 
-    public static boolean checkCollision(int targetX, int targetY, int targetSize, int movingX, int movingY, int movingSize) {
-        // Moving is in target
-        if (movingX >= targetX && movingX <= targetX+targetSize && movingY >= targetY && movingY <= targetY+targetSize) {
-            return true;
-        } else
-        // Top-left of moving touches top of target
-        if (movingX >= targetX && movingX <= targetX+targetSize && movingY == targetY) {
-            return true;
-        } else
-        // Top-right of moving touches top of target
-        if (movingX+movingSize >= targetX && movingX+movingSize <= targetX+targetSize && movingY == targetY) {
-            return true;
-        //} else
-        // Bottom-left of moving touches top of target
-        } else {
-            return false;
-        }
+    public void move()
+    {
+        xCoordinate = this.getXCoordinate()+directionVector.getXCoordinate();
+        yCoordinate = this.getYCoordinate()+directionVector.getYCoordinate();
     }
+
+    public double getXCoordinate(){
+        return (xCoordinate);
+    }
+
+    public double getYCoordinate(){
+        return (yCoordinate);
+    }
+
 }

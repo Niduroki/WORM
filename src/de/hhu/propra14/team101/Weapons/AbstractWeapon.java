@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101.Weapons;
 
 import de.hhu.propra14.team101.Bullet;
+import de.hhu.propra14.team101.Physics;
 import javafx.scene.image.Image;
 
 import java.util.HashMap;
@@ -20,7 +21,7 @@ abstract public class AbstractWeapon {
     /** Graphic of the weapon */
     public Image image;
 
-    abstract public Bullet fire (int[][] path);
+    abstract public Bullet fire (Physics physics);
 
     public Map serialize() {
         Map<String, Object> data = new HashMap<String, Object>();
@@ -39,12 +40,7 @@ abstract public class AbstractWeapon {
             return new Grenade();
         } else {
             System.out.println("AbstractWeapon.deserialize: Unknown weapon");
-            return new AbstractWeapon() {
-                @Override
-                public Bullet fire(int[][] path) {
-                    return new Bullet(path, this);
-                }
-            };
+            return null;
         }
     }
 }

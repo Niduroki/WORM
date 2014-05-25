@@ -308,8 +308,7 @@ public class Main extends Application {
                         Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
                         // Don't fire without a weapon
                         if (currentWorm.weaponList.size() != 0) {
-                            game.addBullet(currentWorm.fireWeapon(new int[]{(int) mouseEvent.getX(), (int) mouseEvent.getY()}));
-                            game.bulletFired = true;
+                            game.fireBullet(currentWorm.fireWeapon(mouseEvent.getX(), mouseEvent.getY()));
                         }
                     }
                 }

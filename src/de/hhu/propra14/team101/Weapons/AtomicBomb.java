@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101.Weapons;
 
 import de.hhu.propra14.team101.Bullet;
+import de.hhu.propra14.team101.Physics;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 
 public class AtomicBomb extends AbstractWeapon {
@@ -11,8 +12,8 @@ public class AtomicBomb extends AbstractWeapon {
         this.radius = 20.5;
     }
 
-    public Bullet fire(int[][] path) {
-        return new Bullet(path, this);
+    public Bullet fire(Physics physics) {
+        return new Bullet(physics, this);
     }
 }
 
