@@ -1,7 +1,8 @@
 package de.hhu.propra14.team101.TerrainObjects;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+
 
 /**
  * Class to create terrain with
@@ -20,12 +21,8 @@ public class SquareBuildingBlock extends AbstractTerrainObject {
      * Draws the block
      */
     public void draw (GraphicsContext gc) {
-        gc.setFill(Color.web(Integer.toHexString(this.color)));
-        gc.fillRect(
-                this.xCoordinate * SquareBuildingBlock.getSize(),
-                this.yCoordinate * SquareBuildingBlock.getSize(),
-                SquareBuildingBlock.getSize(),
-                SquareBuildingBlock.getSize()
-        );
+        Image image = new Image("ground.jpg");
+        gc.drawImage(image, this.xCoordinate*this.size, this.yCoordinate*this.size);
+
     }
 }

@@ -64,6 +64,7 @@ public class Terrain {
      * @param gc GraphicsContext to draw on
      */
     public void draw (GraphicsContext gc) {
+        
         for (int i = 0; i < terrainObjects.length; i++) {
             for (int j = 0; j < terrainObjects[i].length; j++) {
                 if (terrainObjects[i][j] != null) {

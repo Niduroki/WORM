@@ -3,6 +3,7 @@ package de.hhu.propra14.team101;
 import com.sun.istack.internal.Nullable;
 import de.hhu.propra14.team101.Savers.LevelSaves;
 import javafx.scene.canvas.*;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.io.FileNotFoundException;
@@ -214,6 +215,9 @@ public class Game {
      */
     private void draw(GraphicsContext gc) {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+
+        Image image = new Image("Background.jpg");
+        gc.drawImage(image, 0.0, 0.0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
         this.currentTerrain.draw(gc);
         gc.fillText(String.valueOf(this.round), 300, 20);

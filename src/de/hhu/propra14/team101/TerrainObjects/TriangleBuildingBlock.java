@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101.TerrainObjects;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
@@ -31,31 +32,13 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
      * Draws the block
      */
     public void draw (GraphicsContext gc) {
-        gc.setFill(Color.web(Integer.toHexString(this.color)));
+
         if (this.getSlopedLeft()) {
-            double[] xPoints = {
-                    this.xCoordinate * TriangleBuildingBlock.getSize(),
-                    this.xCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize(),
-                    this.xCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize()
-            };
-            double[] yPoints = {
-                    this.yCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize(),
-                    this.yCoordinate * TriangleBuildingBlock.getSize(),
-                    this.yCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize()
-            };
-            gc.fillPolygon(xPoints, yPoints, 3);
+            Image image = new Image("ground-triangle-left.png");
+            gc.drawImage(image, this.xCoordinate*this.size, this.yCoordinate*this.size);
         } else {
-            double[] xPoints = {
-                    this.xCoordinate * TriangleBuildingBlock.getSize(),
-                    this.xCoordinate * TriangleBuildingBlock.getSize(),
-                    this.xCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize()
-            };
-            double[] yPoints = {
-                    this.yCoordinate * TriangleBuildingBlock.getSize(),
-                    this.yCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize(),
-                    this.yCoordinate * TriangleBuildingBlock.getSize() + TriangleBuildingBlock.getSize()
-            };
-            gc.fillPolygon(xPoints, yPoints, 3);
+            Image image = new Image("ground-triangle-rigth.png");
+            gc.drawImage(image, this.xCoordinate*this.size, this.yCoordinate*this.size);
         }
 
     }
