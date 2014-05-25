@@ -49,7 +49,7 @@ public class Main extends Application {
     //private Worm jumpingWorm;
     private Timeline timeline;
     private ArrayList<Player> players;
-    private ArrayList<AbstractWeapon> weapons;
+    private ArrayList<String> availableColors;
 
 
     public static void main (String[] args) {
@@ -120,6 +120,11 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent e) {
                 players = new ArrayList<>();
+                availableColors = new ArrayList<>();
+                availableColors.add("Red");
+                availableColors.add("Green");
+                availableColors.add("Blue");
+                availableColors.add("Yellow");
                 addPlayerButtons();
             }
         });
@@ -216,8 +221,8 @@ public class Main extends Application {
         Button backbtn = new Button("Back");
 
         final ComboBox<String> colorSelection = new ComboBox<String>();
-        colorSelection.getItems().addAll("Red", "Green", "Blue", "Yellow");
-        colorSelection.setValue("Blue");
+        colorSelection.getItems().addAll(availableColors);
+        colorSelection.setValue(availableColors.get(0));
         final CheckBox weaponBox1 = new CheckBox("Atomic Bomb");
         final CheckBox weaponBox2 = new CheckBox("Grenade");
         final CheckBox weaponBox3 = new CheckBox("Bazooka");
@@ -288,7 +293,7 @@ public class Main extends Application {
     }
 
     private Player parsePlayerSelection(Map<String, Boolean> weaponMap, String colorName, String playerName) {
-        weapons = new ArrayList<>();
+        ArrayList<AbstractWeapon> weapons = new ArrayList<>();
         if (weaponMap.get("AtomicBomb")) {
             weapons.add(new AtomicBomb());
         }
@@ -317,6 +322,7 @@ public class Main extends Application {
             color = Color.GREY;
         }
         tmpPlayer.color = color;
+        this.availableColors.remove(this.availableColors.indexOf(colorName));
         tmpPlayer.name = playerName;
         return tmpPlayer;
     }
