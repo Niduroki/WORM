@@ -1,12 +1,6 @@
 package de.hhu.propra14.team101;
 
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  * Class to do networking on the server side
@@ -14,57 +8,35 @@ import java.util.Scanner;
 
 public class NetworkServer {
 
-    private int port;
-    private ServerSocket server;
+    private int nextUserId = 0;
+    private ArrayList<NetworkUser> userList;
 
-    public NetworkServer () throws IOException {
-        this.port = 7601;
-        this.server = new ServerSocket(this.port);
-        //server.setSoTimeout(30000); // Timeout after 30s
-        while (true) {
-            try {
-                Socket client = server.accept();
-                new Thread(new HandleConnectionThread(client)).start();
-            } catch (InterruptedIOException e) {
-                System.out.println("Timeout on a client!");
-            }
-        }
+    public NetworkServer() {
+        this.userList = new ArrayList<>();
     }
 
-    static class HandleConnectionThread implements Runnable {
-
-        Socket client;
-
-        public HandleConnectionThread (Socket client) {
-            this.client = client;
-        }
-
-        @Override
-        public void run() {
-            try {
-                Scanner input = new Scanner(client.getInputStream());
-                PrintWriter output = new PrintWriter(client.getOutputStream());
-
-                while (true) {
-                    String line = input.nextLine();
-                    String answer = interpret(line);
-
-                    output.println(answer);
-                    output.flush();
-                }
-            } catch (IOException e) {
-                System.out.println("Error while communicating with client");
-                e.printStackTrace();
-            } catch (NoSuchElementException e) {
-                System.out.println("Client seemed to quit");
-            }
-        }
-    }
-
-    private static String interpret(String line) {
+    public String interpret(String line) {
         if (line.equals("ping")) {
             return "pong";
+        } else if (line.startsWith("hello ")) {
+            String name = line.substring(6);
+            int uid = nextUserId;
+            this.userList.add(new NetworkUser(uid, name));
+            this.nextUserId += 1;
+            return String.valueOf(uid);
         }
         return "error";
+    }
+
+
+    private class NetworkUser {
+
+        public int uid;
+        public String name;
+
+        public NetworkUser(int uid, String name) {
+            this.uid = uid;
+            this.name = name;
+        }
     }
 }

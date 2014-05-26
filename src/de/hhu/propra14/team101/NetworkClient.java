@@ -46,6 +46,7 @@ public class NetworkClient {
         } catch (IOException e) {
             System.out.println("Can't connect to server");
         }
+
         this.user_id = this.signIn();
     }
 
@@ -79,8 +80,17 @@ public class NetworkClient {
      */
     private int signIn() {
         String id;
+        SettingSaves loader = new SettingSaves();
 
-        id = this.send("sign me in");
+        String name;
+        try {
+            Map data = loader.load("settings.yml");
+            name = (String) data.get("multiplayer_name");
+        } catch (FileNotFoundException | NullPointerException e) {
+            name = "Worms player";
+        }
+
+        id = this.send("hello " + name);
         return Integer.parseInt(id);
     }
 
