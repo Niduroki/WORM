@@ -159,29 +159,31 @@ public class Main extends Application {
         // Create buttons and other objects
         Text scenetitle = new Text("Options");
         Text title1 = new Text("Multiplayer Server");
-        Text title2 = new Text("Proton");
+        Text title2 = new Text("Multiplayer Name");
         Button returnbtn = new Button("Save & Return");
 
-        final ComboBox<String> selection = new ComboBox<String>();
-        selection.getItems().addAll("Overclock", "Normal", "Underclock");
-        selection.setValue("Normal");
+
         final CheckBox checkBox = new CheckBox("Exterminate Dalek");
-        String initialValue;
+        String initialValue1;
+        String initialValue2;
         SettingSaves loader = new SettingSaves();
         try {
             Map<String, Object> data = (Map<String, Object>) loader.load("settings.yml");
-            initialValue = data.get("multiplayer_server").toString();
-            selection.setValue(data.get("proton").toString());
+            initialValue1 = data.get("multiplayer_server").toString();
+            initialValue2 = data.get("multiplayer_name").toString();
             checkBox.setSelected(Boolean.parseBoolean(data.get("dalek").toString()));
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find settings file!");
-            initialValue = "schaepers.it";
+            initialValue1 = "schaepers.it";
+            initialValue2 = "Worms player";
         } catch (NullPointerException e) {
             System.out.println("Missing setting!");
-            initialValue = "schaepers.it";
+            initialValue1 = "schaepers.it";
+            initialValue2 = "Worms player";
         }
 
-        final TextField textField = new TextField(initialValue);
+        final TextField serverField = new TextField(initialValue1);
+        final TextField nameField = new TextField(initialValue2);
 
         // Configure each object
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -189,9 +191,9 @@ public class Main extends Application {
         // Add the objects
         this.grid.add(scenetitle, 0, 0, 2, 1);
         this.grid.add(title1, 1, 2);
-        this.grid.add(textField, 2, 2);
+        this.grid.add(serverField, 2, 2);
         this.grid.add(title2, 1, 4);
-        this.grid.add(selection, 2, 4);
+        this.grid.add(nameField, 2, 4);
         this.grid.add(checkBox, 1, 6);
         this.grid.add(returnbtn, 1, 8);
 
@@ -200,8 +202,8 @@ public class Main extends Application {
             public void handle(ActionEvent actionEvent) {
                 SettingSaves saver = new SettingSaves();
                 Map<String, Object> data = new HashMap<String, Object>();
-                data.put("multiplayer_server", textField.getText());
-                data.put("proton", selection.getValue());
+                data.put("multiplayer_server", serverField.getText());
+                data.put("multiplayer_name", nameField.getText());
                 data.put("dalek", checkBox.selectedProperty().getValue());
                 saver.save(data, "settings.yml");
                 addMainButtons();
