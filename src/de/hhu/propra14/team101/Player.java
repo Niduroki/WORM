@@ -50,7 +50,7 @@ public class Player {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("type", this.type);
         map.put("current_worm", this.currentWorm);
-        map.put("color", this.color);
+        map.put("color", Player.serializeColor(this.color));
         ArrayList<Map> wormArray = new ArrayList<Map>();
         for (int i=0; i<this.wormList.size(); i++) {
             wormArray.add(this.wormList.get(i).serialize());
@@ -67,7 +67,35 @@ public class Player {
         }
         Player player = new Player(wormList, (String)input.get("type"));
         player.currentWorm = (Integer) input.get("current_worm");
-        player.color = (Color) input.get("color");
+        player.color = Player.deseserializeColor((String) input.get("color"));
         return player;
+    }
+
+    public static String serializeColor(Color color) {
+        if (color.equals(Color.RED)) {
+            return "Red";
+        } else if (color.equals(Color.GREEN)) {
+            return "Green";
+        } else if (color.equals(Color.BLUE)) {
+            return "Blue";
+        } else if (color.equals(Color.YELLOW)) {
+            return "Yellow";
+        } else {
+            return "Gray";
+        }
+    }
+
+    public static Color deseserializeColor(String name) {
+        if (name.equals("Red")) {
+            return Color.RED;
+        } else if (name.equals("Blue")) {
+            return Color.BLUE;
+        } else if (name.equals("Green")) {
+            return Color.GREEN;
+        } else if (name.equals("Yellow")) {
+            return Color.YELLOW;
+        } else {
+            return Color.GREY;
+        }
     }
 }

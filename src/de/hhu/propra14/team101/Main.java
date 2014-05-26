@@ -308,19 +308,7 @@ public class Main extends Application {
             wormsList.add(new Worm(weapons));
         }
         Player tmpPlayer = new Player(wormsList, "Local");
-        Color color;
-        if (colorName.equals("Red")) {
-            color = Color.RED;
-        } else if (colorName.equals("Blue")) {
-            color = Color.BLUE;
-        } else if (colorName.equals("Green")) {
-            color = Color.GREEN;
-        } else if (colorName.equals("Yellow")) {
-            color = Color.YELLOW;
-        } else {
-            color = Color.GREY;
-        }
-        tmpPlayer.color = color;
+        tmpPlayer.color = Player.deseserializeColor(colorName);
         this.availableColors.remove(this.availableColors.indexOf(colorName));
         tmpPlayer.name = playerName;
         return tmpPlayer;
