@@ -17,10 +17,13 @@ import java.util.UUID;
 
 public class NetworkClient {
 
+    private Socket connection;
     private String server;
     private UUID uuid;
     private Scanner input;
     private PrintWriter output;
+    private int currentlySent = 0;
+    private int currentlyReceived = 0;
 
     /**
      * Constructs a class for networking
@@ -40,15 +43,31 @@ public class NetworkClient {
         }
 
         try {
-            Socket connection = new Socket(server, port);
+            this.connection = new Socket(server, port);
             this.input = new Scanner(connection.getInputStream());
             this.output = new PrintWriter(connection.getOutputStream());
-            new Thread(new HandleIncomingThread(connection, this)).start();
+            Thread thread = new Thread(new HandleIncomingThread(connection, this));
+            thread.setDaemon(true);
+            thread.start();
         } catch (IOException e) {
             System.out.println("Can't connect to server");
         }
 
         this.signIn();
+
+        while (this.uuid == null) {
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {
+                //
+            }
+        }
+        this.send("ping");
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            //
+        }
     }
 
     /**
@@ -56,16 +75,14 @@ public class NetworkClient {
      * @return Answer received from the server
      * This method should only be used internally
      */
-    private String send (String data) {
+    private void send (String data) {
         if (this.uuid != null) {
             this.output.println(this.uuid.toString() + " " + data);
             this.output.flush();
-            return this.input.nextLine();
         } else {
             // We're not signed in yet
             this.output.println(data);
             this.output.flush();
-            return this.input.nextLine();
         }
     }
 
@@ -101,7 +118,7 @@ public class NetworkClient {
      */
     public void createRoom(String name) throws Exception {
 
-        if (!this.send("create_room " + name).equals("okay")) {
+        if (false) {//!this.send("create_room " + name).equals("okay")) {
             throw (new Exception());
         }
     }
@@ -109,7 +126,6 @@ public class NetworkClient {
     public void chat(char type, String message) {
         //
     }
-
 
 
     static class HandleIncomingThread implements Runnable {
@@ -132,11 +148,6 @@ public class NetworkClient {
                 while (true) {
                     String line = input.nextLine();
                     client.handleIncomingData(line);
-                    try {
-                        Thread.sleep(100);
-                    } catch (Exception e) {
-                        //
-                    }
                 }
             } catch (IOException e) {
                 System.out.println("Error while communicating with client");
