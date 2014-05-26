@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
 
 /**
  * Class to do networking on the client side
@@ -17,7 +18,7 @@ public class NetworkClient {
 
     private int port;
     private String server;
-    private int user_id = 0;
+    private UUID uuid;
     private Socket connection;
     private Scanner input;
     private PrintWriter output;
@@ -47,7 +48,7 @@ public class NetworkClient {
             System.out.println("Can't connect to server");
         }
 
-        this.user_id = this.signIn();
+        this.uuid = this.signIn();
     }
 
     /**
@@ -56,16 +57,16 @@ public class NetworkClient {
      * This method should only be used internally
      */
     private String send (String data) {
-        /*if (this.user_id != 0) {
-            // We're signed in, send our user id, too
-            return "123";
+        if (this.uuid != null) {
+            this.output.println(this.uuid.toString() + data);
+            this.output.flush();
+            return this.input.nextLine();
         } else {
             // We're not signed in yet
-            return "123";
-        }*/
-        this.output.println(data);
-        this.output.flush();
-        return this.input.nextLine();
+            this.output.println(data);
+            this.output.flush();
+            return this.input.nextLine();
+        }
     }
 
     /**
@@ -76,9 +77,9 @@ public class NetworkClient {
     }
 
     /**
-     * @return Returns an unique user id
+     * @return Returns an UUID
      */
-    private int signIn() {
+    private UUID signIn() {
         String id;
         SettingSaves loader = new SettingSaves();
 
@@ -91,17 +92,20 @@ public class NetworkClient {
         }
 
         id = this.send("hello " + name);
-        return Integer.parseInt(id);
+        return UUID.fromString(id);
     }
 
     /**
      * @param name How to name the room
-     * @return Returns the ID of the room we've just created
      */
-    public int createRoom(String name) {
+    public void createRoom(String name) {
         String answer;
 
-        answer = this.send("create room " + name);
-        return Integer.parseInt(answer);
+        answer = this.send("create_room " + name);
+        //return Integer.parseInt(answer);
+    }
+
+    public void chat(char type, String message) {
+        //
     }
 }
