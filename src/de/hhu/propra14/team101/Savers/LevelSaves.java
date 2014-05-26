@@ -1,7 +1,6 @@
 package de.hhu.propra14.team101.Savers;
 
 import de.hhu.propra14.team101.Level;
-import de.hhu.propra14.team101.Savers.AbstractSaver;
 
 import java.io.*;
 import java.util.Map;
@@ -25,7 +24,7 @@ public class LevelSaves extends AbstractSaver {
     }
 
     /**
-     * @param level
+     * @param level level to save
      * @param path path to save to
      */
     public void save (Level level, String path) {

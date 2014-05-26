@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
@@ -32,7 +33,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import javafx.scene.paint.Color;
 
 
 /**
@@ -132,6 +132,11 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 NetworkClient client = new NetworkClient();
+                try {
+                    client.createRoom("A");
+                } catch (Exception e) {
+                    System.out.println("Room can't be created");
+                }
             }
         });
 
@@ -201,7 +206,7 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 SettingSaves saver = new SettingSaves();
-                Map<String, Object> data = new HashMap<String, Object>();
+                Map<String, Object> data = new HashMap<>();
                 data.put("multiplayer_server", serverField.getText());
                 data.put("multiplayer_name", nameField.getText());
                 data.put("dalek", checkBox.selectedProperty().getValue());
@@ -221,7 +226,7 @@ public class Main extends Application {
         Text title2 = new Text("Color");
         Button backbtn = new Button("Back");
 
-        final ComboBox<String> colorSelection = new ComboBox<String>();
+        final ComboBox<String> colorSelection = new ComboBox<>();
         colorSelection.getItems().addAll(availableColors);
         colorSelection.setValue(availableColors.get(0));
         final CheckBox weaponBox1 = new CheckBox("Atomic Bomb");

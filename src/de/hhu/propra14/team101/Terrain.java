@@ -64,11 +64,11 @@ public class Terrain {
      * @param gc GraphicsContext to draw on
      */
     public void draw (GraphicsContext gc) {
-        
-        for (int i = 0; i < terrainObjects.length; i++) {
-            for (int j = 0; j < terrainObjects[i].length; j++) {
-                if (terrainObjects[i][j] != null) {
-                    terrainObjects[i][j].draw(gc);
+
+        for (AbstractTerrainObject[] terrainObject : terrainObjects) {
+            for (AbstractTerrainObject aTerrainObject : terrainObject) {
+                if (aTerrainObject != null) {
+                    aTerrainObject.draw(gc);
                 }
             }
         }
@@ -82,11 +82,7 @@ public class Terrain {
             throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
         }
 
-        if (terrainObjects[xCoordinate][yCoordinate] == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return terrainObjects[xCoordinate][yCoordinate] != null;
     }
 
     /**
@@ -98,12 +94,11 @@ public class Terrain {
             throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
         }
 
-        SquareBuildingBlock dummy = null;
-        this.terrainObjects[xCoordinate][yCoordinate] = dummy;
+        this.terrainObjects[xCoordinate][yCoordinate] = null;
     }
 
     /**
-     * @return
+     * @return 2-dimensional array to use with snakeyaml
      */
     public Object[][] serialize () {
         /** 2-dimensional array to store terrain in.*/
@@ -113,7 +108,7 @@ public class Terrain {
             for (int j=0; j<this.getHeight(); j++) {
                 AbstractTerrainObject workingBlock = this.terrainObjects[i][j];
                 if (workingBlock != null) {
-                    HashMap<String, Object> map = new HashMap<String, Object>();
+                    HashMap<String, Object> map = new HashMap<>();
                     map.put("color", workingBlock.getColor());
                     map.put("coords", workingBlock.getCoords());
                     map.put("destructibility", workingBlock.getDestructible());
@@ -132,13 +127,12 @@ public class Terrain {
 
     public static Terrain deserialize (ArrayList<ArrayList<Map>> input) {
         Terrain terrain = new Terrain(input.size(), input.get(0).size());
-        for (int i=0; i<input.size(); i++) {
-            for (int j=0; j<input.get(i).size(); j++) {
-                if (input.get(i).get(j) != null) {
+        for (ArrayList<Map> xInput : input) {
+            for (Map yInput : xInput) {
+                if (yInput != null) {
                     //Rebuild the block
-                    Map workingMap = input.get(i).get(j);
+                    Map workingMap = yInput;
                     boolean destructibility = Boolean.parseBoolean(workingMap.get("destructibility").toString());
-                    Integer color = (Integer) workingMap.get("color");
                     ArrayList<Integer> coords = (ArrayList<Integer>) workingMap.get("coords");
                     if (workingMap.get("class").equals("de.hhu.propra14.team101.TerrainObjects.SquareBuildingBlock")) {
                         SquareBuildingBlock workingBlock = new SquareBuildingBlock(coords.get(0), coords.get(1));

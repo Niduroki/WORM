@@ -1,7 +1,5 @@
 package de.hhu.propra14.team101.Savers;
 
-import de.hhu.propra14.team101.Savers.AbstractSaver;
-
 import java.io.*;
 import java.util.Map;
 

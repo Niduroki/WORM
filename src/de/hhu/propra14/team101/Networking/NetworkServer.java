@@ -1,4 +1,4 @@
-package de.hhu.propra14.team101;
+package de.hhu.propra14.team101.Networking;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +47,8 @@ public class NetworkServer {
                     } else if (command.equals("list_rooms")) {
                         // List all rooms here
                     } else if (command.matches("create_room .+")) {
-                        // Create a room
+                        // TODO check if the room already exists, if it doesn't create the room
+                        return "okay";
                     } else if (command.matches("join_room .+")) {
                         // Join a room
                     } else if (command.equals("leave_room")) {
@@ -84,21 +85,4 @@ public class NetworkServer {
         //
     }
 
-
-    private class NetworkUser {
-
-        public String name;
-
-        public NetworkUser(String name) {
-            this.name = name;
-        }
-    }
-
-    private class NetworkRoom {
-
-    }
-
-    private class NetworkGame {
-
-    }
 }

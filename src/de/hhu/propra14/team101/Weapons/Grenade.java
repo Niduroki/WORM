@@ -2,7 +2,6 @@ package de.hhu.propra14.team101.Weapons;
 
 import de.hhu.propra14.team101.Bullet;
 import de.hhu.propra14.team101.Physics;
-import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 
 public class Grenade extends AbstractWeapon {
 

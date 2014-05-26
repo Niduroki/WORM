@@ -14,8 +14,8 @@ import java.util.*;
  * Game class to manage players, levels etc.
  */
 public class Game {
-    private ArrayList<Player> players = new ArrayList<Player>();
-    private ArrayList<Level> levels = new ArrayList<Level>();
+    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Level> levels = new ArrayList<>();
     private Bullet bullet;
     public boolean bulletFired = false;
     private boolean gameFinished = false;
@@ -28,8 +28,8 @@ public class Game {
      * Initialize a new game.
      */
     public Game(ArrayList players) {
-        for (int i = 0; i < players.size(); i++) {
-            this.getPlayers().add((Player) players.get(i));
+        for (Object player : players) {
+            this.getPlayers().add((Player) player);
         }
 
         LevelSaves loader = new LevelSaves();

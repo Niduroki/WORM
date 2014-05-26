@@ -21,7 +21,7 @@ public class GameSaves extends AbstractSaver {
      * @param path Path to save to
      */
     public void save(Game game, String path) {
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("terrain", game.getCurrentTerrain().serialize());
         data.put("players", this.serializePlayerArray(game.getPlayers()));
         data.put("round", game.round);
@@ -59,9 +59,9 @@ public class GameSaves extends AbstractSaver {
     }
 
     private ArrayList<Player> deserializePlayerArray(ArrayList<Map> input) {
-        ArrayList<Player> result = new ArrayList<Player>();
-        for (int i=0; i<input.size(); i++) {
-            result.add(Player.deserialize(input.get(i)));
+        ArrayList<Player> result = new ArrayList<>();
+        for (Map anInput : input) {
+            result.add(Player.deserialize(anInput));
         }
         return result;
     }

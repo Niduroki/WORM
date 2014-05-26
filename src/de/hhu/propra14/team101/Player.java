@@ -29,9 +29,7 @@ public class Player {
         if (type.equals("AI") || type.equals("Local") || type.equals("Network")) {
             this.type = type;
         } else {
-            /*throw WrongTypeException(){
-                //
-            }*/
+            this.type = "Local";
         }
     }
 
@@ -47,13 +45,13 @@ public class Player {
     }
 
     public Map serialize() {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("type", this.type);
         map.put("current_worm", this.currentWorm);
         map.put("color", Player.serializeColor(this.color));
-        ArrayList<Map> wormArray = new ArrayList<Map>();
-        for (int i=0; i<this.wormList.size(); i++) {
-            wormArray.add(this.wormList.get(i).serialize());
+        ArrayList<Map> wormArray = new ArrayList<>();
+        for (Worm aWormList : this.wormList) {
+            wormArray.add(aWormList.serialize());
         }
         map.put("worm_array", wormArray);
         return map;
@@ -62,8 +60,8 @@ public class Player {
     public static Player deserialize(Map input) {
         ArrayList<Map> rawWorms = (ArrayList<Map>) input.get("worm_array");
         ArrayList<Worm> wormList = new ArrayList<>();
-        for (int i=0; i<rawWorms.size(); i++) {
-            wormList.add(Worm.deserialize(rawWorms.get(i)));
+        for (Map rawWorm : rawWorms) {
+            wormList.add(Worm.deserialize(rawWorm));
         }
         Player player = new Player(wormList, (String)input.get("type"));
         player.currentWorm = (Integer) input.get("current_worm");
@@ -86,16 +84,17 @@ public class Player {
     }
 
     public static Color deseserializeColor(String name) {
-        if (name.equals("Red")) {
-            return Color.RED;
-        } else if (name.equals("Blue")) {
-            return Color.BLUE;
-        } else if (name.equals("Green")) {
-            return Color.GREEN;
-        } else if (name.equals("Yellow")) {
-            return Color.YELLOW;
-        } else {
-            return Color.GREY;
+        switch (name) {
+            case "Red":
+                return Color.RED;
+            case "Blue":
+                return Color.BLUE;
+            case "Green":
+                return Color.GREEN;
+            case "Yellow":
+                return Color.YELLOW;
+            default:
+                return Color.GREY;
         }
     }
 }

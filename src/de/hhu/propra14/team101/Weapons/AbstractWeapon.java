@@ -24,7 +24,7 @@ abstract public class AbstractWeapon {
     abstract public Bullet fire (Physics physics);
 
     public Map serialize() {
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("name", this.name);
         data.put("damage", this.damage);
         data.put("radius", this.radius);
@@ -32,11 +32,11 @@ abstract public class AbstractWeapon {
     }
 
     public static AbstractWeapon deserialize(Map input) {
-        if (input.get("name") == "Atomic Bomb") {
+        if (input.get("name").toString().equals("Atomic bomb")) {
             return new AtomicBomb();
-        } else if (input.get("name") == "Bazooka") {
+        } else if (input.get("name").toString().equals("Bazooka")) {
             return new Bazooka();
-        } else if (input.get("name") == "Grenade") {
+        } else if (input.get("name").toString().equals("Grenade")) {
             return new Grenade();
         } else {
             System.out.println("AbstractWeapon.deserialize: Unknown weapon");

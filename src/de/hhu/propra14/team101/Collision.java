@@ -1,8 +1,5 @@
 package de.hhu.propra14.team101;
 
-/**
- * Created by danie_000 on 2014-05-25.
- */
 public class Collision {
     private Object collisionElement;
     private CollisionType collisionType;

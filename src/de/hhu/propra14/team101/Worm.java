@@ -38,8 +38,8 @@ public class Worm {
 
     public Worm (ArrayList weapons) {
         this.weaponList = new ArrayList<>();
-        for (int i=0; i<weapons.size(); i++) {
-            this.weaponList.add((AbstractWeapon)weapons.get(i));
+        for (Object weapon : weapons) {
+            this.weaponList.add((AbstractWeapon) weapon);
         }
     }
 
@@ -167,7 +167,11 @@ public class Worm {
     }
 
     public Bullet fireWeapon(double xPos, double yPos) {
-        Bullet bullet = this.weaponList.get(this.currentWeapon).fire(new Physics(this.getXCoordinate(), this.getYCoordinate(), xPos, yPos));
+        Bullet bullet = this.weaponList.get(this.currentWeapon).fire(
+                new Physics(this.getXCoordinate(),
+                this.getYCoordinate(),
+                xPos, yPos)
+        );
         return bullet;
     }
 
@@ -182,25 +186,25 @@ public class Worm {
     }
 
     public Map serialize() {
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("x", this.x_coord);
         data.put("y", this.y_coord);
         data.put("armor", this.armor);
         data.put("health", this.health);
         data.put("orientation", this.orientation);
-        ArrayList<Map> weapons = new ArrayList<Map>();
-        for (int i=0; i<this.weaponList.size(); i++) {
-            weapons.add(this.weaponList.get(i).serialize());
+        ArrayList<Map> weapons = new ArrayList<>();
+        for (AbstractWeapon aWeaponList : this.weaponList) {
+            weapons.add(aWeaponList.serialize());
         }
         data.put("weapons", weapons);
         return data;
     }
 
     public static Worm deserialize(Map input) {
-        ArrayList<Map> rawWeapons = new ArrayList<Map>();
+        ArrayList<Map> rawWeapons = (ArrayList<Map>) input.get("weapons");
         ArrayList<AbstractWeapon> weaponList = new ArrayList<>();
-        for (int i=0; i<rawWeapons.size(); i++) {
-            weaponList.add(AbstractWeapon.deserialize(rawWeapons.get(i)));
+        for (Map rawWeapon : rawWeapons) {
+            weaponList.add(AbstractWeapon.deserialize(rawWeapon));
         }
         Worm result = new Worm(weaponList);
         result.x_coord = (Integer) input.get("x");

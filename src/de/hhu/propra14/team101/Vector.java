@@ -1,7 +1,5 @@
 package de.hhu.propra14.team101;
-/**
- * Created by danie_000 on 2014-05-23.
- */
+
 public class Vector {
     private double xCoordinate;
     private double yCoordinate;

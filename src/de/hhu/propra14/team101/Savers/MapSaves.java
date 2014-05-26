@@ -1,6 +1,5 @@
 package de.hhu.propra14.team101.Savers;
 
-import de.hhu.propra14.team101.Savers.AbstractSaver;
 import de.hhu.propra14.team101.Terrain;
 
 import java.io.*;
@@ -19,9 +18,7 @@ public class MapSaves extends AbstractSaver {
      * Loads a map from a yaml file
      */
     public Terrain load (String path) throws FileNotFoundException {
-        //AbstractTerrainObject[][] terrain = new AbstractTerrainObject[40][30];
         InputStream input = new FileInputStream(new File(path));
-        //AbstractTerrainObject[][] rawTerrain = (AbstractTerrainObject[][]) this.yaml.load(input);
         ArrayList<ArrayList<Map>> rawTerrain = (ArrayList<ArrayList<Map>>) this.yaml.load(input);
         return Terrain.deserialize(rawTerrain);
     }
