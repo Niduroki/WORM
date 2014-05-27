@@ -6,10 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Class to do networking on the client side
@@ -22,8 +19,10 @@ public class NetworkClient {
     private UUID uuid;
     private Scanner input;
     private PrintWriter output;
-    private int currentlySent = 0;
-    private int currentlyReceived = 0;
+    private int sentCounter = 0;
+    private int lastReceivedCounter = -1;
+    private String lastAnswer;
+    private ArrayList<NetworkRequest> toSend = new ArrayList<>();
 
     /**
      * Constructs a class for networking
@@ -53,18 +52,8 @@ public class NetworkClient {
             System.out.println("Can't connect to server");
         }
 
-        this.signIn();
-
-        while (this.uuid == null) {
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
-                //
-            }
-        }
-        this.send("ping");
         try {
-            Thread.sleep(2000);
+            this.signIn();
         } catch (Exception e) {
             //
         }
@@ -72,18 +61,58 @@ public class NetworkClient {
 
     /**
      * @param data Data to send to the server
-     * @return Answer received from the server
+     * @param waitForAnswer whether we should wait for an answer
      * This method should only be used internally
      */
-    private void send (String data) {
-        if (this.uuid != null) {
-            this.output.println(this.uuid.toString() + " " + data);
-            this.output.flush();
+    private void queueSend (String data, boolean waitForAnswer) throws Exception {
+        if (this.toSend.size() == 0) {
+            this.toSend.add(new NetworkRequest(data, waitForAnswer));
+            this.doSending();
         } else {
-            // We're not signed in yet
-            this.output.println(data);
-            this.output.flush();
+            this.toSend.add(new NetworkRequest(data, waitForAnswer));
         }
+    }
+
+    private void doSending() throws Exception {
+        // Reset last answer
+        this.lastAnswer = "";
+
+        while (this.toSend.size() > 0) {
+            NetworkRequest current = this.toSend.get(0);
+
+            int ourCount = this.sentCounter;
+            this.sentCounter += 1;
+            String line = constructLine(current.data, ourCount);
+            this.output.println(line);
+            this.output.flush();
+            if (current.waitForAnswer) {
+                int waitCounter = 0;
+                while (this.lastReceivedCounter < ourCount) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        //
+                    }
+                    waitCounter += 1;
+                    // Wait 2 seconds at most
+                    if (waitCounter > 40) {
+                        // TODO define our own exception here
+                        throw (new Exception());
+                    }
+                }
+            }
+            this.toSend.remove(0);
+        }
+    }
+
+    private String constructLine (String data, int count) {
+        String line = String.valueOf(count);
+        line += " ";
+        if (this.uuid != null) {
+            line += this.uuid.toString() + " ";
+        }
+        line += data;
+        return line;
     }
 
     /**
@@ -91,14 +120,25 @@ public class NetworkClient {
      */
     private void handleIncomingData(String line) {
         System.out.println("Handled a " + line);
+        if (line.matches("[0-9]+ .+")) {
+            lastReceivedCounter = Integer.parseInt(line.split(" ")[0]);
+            line = line.substring(line.indexOf(" ")+1);
+        }
+
         if (line.equals("pong")) {
-            this.send("ping");
+            try {
+                this.queueSend("ping", true);
+            } catch (Exception e) {
+                //
+            }
         } else if (line.matches(NetworkServer.uuidRegex)) {
             this.uuid = UUID.fromString(line);
         }
+
+        this.lastAnswer = line;
     }
 
-    private void signIn() {
+    private void signIn() throws Exception {
         SettingSaves loader = new SettingSaves();
 
         String name;
@@ -109,7 +149,7 @@ public class NetworkClient {
             name = "Worms player";
         }
 
-        this.send("hello " + name);
+        this.queueSend("hello " + name, true);
     }
 
     /**
@@ -117,10 +157,28 @@ public class NetworkClient {
      * @TODO create an own exception, if a room can't be created
      */
     public void createRoom(String name) throws Exception {
-
-        if (false) {//!this.send("create_room " + name).equals("okay")) {
+        System.out.println("Creating a room called " + name);
+        this.queueSend("create_room " + name, true);
+        this.waitForAnswer();
+        if (!this.lastAnswer.equals("okay")) {
             throw (new Exception());
         }
+    }
+
+    public String[] getRooms() throws Exception {
+        this.queueSend("list_rooms", true);
+        this.waitForAnswer();
+        return this.lastAnswer.split(",");
+    }
+
+    private void waitForAnswer() throws Exception {
+        int counter = 0;
+        while (counter <= 20) {
+            if (!this.lastAnswer.equals("")) {
+                return;
+            }
+        }
+        throw (new Exception());
     }
 
     public void chat(char type, String message) {
@@ -150,10 +208,10 @@ public class NetworkClient {
                     client.handleIncomingData(line);
                 }
             } catch (IOException e) {
-                System.out.println("Error while communicating with client");
+                System.out.println("Error while communicating with server");
                 e.printStackTrace();
             } catch (NoSuchElementException e) {
-                System.out.println("Client seemed to quit");
+                System.out.println("Server seemed to quit");
             }
         }
     }

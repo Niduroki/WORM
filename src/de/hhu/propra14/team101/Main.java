@@ -133,9 +133,17 @@ public class Main extends Application {
             public void handle(ActionEvent actionEvent) {
                 NetworkClient client = new NetworkClient();
                 try {
-                    client.createRoom("A");
+                    client.createRoom("Cool room");
                 } catch (Exception e) {
                     System.out.println("Room can't be created");
+                }
+                try {
+                    String[] rooms = client.getRooms();
+                    for (String room : rooms) {
+                        System.out.println(room);
+                    }
+                } catch (Exception e) {
+                    //
                 }
             }
         });
