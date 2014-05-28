@@ -1,5 +1,8 @@
 package de.hhu.propra14.team101.Networking;
 
+import de.hhu.propra14.team101.Networking.Exceptions.NetworkException;
+import de.hhu.propra14.team101.Networking.Exceptions.RoomExistsException;
+import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Savers.SettingSaves;
 
 import java.io.FileNotFoundException;
@@ -54,17 +57,12 @@ public class NetworkClient {
 
         try {
             this.signIn();
-        } catch (Exception e) {
+        } catch (TimeoutException e) {
             //
         }
     }
 
-    /**
-     * @param data Data to send to the server
-     * @param waitForAnswer whether we should wait for an answer
-     * This method should only be used internally
-     */
-    private void queueSend (String data, boolean waitForAnswer) throws Exception {
+    private void queueSend (String data, boolean waitForAnswer) throws TimeoutException {
         if (this.toSend.size() == 0) {
             this.toSend.add(new NetworkRequest(data, waitForAnswer));
             this.doSending();
@@ -73,7 +71,7 @@ public class NetworkClient {
         }
     }
 
-    private void doSending() throws Exception {
+    private void doSending() throws TimeoutException {
         // Reset last answer
         this.lastAnswer = "";
 
@@ -91,13 +89,13 @@ public class NetworkClient {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
-                        //
+                        System.out.println("InterruptedException while waiting!");
+                        e.printStackTrace();
                     }
                     waitCounter += 1;
                     // Wait 2 seconds at most
                     if (waitCounter > 40) {
-                        // TODO define our own exception here
-                        throw (new Exception());
+                        throw (new TimeoutException());
                     }
                 }
             }
@@ -138,7 +136,7 @@ public class NetworkClient {
         this.lastAnswer = line;
     }
 
-    private void signIn() throws Exception {
+    private void signIn() throws TimeoutException {
         SettingSaves loader = new SettingSaves();
 
         String name;
@@ -154,31 +152,31 @@ public class NetworkClient {
 
     /**
      * @param name How to name the room
-     * @TODO create an own exception, if a room can't be created
+     * @throws de.hhu.propra14.team101.Networking.Exceptions.RoomExistsException
      */
-    public void createRoom(String name) throws Exception {
+    public void createRoom(String name) throws NetworkException {
         System.out.println("Creating a room called " + name);
         this.queueSend("create_room " + name, true);
         this.waitForAnswer();
         if (!this.lastAnswer.equals("okay")) {
-            throw (new Exception());
+            throw (new RoomExistsException());
         }
     }
 
-    public String[] getRooms() throws Exception {
+    public String[] getRooms() throws TimeoutException {
         this.queueSend("list_rooms", true);
         this.waitForAnswer();
         return this.lastAnswer.split(",");
     }
 
-    private void waitForAnswer() throws Exception {
+    private void waitForAnswer() throws TimeoutException {
         int counter = 0;
         while (counter <= 20) {
             if (!this.lastAnswer.equals("")) {
                 return;
             }
         }
-        throw (new Exception());
+        throw (new TimeoutException());
     }
 
     public void chat(char type, String message) {

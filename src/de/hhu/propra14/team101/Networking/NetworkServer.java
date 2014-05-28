@@ -87,14 +87,18 @@ public class NetworkServer {
                     } else if (command.matches("chat [gr] .+")) {
                         String type = command.split(" ")[1];
                         String message = command.substring(7);
-                        if (type.equals("g")) {
-                            // Chat globally
-                            answer = "okay";
-                        } else if (type.equals("r")) {
-                            // Chat in our room
-                            answer = "okay";
-                        } else {
-                            answer = "error client syntax";
+                        switch (type) {
+                            case "g":
+                                // Chat globally
+                                answer = "okay";
+                                break;
+                            case "r":
+                                // Chat in our room
+                                answer = "okay";
+                                break;
+                            default:
+                                answer = "error client syntax";
+                                break;
                         }
                     } else if (command.equals("start_game")) {
                         // Start a game here
