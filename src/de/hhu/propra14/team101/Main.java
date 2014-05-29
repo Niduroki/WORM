@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hhu.propra14.team101.Networking.Exceptions.NetworkException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
@@ -135,13 +136,19 @@ public class Main extends Application {
                 try {
                     client.createRoom("Cool room");
                 } catch (Exception e) {
-                    System.out.println("Room can't be created");
+                    System.out.println("Room can't be created, joining instead");
+                    try {
+                        client.joinRoom("Cool room");
+                    } catch (NetworkException e2) {
+                        System.out.println("Can't join the room");
+                    }
                 }
                 try {
                     String[] rooms = client.getRooms();
                     for (String room : rooms) {
                         System.out.println(room);
                     }
+                    client.chat('g', "Hi there!");
                 } catch (Exception e) {
                     //
                 }
@@ -188,11 +195,11 @@ public class Main extends Application {
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find settings file!");
             initialValue1 = "schaepers.it";
-            initialValue2 = "Worms player";
+            initialValue2 = "Worms-player";
         } catch (NullPointerException e) {
             System.out.println("Missing setting!");
             initialValue1 = "schaepers.it";
-            initialValue2 = "Worms player";
+            initialValue2 = "Worms-player";
         }
 
         final TextField serverField = new TextField(initialValue1);

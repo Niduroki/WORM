@@ -17,6 +17,8 @@ import java.util.*;
 
 public class NetworkClient {
 
+    public String currentRoom;
+
     private Socket connection;
     private String server;
     private UUID uuid;
@@ -123,12 +125,27 @@ public class NetworkClient {
             line = line.substring(line.indexOf(" ")+1);
         }
 
-        if (line.equals("pong")) {
+        if (line.equals("ping")) {
             try {
-                this.queueSend("ping", true);
-            } catch (Exception e) {
+                this.queueSend("pong", true);
+            } catch (TimeoutException e) {
                 //
             }
+        } else if (line.startsWith("chat")) {
+            String chatline = line.substring(7);
+            if (line.charAt(5) == 'g') {
+                String user = chatline.split(" ")[0];
+                String message = chatline.substring(chatline.indexOf(" ")+1);
+                // TODO display message in the GUI global chat
+                System.out.println(user + " wrote " + message + " globally");
+            } else if (line.charAt(5) == 'r') {
+                String user = line.substring(7, line.substring(7).indexOf(" "));
+                String message = line.substring(line.substring(7).indexOf(" "));
+                // TODO display message in the GUI room chat
+                System.out.println(user + " wrote " + message + " in " + currentRoom);
+            }
+        } else if (line.startsWith("game")) {
+            // TODO interpret whatever we got now
         } else if (line.matches(NetworkServer.uuidRegex)) {
             this.uuid = UUID.fromString(line);
         }
@@ -161,6 +178,25 @@ public class NetworkClient {
         if (!this.lastAnswer.equals("okay")) {
             throw (new RoomExistsException());
         }
+        this.currentRoom = name;
+    }
+
+    public void joinRoom(String name) throws NetworkException {
+        this.queueSend("join_room " + name, true);
+        this.waitForAnswer();
+        if (!this.lastAnswer.equals("okay")) {
+            throw (new RoomExistsException());
+        }
+        this.currentRoom = name;
+    }
+
+    public void leaveRoom() throws NetworkException {
+        this.queueSend("leave_room", true);
+        this.waitForAnswer();
+        if (!this.lastAnswer.equals("okay")) {
+            throw (new RoomExistsException());
+        }
+        this.currentRoom = null;
     }
 
     public String[] getRooms() throws TimeoutException {
@@ -179,8 +215,10 @@ public class NetworkClient {
         throw (new TimeoutException());
     }
 
-    public void chat(char type, String message) {
-        //
+    public void chat(char type, String message) throws TimeoutException {
+        this.queueSend("chat " + type + " " + message, true);
+        // TODO is this needed?
+        this.waitForAnswer();
     }
 
 

@@ -63,16 +63,21 @@ public class NetworkServer {
                         userMap.remove(uuid);
                         answer = "okay";
                     } else if (command.equals("status")) {
-                        answer = "name:"+currentUser.name+",";
+                        answer = "name:" + currentUser.name + ",";
                         if (currentUser.getCurrentRoom() != null) {
-                            answer += "room:"+currentUser.getCurrentRoom().name+",";
+                            answer += "room:" + currentUser.getCurrentRoom().name + ",";
 
                             answer += "current_room_users:";
-                            for (NetworkUser user: currentUser.getCurrentRoom().users) {
+                            for (NetworkUser user : currentUser.getCurrentRoom().users) {
                                 answer += user.name + ",";
                             }
                         } else {
                             answer += "room:none,";
+                        }
+                    } else if (command.equals("list_users")) {
+                        answer = "";
+                        for (NetworkUser user : this.userMap.values()) {
+                            answer += user.name + ",";
                         }
                     } else if (command.equals("list_rooms")) {
                         if (this.roomMap.size() > 0) {
@@ -101,7 +106,11 @@ public class NetworkServer {
                             answer = "does_not_exist";
                         }
                     } else if (command.equals("leave_room")) {
+                        NetworkRoom room = currentUser.getCurrentRoom();
                         currentUser.leaveRoom();
+                        if (room.empty) {
+                            this.roomMap.remove(room.name);
+                        }
                         answer = "okay";
                     } else if (command.matches("chat [gr] .+")) {
                         String type = command.split(" ")[1];

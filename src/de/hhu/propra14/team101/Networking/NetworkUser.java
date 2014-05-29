@@ -27,6 +27,7 @@ public class NetworkUser {
     }
 
     public void leaveRoom() {
+        this.currentRoom.removeUser(this);
         this.currentRoom = null;
     }
 
