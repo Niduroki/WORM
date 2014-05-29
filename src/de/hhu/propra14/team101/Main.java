@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.collections.FXCollections;
 
 import de.hhu.propra14.team101.Networking.Exceptions.NetworkException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
@@ -17,6 +18,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -162,6 +164,13 @@ public class Main extends Application {
             }
         });
 
+        multibtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addMpButtons();
+            }
+        });
+
 
 
         exitbtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -230,6 +239,53 @@ public class Main extends Application {
             }
         });
     }
+
+    private void addMpButtons() {
+        // Clean up
+        this.grid.getChildren().clear();
+
+        // Create buttons and other objects
+        Text scenetitle = new Text("Multiplayer");
+        Button returnbtn = new Button("Back");
+        Button Create = new Button("Create");
+        Button Join = new Button ("Join");
+
+        ListView list = new ListView<String>();
+        ObservableList items =FXCollections.observableArrayList (
+                "Single", "Double", "Suite", "Family App", "Single", "Double", "Suite", "Family App", "Single", "Double", "Suite", "Family App", "Single", "Double", "Suite", "Family App");
+        list.setItems(items);
+        list.setPrefWidth(400);
+        list.setPrefHeight(80);
+
+        TextArea chatarea = new TextArea();
+        TextField chatfield = new TextField("");
+
+        // Configure each object
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
+        // Add the objects
+        this.grid.add(scenetitle, 0, 0, 2, 1);
+        this.grid.add(chatarea,0,2,3,3);
+        this.grid.add(returnbtn, 0, 8);
+        this.grid.add(list, 0, 1,3,3);
+        this.grid.add(Create,1,8);
+        this.grid.add(Join,2,8);
+        this.grid.add(chatfield,0,5,3,3);
+
+        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                SettingSaves saver = new SettingSaves();
+                Map<String, Object> data = new HashMap<>();
+
+
+
+                saver.save(data, "settings.yml");
+                addMainButtons();
+            }
+        });
+    }
+
     private void addPlayerButtons() {
         // Clean up
         this.grid.getChildren().clear();
