@@ -128,10 +128,28 @@ public class NetworkServer {
                                 break;
                         }
                     } else if (command.equals("start_game")) {
-                        // Start a game here
-                        answer = "okay";
+                        if (currentUser == currentUser.getCurrentRoom().users.get(0)) {
+                            boolean ready = true;
+                            for (NetworkUser user : currentUser.getCurrentRoom().users) {
+                                if (!user.gameReady) {
+                                    ready = false;
+                                }
+                            }
+
+                            if (ready) {
+                                NetworkGame game = new NetworkGame(currentUser.getCurrentRoom());
+                                for (NetworkUser user : currentUser.getCurrentRoom().users) {
+                                    user.game = game;
+                                }
+                                answer = "okay";
+                            } else {
+                                answer = "not_ready";
+                            }
+                        } else {
+                            answer = "error client not_owner";
+                        }
                     } else if (command.matches("game .+")) {
-                        answer = this.interpretGame(uuid, command.substring(5));
+                        answer = this.interpretGame(currentUser, command.substring(5));
                     } else {
                         answer = "error client command";
                     }
@@ -153,8 +171,9 @@ public class NetworkServer {
         }
     }
 
-    private String interpretGame(UUID user, String command) {
-        return "bla";
+    private String interpretGame(NetworkUser user, String command) {
+       user.game.doAction(user, command);
+       return "okay";
     }
 
     private boolean checkAlive() {

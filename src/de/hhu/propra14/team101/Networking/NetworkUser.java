@@ -6,6 +6,8 @@ public class NetworkUser {
 
     public String name;
     public PrintWriter networkOutput;
+    public boolean gameReady = false;
+    public NetworkGame game;
 
     private NetworkRoom currentRoom;
 
