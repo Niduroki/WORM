@@ -251,37 +251,31 @@ public class Main extends Application {
         Button Join = new Button ("Join");
 
         ListView list = new ListView<String>();
-        ObservableList items =FXCollections.observableArrayList (
-                "Single", "Double", "Suite", "Family App", "Single", "Double", "Suite", "Family App", "Single", "Double", "Suite", "Family App", "Single", "Double", "Suite", "Family App");
+        ObservableList items = FXCollections.observableArrayList("Cool room name", "Another room", "Room name", "Some room");
         list.setItems(items);
         list.setPrefWidth(400);
         list.setPrefHeight(80);
 
         TextArea chatarea = new TextArea();
+        chatarea.setEditable(false);
         TextField chatfield = new TextField("");
 
         // Configure each object
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
-        this.grid.add(scenetitle, 0, 0, 2, 1);
-        this.grid.add(chatarea,0,2,3,3);
-        this.grid.add(returnbtn, 0, 8);
-        this.grid.add(list, 0, 1,3,3);
-        this.grid.add(Create,1,8);
-        this.grid.add(Join,2,8);
-        this.grid.add(chatfield,0,5,3,3);
+        this.grid.add(scenetitle, 0, 0, 3, 1);
+        this.grid.add(list, 0, 1, 3, 2);
+        this.grid.add(chatarea, 0, 3, 3, 5);
+        this.grid.add(chatfield, 0, 7, 3, 9);
+        this.grid.add(returnbtn, 0, 11);
+        this.grid.add(Create,1,11);
+        this.grid.add(Join,2,11);
 
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                SettingSaves saver = new SettingSaves();
-                Map<String, Object> data = new HashMap<>();
-
-
-
-                saver.save(data, "settings.yml");
-                addMainButtons();
+                //
             }
         });
     }
