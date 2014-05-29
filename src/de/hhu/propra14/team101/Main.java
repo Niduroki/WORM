@@ -250,6 +250,13 @@ public class Main extends Application {
         Button Create = new Button("Create");
         Button Join = new Button ("Join");
 
+        Create.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addcreatearoom();
+            }
+        });
+
         ListView list = new ListView<String>();
         ObservableList items = FXCollections.observableArrayList("Cool room name", "Another room", "Room name", "Some room");
         list.setItems(items);
@@ -275,7 +282,57 @@ public class Main extends Application {
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                //
+                addMainButtons();
+            }
+        });
+    }
+    private void addcreatearoom() {
+        // Clean up
+        this.grid.getChildren().clear();
+
+        // Create buttons and other objects
+        Text scenetitle = new Text("Create a room");
+        Button returnbtn = new Button("Back");
+        Button Create = new Button("Create");
+
+        Text title1 = new Text ("Name");
+        Text title2 = new Text ("Password");
+        Text title3 = new Text ("Map");
+        TextField text1 = new TextField("");
+        TextField text2 = new TextField("");
+
+        final ComboBox<String> map = new ComboBox<>();
+        map.getItems().add("Map 1");
+        map.getItems().add("Map 2");
+        map.getItems().add("Map 3");
+        map.setValue("Map 1");
+
+        final CheckBox weaponBox1 = new CheckBox("Atomic Bomb");
+        final CheckBox weaponBox2 = new CheckBox("Grenade");
+        final CheckBox weaponBox3 = new CheckBox("Bazooka");
+
+        // Configure each object
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
+        // Add the objects
+
+        this.grid.add(scenetitle, 0, 0, 3, 1);
+        this.grid.add(text1,1,1);
+        this.grid.add(text2,1,2);
+        this.grid.add(title1,0,1);
+        this.grid.add(title2,0,2);
+        this.grid.add(title3,0,3);
+        this.grid.add(map,1,3);
+        this.grid.add(returnbtn, 0, 11);
+        this.grid.add(Create,1,11);
+        this.grid.add(weaponBox1,0,4);
+        this.grid.add(weaponBox2,1,4);
+        this.grid.add(weaponBox3,2,4);
+
+        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addMpButtons();
             }
         });
     }
