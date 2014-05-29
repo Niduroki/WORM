@@ -1,5 +1,7 @@
 package de.hhu.propra14.team101.Networking;
 
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,7 +24,7 @@ public class NetworkServer {
 
     private int counter = 0;
 
-    public String interpret(String line) {
+    public String interpret(String line, PrintWriter networkOutput) {
         String answer;
 
         // Every 20 interprets check if everybody's still there
@@ -42,12 +44,13 @@ public class NetworkServer {
             System.out.println(requestCount);
         }
 
+        // TODO sanitizing: room names must not have a "," user names must not have a " "
         try {
             System.out.println(line);
             if (line.startsWith("hello ")) {
                 String name = line.substring(6);
                 UUID uuid = UUID.randomUUID();
-                this.userMap.put(uuid, new NetworkUser(name));
+                this.userMap.put(uuid, new NetworkUser(name, networkOutput));
                 answer = String.valueOf(uuid);
             } else if (line.matches(NetworkServer.uuidRegex + " .+")) {
                 UUID uuid = UUID.fromString(line.split(" ")[0]);
@@ -59,8 +62,19 @@ public class NetworkServer {
                     } else if (command.equals("logoff")) {
                         userMap.remove(uuid);
                         answer = "okay";
+                    } else if (command.equals("status")) {
+                        answer = "name:"+currentUser.name+",";
+                        if (currentUser.getCurrentRoom() != null) {
+                            answer += "room:"+currentUser.getCurrentRoom().name+",";
+
+                            answer += "current_room_users:";
+                            for (NetworkUser user: currentUser.getCurrentRoom().users) {
+                                answer += user.name + ",";
+                            }
+                        } else {
+                            answer += "room:none,";
+                        }
                     } else if (command.equals("list_rooms")) {
-                        System.out.println(this.roomMap.size());
                         if (this.roomMap.size() > 0) {
                             answer = "";
                             for (NetworkRoom aRoom : this.roomMap.values()) {
@@ -74,27 +88,40 @@ public class NetworkServer {
                         if (this.roomMap.containsKey(roomName)) {
                             answer = "exists";
                         } else {
-                            this.roomMap.put(roomName, new NetworkRoom(roomName, currentUser));
-                            currentUser.currentRoom = this.roomMap.get(roomName);
+                            this.roomMap.put(roomName, new NetworkRoom(roomName));
+                            currentUser.joinRoom(this.roomMap.get(roomName));
                             answer = "okay";
                         }
                     } else if (command.matches("join_room .+")) {
-                        // Join a room
-                        answer = "okay";
+                        String roomName = command.substring(command.indexOf(" ")+1);
+                        if (this.roomMap.containsKey(roomName)) {
+                            currentUser.joinRoom(this.roomMap.get(roomName));
+                            answer = "okay";
+                        } else {
+                            answer = "does_not_exist";
+                        }
                     } else if (command.equals("leave_room")) {
-                        // Leave the current room
+                        currentUser.leaveRoom();
                         answer = "okay";
                     } else if (command.matches("chat [gr] .+")) {
                         String type = command.split(" ")[1];
                         String message = command.substring(7);
                         switch (type) {
                             case "g":
-                                // Chat globally
+                                for (NetworkUser user : userMap.values()) {
+                                    user.send("chat g " + currentUser.name + " " + message);
+                                }
                                 answer = "okay";
                                 break;
                             case "r":
-                                // Chat in our room
-                                answer = "okay";
+                                if (currentUser.getCurrentRoom() != null) {
+                                    for (NetworkUser user : currentUser.getCurrentRoom().users) {
+                                        user.send("chat r " + currentUser.name + " " + message);
+                                    }
+                                    answer = "okay";
+                                } else {
+                                    answer = "error client no_room";
+                                }
                                 break;
                             default:
                                 answer = "error client syntax";

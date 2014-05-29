@@ -6,9 +6,8 @@ public class NetworkRoom {
     public String name;
     public ArrayList<NetworkUser> users = new ArrayList<>();
 
-    public NetworkRoom(String name, NetworkUser creater) {
+    public NetworkRoom(String name) {
         this.name = name;
-        this.users.add(creater);
     }
 
     public void addUser(NetworkUser user) {

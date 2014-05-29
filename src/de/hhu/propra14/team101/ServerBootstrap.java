@@ -57,7 +57,7 @@ public class ServerBootstrap {
 
                 while (true) {
                     String line = input.nextLine();
-                    String answer = networkServer.interpret(line);
+                    String answer = networkServer.interpret(line, output);
 
                     output.println(answer);
                     output.flush();
