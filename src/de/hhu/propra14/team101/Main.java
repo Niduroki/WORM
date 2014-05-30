@@ -430,8 +430,6 @@ public class Main extends Application {
                     game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('r');
                 } else if (keyEvent.getCode() == KeyCode.I) {
                     // Show the inventory
-                } else if (keyEvent.getCode() == KeyCode.N) {
-                    game.nextRound();
                 } else if (keyEvent.getCode() == KeyCode.S) {
                     // Save a game
                     GameSaves saver = new GameSaves();
