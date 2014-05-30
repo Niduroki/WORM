@@ -250,6 +250,13 @@ public class Main extends Application {
         Button Create = new Button("Create");
         Button Join = new Button ("Join");
 
+        Join.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addroombtns();
+            }
+        });
+
         Create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -302,6 +309,7 @@ public class Main extends Application {
         color.getItems().add("Blue");
         color.getItems().add("Green");
         color.getItems().add("Yellow");
+        color.getItems().add("Spectator");
         color.setValue("Red");
 
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -312,7 +320,7 @@ public class Main extends Application {
         });
 
         ListView list = new ListView<String>();
-        ObservableList items = FXCollections.observableArrayList("Spieler 1", "Spieler 2", "Spieler 3", "Spieler 4", "Specktatör");
+        ObservableList items = FXCollections.observableArrayList("Spieler 1", "Spieler 2", "Spieler 3", "Spieler 4");
         list.setItems(items);
         list.setPrefWidth(100);
         list.setPrefHeight(150);
@@ -326,6 +334,7 @@ public class Main extends Application {
 
         // Add the objects
         this.grid.add(advance,3,1,4,4);
+        this.grid.add(ready,1,11);
         this.grid.add(scenetitle, 0, 0, 3, 1);
         this.grid.add(color, 2,1,4,4);
         this.grid.add(list, 0, 1, 2, 2);
