@@ -23,6 +23,8 @@ public class Game {
     private Terrain currentTerrain;
     public int round = 0;
     public int turnOfPlayer = 0;
+    public int roundTimer = 20;
+    private int secondCounter = 0;
 
     /**
      * Initialize a new game.
@@ -208,9 +210,10 @@ public class Game {
         }
         gc.setFill(Color.BLACK);
         gc.fillText("Current weapon: " + text, 0, 10);
+        gc.fillText(String.valueOf(this.round), gc.getCanvas().getWidth()/2, 15);
+        gc.fillText(String.valueOf(this.roundTimer), gc.getCanvas().getWidth()-15, 10);
 
         this.currentTerrain.draw(gc);
-        gc.fillText(String.valueOf(this.round), 300, 20);
 
         for (int i = 0; i < this.getPlayers().size(); i++) {
             for (int indexWorms = 0; indexWorms < this.getPlayers().get(i).wormList.size(); indexWorms++) {
@@ -227,7 +230,16 @@ public class Game {
      */
     public void updateGame(GraphicsContext gc) {
 
-        //if (!bulletFired) {
+        this.secondCounter += 1;
+        // 16 FPS at the moment
+        if (this.secondCounter == 16) {
+            this.secondCounter = 0;
+            this.roundTimer -= 1;
+            if (this.roundTimer == 0) {
+                this.nextRound();
+                this.roundTimer = 20;
+            }
+        }
 
         // Remove dead players
         for (int i = 0; i < this.getPlayers().size(); i++) {

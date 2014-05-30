@@ -378,6 +378,14 @@ public class Main extends Application {
             startbtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
+                    // Don't start without a weapon
+                    if (!(
+                            weaponBox1.selectedProperty().getValue() ||
+                            weaponBox2.selectedProperty().getValue() ||
+                            weaponBox3.selectedProperty().getValue()
+                    )) {
+                        return;
+                    }
                     Map<String, Boolean> weaponMap = new HashMap<String, Boolean>();
                     weaponMap.put("AtomicBomb", weaponBox1.selectedProperty().getValue());
                     weaponMap.put("Grenade", weaponBox2.selectedProperty().getValue());
@@ -385,10 +393,7 @@ public class Main extends Application {
 
                     players.add(parsePlayerSelection(weaponMap, colorSelection.getValue(), nameField.getText()));
 
-                    field = new Canvas(600, 400);
-                    grid.getChildren().clear();
-                    grid.add(field, 0, 0);
-                    startGameplay(field.getGraphicsContext2D());
+                    addMapSelectionButtons();
                 }
             });
         }
@@ -408,6 +413,14 @@ public class Main extends Application {
             addplayerbtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
+                    // Don't start without a weapon
+                    if (!(
+                            weaponBox1.selectedProperty().getValue() ||
+                            weaponBox2.selectedProperty().getValue() ||
+                            weaponBox3.selectedProperty().getValue()
+                    )) {
+                        return;
+                    }
                     Map<String, Boolean> weaponMap = new HashMap<String, Boolean>();
                     weaponMap.put("AtomicBomb", weaponBox1.selectedProperty().getValue());
                     weaponMap.put("Grenade", weaponBox2.selectedProperty().getValue());
@@ -419,6 +432,48 @@ public class Main extends Application {
             });
         }
     }
+
+    private void addMapSelectionButtons() {
+        // Clean up
+        this.grid.getChildren().clear();
+
+        // Create buttons and other objects
+        Text scenetitle = new Text("Select a map");
+        Button backbtn = new Button("Back");
+        Button startbtn = new Button("Start");
+
+        final ComboBox<String> mapSelection = new ComboBox<>();
+        mapSelection.getItems().addAll("Map 1", "Map 2", "Map 3");
+        mapSelection.setValue("Map 1");
+
+        // Configure each object
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
+        // Add the objects
+        this.grid.add(scenetitle, 0, 0, 2, 1);
+        this.grid.add(mapSelection, 0, 4);
+        this.grid.add(backbtn, 0, 8);
+        this.grid.add(startbtn, 1, 8);
+
+        backbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addMainButtons();
+            }
+        });
+
+        startbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+
+                field = new Canvas(600, 400);
+                grid.getChildren().clear();
+                grid.add(field, 0, 0);
+                int levelNumber = Integer.parseInt(mapSelection.getValue().split(" ")[1])-1;
+                startGameplay(levelNumber, field.getGraphicsContext2D());
+            }
+        });
+        }
 
     private Player parsePlayerSelection(Map<String, Boolean> weaponMap, String colorName, String playerName) {
         ArrayList<AbstractWeapon> weapons = new ArrayList<>();
@@ -480,7 +535,7 @@ public class Main extends Application {
     /**
      * Starts the gameplay
      */
-    public void startGameplay(GraphicsContext gc) {
+    public void startGameplay(int levelNumber, GraphicsContext gc) {
 
         final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
             @Override
@@ -537,8 +592,6 @@ public class Main extends Application {
                     game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('r');
                 } else if (keyEvent.getCode() == KeyCode.I) {
                     // Show the inventory
-                } else if (keyEvent.getCode() == KeyCode.N) {
-                    game.nextRound();
                 } else if (keyEvent.getCode() == KeyCode.S) {
                     // Save a game
                     GameSaves saver = new GameSaves();
@@ -551,13 +604,6 @@ public class Main extends Application {
                     } catch (FileNotFoundException e) {
                         //
                     }
-                } else if(keyEvent.getCode() == KeyCode.M) {
-                    //switch to next level
-                    if (game.getSelectedLevelNumber() + 1 < game.getCountLevel()) {
-                        game.startLevel(game.getSelectedLevelNumber() + 1, field.getGraphicsContext2D());
-                    } else {
-                        game.startLevel(0, field.getGraphicsContext2D());
-                    }
                 }
             }
         };
@@ -567,7 +613,7 @@ public class Main extends Application {
         this.primaryStage.getScene().addEventHandler(ScrollEvent.SCROLL, scrollHandler);
 
         game = new Game(players);
-        game.startLevel(0, gc);
+        game.startLevel(levelNumber, gc);
 
         //Prepare updating game
         final Duration oneFrameAmt = Duration.millis(60);

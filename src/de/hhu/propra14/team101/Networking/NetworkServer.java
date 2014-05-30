@@ -136,6 +136,9 @@ public class NetworkServer {
                                 answer = "error client syntax";
                                 break;
                         }
+                    } else if (command.equals("ready")) {
+                        currentUser.gameReady = !currentUser.gameReady;
+                        answer = "okay";
                     } else if (command.equals("start_game")) {
                         if (currentUser == currentUser.getCurrentRoom().users.get(0)) {
                             boolean ready = true;
@@ -158,7 +161,11 @@ public class NetworkServer {
                             answer = "error client not_owner";
                         }
                     } else if (command.matches("game .+")) {
-                        answer = this.interpretGame(currentUser, command.substring(5));
+                        if (currentUser.game != null) {
+                            answer = this.interpretGame(currentUser, command.substring(5));
+                        } else {
+                            answer = "error client no_game";
+                        }
                     } else {
                         answer = "error client command";
                     }

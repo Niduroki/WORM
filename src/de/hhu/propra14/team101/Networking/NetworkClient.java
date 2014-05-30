@@ -1,8 +1,6 @@
 package de.hhu.propra14.team101.Networking;
 
-import de.hhu.propra14.team101.Networking.Exceptions.NetworkException;
-import de.hhu.propra14.team101.Networking.Exceptions.RoomExistsException;
-import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
+import de.hhu.propra14.team101.Networking.Exceptions.*;
 import de.hhu.propra14.team101.Savers.SettingSaves;
 
 import java.io.FileNotFoundException;
@@ -221,6 +219,10 @@ public class NetworkClient {
         this.waitForAnswer();
     }
 
+    public void switchReady() throws TimeoutException {
+        this.queueSend("ready", true);
+        this.waitForAnswer();
+    }
 
     static class HandleIncomingThread implements Runnable {
 
