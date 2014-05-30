@@ -322,7 +322,7 @@ public class Main extends Application {
         ListView list = new ListView<String>();
         ObservableList items = FXCollections.observableArrayList("Spieler 1", "Spieler 2", "Spieler 3", "Spieler 4");
         list.setItems(items);
-        list.setPrefWidth(100);
+        list.setPrefWidth(250);
         list.setPrefHeight(150);
 
         TextArea chatarea = new TextArea();
@@ -333,14 +333,14 @@ public class Main extends Application {
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
-        this.grid.add(advance,3,1,4,4);
-        this.grid.add(ready,1,11);
+        this.grid.add(ready,1,12);
+        this.grid.add(advance, 2, 2);
         this.grid.add(scenetitle, 0, 0, 3, 1);
-        this.grid.add(color, 2,1,4,4);
+        this.grid.add(color, 2, 1);
         this.grid.add(list, 0, 1, 2, 2);
         this.grid.add(chatarea, 0, 3, 3, 5);
         this.grid.add(chatfield, 0, 7, 3, 9);
-        this.grid.add(returnbtn, 0, 11);
+        this.grid.add(returnbtn, 0, 12);
 
 
 
