@@ -1,21 +1,19 @@
 package de.hhu.propra14.team101;
 
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import javafx.collections.FXCollections;
 
-import de.hhu.propra14.team101.Networking.Exceptions.NetworkException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
-import de.hhu.propra14.team101.Weapons.AbstractWeapon;
-import de.hhu.propra14.team101.Weapons.AtomicBomb;
-import de.hhu.propra14.team101.Weapons.Bazooka;
-import de.hhu.propra14.team101.Weapons.Grenade;
+import de.hhu.propra14.team101.Weapons.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -23,6 +21,7 @@ import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -43,7 +42,7 @@ import javafx.util.Duration;
 /**
  * Main class, that starts the program
  */
-public class Main extends Application {
+public class Main extends Application implements Initializable {
 
     protected Canvas field;
     protected Game game;
@@ -56,9 +55,12 @@ public class Main extends Application {
     private ArrayList<String> availableColors;
     private NetworkClient client;
 
-
     public static void main (String[] args) {
         launch(args);
+    }
+
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // TODO use fxml
     }
 
     /**
@@ -134,32 +136,6 @@ public class Main extends Application {
             }
         });
 
-        multibtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                NetworkClient client = new NetworkClient();
-                try {
-                    client.createRoom("Cool room");
-                } catch (Exception e) {
-                    System.out.println("Room can't be created, joining instead");
-                    try {
-                        client.joinRoom("Cool room");
-                    } catch (NetworkException e2) {
-                        System.out.println("Can't join the room");
-                    }
-                }
-                try {
-                    String[] rooms = client.getRooms();
-                    for (String room : rooms) {
-                        System.out.println(room);
-                    }
-                    client.chat('g', "Hi there!");
-                } catch (Exception e) {
-                    //
-                }
-            }
-        });
-
         optionsbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -173,8 +149,6 @@ public class Main extends Application {
                 addMpButtons();
             }
         });
-
-
 
         exitbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -245,7 +219,7 @@ public class Main extends Application {
 
 
     private void addMpButtons() {
-        this.client = new NetworkClient();
+        this.client = new NetworkClient(this);
         // Clean up
         this.grid.getChildren().clear();
 
@@ -284,6 +258,7 @@ public class Main extends Application {
 
         TextArea chatarea = new TextArea();
         chatarea.setEditable(false);
+        chatarea.setWrapText(false);
         TextField chatfield = new TextField("");
 
         // Configure each object

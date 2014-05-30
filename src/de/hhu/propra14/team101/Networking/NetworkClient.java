@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101.Networking;
 
+import de.hhu.propra14.team101.Main;
 import de.hhu.propra14.team101.Networking.Exceptions.*;
 import de.hhu.propra14.team101.Savers.SettingSaves;
 
@@ -26,11 +27,12 @@ public class NetworkClient {
     private int lastReceivedCounter = -1;
     private String lastAnswer;
     private ArrayList<NetworkRequest> toSend = new ArrayList<>();
+    private Main main;
 
     /**
      * Constructs a class for networking
      */
-    public NetworkClient () {
+    public NetworkClient (Main main) {
         int port = 7601;
         SettingSaves loader = new SettingSaves();
         try {
@@ -60,6 +62,8 @@ public class NetworkClient {
         } catch (TimeoutException e) {
             //
         }
+
+        this.main = main;
     }
 
     private void queueSend (String data, boolean waitForAnswer) throws TimeoutException {
@@ -135,6 +139,8 @@ public class NetworkClient {
                 String user = chatline.split(" ")[0];
                 String message = chatline.substring(chatline.indexOf(" ")+1);
                 // TODO display message in the GUI global chat
+                // TODO javafx isn't thread-safe (at least the way we use it now) se we'll need to work around this somehow
+                // E.g. with two Strings that keep chatlogs and the gui updates every second or so based on them
                 System.out.println(user + " wrote " + message + " globally");
             } else if (line.charAt(5) == 'r') {
                 String user = line.substring(7, line.substring(7).indexOf(" "));
