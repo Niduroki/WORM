@@ -443,8 +443,7 @@ public class Main extends Application {
         this.grid.add(title2,0,2);
         this.grid.add(title3,0,3);
         this.grid.add(map,1,3);
-        this.grid.add(returnbtn, 0, 11);
-        this.grid.add(Create,1,11);
+        this.grid.add(Create,0,11);
         this.grid.add(weaponBox1,0,4);
         this.grid.add(weaponBox2,1,4);
         this.grid.add(weaponBox3,2,4);
