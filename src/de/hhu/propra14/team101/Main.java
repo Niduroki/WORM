@@ -315,7 +315,7 @@ public class Main extends Application {
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                addMainButtons();
+                addMpButtons();
             }
         });
 
