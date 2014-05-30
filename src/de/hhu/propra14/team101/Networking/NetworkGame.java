@@ -29,16 +29,25 @@ public class NetworkGame {
 
     public void doAction(NetworkUser user, String line) {
         if (this.game.turnOfPlayer == this.room.users.indexOf(user)) {
+            Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
             if (line.equals("move_left")) {
-                int currentWorm = this.game.getPlayers().get(game.turnOfPlayer).currentWorm;
-                this.game.getPlayers().get(this.game.turnOfPlayer).wormList.get(currentWorm).move('l');
+                currentWorm.move('l');
             } else if (line.equals("move_right")) {
-
+                currentWorm.move('r');
+            } else if (line.equals("next_weapon")) {
+                currentWorm.nextWeapon();
+            } else if (line.equals("prev_weapon")) {
+                currentWorm.prevWeapon();
+            } else if (line.startsWith("fire")) {
+                // Don't fire without a weapon
+                if (currentWorm.weaponList.size() != 0) {
+                    String[] coords = line.split(" ");
+                    game.fireBullet(currentWorm.fireWeapon(Double.parseDouble(coords[1]), Double.parseDouble(coords[2])));
+                }
             }
-
             for (NetworkUser anUser: this.room.users) {
                 // Propagate the action
-                anUser.send(line);
+                anUser.send("game " + line);
             }
         }
         // Just don't do anything otherwise
