@@ -286,6 +286,62 @@ public class Main extends Application {
             }
         });
     }
+    private void addroombtns() {
+        // Clean up
+        this.grid.getChildren().clear();
+
+        // Create buttons and other objects
+        Text scenetitle = new Text("Platzhalter");
+        Button returnbtn = new Button("Leave");
+        Button ready = new Button("Ready");
+        Button advance = new Button ("Advance");
+
+
+        final ComboBox<String> color = new ComboBox<>();
+        color.getItems().add("Red");
+        color.getItems().add("Blue");
+        color.getItems().add("Green");
+        color.getItems().add("Yellow");
+        color.setValue("Red");
+
+        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addMainButtons();
+            }
+        });
+
+        ListView list = new ListView<String>();
+        ObservableList items = FXCollections.observableArrayList("Spieler 1", "Spieler 2", "Spieler 3", "Spieler 4", "Specktatör");
+        list.setItems(items);
+        list.setPrefWidth(100);
+        list.setPrefHeight(150);
+
+        TextArea chatarea = new TextArea();
+        chatarea.setEditable(false);
+        TextField chatfield = new TextField("");
+
+        // Configure each object
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
+        // Add the objects
+        this.grid.add(advance,3,1,4,4);
+        this.grid.add(scenetitle, 0, 0, 3, 1);
+        this.grid.add(color, 2,1,4,4);
+        this.grid.add(list, 0, 1, 2, 2);
+        this.grid.add(chatarea, 0, 3, 3, 5);
+        this.grid.add(chatfield, 0, 7, 3, 9);
+        this.grid.add(returnbtn, 0, 11);
+
+
+
+        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addMainButtons();
+            }
+        });
+    }
     private void addcreatearoom() {
         // Clean up
         this.grid.getChildren().clear();
@@ -333,6 +389,12 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 addMpButtons();
+            }
+        });
+        Create.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addroombtns();
             }
         });
     }
