@@ -301,7 +301,7 @@ public class Main extends Application {
         Text scenetitle = new Text("Platzhalter");
         Button returnbtn = new Button("Leave");
         Button ready = new Button("Ready");
-        Button advance = new Button ("Advance");
+        Button advanced = new Button ("Advanced");
 
 
         final ComboBox<String> color = new ComboBox<>();
@@ -334,7 +334,7 @@ public class Main extends Application {
 
         // Add the objects
         this.grid.add(ready,1,12);
-        this.grid.add(advance, 2, 2);
+        this.grid.add(advanced, 2, 2);
         this.grid.add(scenetitle, 0, 0, 3, 1);
         this.grid.add(color, 2, 1);
         this.grid.add(list, 0, 1, 2, 2);
@@ -342,7 +342,7 @@ public class Main extends Application {
         this.grid.add(chatfield, 0, 7, 3, 9);
         this.grid.add(returnbtn, 0, 12);
 
-        advance.setOnAction(new EventHandler<ActionEvent>() {
+        advanced.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 addadvancebtns();
