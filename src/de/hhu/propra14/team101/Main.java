@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import javafx.collections.FXCollections;
 
 import de.hhu.propra14.team101.Networking.Exceptions.NetworkException;
@@ -52,6 +54,7 @@ public class Main extends Application {
     private Timeline timeline;
     private ArrayList<Player> players;
     private ArrayList<String> availableColors;
+    private NetworkClient client;
 
 
     public static void main (String[] args) {
@@ -240,7 +243,9 @@ public class Main extends Application {
         });
     }
 
+
     private void addMpButtons() {
+        this.client = new NetworkClient();
         // Clean up
         this.grid.getChildren().clear();
 
@@ -264,9 +269,16 @@ public class Main extends Application {
             }
         });
 
+
         ListView list = new ListView<String>();
-        ObservableList items = FXCollections.observableArrayList("Cool room name", "Another room", "Room name", "Some room");
-        list.setItems(items);
+        try {
+            String[] rooms = client.getRooms();
+            list.setItems(FXCollections.observableArrayList(rooms));
+        } catch (TimeoutException exceptionName) {
+            String[] rooms = {"Cool room name", "Another room", "Room name", "Some room"};
+            list.setItems(FXCollections.observableArrayList(rooms));
+        }
+
         list.setPrefWidth(400);
         list.setPrefHeight(80);
 
@@ -285,6 +297,7 @@ public class Main extends Application {
         this.grid.add(returnbtn, 0, 11);
         this.grid.add(Create,1,11);
         this.grid.add(Join,2,11);
+
 
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
