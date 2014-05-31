@@ -39,7 +39,7 @@ public class NetworkClient {
         try {
             Map data = loader.load("settings.yml");
             if (data.get("multiplayer_server") != null) {
-                server = (String) data.get("default_server");
+                server = (String) data.get("multiplayer_server");
             } else {
                 server = "schaepers.it";
             }
