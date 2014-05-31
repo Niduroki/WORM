@@ -7,6 +7,7 @@ import de.hhu.propra14.team101.Savers.SettingSaves;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.*;
 
@@ -37,7 +38,7 @@ public class NetworkClient {
         SettingSaves loader = new SettingSaves();
         try {
             Map data = loader.load("settings.yml");
-            if (data.get("default_server") != null) {
+            if (data.get("multiplayer_server") != null) {
                 server = (String) data.get("default_server");
             } else {
                 server = "schaepers.it";
@@ -53,8 +54,9 @@ public class NetworkClient {
             Thread thread = new Thread(new HandleIncomingThread(connection, this));
             thread.setDaemon(true);
             thread.start();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             System.out.println("Can't connect to server");
+            e.printStackTrace();
         }
 
         try {
