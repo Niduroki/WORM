@@ -36,8 +36,8 @@ public class Lobby {
         // Create buttons and other objects
         Text scenetitle = new Text("Lobby");
         Button returnbtn = new Button("Back");
-        Button create = new Button("Create");
-        Button join = new Button("Join");
+        Button create = new Button("Create Game");
+        Button join = new Button("Join Game");
 
         join.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -49,7 +49,8 @@ public class Lobby {
         create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                addcreatearoom();
+                timeline.stop();
+                addcreateGameBtns();
             }
         });
 
@@ -155,8 +156,12 @@ public class Lobby {
         });
 
         ListView list = new ListView<String>();
-        ObservableList items = FXCollections.observableArrayList("Spieler 1", "Spieler 2", "Spieler 3", "Spieler 4");
-        list.setItems(items);
+        try {
+            String[] users = this.main.client.getUsers();
+            list.setItems(FXCollections.observableArrayList(users));
+        } catch (TimeoutException exceptionName) {
+            System.out.println(exceptionName.getMessage());
+        }
         list.setPrefWidth(250);
         list.setPrefHeight(150);
 
@@ -185,17 +190,16 @@ public class Lobby {
         });
     }
 
-    private void addcreatearoom() {
+    private void addcreateGameBtns() {
         // Clean up
         this.main.grid.getChildren().clear();
 
         // Create buttons and other objects
-        Text scenetitle = new Text("Create a room");
+        Text scenetitle = new Text("Create game");
         Button returnbtn = new Button("Back");
-        Button Create = new Button("Create");
+        Button startBtn = new Button("Start");
 
         Text title1 = new Text("Name");
-        Text title2 = new Text("Password");
         Text title3 = new Text("Map");
         TextField text1 = new TextField("");
         TextField text2 = new TextField("");
@@ -219,11 +223,10 @@ public class Lobby {
         this.main.grid.add(text1, 1, 1);
         this.main.grid.add(text2, 1, 2);
         this.main.grid.add(title1, 0, 1);
-        this.main.grid.add(title2, 0, 2);
-        this.main.grid.add(title3, 0, 3);
+        this.main.grid.add(title3, 0, 2);
         this.main.grid.add(map, 1, 3);
         this.main.grid.add(returnbtn, 0, 11);
-        this.main.grid.add(Create, 1, 11);
+        this.main.grid.add(startBtn, 1, 11);
         this.main.grid.add(weaponBox1, 0, 4);
         this.main.grid.add(weaponBox2, 1, 4);
         this.main.grid.add(weaponBox3, 2, 4);
@@ -234,10 +237,10 @@ public class Lobby {
                 addMpButtons();
             }
         });
-        Create.setOnAction(new EventHandler<ActionEvent>() {
+        startBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                addroombtns();
+                //addroombtns();
             }
         });
     }
