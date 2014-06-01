@@ -15,11 +15,11 @@ public class NetworkServer {
     public static String uuidRegex = ".{8}-.{4}-.{4}-.{4}-.{12}";
 
     private Map<UUID, NetworkUser> userMap;
-    private Map<String, NetworkRoom> roomMap;
+    //private Map<String, NetworkRoom> roomMap;
 
     public NetworkServer() {
         this.userMap = new HashMap<>();
-        this.roomMap = new HashMap<>();
+        //this.roomMap = new HashMap<>();
     }
 
     private int counter = 0;
@@ -64,7 +64,7 @@ public class NetworkServer {
                         answer = "okay";
                     } else if (command.equals("status")) {
                         answer = "name:" + currentUser.name + ",";
-                        if (currentUser.getCurrentRoom() != null) {
+                        /*if (currentUser.getCurrentRoom() != null) {
                             answer += "room:" + currentUser.getCurrentRoom().name + ",";
 
                             answer += "current_room_users:";
@@ -73,13 +73,13 @@ public class NetworkServer {
                             }
                         } else {
                             answer += "room:none,";
-                        }
+                        }*/
                     } else if (command.equals("list_users")) {
                         answer = "";
                         for (NetworkUser user : this.userMap.values()) {
                             answer += user.name + ",";
                         }
-                    } else if (command.equals("list_rooms")) {
+                    /*} else if (command.equals("list_rooms")) {
                         if (this.roomMap.size() > 0) {
                             answer = "";
                             for (NetworkRoom aRoom : this.roomMap.values()) {
@@ -87,8 +87,8 @@ public class NetworkServer {
                             }
                         } else {
                             answer = "none";
-                        }
-                    } else if (command.matches("create_room .+")) {
+                        }*/
+                    /*} else if (command.matches("create_room .+")) {
                         String roomName = command.substring(command.indexOf(" ")+1);
                         if (this.roomMap.containsKey(roomName)) {
                             answer = "exists";
@@ -111,31 +111,13 @@ public class NetworkServer {
                         if (room.empty) {
                             this.roomMap.remove(room.name);
                         }
-                        answer = "okay";
-                    } else if (command.matches("chat [gr] .+")) {
-                        String type = command.split(" ")[1];
-                        String message = command.substring(7);
-                        switch (type) {
-                            case "g":
-                                for (NetworkUser user : userMap.values()) {
-                                    user.send("chat g " + currentUser.name + " " + message);
-                                }
-                                answer = "okay";
-                                break;
-                            case "r":
-                                if (currentUser.getCurrentRoom() != null) {
-                                    for (NetworkUser user : currentUser.getCurrentRoom().users) {
-                                        user.send("chat r " + currentUser.name + " " + message);
-                                    }
-                                    answer = "okay";
-                                } else {
-                                    answer = "error client no_room";
-                                }
-                                break;
-                            default:
-                                answer = "error client syntax";
-                                break;
+                        answer = "okay";*/
+                    } else if (command.matches("chat .+")) {
+                        String message = command.substring(5);
+                        for (NetworkUser user : userMap.values()) {
+                             user.send("chat " + currentUser.name + " " + message);
                         }
+                        answer = "okay";
                     } else if (command.equals("ready")) {
                         currentUser.gameReady = !currentUser.gameReady;
                         answer = "okay";
