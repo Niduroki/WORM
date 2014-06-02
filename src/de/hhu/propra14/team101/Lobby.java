@@ -163,14 +163,19 @@ public class Lobby {
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                roomTimeline.stop();
-                addMpButtons();
+                try {
+                    main.client.leaveRoom();
+                    roomTimeline.stop();
+                    addMpButtons();
+                } catch (NetworkException e) {
+                    //
+                }
             }
         });
 
         final ListView list = new ListView<String>();
         try {
-            String[] users = this.main.client.getUsers();
+            String[] users = this.main.client.getRoomUsers();
             list.setItems(FXCollections.observableArrayList(users));
         } catch (TimeoutException exceptionName) {
             System.out.println(exceptionName.getMessage());
@@ -242,12 +247,12 @@ public class Lobby {
         final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
-                        if (main.client.hasGlobalMessages()) {
+                        if (main.client.hasRoomMessages()) {
                             roomChatArea.appendText(main.client.getLastRoomMessage() + "\n");
                         }
 
                         try {
-                            String[] users = main.client.getUsers();
+                            String[] users = main.client.getRoomUsers();
                             list.setItems(FXCollections.observableArrayList(users));
                         } catch (TimeoutException exceptionName) {
                             System.out.println(exceptionName.getMessage());

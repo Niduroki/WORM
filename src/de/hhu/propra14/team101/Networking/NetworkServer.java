@@ -14,12 +14,10 @@ public class NetworkServer {
 
     public static String uuidRegex = ".{8}-.{4}-.{4}-.{4}-.{12}";
 
-    private Map<UUID, NetworkUser> userMap;
-    private Map<String, NetworkRoom> roomMap;
+    private Map<UUID, NetworkUser> userMap = new HashMap<>();
+    private Map<String, NetworkRoom> roomMap = new HashMap<>();
 
     public NetworkServer() {
-        this.userMap = new HashMap<>();
-        //this.roomMap = new HashMap<>();
     }
 
     private int counter = 0;
@@ -78,6 +76,15 @@ public class NetworkServer {
                         answer = "";
                         for (NetworkUser user : this.userMap.values()) {
                             answer += user.name + ",";
+                        }
+                    } else if (command.equals("list_room_users")) {
+                        answer = "";
+                        if (currentUser.getCurrentRoom() != null) {
+                            for (NetworkUser user : currentUser.getCurrentRoom().users) {
+                                answer += user.name + ",";
+                            }
+                        } else {
+                            answer = "error client no_room";
                         }
                     } else if (command.equals("list_rooms")) {
                         if (this.roomMap.size() > 0) {

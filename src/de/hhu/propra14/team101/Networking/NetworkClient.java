@@ -138,13 +138,14 @@ public class NetworkClient {
                 //
             }
         } else if (line.startsWith("chat")) {
-            String chatline = line.substring(7);
+            String chatline = line.substring(5);
             String user = chatline.split(" ")[0];
-            String message = chatline.substring(chatline.indexOf(" ")+1);
-            if (line.charAt(5) == 'g') {
+            char type = chatline.split(" ")[1].charAt(0);
+            String message = chatline.substring(chatline.indexOf(" ")+3);
+            if (type == 'g') {
                 globalMessages.add(user + ">: " + message);
                 System.out.println(user + " wrote " + message + " globally");
-            } else if (line.charAt(5) == 'r') {
+            } else if (type == 'r') {
                 roomMessages.add(user + ">: " + message);
                 System.out.println(user + " wrote " + message + " in " + currentRoom);
             }
@@ -160,7 +161,6 @@ public class NetworkClient {
     private void signIn() throws TimeoutException {
         SettingSaves loader = new SettingSaves();
 
-        String name;
         try {
             Map data = loader.load("settings.yml");
             this.ourName = (String) data.get("multiplayer_name");
@@ -231,6 +231,12 @@ public class NetworkClient {
 
     public String[] getUsers() throws TimeoutException {
         this.queueSend("list_users", true);
+        this.waitForAnswer();
+        return this.lastAnswer.split(",");
+    }
+
+    public String[] getRoomUsers() throws TimeoutException {
+        this.queueSend("list_room_users", true);
         this.waitForAnswer();
         return this.lastAnswer.split(",");
     }
