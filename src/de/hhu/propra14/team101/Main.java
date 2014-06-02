@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import javafx.animation.Animation;
@@ -42,6 +43,7 @@ public class Main extends Application implements Initializable {
     protected NetworkClient client;
     protected GUI gui;
     protected Lobby lobby;
+    public boolean isOnlineGame = false;
 
     public static void main (String[] args) {
         launch(args);
@@ -88,6 +90,9 @@ public class Main extends Application implements Initializable {
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.isSecondaryButtonDown()) {
                     if (game.turnOfPlayer < game.getPlayers().size()) {
+                        if (isOnlineGame) {
+                            //
+                        }
                         Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
                         // Don't fire without a weapon
                         if (currentWorm.weaponList.size() != 0) {
@@ -104,8 +109,22 @@ public class Main extends Application implements Initializable {
                 // Scrolled up
                 Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
                 if (scrollEvent.getDeltaY() > 0) {
+                    if (isOnlineGame) {
+                        try {
+                            client.nextWeapon();
+                        } catch (TimeoutException e) {
+                            //
+                        }
+                    }
                     currentWorm.nextWeapon();
                 } else if (scrollEvent.getDeltaY() < 0) { // Scrolled down
+                    if (isOnlineGame) {
+                        try {
+                            client.prevWeapon();
+                        } catch (TimeoutException e) {
+                            //
+                        }
+                    }
                     currentWorm.prevWeapon();
                 }
             }
@@ -131,11 +150,25 @@ public class Main extends Application implements Initializable {
                     //    jumpingWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm);
                     //}
                 } else if (keyEvent.getCode() == KeyCode.LEFT) {
+                    if (isOnlineGame) {
+                        try {
+                            client.move('l');
+                        } catch (TimeoutException e) {
+                            //
+                        }
+                    }
                     int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
                     game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('l');
                 } else if (keyEvent.getCode() == KeyCode.RIGHT) {
                     int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
                     game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('r');
+                    if (isOnlineGame) {
+                        try {
+                            client.move('r');
+                        } catch (TimeoutException e) {
+                            //
+                        }
+                    }
                 } else if (keyEvent.getCode() == KeyCode.I) {
                     // Show the inventory
                 } else if (keyEvent.getCode() == KeyCode.S) {

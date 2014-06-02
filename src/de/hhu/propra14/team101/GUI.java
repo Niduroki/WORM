@@ -90,6 +90,7 @@ public class GUI {
         multibtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                main.client = new NetworkClient(main);
                 main.lobby.addMpButtons();
             }
         });

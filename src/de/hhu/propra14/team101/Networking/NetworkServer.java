@@ -15,7 +15,7 @@ public class NetworkServer {
     public static String uuidRegex = ".{8}-.{4}-.{4}-.{4}-.{12}";
 
     private Map<UUID, NetworkUser> userMap;
-    //private Map<String, NetworkRoom> roomMap;
+    private Map<String, NetworkRoom> roomMap;
 
     public NetworkServer() {
         this.userMap = new HashMap<>();
@@ -79,7 +79,7 @@ public class NetworkServer {
                         for (NetworkUser user : this.userMap.values()) {
                             answer += user.name + ",";
                         }
-                    /*} else if (command.equals("list_rooms")) {
+                    } else if (command.equals("list_rooms")) {
                         if (this.roomMap.size() > 0) {
                             answer = "";
                             for (NetworkRoom aRoom : this.roomMap.values()) {
@@ -87,8 +87,8 @@ public class NetworkServer {
                             }
                         } else {
                             answer = "none";
-                        }*/
-                    /*} else if (command.matches("create_room .+")) {
+                        }
+                    } else if (command.matches("create_room .+")) {
                         String roomName = command.substring(command.indexOf(" ")+1);
                         if (this.roomMap.containsKey(roomName)) {
                             answer = "exists";
@@ -111,7 +111,7 @@ public class NetworkServer {
                         if (room.empty) {
                             this.roomMap.remove(room.name);
                         }
-                        answer = "okay";*/
+                        answer = "okay";
                     } else if (command.matches("chat .+")) {
                         String message = command.substring(5);
                         for (NetworkUser user : userMap.values()) {

@@ -29,7 +29,6 @@ public class Lobby {
     }
 
     public void addMpButtons() {
-        this.main.client = new NetworkClient(this.main);
         // Clean up
         this.main.grid.getChildren().clear();
 
@@ -57,8 +56,8 @@ public class Lobby {
 
         list = new ListView<String>();
         try {
-            String[] users = this.main.client.getUsers();
-            list.setItems(FXCollections.observableArrayList(users));
+            String[] rooms = this.main.client.getRooms();
+            list.setItems(FXCollections.observableArrayList(rooms));
         } catch (TimeoutException exceptionName) {
             System.out.println(exceptionName.getMessage());
         }
@@ -76,7 +75,7 @@ public class Lobby {
             public void handle(KeyEvent keyEvent) {
                 try {
                     if (keyEvent.getCode() == KeyCode.ENTER) {
-                        main.client.chat(chatfield.getText());
+                        main.client.chat('g', chatfield.getText());
                         chatfield.clear();
                     }
                 } catch (TimeoutException ex) {
@@ -103,6 +102,8 @@ public class Lobby {
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                main.client.logoff();
+                timeline.stop();
                 main.gui.addMainButtons();
             }
         });
@@ -117,8 +118,8 @@ public class Lobby {
                         }
 
                         try {
-                            String[] users = main.client.getUsers();
-                            list.setItems(FXCollections.observableArrayList(users));
+                            String[] rooms = main.client.getRooms();
+                            list.setItems(FXCollections.observableArrayList(rooms));
                         } catch (TimeoutException exceptionName) {
                             System.out.println(exceptionName.getMessage());
                         }
@@ -158,7 +159,7 @@ public class Lobby {
             }
         });
 
-        ListView list = new ListView<String>();
+        final ListView list = new ListView<String>();
         try {
             String[] users = this.main.client.getUsers();
             list.setItems(FXCollections.observableArrayList(users));
@@ -189,6 +190,25 @@ public class Lobby {
             @Override
             public void handle(ActionEvent actionEvent) {
                 addadvancebtns();
+            }
+        });
+
+        ready.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (list.getItems().get(0).toString().equals("myname")) {
+                    try {
+                        main.client.startGame();
+                    } catch (TimeoutException e) {
+                        //
+                    }
+                } else {
+                    try {
+                        main.client.switchReady();
+                    } catch (TimeoutException e) {
+                        //
+                    }
+                }
             }
         });
     }

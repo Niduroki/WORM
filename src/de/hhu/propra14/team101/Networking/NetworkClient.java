@@ -17,7 +17,8 @@ import java.util.*;
 
 public class NetworkClient {
 
-    //public String currentRoom;
+    public String currentRoom;
+    public String ourName;
 
     private Socket connection;
     private String server;
@@ -29,7 +30,7 @@ public class NetworkClient {
     private String lastAnswer;
     private ArrayList<NetworkRequest> toSend = new ArrayList<>();
     private Main main;
-    private PriorityQueue<String> messages = new PriorityQueue<String>();
+    private PriorityQueue<String> messages = new PriorityQueue<>();
 
     /**
      * Constructs a class for networking
@@ -42,7 +43,7 @@ public class NetworkClient {
             if (data.get("multiplayer_server") != null) {
                 server = (String) data.get("multiplayer_server");
             } else {
-                server = "localhost";
+                server = "schaepers.it";
             }
         } catch (FileNotFoundException e) {
             //
@@ -137,11 +138,16 @@ public class NetworkClient {
                 //
             }
         } else if (line.startsWith("chat")) {
-            String chatline = line.substring(5);
+            String chatline = line.substring(7);
             String user = chatline.split(" ")[0];
-            String message = chatline.substring(user.length() + 1);
-            messages.add(user + ">: "+message);
-            System.out.println(user + " wrote " + message);
+            String message = chatline.substring(chatline.indexOf(" ")+1);
+            if (line.charAt(5) == 'g') {
+                messages.add(user + ">: "+message);
+                System.out.println(user + " wrote " + message + " globally");
+            } else if (line.charAt(5) == 'r') {
+                // TODO display message in the GUI room chat
+                System.out.println(user + " wrote " + message + " in " + currentRoom);
+            }
         } else if (line.startsWith("game")) {
             // TODO interpret whatever we got now
         } else if (line.matches(NetworkServer.uuidRegex)) {
@@ -157,17 +163,18 @@ public class NetworkClient {
         String name;
         try {
             Map data = loader.load("settings.yml");
-            name = (String) data.get("multiplayer_name");
+            this.ourName = (String) data.get("multiplayer_name");
         } catch (FileNotFoundException | NullPointerException e) {
-            name = "Worms player";
+            this.ourName = "Worms player";
         }
 
-        this.queueSend("hello " + name, true);
+        this.queueSend("hello " + this.ourName, true);
     }
 
-    /*/**
+    /**
      * @param name How to name the room
      * @throws de.hhu.propra14.team101.Networking.Exceptions.RoomExistsException
+    */
     public void createRoom(String name) throws NetworkException {
         System.out.println("Creating a room called " + name);
         this.queueSend("create_room " + name, true);
@@ -175,7 +182,7 @@ public class NetworkClient {
         if (!this.lastAnswer.equals("okay")) {
             throw (new RoomExistsException());
         }
-        //this.currentRoom = name;
+        this.currentRoom = name;
     }
 
     public void joinRoom(String name) throws NetworkException {
@@ -194,13 +201,17 @@ public class NetworkClient {
             throw (new RoomExistsException());
         }
         this.currentRoom = null;
-    }*/
+    }
 
-    /*public String[] getRooms() throws TimeoutException {
+    public String[] getRooms() throws TimeoutException {
         this.queueSend("list_rooms", true);
         this.waitForAnswer();
-        return this.lastAnswer.split(",");
-    }*/
+        if (this.lastAnswer.equals("none")) {
+            return new String[0];
+        } else {
+            return this.lastAnswer.split(",");
+        }
+    }
 
     public boolean hasMessages() {
         return !(messages.size() == 0);
@@ -226,8 +237,8 @@ public class NetworkClient {
         throw (new TimeoutException());
     }
 
-    public void chat(String message) throws TimeoutException {
-        this.queueSend("chat " + message, true);
+    public void chat(char type, String message) throws TimeoutException {
+        this.queueSend("chat " + type + " " + message, true);
         // TODO is this needed?
         this.waitForAnswer();
     }
@@ -235,6 +246,38 @@ public class NetworkClient {
     public void switchReady() throws TimeoutException {
         this.queueSend("ready", true);
         this.waitForAnswer();
+    }
+
+    public void nextWeapon() throws TimeoutException {
+        this.queueSend("next_weapon", true);
+        this.waitForAnswer();
+    }
+
+    public void prevWeapon() throws TimeoutException {
+        this.queueSend("prev_weapon", true);
+        this.waitForAnswer();
+    }
+
+    public void move(char direction) throws TimeoutException {
+        if (direction == 'l') {
+            this.queueSend("move_left", true);
+        } else if (direction == 'r') {
+            this.queueSend("move_right", true);
+        }
+        this.waitForAnswer();
+    }
+
+    public void startGame() throws TimeoutException {
+        this.queueSend("start_game", true);
+        this.waitForAnswer();
+    }
+
+    public void logoff() {
+        try {
+            this.queueSend("logoff", false);
+        } catch (TimeoutException e) {
+            //
+        }
     }
 
     static class HandleIncomingThread implements Runnable {
