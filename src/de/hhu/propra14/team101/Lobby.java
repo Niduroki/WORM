@@ -70,15 +70,18 @@ public class Lobby {
         chatArea.setEditable(false);
         chatArea.setWrapText(false);
 
-        TextField chatfield = new TextField("");
-        final EventHandler<KeyEvent> handler = (keyEvent) -> {
-            try {
-                if (keyEvent.getCode() == KeyCode.ENTER) {
-                    main.client.chat(chatfield.getText());
-                    chatfield.clear();
+        final TextField chatfield = new TextField("");
+        final EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>(){
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                try {
+                    if (keyEvent.getCode() == KeyCode.ENTER) {
+                        main.client.chat(chatfield.getText());
+                        chatfield.clear();
+                    }
+                } catch (TimeoutException ex) {
+                    System.out.println(ex.getMessage());
                 }
-            } catch (TimeoutException ex) {
-                System.out.println(ex.getMessage());
             }
         };
 
