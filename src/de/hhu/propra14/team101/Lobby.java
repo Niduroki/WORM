@@ -1,12 +1,10 @@
 package de.hhu.propra14.team101;
 
-import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
-import de.hhu.propra14.team101.Networking.NetworkClient;
+import de.hhu.propra14.team101.Networking.Exceptions.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.*;
 import javafx.scene.control.*;
 import javafx.scene.text.Font;
@@ -20,8 +18,10 @@ import javafx.util.Duration;
  */
 public class Lobby {
     protected Main main;
-    private Timeline timeline;
-    protected TextArea chatArea;
+    private Timeline globalTimeline;
+    private Timeline roomTimeline;
+    protected TextArea globalChatArea;
+    protected TextArea roomChatArea;
     protected ListView<String> list;
 
     public Lobby(Main main) {
@@ -41,14 +41,22 @@ public class Lobby {
         join.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                addroombtns();
+                try {
+                    main.client.joinRoom(list.getSelectionModel().getSelectedItem());
+                    globalTimeline.stop();
+                    addroombtns();
+                } catch (RoomDoesNotExistException e) {
+                    //
+                } catch (NetworkException e) {
+                    //
+                }
             }
         });
 
         create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                timeline.stop();
+                globalTimeline.stop();
                 addcreateGameBtns();
             }
         });
@@ -65,9 +73,9 @@ public class Lobby {
         list.setPrefWidth(400);
         list.setPrefHeight(80);
 
-        chatArea = new TextArea();
-        chatArea.setEditable(false);
-        chatArea.setWrapText(false);
+        globalChatArea = new TextArea();
+        globalChatArea.setEditable(false);
+        globalChatArea.setWrapText(false);
 
         final TextField chatfield = new TextField("");
         final EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>(){
@@ -92,7 +100,7 @@ public class Lobby {
         // Add the objects
         this.main.grid.add(scenetitle, 0, 0, 3, 1);
         this.main.grid.add(list, 0, 1, 3, 2);
-        this.main.grid.add(chatArea, 0, 3, 3, 5);
+        this.main.grid.add(globalChatArea, 0, 3, 3, 5);
         this.main.grid.add(chatfield, 0, 7, 3, 9);
         this.main.grid.add(returnbtn, 0, 11);
         this.main.grid.add(create, 1, 11);
@@ -103,7 +111,7 @@ public class Lobby {
             @Override
             public void handle(ActionEvent actionEvent) {
                 main.client.logoff();
-                timeline.stop();
+                globalTimeline.stop();
                 main.gui.addMainButtons();
             }
         });
@@ -113,8 +121,8 @@ public class Lobby {
         final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
-                        if (main.client.hasMessages()) {
-                            chatArea.setText(chatArea.getText() + "\n" + main.client.getLastMessage());
+                        if (main.client.hasGlobalMessages()) {
+                            globalChatArea.appendText(main.client.getLastGlobalMessage() + "\n");
                         }
 
                         try {
@@ -127,10 +135,10 @@ public class Lobby {
                 }
         );
 
-        // Construct a timeline with the mainloop
-        this.timeline = new Timeline(keyFrame);
-        this.timeline.setCycleCount(Animation.INDEFINITE);
-        this.timeline.play();
+        // Construct a globalTimeline with the mainloop
+        this.globalTimeline = new Timeline(keyFrame);
+        this.globalTimeline.setCycleCount(Animation.INDEFINITE);
+        this.globalTimeline.play();
     }
 
     public void addroombtns() {
@@ -138,7 +146,7 @@ public class Lobby {
         this.main.grid.getChildren().clear();
 
         // Create buttons and other objects
-        Text scenetitle = new Text("Platzhalter");
+        Text scenetitle = new Text(this.main.client.currentRoom);
         Button returnbtn = new Button("Leave");
         Button ready = new Button("Ready");
         Button advanced = new Button("Advanced");
@@ -155,6 +163,7 @@ public class Lobby {
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                roomTimeline.stop();
                 addMpButtons();
             }
         });
@@ -169,9 +178,25 @@ public class Lobby {
         list.setPrefWidth(250);
         list.setPrefHeight(150);
 
-        TextArea chatarea = new TextArea();
-        chatarea.setEditable(false);
-        TextField chatfield = new TextField("");
+        this.roomChatArea = new TextArea();
+        this.roomChatArea.setEditable(false);
+        final TextField chatfield = new TextField("");
+
+        final EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>(){
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                try {
+                    if (keyEvent.getCode() == KeyCode.ENTER) {
+                        main.client.chat('r', chatfield.getText());
+                        chatfield.clear();
+                    }
+                } catch (TimeoutException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        };
+
+        chatfield.addEventHandler(KeyEvent.KEY_RELEASED, handler);
 
         // Configure each object
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -182,7 +207,7 @@ public class Lobby {
         this.main.grid.add(scenetitle, 0, 0, 3, 1);
         this.main.grid.add(color, 2, 1);
         this.main.grid.add(list, 0, 1, 2, 2);
-        this.main.grid.add(chatarea, 0, 3, 3, 5);
+        this.main.grid.add(this.roomChatArea, 0, 3, 3, 5);
         this.main.grid.add(chatfield, 0, 7, 3, 9);
         this.main.grid.add(returnbtn, 0, 12);
 
@@ -211,6 +236,30 @@ public class Lobby {
                 }
             }
         });
+
+        //Prepare updating the room
+        final Duration oneFrameAmt = Duration.seconds(1);
+        final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
+                new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        if (main.client.hasGlobalMessages()) {
+                            roomChatArea.appendText(main.client.getLastRoomMessage() + "\n");
+                        }
+
+                        try {
+                            String[] users = main.client.getUsers();
+                            list.setItems(FXCollections.observableArrayList(users));
+                        } catch (TimeoutException exceptionName) {
+                            System.out.println(exceptionName.getMessage());
+                        }
+                    }
+                }
+        );
+
+        // Construct a globalTimeline with the mainloop
+        this.roomTimeline = new Timeline(keyFrame);
+        this.roomTimeline.setCycleCount(Animation.INDEFINITE);
+        this.roomTimeline.play();
     }
 
     private void addcreateGameBtns() {
@@ -224,7 +273,7 @@ public class Lobby {
 
         Text title1 = new Text("Name");
         Text title3 = new Text("Map");
-        TextField text1 = new TextField("");
+        final TextField text1 = new TextField("");
         TextField text2 = new TextField("");
 
         final ComboBox<String> map = new ComboBox<>();
@@ -263,7 +312,14 @@ public class Lobby {
         startBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                //addroombtns();
+                try {
+                    main.client.createRoom(text1.getText());
+                    addroombtns();
+                } catch (RoomExistsException e) {
+                    //
+                } catch (NetworkException e) {
+                    //
+                }
             }
         });
     }

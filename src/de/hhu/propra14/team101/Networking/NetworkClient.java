@@ -7,7 +7,6 @@ import de.hhu.propra14.team101.Savers.SettingSaves;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.util.*;
 
@@ -30,7 +29,8 @@ public class NetworkClient {
     private String lastAnswer;
     private ArrayList<NetworkRequest> toSend = new ArrayList<>();
     private Main main;
-    private PriorityQueue<String> messages = new PriorityQueue<>();
+    private PriorityQueue<String> globalMessages = new PriorityQueue<>();
+    private PriorityQueue<String> roomMessages = new PriorityQueue<>();
 
     /**
      * Constructs a class for networking
@@ -142,10 +142,10 @@ public class NetworkClient {
             String user = chatline.split(" ")[0];
             String message = chatline.substring(chatline.indexOf(" ")+1);
             if (line.charAt(5) == 'g') {
-                messages.add(user + ">: "+message);
+                globalMessages.add(user + ">: " + message);
                 System.out.println(user + " wrote " + message + " globally");
             } else if (line.charAt(5) == 'r') {
-                // TODO display message in the GUI room chat
+                roomMessages.add(user + ">: " + message);
                 System.out.println(user + " wrote " + message + " in " + currentRoom);
             }
         } else if (line.startsWith("game")) {
@@ -188,8 +188,8 @@ public class NetworkClient {
     public void joinRoom(String name) throws NetworkException {
         this.queueSend("join_room " + name, true);
         this.waitForAnswer();
-        if (!this.lastAnswer.equals("okay")) {
-            throw (new RoomExistsException());
+        if (this.lastAnswer.equals("does_not_exist")) {
+            throw (new RoomDoesNotExistException());
         }
         this.currentRoom = name;
     }
@@ -213,12 +213,20 @@ public class NetworkClient {
         }
     }
 
-    public boolean hasMessages() {
-        return !(messages.size() == 0);
+    public boolean hasGlobalMessages() {
+        return !(globalMessages.size() == 0);
     }
 
-    public String getLastMessage() {
-        return messages.poll();
+    public String getLastGlobalMessage() {
+        return globalMessages.poll();
+    }
+
+    public boolean hasRoomMessages() {
+        return !(roomMessages.size() == 0);
+    }
+
+    public String getLastRoomMessage() {
+        return roomMessages.poll();
     }
 
     public String[] getUsers() throws TimeoutException {
