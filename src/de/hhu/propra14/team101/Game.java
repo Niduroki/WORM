@@ -6,6 +6,7 @@ import javafx.scene.canvas.*;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -14,16 +15,18 @@ import java.util.*;
  * Game class to manage players, levels etc.
  */
 public class Game {
-    private ArrayList<Player> players = new ArrayList<>();
-    private ArrayList<Level> levels = new ArrayList<>();
-    private Bullet bullet;
+    public boolean paused = false;
     public boolean bulletFired = false;
-    private boolean gameFinished = false;
-    private int selectedLevelNumber;
-    private Terrain currentTerrain;
     public int round = 0;
     public int turnOfPlayer = 0;
     public int roundTimer = 20;
+
+    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Level> levels = new ArrayList<>();
+    private Bullet bullet;
+    private boolean gameFinished = false;
+    private int selectedLevelNumber;
+    private Terrain currentTerrain;
     private int secondCounter = 0;
 
     /**
@@ -209,6 +212,7 @@ public class Game {
             text = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
         }
         gc.setFill(Color.BLACK);
+        gc.setFont(new Font(12));
         gc.fillText("Current weapon: " + text, 0, 10);
         gc.fillText(String.valueOf(this.round), gc.getCanvas().getWidth()/2, 15);
         gc.fillText(String.valueOf(this.roundTimer), gc.getCanvas().getWidth()-15, 10);
@@ -223,6 +227,12 @@ public class Game {
         if (bulletFired) {
             bullet.draw(gc);
         }
+
+        if (this.paused) {
+            gc.setFill(Color.BLACK);
+            gc.setFont(new Font(25));
+            gc.fillText("PAUSED", 260, 180);
+        }
     }
 
     /**
@@ -230,59 +240,62 @@ public class Game {
      */
     public void updateGame(GraphicsContext gc) {
 
-        this.secondCounter += 1;
-        // 16 FPS at the moment
-        if (this.secondCounter == 16) {
-            this.secondCounter = 0;
-            this.roundTimer -= 1;
-            if (this.roundTimer == 0) {
-                this.nextRound();
-                this.roundTimer = 20;
-            }
-        }
-
-        // Remove dead players
-        for (int i = 0; i < this.getPlayers().size(); i++) {
-            if (this.getPlayers().get(i).wormList.size() == 0) {
-                this.getPlayers().remove(i);
-            }
-        }
-
-        // Remove dead worms
-        for (int i = 0; i < this.getPlayers().size(); i++) {
-            for (int j = 0; j < this.getPlayers().get(i).wormList.size(); j++) {
-                if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
-                    this.getPlayers().get(i).wormList.remove(j);
+        if (!this.paused) {
+            this.secondCounter += 1;
+            // 16 FPS at the moment
+            if (this.secondCounter == 16) {
+                this.secondCounter = 0;
+                this.roundTimer -= 1;
+                if (this.roundTimer == 0) {
+                    this.nextRound();
+                    this.roundTimer = 20;
                 }
             }
-        }
 
-        if (this.getPlayers().size() == 1) {
-            this.gameFinished = true;
-        }
 
-        if (bulletFired) {
-            bullet.physics.move();
-            ArrayList<Worm> wormArrayList = new ArrayList<>();
-            for (Player playerItem : this.getPlayers()) {
-                wormArrayList.addAll(playerItem.wormList);
+            // Remove dead players
+            for (int i = 0; i < this.getPlayers().size(); i++) {
+                if (this.getPlayers().get(i).wormList.size() == 0) {
+                    this.getPlayers().remove(i);
+                }
             }
-            Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
-            Collision collision = bullet.physics.hasCollision(currentWorm, wormArrayList, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-            if(collision != null) {
-                switch (collision.getType()) {
-                    case Worm:
-                        ((Worm) collision.getCollisionElement()).health -= bullet.weapon.damage;
-                        bulletFired = false;
-                        nextRound();
-                        break;
-                    case TopOrDown:
-                        bulletFired = false;
-                        nextRound();
-                        break;
-                    case LeftOrRight:
-                        bullet.physics = Physics.Revert(bullet.physics);
-                        break;
+
+            // Remove dead worms
+            for (int i = 0; i < this.getPlayers().size(); i++) {
+                for (int j = 0; j < this.getPlayers().get(i).wormList.size(); j++) {
+                    if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
+                        this.getPlayers().get(i).wormList.remove(j);
+                    }
+                }
+            }
+
+            if (this.getPlayers().size() == 1) {
+                this.gameFinished = true;
+            }
+
+            if (bulletFired) {
+                bullet.physics.move();
+                ArrayList<Worm> wormArrayList = new ArrayList<>();
+                for (Player playerItem : this.getPlayers()) {
+                    wormArrayList.addAll(playerItem.wormList);
+                }
+                Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
+                Collision collision = bullet.physics.hasCollision(currentWorm, wormArrayList, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+                if (collision != null) {
+                    switch (collision.getType()) {
+                        case Worm:
+                            ((Worm) collision.getCollisionElement()).health -= bullet.weapon.damage;
+                            bulletFired = false;
+                            nextRound();
+                            break;
+                        case TopOrDown:
+                            bulletFired = false;
+                            nextRound();
+                            break;
+                        case LeftOrRight:
+                            bullet.physics = Physics.Revert(bullet.physics);
+                            break;
+                    }
                 }
             }
         }

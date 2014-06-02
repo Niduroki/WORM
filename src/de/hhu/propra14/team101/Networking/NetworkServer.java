@@ -25,11 +25,9 @@ public class NetworkServer {
     public String interpret(String line, PrintWriter networkOutput) {
         String answer;
 
-        // Every 20 interprets check if everybody's still there
-        if (this.counter == 20) {
-            if (!this.checkAlive()) {
-                //client.close();
-            }
+        // Every 30 interprets check if everybody's still there
+        if (this.counter == 30) {
+            this.checkAlive();
             this.counter = 0;
         } else {
             this.counter += 1;
@@ -48,7 +46,7 @@ public class NetworkServer {
             if (line.startsWith("hello ")) {
                 String name = line.substring(6);
                 UUID uuid = UUID.randomUUID();
-                this.userMap.put(uuid, new NetworkUser(name, networkOutput));
+                this.userMap.put(uuid, new NetworkUser(name, uuid, networkOutput));
                 answer = String.valueOf(uuid);
             } else if (line.matches(NetworkServer.uuidRegex + " .+")) {
                 UUID uuid = UUID.fromString(line.split(" ")[0]);
@@ -57,6 +55,9 @@ public class NetworkServer {
                     String command = line.substring(37);
                     if (command.equals("ping")) {
                         answer = "pong";
+                    } else if (command.equals("pong")) {
+                        currentUser.lastPong = System.currentTimeMillis();
+                        answer = "okay";
                     } else if (command.equals("logoff")) {
                         userMap.remove(uuid);
                         answer = "okay";
@@ -181,8 +182,15 @@ public class NetworkServer {
        return "okay";
     }
 
-    private boolean checkAlive() {
-        return true;
+    private void checkAlive() {
+        for (NetworkUser user: userMap.values()) {
+            // If the last pong is more than 120s ago remove the user
+            if (System.currentTimeMillis() - user.lastPong > 120000) {
+                userMap.remove(user.uuid);
+            } else {
+                user.send("ping");
+            }
+        }
     }
 
 }

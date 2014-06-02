@@ -88,6 +88,10 @@ public class Main extends Application implements Initializable {
         final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                if (game.paused) {
+                    // Don't do anything
+                    return;
+                }
                 if (mouseEvent.isSecondaryButtonDown()) {
                     if (game.turnOfPlayer < game.getPlayers().size()) {
                         if (isOnlineGame) {
@@ -106,6 +110,10 @@ public class Main extends Application implements Initializable {
         final EventHandler<ScrollEvent> scrollHandler = new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent scrollEvent) {
+                if (game.paused) {
+                    // Don't do anything
+                    return;
+                }
                 // Scrolled up
                 Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
                 if (scrollEvent.getDeltaY() > 0) {
@@ -133,6 +141,10 @@ public class Main extends Application implements Initializable {
         final EventHandler<KeyEvent> keypressHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
+                if (game.paused && keyEvent.getCode() != KeyCode.P && keyEvent.getCode() != KeyCode.T) {
+                    // Don't do anything
+                    return;
+                }
                 if (keyEvent.getCode() == KeyCode.ESCAPE) {
                     // Close the game
                     timeline.stop();
@@ -171,6 +183,13 @@ public class Main extends Application implements Initializable {
                     }
                 } else if (keyEvent.getCode() == KeyCode.I) {
                     // Show the inventory
+                } else if (keyEvent.getCode() == KeyCode.P) {
+                    // (Un-)Pause the game
+                    game.paused = !game.paused;
+                } else if (keyEvent.getCode() == KeyCode.T) {
+                    if (isOnlineGame) {
+                        // Show the chat ingame here
+                    }
                 } else if (keyEvent.getCode() == KeyCode.S) {
                     // Save a game
                     GameSaves saver = new GameSaves();

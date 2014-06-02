@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101.Networking;
 
 import java.io.PrintWriter;
+import java.util.UUID;
 
 public class NetworkUser {
 
@@ -8,13 +9,15 @@ public class NetworkUser {
     public PrintWriter networkOutput;
     public boolean gameReady = false;
     public NetworkGame game;
+    public long lastPong = System.currentTimeMillis();
+    public UUID uuid;
 
     private NetworkRoom currentRoom;
 
-    public NetworkUser(String name, PrintWriter networkOutput) {
+    public NetworkUser(String name, UUID uuid, PrintWriter networkOutput) {
         this.name = name;
+        this.uuid = uuid;
         this.networkOutput = networkOutput;
-
     }
 
     public void joinRoom(NetworkRoom room) {
