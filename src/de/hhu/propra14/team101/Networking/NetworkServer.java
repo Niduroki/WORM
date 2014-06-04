@@ -1,5 +1,7 @@
 package de.hhu.propra14.team101.Networking;
 
+import org.yaml.snakeyaml.Yaml;
+
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
@@ -144,17 +146,12 @@ public class NetworkServer {
                         answer = "okay";
                     } else if (command.equals("start_game")) {
                         if (currentUser == currentUser.getCurrentRoom().users.get(0)) {
-                            boolean ready = true;
-                            for (NetworkUser user : currentUser.getCurrentRoom().users) {
-                                if (!user.gameReady) {
-                                    ready = false;
-                                }
-                            }
-
-                            if (ready) {
+                            if (currentUser.getCurrentRoom().roomReady) {
                                 NetworkGame game = new NetworkGame(currentUser.getCurrentRoom());
                                 for (NetworkUser user : currentUser.getCurrentRoom().users) {
                                     user.game = game;
+                                    user.send("game started");
+                                    // TODO bootstrap initial data here
                                 }
                                 answer = "okay";
                             } else {
@@ -191,8 +188,16 @@ public class NetworkServer {
     }
 
     private String interpretGame(NetworkUser user, String command) {
-       user.game.doAction(user, command);
-       return "okay";
+        if (command.equals("sync")) {
+            Yaml yaml = new Yaml();
+            // Send everything over the wire
+            // Problem: everything right now is line-based - solution:
+            // Replace every newline with an unused char (';') for sending and on receiving undo the replacement
+            return yaml.dump(user.game.game.serialize()).replace('\n', ';');
+        } else {
+            user.game.doAction(user, command);
+            return "okay";
+        }
     }
 
     private void checkAlive() {

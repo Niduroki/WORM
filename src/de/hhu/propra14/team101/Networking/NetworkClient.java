@@ -1,8 +1,10 @@
 package de.hhu.propra14.team101.Networking;
 
+import de.hhu.propra14.team101.Game;
 import de.hhu.propra14.team101.Main;
 import de.hhu.propra14.team101.Networking.Exceptions.*;
 import de.hhu.propra14.team101.Savers.SettingSaves;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -299,6 +301,16 @@ public class NetworkClient {
     public void startGame() throws TimeoutException {
         this.queueSend("start_game", true);
         this.waitForAnswer();
+    }
+
+    public void syncGame(Game game) throws TimeoutException {
+        this.queueSend("game sync", true);
+        this.waitForAnswer();
+        String answer = this.lastAnswer;
+        Yaml yaml = new Yaml();
+        Game remoteGame = Game.deserialize((Map<String, Object>) yaml.load(answer));
+        // TODO attributes from remoteGame should be set to game
+        // Is it possible to just replace the whole game outside of this function without screwing up players?
     }
 
     public void logoff() {

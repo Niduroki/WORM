@@ -327,4 +327,38 @@ public class Game {
 
         draw(gc);
     }
+
+    public Map<String, Object> serialize() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("terrain", this.currentTerrain.serialize());
+        result.put("players", this.serializePlayerArray());
+        result.put("round", this.round);
+        result.put("turn_of_player", this.turnOfPlayer);
+
+        return result;
+    }
+
+    public static Game deserialize(Map<String, Object> data) {
+        Game game = new Game(Game.deserializePlayerArray((ArrayList<Map>) data.get("players")));
+        game.setCurrentTerrain(Terrain.deserialize((ArrayList<ArrayList<Map>>) data.get("terrain")));
+        game.round = (Integer) data.get("round");
+        game.turnOfPlayer = (Integer) data.get("turn_of_player");
+        return game;
+    }
+
+    private Object[] serializePlayerArray() {
+        Object[] result = new Object[players.size()];
+        for (int i=0; i<players.size(); i++) {
+            result[i] =  players.get(i).serialize();
+        }
+        return result;
+    }
+
+    private static ArrayList<Player> deserializePlayerArray(ArrayList<Map> input) {
+        ArrayList<Player> result = new ArrayList<>();
+        for (Map anInput : input) {
+            result.add(Player.deserialize(anInput));
+        }
+        return result;
+    }
 }

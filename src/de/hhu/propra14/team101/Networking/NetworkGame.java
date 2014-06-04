@@ -11,7 +11,7 @@ import java.util.Collections;
 
 public class NetworkGame {
     public NetworkRoom room;
-    private Game game;
+    public Game game;
 
     public NetworkGame(NetworkRoom room) {
         this.room = room;
