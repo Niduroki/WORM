@@ -6,6 +6,7 @@ public class NetworkRoom {
     public String name;
     public ArrayList<NetworkUser> users = new ArrayList<>();
     public boolean empty = false;
+    public boolean roomReady = false;
 
     public NetworkRoom(String name) {
         this.name = name;

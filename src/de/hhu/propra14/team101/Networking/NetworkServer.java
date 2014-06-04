@@ -2,9 +2,7 @@ package de.hhu.propra14.team101.Networking;
 
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Class to do networking on the server side
@@ -128,6 +126,21 @@ public class NetworkServer {
                         answer = "okay";
                     } else if (command.equals("ready")) {
                         currentUser.gameReady = !currentUser.gameReady;
+
+                        boolean everyoneReady = true;
+                        for (NetworkUser user : currentUser.getCurrentRoom().users) {
+                            if (!user.gameReady) {
+                                everyoneReady = false;
+                            }
+                        }
+
+                        if (everyoneReady) {
+                            currentUser.getCurrentRoom().roomReady = true;
+                            currentUser.getCurrentRoom().users.get(0).send("everyone_ready");
+                        } else if (currentUser.getCurrentRoom().roomReady && !everyoneReady) {
+                            currentUser.getCurrentRoom().roomReady = false;
+                            currentUser.getCurrentRoom().users.get(0).send("everyone_not_ready");
+                        }
                         answer = "okay";
                     } else if (command.equals("start_game")) {
                         if (currentUser == currentUser.getCurrentRoom().users.get(0)) {
@@ -183,13 +196,19 @@ public class NetworkServer {
     }
 
     private void checkAlive() {
+        ArrayList<UUID> toRemove = new ArrayList<>();
         for (NetworkUser user: userMap.values()) {
-            // If the last pong is more than 120s ago remove the user
-            if (System.currentTimeMillis() - user.lastPong > 120000) {
-                userMap.remove(user.uuid);
+            // If the last pong is more than 90s ago remove the user
+            if (System.currentTimeMillis() - user.lastPong > 90000) {
+                toRemove.add(user.uuid);
             } else {
                 user.send("ping");
             }
+        }
+
+        // This is needed to avoid ConcurrentModificationException
+        for (UUID uuid: toRemove) {
+            userMap.remove(uuid);
         }
     }
 

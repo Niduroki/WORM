@@ -18,6 +18,7 @@ public class NetworkClient {
 
     public String currentRoom;
     public String ourName;
+    public boolean roomReady = false;
 
     private Socket connection;
     private String server;
@@ -143,7 +144,7 @@ public class NetworkClient {
             String chatline = line.substring(5);
             String user = chatline.split(" ")[0];
             char type = chatline.split(" ")[1].charAt(0);
-            String message = chatline.substring(chatline.indexOf(" ")+3);
+            String message = chatline.substring(chatline.indexOf(" ") + 3);
             if (type == 'g') {
                 globalMessages.add(user + ">: " + message);
                 System.out.println(user + " wrote " + message + " globally");
@@ -151,6 +152,10 @@ public class NetworkClient {
                 roomMessages.add(user + ">: " + message);
                 System.out.println(user + " wrote " + message + " in " + currentRoom);
             }
+        } else if (line.equals("everyone_ready")) {
+            this.roomReady = true;
+        } else if (line.equals("everyone_not_ready")) {
+            this.roomReady = false;
         } else if (line.startsWith("game")) {
             // TODO interpret whatever we got now
         } else if (line.matches(NetworkServer.uuidRegex)) {
@@ -185,6 +190,8 @@ public class NetworkClient {
             throw (new RoomExistsException());
         }
         this.currentRoom = name;
+        // The first user is always ready
+        this.switchReady();
     }
 
     public void joinRoom(String name) throws NetworkException {

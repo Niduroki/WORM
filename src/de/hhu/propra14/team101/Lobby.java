@@ -41,21 +41,6 @@ public class Lobby {
         Button create = new Button("Create Game");
         Button join = new Button("Join Game");
 
-        join.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                        main.client.joinRoom(list.getSelectionModel().getSelectedItem());
-                        globalTimeline.stop();
-                        addroombtns();
-                } catch (RoomDoesNotExistException e) {
-                    //
-                } catch (NetworkException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        });
-
         create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -75,6 +60,24 @@ public class Lobby {
 
         list.setPrefWidth(400);
         list.setPrefHeight(80);
+
+        join.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    String selectedRoom = list.getSelectionModel().getSelectedItems().get(0);
+                    if (selectedRoom != null) {
+                        main.client.joinRoom(selectedRoom);
+                        globalTimeline.stop();
+                        addroombtns();
+                    }
+                } catch (RoomDoesNotExistException e) {
+                    //
+                } catch (NetworkException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
 
         globalChatArea = new TextArea();
         globalChatArea.setEditable(false);
@@ -151,7 +154,6 @@ public class Lobby {
         // Create buttons and other objects
         Text scenetitle = new Text(this.main.client.currentRoom);
         Button returnbtn = new Button("Leave");
-        Button ready = new Button("Ready");
         Button advanced = new Button("Advanced");
 
 
@@ -185,6 +187,14 @@ public class Lobby {
         }
         list.setPrefWidth(250);
         list.setPrefHeight(150);
+
+        final Button ready;
+        if (list.getItems().get(0).toString().equals(main.client.ourName)) {
+            ready = new Button("Start");
+        } else {
+            ready = new Button("Ready");
+        }
+        ready.setStyle("-fx-background-color: #ff0000");
 
         this.roomChatArea = new TextArea();
         this.roomChatArea.setEditable(false);
@@ -229,15 +239,23 @@ public class Lobby {
         ready.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (list.getItems().get(0).toString().equals("myname")) {
+                if (list.getItems().get(0).toString().equals(main.client.ourName)) {
                     try {
-                        main.client.startGame();
+                        if (main.client.roomReady) {
+                            main.client.startGame();
+                            roomTimeline.stop();
+                        }
                     } catch (TimeoutException e) {
                         //
                     }
                 } else {
                     try {
                         main.client.switchReady();
+                        if (ready.getStyle().equals("-fx-background-color: #00ff00")) {
+                            ready.setStyle("-fx-background-color: #ff0000");
+                        } else {
+                            ready.setStyle("-fx-background-color: #00ff00");
+                        }
                     } catch (TimeoutException e) {
                         //
                     }
@@ -252,6 +270,17 @@ public class Lobby {
                     public void handle(ActionEvent event) {
                         if (main.client.hasRoomMessages()) {
                             roomChatArea.appendText(main.client.getLastRoomMessage() + "\n");
+                        }
+
+                        if (list.getItems().get(0).toString().equals(main.client.ourName)) {
+                            ready.setText("Start");
+                            if (main.client.roomReady) {
+                                ready.setStyle(("-fx-background-color: #00ff00"));
+                            } else {
+                                ready.setStyle("-fx-background-color: #ff0000");
+                            }
+                        } else {
+
                         }
 
                         try {
@@ -280,6 +309,7 @@ public class Lobby {
         Button startBtn = new Button("Start");
 
         Text title1 = new Text("Name");
+        Text title2 = new Text("Password");
         Text title3 = new Text("Map");
         final TextField text1 = new TextField("");
         TextField text2 = new TextField("");
@@ -303,7 +333,8 @@ public class Lobby {
         this.main.grid.add(text1, 1, 1);
         this.main.grid.add(text2, 1, 2);
         this.main.grid.add(title1, 0, 1);
-        this.main.grid.add(title3, 0, 2);
+        this.main.grid.add(title2, 0, 2);
+        this.main.grid.add(title3, 0, 3);
         this.main.grid.add(map, 1, 3);
         this.main.grid.add(returnbtn, 0, 11);
         this.main.grid.add(startBtn, 1, 11);
