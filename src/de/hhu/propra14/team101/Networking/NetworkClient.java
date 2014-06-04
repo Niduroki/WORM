@@ -308,7 +308,7 @@ public class NetworkClient {
         this.waitForAnswer();
         String answer = this.lastAnswer;
         Yaml yaml = new Yaml();
-        Game remoteGame = Game.deserialize((Map<String, Object>) yaml.load(answer));
+        Game remoteGame = Game.deserialize((Map<String, Object>) yaml.load(answer.replace(';', '\n')));
         // TODO attributes from remoteGame should be set to game
         // Is it possible to just replace the whole game outside of this function without screwing up players?
     }
