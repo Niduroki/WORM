@@ -4,7 +4,10 @@ import de.hhu.propra14.team101.Networking.Exceptions.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.event.*;
 import javafx.scene.control.*;
 import javafx.scene.text.Font;
@@ -42,13 +45,13 @@ public class Lobby {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    main.client.joinRoom(list.getSelectionModel().getSelectedItem());
-                    globalTimeline.stop();
-                    addroombtns();
+                        main.client.joinRoom(list.getSelectionModel().getSelectedItem());
+                        globalTimeline.stop();
+                        addroombtns();
                 } catch (RoomDoesNotExistException e) {
                     //
                 } catch (NetworkException e) {
-                    //
+                    System.out.println(e.getMessage());
                 }
             }
         });

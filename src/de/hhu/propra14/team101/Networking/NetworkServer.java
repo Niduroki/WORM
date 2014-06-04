@@ -89,7 +89,7 @@ public class NetworkServer {
                         }
                     } else if (command.equals("list_rooms")) {
                         if (this.roomMap.size() > 0) {
-                            answer = "";
+                            answer = "rooms ";
                             for (NetworkRoom aRoom : this.roomMap.values()) {
                                 answer += aRoom.name + ",";
                             }

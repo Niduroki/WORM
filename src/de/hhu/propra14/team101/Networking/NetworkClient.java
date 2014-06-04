@@ -76,6 +76,7 @@ public class NetworkClient {
             this.doSending();
         } else {
             this.toSend.add(new NetworkRequest(data, waitForAnswer));
+            this.doSending();
         }
     }
 
@@ -90,6 +91,7 @@ public class NetworkClient {
             this.sentCounter += 1;
             String line = constructLine(current.data, ourCount);
             this.output.println(line);
+            System.out.println("client send::"+line);
             this.output.flush();
             if (current.waitForAnswer) {
                 int waitCounter = 0;
@@ -209,7 +211,13 @@ public class NetworkClient {
         if (this.lastAnswer.equals("none")) {
             return new String[0];
         } else {
-            return this.lastAnswer.split(",");
+            if(this.lastAnswer.startsWith("rooms")) {
+                String rooms = this.lastAnswer.substring(6);
+                String[] roomList = rooms.split(",");
+                return roomList;
+            } else {
+                return new String[0];
+            }
         }
     }
 
