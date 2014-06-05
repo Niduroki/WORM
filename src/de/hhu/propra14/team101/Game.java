@@ -30,6 +30,7 @@ public class Game {
     private int selectedLevelNumber;
     private Terrain currentTerrain;
     private int secondCounter = 0;
+    private Image background;
 
     /**
      * Initialize a new game.
@@ -55,6 +56,8 @@ public class Game {
         } catch (FileNotFoundException e) {
             //
         }
+
+        this.background = new Image("Background.jpg");
 
         // Hard coded levels - if save-files change uncomment this and save this structure
         /*
@@ -205,13 +208,14 @@ public class Game {
     private void draw(GraphicsContext gc) {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
-        Image image = new Image("Background.jpg");
-        gc.drawImage(image, 0.0, 0.0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.drawImage(this.background, 0.0, 0.0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
         Worm currentWorm;
         try {
             currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
         } catch (IndexOutOfBoundsException e) {
+            // FIXME when a player has 0 worms left he isn't removed now, in that case just draw nothing this frame for now
+            System.out.println("FIXME IndexOutOfBoundsException in Game.draw()");
             return;
         }
 
@@ -265,7 +269,7 @@ public class Game {
 
             // Remove dead players
             for (int i = 0; i < this.getPlayers().size(); i++) {
-                if (this.getPlayers().get(i).wormList.size() == 0) {
+                if (this.getPlayers().get(i).wormList.isEmpty()) {
                     this.getPlayers().remove(i);
                 }
             }
@@ -275,6 +279,11 @@ public class Game {
                 for (int j = 0; j < this.getPlayers().get(i).wormList.size(); j++) {
                     if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
                         this.getPlayers().get(i).wormList.remove(j);
+
+                        // Decrement current worm to prevent an IndexOutOfBoundsException
+                        if (this.getPlayers().get(i).currentWorm != 0) {
+                            this.getPlayers().get(i).currentWorm -= 1;
+                        }
                     }
                 }
             }
