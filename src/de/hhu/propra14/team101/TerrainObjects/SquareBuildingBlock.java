@@ -15,13 +15,6 @@ public class SquareBuildingBlock extends AbstractTerrainObject {
         super(x, y);
         this.color = 0x883300; // Dirt-ish html-color
         this.destructible = true;
-    }
-
-    /**
-     * Draws the block
-     */
-    public void draw (GraphicsContext gc) {
-        Image image = new Image("ground.jpg");
-        gc.drawImage(image, this.xCoordinate*this.size, this.yCoordinate*this.size, this.size, this.size);
+        this.image = new Image("ground.jpg");
     }
 }

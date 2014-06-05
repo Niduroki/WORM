@@ -22,9 +22,9 @@ public class Obstacle extends AbstractTerrainObject {
     public void draw (GraphicsContext gc) {
         gc.setFill(Color.web(Integer.toHexString(this.color)));
         gc.fillOval(
-                this.xCoordinate * Obstacle.getSize(),
-                this.yCoordinate * Obstacle.getSize(),
-                Obstacle.getSize(), Obstacle.getSize()
+                this.xCoordinate * this.size,
+                this.yCoordinate * this.size,
+                this.size, this.size
         );
     }
 }

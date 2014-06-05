@@ -1,12 +1,13 @@
 package de.hhu.propra14.team101.TerrainObjects;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 /**
  * Class to create terrain with
  */
 abstract public class AbstractTerrainObject {
-    protected static int size = 10;
+    protected int size = 10;
 
     protected int color;
 
@@ -14,6 +15,8 @@ abstract public class AbstractTerrainObject {
 
     protected int xCoordinate;
     protected int yCoordinate;
+
+    protected Image image;
 
     /**
      * @param x X-Coordinate of the object
@@ -39,22 +42,6 @@ abstract public class AbstractTerrainObject {
      */
     public int[] getCoords () {
         return new int[]{this.xCoordinate, this.yCoordinate};
-    }
-
-    /**
-     * @param size Size for the object
-     * Sets the size
-     */
-    public static void setSize (int size) {
-        AbstractTerrainObject.size = size;
-    }
-
-    /**
-     * @return Size of the object
-     * Gets the size
-     */
-    public static int getSize () {
-        return AbstractTerrainObject.size;
     }
 
     /**
@@ -93,5 +80,7 @@ abstract public class AbstractTerrainObject {
     /**
      * Draws the object
      */
-    abstract public void draw (GraphicsContext gc);
+    public void draw (GraphicsContext gc) {
+        gc.drawImage(this.image, this.xCoordinate*this.size, this.yCoordinate*this.size, this.size, this.size);
+    }
 }

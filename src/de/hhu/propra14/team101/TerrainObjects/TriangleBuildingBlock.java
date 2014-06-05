@@ -17,6 +17,12 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
         this.slopedLeft = slopedLeft;
         this.color = 0x883300; // Dirt-ish html-color
         this.destructible = true;
+
+        if (this.getSlopedLeft()) {
+            this.image = new Image("ground-triangle-right.png");
+        } else {
+            this.image = new Image("ground-triangle-left.png");
+        }
     }
 
     public void setSlopedLeft (boolean slopedLeft) {
@@ -25,20 +31,5 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
 
     public boolean getSlopedLeft() {
         return this.slopedLeft;
-    }
-
-    /**
-     * Draws the block
-     */
-    public void draw (GraphicsContext gc) {
-
-        if (this.getSlopedLeft()) {
-            Image image = new Image("ground-triangle-right.png");
-            gc.drawImage(image, this.xCoordinate*this.size, this.yCoordinate*this.size, this.size, this.size);
-        } else {
-            Image image = new Image("ground-triangle-left.png");
-            gc.drawImage(image, this.xCoordinate*this.size, this.yCoordinate*this.size, this.size, this.size);
-        }
-
     }
 }

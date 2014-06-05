@@ -35,12 +35,14 @@ public class Worm {
     protected char orientation = 'l';
 
     private int jumpProcess = 0;
+    private Image image;
 
     public Worm (ArrayList weapons) {
         this.weaponList = new ArrayList<>();
         for (Object weapon : weapons) {
             this.weaponList.add((AbstractWeapon) weapon);
         }
+        this.image = new Image("worm.gif");
     }
 
     public int getXCoordinate()
@@ -68,8 +70,7 @@ public class Worm {
      * Draws the worm
      */
     public void draw (GraphicsContext gc, Color color) {
-        Image image = new Image("worm.gif");
-        gc.drawImage(image, this.x_coord, this.y_coord, this.size, this.size);
+        gc.drawImage(this.image, this.x_coord, this.y_coord, this.size, this.size);
         gc.setFill(color);
         gc.fillText("H"+String.valueOf(this.health), this.x_coord, this.y_coord-4);
         if (this.armor != 0) {
