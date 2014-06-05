@@ -32,9 +32,9 @@ import javafx.util.Duration;
  */
 public class Main extends Application implements Initializable {
 
-    protected Canvas field;
-    protected Game game;
-    protected GridPane grid;
+    public Canvas field;
+    public Game game;
+    public GridPane grid;
     protected Stage primaryStage;
     //private int jumping = 0;
     //private Worm jumpingWorm;
@@ -85,6 +85,11 @@ public class Main extends Application implements Initializable {
      * Starts the gameplay
      */
     public void startGameplay(int levelNumber, GraphicsContext gc) {
+
+        // Don't redefine game, if we already have one (e.g. in network gaming)
+        if (this.game == null) {
+            this.game = new Game(players);
+        }
 
         final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
             @Override
@@ -211,8 +216,7 @@ public class Main extends Application implements Initializable {
         this.primaryStage.getScene().addEventHandler(MouseEvent.ANY, mouseHandler);
         this.primaryStage.getScene().addEventHandler(ScrollEvent.SCROLL, scrollHandler);
 
-        game = new Game(players);
-        game.startLevel(levelNumber, gc);
+        this.game.startLevel(levelNumber, gc);
 
         // Load fps from settings
         int fps;

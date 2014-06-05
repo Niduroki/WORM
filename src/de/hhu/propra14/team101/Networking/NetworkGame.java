@@ -13,7 +13,7 @@ public class NetworkGame {
     public NetworkRoom room;
     public Game game;
 
-    public NetworkGame(NetworkRoom room) {
+    public NetworkGame(NetworkRoom room, int levelNumber) {
         this.room = room;
         // TODO construct an ArrayList<Player> from room here
         ArrayList<Player> players = new ArrayList<>();
@@ -25,6 +25,7 @@ public class NetworkGame {
             players.add(new Player(worms, user.name));
         }
         this.game = new Game(players);
+        this.game.startLevel(levelNumber);
     }
 
     public void doAction(NetworkUser user, String line) {

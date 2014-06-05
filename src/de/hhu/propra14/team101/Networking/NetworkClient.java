@@ -169,9 +169,11 @@ public class NetworkClient {
 
     private void interpretGame(String command) {
         if (command.equals("started")) {
-            // Start the game
-        } else if (command.startsWith("sync ")) {
-            // We're syncing
+            try {
+                this.syncGame();
+            } catch (TimeoutException e) {
+                //
+            }
         } else if (command.equals("...")) {
             // ...
         }
@@ -313,14 +315,12 @@ public class NetworkClient {
         this.waitForAnswer();
     }
 
-    public void syncGame(Game game) throws TimeoutException {
+    public void syncGame() throws TimeoutException {
         this.queueSend("game sync", true);
         this.waitForAnswer();
         String answer = this.lastAnswer;
         Yaml yaml = new Yaml();
-        Game remoteGame = Game.deserialize((Map<String, Object>) yaml.load(answer.replace(';', '\n')));
-        // TODO attributes from remoteGame should be set to game
-        // Is it possible to just replace the whole game outside of this function without screwing up players?
+        this.main.game = Game.deserialize((Map<String, Object>) yaml.load(answer.replace(';', '\n')));
     }
 
     public void logoff() {

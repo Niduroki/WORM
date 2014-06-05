@@ -7,9 +7,11 @@ public class NetworkRoom {
     public ArrayList<NetworkUser> users = new ArrayList<>();
     public boolean empty = false;
     public boolean roomReady = false;
+    public int selectedMap;
 
-    public NetworkRoom(String name) {
+    public NetworkRoom(String name, int selectedMap) {
         this.name = name;
+        this.selectedMap = selectedMap;
     }
 
     public void addUser(NetworkUser user) {

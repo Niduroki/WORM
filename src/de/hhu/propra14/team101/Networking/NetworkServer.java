@@ -101,7 +101,7 @@ public class NetworkServer {
                         if (this.roomMap.containsKey(roomName)) {
                             answer = "exists";
                         } else {
-                            this.roomMap.put(roomName, new NetworkRoom(roomName));
+                            this.roomMap.put(roomName, new NetworkRoom(roomName, 0)); // TODO use the actual selected map instead of 0
                             currentUser.joinRoom(this.roomMap.get(roomName));
                             answer = "okay";
                         }
@@ -148,7 +148,7 @@ public class NetworkServer {
                     } else if (command.equals("start_game")) {
                         if (currentUser == currentUser.getCurrentRoom().users.get(0)) {
                             if (currentUser.getCurrentRoom().roomReady) {
-                                NetworkGame game = new NetworkGame(currentUser.getCurrentRoom());
+                                NetworkGame game = new NetworkGame(currentUser.getCurrentRoom(), 0); // TODO pass the actual selected map here
                                 for (NetworkUser user : currentUser.getCurrentRoom().users) {
                                     user.game = game;
                                     user.send("game started");

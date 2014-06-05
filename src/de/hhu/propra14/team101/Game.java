@@ -41,7 +41,7 @@ public class Game {
         SettingSaves settingsLoader = new SettingSaves();
         try {
             this.fps = Integer.parseInt((String) settingsLoader.load("settings.yml").get("fps"));
-        } catch (FileNotFoundException | NullPointerException e) {
+        } catch (FileNotFoundException | NumberFormatException e) {
             this.fps = 16;
         }
 
@@ -55,7 +55,7 @@ public class Game {
             levels.add(loader.load("maps/Map2.yml"));
             levels.add(loader.load("maps/Map3.yml"));
         } catch (FileNotFoundException e) {
-            //
+            System.out.println("Couldn't find level-files");
         }
 
         // Hard coded levels - if save-files change uncomment this and save this structure
@@ -109,16 +109,6 @@ public class Game {
         levels.add(level3);
         */
 
-    }
-
-    /**
-     * Constructs a game
-     * @param players ArrayList of players
-     * @param headless Whether to actually do drawing - useful for network gaming on headless servers
-     */
-    public Game(ArrayList players, boolean headless) {
-        this(players);
-        this.headless = headless;
     }
 
     /**
@@ -353,9 +343,7 @@ public class Game {
      * @throws java.lang.IllegalArgumentException if levelNumber does not exist.
      */
     public void startLevel(int levelNumber, GraphicsContext gc) {
-        if (!this.headless) {
-            this.background = new Image("Background.jpg");
-        }
+        this.background = new Image("Background.jpg");
 
         if (levelNumber >= levels.size() || levelNumber < 0) {
             throw new IllegalArgumentException("Level does not exist.");
@@ -364,9 +352,20 @@ public class Game {
         this.currentTerrain = levels.get(selectedLevelNumber).getTerrain();
         levels.get(selectedLevelNumber).setWormsStartPosition(this.getPlayers());
 
-        if (!this.headless) {
-            draw(gc);
+        draw(gc);
+    }
+
+    /**
+     * Start the level without drawing anything (thus not needing a gc)
+     * @param levelNumber
+     */
+    public void startLevel(int levelNumber) {
+        if (levelNumber >= levels.size() || levelNumber < 0) {
+            throw new IllegalArgumentException("Level does not exist.");
         }
+        selectedLevelNumber = levelNumber;
+        this.currentTerrain = levels.get(selectedLevelNumber).getTerrain();
+        levels.get(selectedLevelNumber).setWormsStartPosition(this.getPlayers());
     }
 
     public Map<String, Object> serialize() {
