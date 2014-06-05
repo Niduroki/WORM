@@ -21,6 +21,18 @@ public class NetworkRoom {
         this.updateEmpty();
     }
 
+    public void setRoomReady(boolean state) {
+        if (state != this.roomReady) {
+            if (state) {
+                this.users.get(0).send("everyone_ready");
+            } else {
+                this.users.get(0).send("everyone_not_ready");
+            }
+            this.roomReady = state;
+        }
+        // Do nothing otherwise
+    }
+
     private void updateEmpty() {
         this.empty = this.users.size() == 0;
     }

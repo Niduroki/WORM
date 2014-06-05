@@ -21,7 +21,7 @@ public class NetworkGame {
             ArrayList<Worm> worms = new ArrayList<>();
             ArrayList<AbstractWeapon> weapons = new ArrayList<>();
             weapons.add(new Bazooka());
-            Collections.addAll(worms, new Worm(weapons), new Worm(weapons));
+            Collections.addAll(worms, new Worm(weapons, true), new Worm(weapons, true));
             players.add(new Player(worms, user.name));
         }
         this.game = new Game(players);

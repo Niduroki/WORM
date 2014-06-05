@@ -18,6 +18,7 @@ import java.util.*;
 public class Game {
     public boolean paused = false;
     public boolean bulletFired = false;
+    public boolean headless = false;
     public int round = 0;
     public int turnOfPlayer = 0;
     public int roundTimer = 20;
@@ -56,8 +57,6 @@ public class Game {
         } catch (FileNotFoundException e) {
             //
         }
-
-        this.background = new Image("Background.jpg");
 
         // Hard coded levels - if save-files change uncomment this and save this structure
         /*
@@ -110,6 +109,16 @@ public class Game {
         levels.add(level3);
         */
 
+    }
+
+    /**
+     * Constructs a game
+     * @param players ArrayList of players
+     * @param headless Whether to actually do drawing - useful for network gaming on headless servers
+     */
+    public Game(ArrayList players, boolean headless) {
+        this(players);
+        this.headless = headless;
     }
 
     /**
@@ -318,7 +327,10 @@ public class Game {
                 }
             }
         }
-        draw(gc);
+
+        if (!this.headless) {
+            draw(gc);
+        }
     }
 
     public void nextRound() {
@@ -341,6 +353,10 @@ public class Game {
      * @throws java.lang.IllegalArgumentException if levelNumber does not exist.
      */
     public void startLevel(int levelNumber, GraphicsContext gc) {
+        if (!this.headless) {
+            this.background = new Image("Background.jpg");
+        }
+
         if (levelNumber >= levels.size() || levelNumber < 0) {
             throw new IllegalArgumentException("Level does not exist.");
         }
@@ -348,7 +364,9 @@ public class Game {
         this.currentTerrain = levels.get(selectedLevelNumber).getTerrain();
         levels.get(selectedLevelNumber).setWormsStartPosition(this.getPlayers());
 
-        draw(gc);
+        if (!this.headless) {
+            draw(gc);
+        }
     }
 
     public Map<String, Object> serialize() {

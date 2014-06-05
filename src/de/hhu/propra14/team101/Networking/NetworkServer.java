@@ -109,6 +109,8 @@ public class NetworkServer {
                         String roomName = command.substring(command.indexOf(" ")+1);
                         if (this.roomMap.containsKey(roomName)) {
                             currentUser.joinRoom(this.roomMap.get(roomName));
+                            // One user who isn't ready just joined
+                            currentUser.getCurrentRoom().setRoomReady(false);
                             answer = "okay";
                         } else {
                             answer = "does_not_exist";
@@ -136,12 +138,11 @@ public class NetworkServer {
                             }
                         }
 
+                        // Set the room ready
                         if (everyoneReady) {
-                            currentUser.getCurrentRoom().roomReady = true;
-                            currentUser.getCurrentRoom().users.get(0).send("everyone_ready");
-                        } else if (currentUser.getCurrentRoom().roomReady && !everyoneReady) {
-                            currentUser.getCurrentRoom().roomReady = false;
-                            currentUser.getCurrentRoom().users.get(0).send("everyone_not_ready");
+                            currentUser.getCurrentRoom().setRoomReady(everyoneReady);
+                        } else if (currentUser.getCurrentRoom().roomReady) { // Not everyone is ready now, but the room is still ready
+                            currentUser.getCurrentRoom().setRoomReady(everyoneReady);
                         }
                         answer = "okay";
                     } else if (command.equals("start_game")) {
@@ -193,7 +194,7 @@ public class NetworkServer {
             // Send everything over the wire
             // Problem: everything right now is line-based - solution:
             // Replace every newline with an unused char (';') for sending and on receiving undo the replacement
-            return yaml.dump(user.game.game.serialize()).replace('\n', ';');
+            return "game sync " + yaml.dump(user.game.game.serialize()).replace('\n', ';');
         } else {
             user.game.doAction(user, command);
             return "okay";

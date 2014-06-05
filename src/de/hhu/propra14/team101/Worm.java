@@ -45,6 +45,18 @@ public class Worm {
         this.image = new Image("worm.gif");
     }
 
+    /**
+     * Construct a worm without an image for headless mode (on the server)
+     * @param weapons
+     * @param headless
+     */
+    public Worm (ArrayList weapons, boolean headless) {
+        this.weaponList = new ArrayList<>();
+        for (Object weapon : weapons) {
+            this.weaponList.add((AbstractWeapon) weapon);
+        }
+    }
+
     public int getXCoordinate()
     {
         return x_coord;

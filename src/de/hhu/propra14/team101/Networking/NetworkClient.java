@@ -159,12 +159,22 @@ public class NetworkClient {
         } else if (line.equals("everyone_not_ready")) {
             this.roomReady = false;
         } else if (line.startsWith("game")) {
-            // TODO interpret whatever we got now
+            this.interpretGame(line.substring(5));
         } else if (line.matches(NetworkServer.uuidRegex)) {
             this.uuid = UUID.fromString(line);
         }
 
         this.lastAnswer = line;
+    }
+
+    private void interpretGame(String command) {
+        if (command.equals("started")) {
+            // Start the game
+        } else if (command.startsWith("sync ")) {
+            // We're syncing
+        } else if (command.equals("...")) {
+            // ...
+        }
     }
 
     private void signIn() throws TimeoutException {
