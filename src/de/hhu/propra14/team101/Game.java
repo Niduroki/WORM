@@ -2,6 +2,7 @@ package de.hhu.propra14.team101;
 
 import com.sun.istack.internal.Nullable;
 import de.hhu.propra14.team101.Savers.LevelSaves;
+import de.hhu.propra14.team101.Savers.SettingSaves;
 import javafx.scene.canvas.*;
 
 import javafx.scene.image.Image;
@@ -20,6 +21,7 @@ public class Game {
     public int round = 0;
     public int turnOfPlayer = 0;
     public int roundTimer = 20;
+    public int fps = 16;
 
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Level> levels = new ArrayList<>();
@@ -33,6 +35,14 @@ public class Game {
      * Initialize a new game.
      */
     public Game(ArrayList players) {
+        // Load fps from settings
+        SettingSaves settingsLoader = new SettingSaves();
+        try {
+            this.fps = Integer.parseInt((String) settingsLoader.load("settings.yml").get("fps"));
+        } catch (FileNotFoundException | NullPointerException e) {
+            this.fps = 16;
+        }
+
         for (Object player : players) {
             this.getPlayers().add((Player) player);
         }
@@ -242,8 +252,8 @@ public class Game {
 
         if (!this.paused) {
             this.secondCounter += 1;
-            // 16 FPS at the moment
-            if (this.secondCounter == 16) {
+
+            if (this.secondCounter == this.fps) {
                 this.secondCounter = 0;
                 this.roundTimer -= 1;
                 if (this.roundTimer == 0) {
@@ -310,6 +320,10 @@ public class Game {
         } else {
             this.turnOfPlayer += 1;
         }
+
+        // Reset frame counter for seconds and roundTimer
+        this.secondCounter = 0;
+        this.roundTimer = 20;
     }
 
     /**

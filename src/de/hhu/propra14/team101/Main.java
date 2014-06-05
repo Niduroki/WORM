@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
+import de.hhu.propra14.team101.Savers.SettingSaves;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -213,8 +214,17 @@ public class Main extends Application implements Initializable {
         game = new Game(players);
         game.startLevel(levelNumber, gc);
 
+        // Load fps from settings
+        int fps;
+        SettingSaves loader = new SettingSaves();
+        try {
+            fps = Integer.parseInt((String) loader.load("settings.yml").get("fps"));
+        } catch (FileNotFoundException | NullPointerException e) {
+            fps = 16;
+        }
+
         //Prepare updating game
-        final Duration oneFrameAmt = Duration.millis(60);
+        final Duration oneFrameAmt = Duration.millis(1000/fps);
         final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {

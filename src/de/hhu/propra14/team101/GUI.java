@@ -111,10 +111,12 @@ public class GUI {
         Text scenetitle = new Text("Options");
         Text title1 = new Text("Multiplayer Server");
         Text title2 = new Text("Multiplayer Name");
+        Text title3 = new Text("Frames per second");
         Button returnbtn = new Button("Save & Return");
 
 
-        final CheckBox checkBox = new CheckBox("Exterminate Dalek");
+        final ComboBox<String> fpsBox = new ComboBox<>();
+        fpsBox.getItems().addAll("15", "20", "30", "45", "60");
         String initialValue1;
         String initialValue2;
         SettingSaves loader = new SettingSaves();
@@ -122,15 +124,17 @@ public class GUI {
             Map<String, Object> data = (Map<String, Object>) loader.load("settings.yml");
             initialValue1 = data.get("multiplayer_server").toString();
             initialValue2 = data.get("multiplayer_name").toString();
-            checkBox.setSelected(Boolean.parseBoolean(data.get("dalek").toString()));
+            fpsBox.getSelectionModel().select(data.get("fps").toString());
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find settings file!");
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
+            fpsBox.getSelectionModel().select("20");
         } catch (NullPointerException e) {
             System.out.println("Missing setting!");
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
+            fpsBox.getSelectionModel().select("20");
         }
 
         final TextField serverField = new TextField(initialValue1);
@@ -145,7 +149,8 @@ public class GUI {
         this.main.grid.add(serverField, 2, 2);
         this.main.grid.add(title2, 1, 4);
         this.main.grid.add(nameField, 2, 4);
-        this.main.grid.add(checkBox, 1, 6);
+        this.main.grid.add(title3, 1, 6);
+        this.main.grid.add(fpsBox, 2, 6);
         this.main.grid.add(returnbtn, 1, 8);
 
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -155,7 +160,7 @@ public class GUI {
                 Map<String, Object> data = new HashMap<>();
                 data.put("multiplayer_server", serverField.getText());
                 data.put("multiplayer_name", nameField.getText());
-                data.put("dalek", checkBox.selectedProperty().getValue());
+                data.put("fps", fpsBox.getSelectionModel().getSelectedItem());
                 saver.save(data, "settings.yml");
                 addMainButtons();
             }
