@@ -172,7 +172,7 @@ public class NetworkClient {
             try {
                 this.syncGame();
             } catch (TimeoutException e) {
-                //
+                System.out.println("TIMEOUT!!!!!");
             }
         } else if (command.equals("...")) {
             // ...
@@ -315,12 +315,18 @@ public class NetworkClient {
         this.waitForAnswer();
     }
 
+    /**
+     * Hard resyncs the game by asking the server to send the current game state as a save and substitutes the current game with that
+     * @throws TimeoutException
+     */
     public void syncGame() throws TimeoutException {
         this.queueSend("game sync", true);
         this.waitForAnswer();
         String answer = this.lastAnswer;
         Yaml yaml = new Yaml();
         this.main.game = Game.deserialize((Map<String, Object>) yaml.load(answer.replace(';', '\n')));
+        this.main.game.gc = this.main.field.getGraphicsContext2D();
+        this.main.game.startLevel();
     }
 
     public void logoff() {

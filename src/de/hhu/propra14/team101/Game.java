@@ -22,12 +22,12 @@ public class Game {
     public int turnOfPlayer = 0;
     public int roundTimer = 20;
     public int fps = 16;
+    public GraphicsContext gc;
 
     private ArrayList<Player> players = new ArrayList<>();
-    private ArrayList<Level> levels = new ArrayList<>();
+    private Level level;
     private Bullet bullet;
     private boolean gameFinished = false;
-    private int selectedLevelNumber;
     private Terrain currentTerrain;
     private int secondCounter = 0;
     private Image background;
@@ -46,19 +46,6 @@ public class Game {
 
         for (Object player : players) {
             this.getPlayers().add((Player) player);
-        }
-
-        LevelSaves loader = new LevelSaves();
-        try {
-            levels.add(loader.load("maps/Map1.gz"));
-            levels.add(loader.load("maps/Map2.gz"));
-            levels.add(loader.load("maps/Map3.gz"));
-        } catch (FileNotFoundException e) {
-            System.out.println("Couldn't find level-files");
-        }
-
-        if (!Main.headless) {
-            this.background = new Image("Background.jpg");
         }
 
         // Hard coded levels - if save-files change uncomment this and save this structure
@@ -111,43 +98,6 @@ public class Game {
         }
         levels.add(level3);
         */
-
-    }
-
-    /**
-     * Get number of level, which is selected.
-     */
-    public int getSelectedLevelNumber() {
-        return selectedLevelNumber;
-    }
-
-    /**
-     * Get count of levels.
-     */
-    public int getCountLevel() {
-        return levels.size();
-    }
-
-    /**
-     * Add a level. Overwrites level, if level number exists.
-     *
-     * @param level The new level.
-     * @throws java.lang.IllegalArgumentException if level number is negative
-     */
-    public void addLevel(Level level) {
-        if (level.getNumber() < 0) {
-            throw new IllegalArgumentException("level number must be positive or null");
-        }
-
-        if (level.getNumber() < levels.size()) {
-            levels.set(level.getNumber(), level);
-        } else {
-            int index;
-            for (index = levels.size(); index < level.getNumber(); index++) {
-                levels.add(null);
-            }
-            levels.add(level);
-        }
     }
 
     public void fireBullet(Bullet bullet) {
@@ -157,18 +107,25 @@ public class Game {
 
     /**
      * Gets a level.
-     *
-     * @param number the level number
      * @return a specific level
      * @throws java.lang.IllegalArgumentException
      */
     @Nullable
-    public Level getLevel(int number) {
-        if (number >= levels.size() || number < 0) {
-            throw new IllegalArgumentException("number has to exist");
+    public Level getLevel() {
+        return level;
+    }
+
+    public void loadLevel(String levelName) {
+        LevelSaves loader = new LevelSaves();
+        try {
+            level = loader.load("maps/"+levelName+".gz");
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldn't find level-file");
         }
 
-        return levels.get(number);
+        if (!Main.headless) {
+            this.background = new Image("Background.jpg");
+        }
     }
 
     /**
@@ -342,31 +299,14 @@ public class Game {
 
     /**
      * Start the level and initialize terrain and worms.
-     *
-     * @throws java.lang.IllegalArgumentException if levelNumber does not exist.
      */
-    public void startLevel(int levelNumber, GraphicsContext gc) {
-        if (levelNumber >= levels.size() || levelNumber < 0) {
-            throw new IllegalArgumentException("Level does not exist.");
-        }
-        selectedLevelNumber = levelNumber;
-        this.currentTerrain = levels.get(selectedLevelNumber).getTerrain();
-        levels.get(selectedLevelNumber).setWormsStartPosition(this.getPlayers());
+    public void startLevel() {
+        this.currentTerrain = level.getTerrain();
+        level.setWormsStartPosition(this.getPlayers());
 
-        draw(gc);
-    }
-
-    /**
-     * Start the level without drawing anything (thus not needing a gc)
-     * @param levelNumber
-     */
-    public void startLevel(int levelNumber) {
-        if (levelNumber >= levels.size() || levelNumber < 0) {
-            throw new IllegalArgumentException("Level does not exist.");
+        if (!Main.headless) {
+            draw(this.gc);
         }
-        selectedLevelNumber = levelNumber;
-        this.currentTerrain = levels.get(selectedLevelNumber).getTerrain();
-        levels.get(selectedLevelNumber).setWormsStartPosition(this.getPlayers());
     }
 
     public Map<String, Object> serialize() {

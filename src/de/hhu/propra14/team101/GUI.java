@@ -273,8 +273,8 @@ public class GUI {
         Button startbtn = new Button("Start");
 
         final ComboBox<String> mapSelection = new ComboBox<>();
-        mapSelection.getItems().addAll("Map 1", "Map 2", "Map 3");
-        mapSelection.setValue("Map 1");
+        mapSelection.getItems().addAll("Map1", "Map2", "Map3");
+        mapSelection.setValue("Map1");
 
         // Configure each object
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -299,8 +299,9 @@ public class GUI {
                 main.field = new Canvas(600, 400);
                 main.grid.getChildren().clear();
                 main.grid.add(main.field, 0, 0);
-                int levelNumber = Integer.parseInt(mapSelection.getValue().split(" ")[1])-1;
-                main.startGameplay(levelNumber, main.field.getGraphicsContext2D());
+                main.game = new Game(main.players);
+                main.game.loadLevel(mapSelection.getValue());
+                main.startGameplay();
             }
         });
     }

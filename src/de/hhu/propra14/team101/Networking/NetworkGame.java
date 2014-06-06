@@ -5,6 +5,7 @@ import de.hhu.propra14.team101.Player;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import de.hhu.propra14.team101.Weapons.Bazooka;
 import de.hhu.propra14.team101.Worm;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,7 @@ public class NetworkGame {
     public NetworkRoom room;
     public Game game;
 
-    public NetworkGame(NetworkRoom room, int levelNumber) {
+    public NetworkGame(NetworkRoom room, String levelName) {
         this.room = room;
         // TODO construct an ArrayList<Player> from room here
         ArrayList<Player> players = new ArrayList<>();
@@ -22,10 +23,13 @@ public class NetworkGame {
             ArrayList<AbstractWeapon> weapons = new ArrayList<>();
             weapons.add(new Bazooka());
             Collections.addAll(worms, new Worm(weapons, true), new Worm(weapons, true));
-            players.add(new Player(worms, user.name));
+            Player tmpPlayer = new Player(worms, user.name);
+            tmpPlayer.color = Color.RED;
+            players.add(tmpPlayer);
         }
         this.game = new Game(players);
-        this.game.startLevel(levelNumber);
+        this.game.loadLevel(levelName);
+        this.game.startLevel();
     }
 
     public void doAction(NetworkUser user, String line) {

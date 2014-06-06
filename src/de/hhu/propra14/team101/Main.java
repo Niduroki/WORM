@@ -86,7 +86,7 @@ public class Main extends Application implements Initializable {
     /**
      * Starts the gameplay
      */
-    public void startGameplay(int levelNumber, GraphicsContext gc) {
+    public void startGameplay() {
 
         // Don't redefine game, if we already have one (e.g. in network gaming)
         if (this.game == null) {
@@ -218,7 +218,8 @@ public class Main extends Application implements Initializable {
         this.primaryStage.getScene().addEventHandler(MouseEvent.ANY, mouseHandler);
         this.primaryStage.getScene().addEventHandler(ScrollEvent.SCROLL, scrollHandler);
 
-        this.game.startLevel(levelNumber, gc);
+        this.game.gc = this.field.getGraphicsContext2D();
+        this.game.startLevel();
 
         // Load fps from settings
         int fps;
