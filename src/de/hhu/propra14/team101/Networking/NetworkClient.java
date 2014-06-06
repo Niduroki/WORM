@@ -49,7 +49,7 @@ public class NetworkClient {
                 server = "schaepers.it";
             }
         } catch (FileNotFoundException e) {
-            //
+            server = "schaepers.it";
         }
 
         try {
