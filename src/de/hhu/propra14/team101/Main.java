@@ -223,7 +223,7 @@ public class Main extends Application implements Initializable {
         SettingSaves loader = new SettingSaves();
         try {
             fps = Integer.parseInt((String) loader.load("settings.yml").get("fps"));
-        } catch (FileNotFoundException | NullPointerException e) {
+        } catch (FileNotFoundException | NullPointerException | NumberFormatException e) {
             fps = 16;
         }
 

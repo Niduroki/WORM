@@ -20,12 +20,11 @@ public class LevelSaves extends AbstractSaver {
     public Level load (String path) throws FileNotFoundException {
         InputStream input;
         try {
-            // TODO https://stackoverflow.com/questions/1913565/how-can-i-access-a-txt-file-in-a-jar-with-fileinputstream
-            // This can't work in a jar
-            input = new FileInputStream(new File(path));
-        } catch (FileNotFoundException e) {
             // If we're not in a jar the maps are under resources
             input = new FileInputStream(new File("resources/" + path));
+        } catch (FileNotFoundException e) {
+            // Read from a jar
+            input = this.getClass().getResourceAsStream("/"+path);
         }
         Map<String, Object> raw = (Map<String, Object>) this.yaml.load(input);
         return Level.deserialize(raw);
