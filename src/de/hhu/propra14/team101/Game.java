@@ -18,11 +18,14 @@ import java.util.*;
 public class Game {
     public boolean paused = false;
     public boolean bulletFired = false;
+    public boolean online = false;
     public int round = 0;
     public int turnOfPlayer = 0;
     public int roundTimer = 20;
     public int fps = 16;
     public GraphicsContext gc;
+    // Necessary to tell the lobby javafx process to start the game now
+    public static boolean startMe = false;
 
     private ArrayList<Player> players = new ArrayList<>();
     private Level level;
@@ -48,6 +51,9 @@ public class Game {
             this.getPlayers().add((Player) player);
         }
 
+        if (!Main.headless) {
+            this.background = new Image("Background.jpg");
+        }
         // Hard coded levels - if save-files change uncomment this and save this structure
         /*
         //level1
@@ -121,10 +127,6 @@ public class Game {
             level = loader.load("maps/"+levelName+".gz");
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find level-file");
-        }
-
-        if (!Main.headless) {
-            this.background = new Image("Background.jpg");
         }
     }
 
@@ -301,8 +303,10 @@ public class Game {
      * Start the level and initialize terrain and worms.
      */
     public void startLevel() {
-        this.currentTerrain = level.getTerrain();
-        level.setWormsStartPosition(this.getPlayers());
+        if (!this.online) {
+            this.currentTerrain = level.getTerrain();
+            level.setWormsStartPosition(this.getPlayers());
+        }
 
         if (!Main.headless) {
             draw(this.gc);

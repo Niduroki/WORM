@@ -87,11 +87,7 @@ public class Main extends Application implements Initializable {
      * Starts the gameplay
      */
     public void startGameplay() {
-
-        // Don't redefine game, if we already have one (e.g. in network gaming)
-        if (this.game == null) {
-            this.game = new Game(players);
-        }
+        assert this.game != null;
 
         final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
             @Override

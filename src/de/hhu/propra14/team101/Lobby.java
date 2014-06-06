@@ -248,7 +248,6 @@ public class Lobby {
                     try {
                         if (main.client.roomReady) {
                             main.client.startGame();
-                            roomTimeline.stop();
                         }
                     } catch (TimeoutException e) {
                         //
@@ -289,6 +288,13 @@ public class Lobby {
                         }
 
                         list.setItems(FXCollections.observableArrayList(main.client.roomUsers));
+
+                        if (Game.startMe) {
+                            roomTimeline.stop();
+                            main.grid.getChildren().clear();
+                            main.grid.add(main.field, 0, 0);
+                            main.startGameplay();
+                        }
                     }
                 }
         );
