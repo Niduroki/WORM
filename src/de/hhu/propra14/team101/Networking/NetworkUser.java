@@ -27,10 +27,26 @@ public class NetworkUser {
 
         room.addUser(this);
         this.currentRoom = room;
+
+        // Propagate
+        for (NetworkUser user: this.currentRoom.users) {
+            // We don't need this info
+            if (user != this) {
+                user.send("room_joined " + name);
+            }
+        }
     }
 
     public void leaveRoom() {
         this.currentRoom.removeUser(this);
+
+        // Propagate
+        for (NetworkUser user: this.currentRoom.users) {
+            // We don't need this info
+            if (user != this) {
+                user.send("room_left " + name);
+            }
+        }
         this.currentRoom = null;
     }
 

@@ -4,10 +4,7 @@ import de.hhu.propra14.team101.Networking.Exceptions.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.event.*;
 import javafx.scene.control.*;
 import javafx.scene.text.Font;
@@ -50,7 +47,7 @@ public class Lobby {
         });
 
 
-        list = new ListView<String>();
+        list = new ListView<>();
         try {
             String[] rooms = this.main.client.getRooms();
             list.setItems(FXCollections.observableArrayList(rooms));
@@ -178,10 +175,10 @@ public class Lobby {
             }
         });
 
-        final ListView list = new ListView<String>();
+        final ListView<String> list = new ListView<>();
         try {
-            String[] users = this.main.client.getRoomUsers();
-            list.setItems(FXCollections.observableArrayList(users));
+            this.main.client.loadRoomUsers();
+            list.setItems(FXCollections.observableArrayList(this.main.client.roomUsers));
         } catch (TimeoutException exceptionName) {
             System.out.println(exceptionName.getMessage());
         }
@@ -189,7 +186,15 @@ public class Lobby {
         list.setPrefHeight(150);
 
         final Button ready;
-        if (list.getItems().get(0).toString().equals(main.client.ourName)) {
+        boolean owner;
+        try {
+            owner = this.main.client.roomUsers.get(0).equals(main.client.ourName);
+        } catch (IndexOutOfBoundsException e) {
+            // If there's no one in here yet we're the owner
+            owner = true;
+        }
+
+        if (owner) {
             ready = new Button("Start");
         } else {
             ready = new Button("Ready");
@@ -283,12 +288,7 @@ public class Lobby {
 
                         }
 
-                        try {
-                            String[] users = main.client.getRoomUsers();
-                            list.setItems(FXCollections.observableArrayList(users));
-                        } catch (TimeoutException exceptionName) {
-                            System.out.println(exceptionName.getMessage());
-                        }
+                        list.setItems(FXCollections.observableArrayList(main.client.roomUsers));
                     }
                 }
         );
