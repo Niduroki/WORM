@@ -39,6 +39,13 @@ public class Lobby {
         globalChatArea.setEditable(false);
         globalChatArea.setWrapText(false);
 
+        final ListView list2 = new ListView<String>();
+        String[] users = new String[0];
+        list2.setItems(FXCollections.observableArrayList(users));
+
+        list2.setMaxWidth(150);
+        list2.setMaxHeight(200);
+
         final TextField chatfield = new TextField("");
         final EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>() {
             @Override
@@ -51,17 +58,11 @@ public class Lobby {
                 } catch (TimeoutException ex) {
                     System.out.println(ex.getMessage());
                 }
-                final ListView list2 = new ListView<String>();
-                    String[] users = new String[0];
-                    list2.setItems(FXCollections.observableArrayList(users));
-
-                    list2.setMaxWidth(200);
-                    list2.setMaxHeight(200);
                 }
         };
         chatfield.addEventHandler(KeyEvent.KEY_RELEASED, handler);
         // Add the objects
-        this.main.grid.add (list,3,3,5,5);
+        this.main.grid.add (list2,3,3,5,5);
         this.main.grid.add(globalChatArea, 0, 3, 3, 5);
         this.main.grid.add(chatfield, 0, 7, 3, 9);
     }
