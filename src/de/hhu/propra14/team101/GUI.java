@@ -121,7 +121,7 @@ public class GUI {
         String initialValue2;
         SettingSaves loader = new SettingSaves();
         try {
-            Map<String, Object> data = (Map<String, Object>) loader.load("settings.yml");
+            Map<String, Object> data = (Map<String, Object>) loader.load("settings.gz");
             initialValue1 = data.get("multiplayer_server").toString();
             initialValue2 = data.get("multiplayer_name").toString();
             fpsBox.getSelectionModel().select(data.get("fps").toString());
@@ -161,7 +161,7 @@ public class GUI {
                 data.put("multiplayer_server", serverField.getText());
                 data.put("multiplayer_name", nameField.getText());
                 data.put("fps", fpsBox.getSelectionModel().getSelectedItem());
-                saver.save(data, "settings.yml");
+                saver.save(data, "settings.gz");
                 addMainButtons();
             }
         });

@@ -36,11 +36,11 @@ public class Game {
     /**
      * Initialize a new game.
      */
-    public Game(ArrayList players) {
+    public Game(ArrayList players, boolean headless) {
         // Load fps from settings
         SettingSaves settingsLoader = new SettingSaves();
         try {
-            this.fps = Integer.parseInt((String) settingsLoader.load("settings.yml").get("fps"));
+            this.fps = Integer.parseInt((String) settingsLoader.load("settings.gz").get("fps"));
         } catch (FileNotFoundException | NumberFormatException e) {
             this.fps = 16;
         }
@@ -51,11 +51,15 @@ public class Game {
 
         LevelSaves loader = new LevelSaves();
         try {
-            levels.add(loader.load("maps/Map1.yml"));
-            levels.add(loader.load("maps/Map2.yml"));
-            levels.add(loader.load("maps/Map3.yml"));
+            levels.add(loader.load("maps/Map1.gz"));
+            levels.add(loader.load("maps/Map2.gz"));
+            levels.add(loader.load("maps/Map3.gz"));
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find level-files");
+        }
+
+        if (!headless) {
+            this.background = new Image("Background.jpg");
         }
 
         // Hard coded levels - if save-files change uncomment this and save this structure
@@ -343,8 +347,6 @@ public class Game {
      * @throws java.lang.IllegalArgumentException if levelNumber does not exist.
      */
     public void startLevel(int levelNumber, GraphicsContext gc) {
-        this.background = new Image("Background.jpg");
-
         if (levelNumber >= levels.size() || levelNumber < 0) {
             throw new IllegalArgumentException("Level does not exist.");
         }
@@ -378,8 +380,8 @@ public class Game {
         return result;
     }
 
-    public static Game deserialize(Map<String, Object> data) {
-        Game game = new Game(Game.deserializePlayerArray((ArrayList<Map>) data.get("players")));
+    public static Game deserialize(Map<String, Object> data, boolean headless) {
+        Game game = new Game(Game.deserializePlayerArray((ArrayList<Map>) data.get("players")), headless);
         game.setCurrentTerrain(Terrain.deserialize((ArrayList<ArrayList<Map>>) data.get("terrain")));
         game.round = (Integer) data.get("round");
         game.turnOfPlayer = (Integer) data.get("turn_of_player");

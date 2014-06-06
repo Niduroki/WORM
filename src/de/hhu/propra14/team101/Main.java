@@ -88,7 +88,7 @@ public class Main extends Application implements Initializable {
 
         // Don't redefine game, if we already have one (e.g. in network gaming)
         if (this.game == null) {
-            this.game = new Game(players);
+            this.game = new Game(players, false);
         }
 
         final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
@@ -199,12 +199,12 @@ public class Main extends Application implements Initializable {
                 } else if (keyEvent.getCode() == KeyCode.S) {
                     // Save a game
                     GameSaves saver = new GameSaves();
-                    saver.save(game, "GameSave.yml");
+                    saver.save(game, "GameSave.gz");
                 } else if (keyEvent.getCode() == KeyCode.L) {
                     // Load a game
                     GameSaves loader = new GameSaves();
                     try {
-                        game = loader.load("GameSave.yml");
+                        game = loader.load("GameSave.gz", false);
                     } catch (FileNotFoundException e) {
                         //
                     }
@@ -222,7 +222,7 @@ public class Main extends Application implements Initializable {
         int fps;
         SettingSaves loader = new SettingSaves();
         try {
-            fps = Integer.parseInt((String) loader.load("settings.yml").get("fps"));
+            fps = Integer.parseInt((String) loader.load("settings.gz").get("fps"));
         } catch (FileNotFoundException | NullPointerException | NumberFormatException e) {
             fps = 16;
         }

@@ -42,7 +42,7 @@ public class NetworkClient {
         int port = 7601;
         SettingSaves loader = new SettingSaves();
         try {
-            Map data = loader.load("settings.yml");
+            Map data = loader.load("settings.gz");
             if (data.get("multiplayer_server") != null) {
                 server = (String) data.get("multiplayer_server");
             } else {
@@ -183,7 +183,7 @@ public class NetworkClient {
         SettingSaves loader = new SettingSaves();
 
         try {
-            Map data = loader.load("settings.yml");
+            Map data = loader.load("settings.gz");
             this.ourName = (String) data.get("multiplayer_name");
         } catch (FileNotFoundException | NullPointerException e) {
             this.ourName = "Worms player";
@@ -320,7 +320,7 @@ public class NetworkClient {
         this.waitForAnswer();
         String answer = this.lastAnswer;
         Yaml yaml = new Yaml();
-        this.main.game = Game.deserialize((Map<String, Object>) yaml.load(answer.replace(';', '\n')));
+        this.main.game = Game.deserialize((Map<String, Object>) yaml.load(answer.replace(';', '\n')), true);
     }
 
     public void logoff() {
