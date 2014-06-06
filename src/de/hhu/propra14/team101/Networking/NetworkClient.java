@@ -320,7 +320,7 @@ public class NetworkClient {
         this.waitForAnswer();
         String answer = this.lastAnswer;
         Yaml yaml = new Yaml();
-        this.main.game = Game.deserialize((Map<String, Object>) yaml.load(answer.replace(';', '\n')), true);
+        this.main.game = Game.deserialize((Map<String, Object>) yaml.load(answer.replace(';', '\n')));
     }
 
     public void logoff() {

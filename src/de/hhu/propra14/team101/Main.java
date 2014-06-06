@@ -46,6 +46,8 @@ public class Main extends Application implements Initializable {
     protected Lobby lobby;
     public boolean isOnlineGame = false;
 
+    public static boolean headless = false;
+
     public static void main (String[] args) {
         launch(args);
     }
@@ -88,7 +90,7 @@ public class Main extends Application implements Initializable {
 
         // Don't redefine game, if we already have one (e.g. in network gaming)
         if (this.game == null) {
-            this.game = new Game(players, false);
+            this.game = new Game(players);
         }
 
         final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {

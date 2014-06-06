@@ -16,6 +16,8 @@ import java.util.Scanner;
 public class ServerBootstrap {
 
     public static void main(String[] args) {
+        // Don't load any graphics
+        Main.headless = true;
         try {
             start();
         } catch (IOException e) {

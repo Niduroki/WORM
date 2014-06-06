@@ -18,7 +18,6 @@ import java.util.*;
 public class Game {
     public boolean paused = false;
     public boolean bulletFired = false;
-    public boolean headless = false;
     public int round = 0;
     public int turnOfPlayer = 0;
     public int roundTimer = 20;
@@ -36,7 +35,7 @@ public class Game {
     /**
      * Initialize a new game.
      */
-    public Game(ArrayList players, boolean headless) {
+    public Game(ArrayList players) {
         // Load fps from settings
         SettingSaves settingsLoader = new SettingSaves();
         try {
@@ -58,7 +57,7 @@ public class Game {
             System.out.println("Couldn't find level-files");
         }
 
-        if (!headless) {
+        if (!Main.headless) {
             this.background = new Image("Background.jpg");
         }
 
@@ -322,7 +321,7 @@ public class Game {
             }
         }
 
-        if (!this.headless) {
+        if (!Main.headless) {
             draw(gc);
         }
     }
@@ -380,8 +379,8 @@ public class Game {
         return result;
     }
 
-    public static Game deserialize(Map<String, Object> data, boolean headless) {
-        Game game = new Game(Game.deserializePlayerArray((ArrayList<Map>) data.get("players")), headless);
+    public static Game deserialize(Map<String, Object> data) {
+        Game game = new Game(Game.deserializePlayerArray((ArrayList<Map>) data.get("players")));
         game.setCurrentTerrain(Terrain.deserialize((ArrayList<ArrayList<Map>>) data.get("terrain")));
         game.round = (Integer) data.get("round");
         game.turnOfPlayer = (Integer) data.get("turn_of_player");

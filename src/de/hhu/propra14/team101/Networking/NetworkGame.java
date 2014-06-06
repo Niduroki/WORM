@@ -24,7 +24,7 @@ public class NetworkGame {
             Collections.addAll(worms, new Worm(weapons, true), new Worm(weapons, true));
             players.add(new Player(worms, user.name));
         }
-        this.game = new Game(players, true);
+        this.game = new Game(players);
         this.game.startLevel(levelNumber);
     }
 

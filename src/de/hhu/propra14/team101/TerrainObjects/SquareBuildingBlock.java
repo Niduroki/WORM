@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101.TerrainObjects;
 
+import de.hhu.propra14.team101.Main;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -15,6 +16,9 @@ public class SquareBuildingBlock extends AbstractTerrainObject {
         super(x, y);
         this.color = 0x883300; // Dirt-ish html-color
         this.destructible = true;
-        this.image = new Image("ground.jpg");
+
+        if (!Main.headless) {
+            this.image = new Image("ground.jpg");
+        }
     }
 }

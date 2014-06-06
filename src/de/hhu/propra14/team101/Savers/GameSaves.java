@@ -32,7 +32,7 @@ public class GameSaves extends AbstractSaver {
      */
     public Game load(String path, boolean headless) throws FileNotFoundException {
         Map<String, Object> data = (Map<String, Object>) this.yaml.load(GZipper.gunzip(path));
-        Game game = Game.deserialize(data, headless);
+        Game game = Game.deserialize(data);
         return game;
     }
 }
