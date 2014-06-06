@@ -31,12 +31,48 @@ public class Lobby {
         this.main = main;
     }
 
+    public void addChatButtons() {
+        // Clean up
+        this.main.grid.getChildren().clear();
+
+        globalChatArea = new TextArea();
+        globalChatArea.setEditable(false);
+        globalChatArea.setWrapText(false);
+
+        final TextField chatfield = new TextField("");
+        final EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                try {
+                    if (keyEvent.getCode() == KeyCode.ENTER) {
+                        main.client.chat('g', chatfield.getText());
+                        chatfield.clear();
+                    }
+                } catch (TimeoutException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                final ListView list2 = new ListView<String>();
+                    String[] users = new String[0];
+                    list2.setItems(FXCollections.observableArrayList(users));
+
+                    list2.setMaxWidth(200);
+                    list2.setMaxHeight(200);
+                }
+        };
+        chatfield.addEventHandler(KeyEvent.KEY_RELEASED, handler);
+        // Add the objects
+        this.main.grid.add (list,3,3,5,5);
+        this.main.grid.add(globalChatArea, 0, 3, 3, 5);
+        this.main.grid.add(chatfield, 0, 7, 3, 9);
+    }
+
     public void addMpButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
 
         // Create buttons and other objects
         Text scenetitle = new Text("Lobby");
+        Button Chat = new Button ("Chat");
         Button returnbtn = new Button("Back");
         Button create = new Button("Create Game");
         Button join = new Button("Join Game");
@@ -111,6 +147,7 @@ public class Lobby {
         this.main.grid.add(returnbtn, 0, 11);
         this.main.grid.add(create, 1, 11);
         this.main.grid.add(join, 2, 11);
+        this.main.grid.add(Chat, 3,11);
 
 
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -119,6 +156,14 @@ public class Lobby {
                 main.client.logoff();
                 globalTimeline.stop();
                 main.gui.addMainButtons();
+            }
+        });
+
+        Chat.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                addChatButtons();
             }
         });
 
