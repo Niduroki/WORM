@@ -19,8 +19,12 @@ public class GZipper {
     }
 
     public static String gunzip (String path) throws FileNotFoundException {
+        return GZipper.gunzip(new FileInputStream(path));
+    }
+
+    public static String gunzip (InputStream stream) throws FileNotFoundException {
         try {
-            GZIPInputStream zipper = new GZIPInputStream(new FileInputStream(path));
+            GZIPInputStream zipper = new GZIPInputStream(stream);
             BufferedReader reader = new BufferedReader(new InputStreamReader(zipper, "UTF-8"));
             String out = "";
             String line;
