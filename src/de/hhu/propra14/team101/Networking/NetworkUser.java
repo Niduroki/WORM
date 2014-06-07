@@ -11,6 +11,7 @@ public class NetworkUser {
     public NetworkGame game;
     public long lastPong = System.currentTimeMillis();
     public UUID uuid;
+    public String team;
 
     private NetworkRoom currentRoom;
 
@@ -27,6 +28,7 @@ public class NetworkUser {
 
         room.addUser(this);
         this.currentRoom = room;
+        this.team = "spectator";
 
         // Propagate
         for (NetworkUser user: this.currentRoom.users) {

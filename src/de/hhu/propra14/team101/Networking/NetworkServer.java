@@ -3,7 +3,6 @@ package de.hhu.propra14.team101.Networking;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.*;
 
 /**
@@ -82,7 +81,7 @@ public class NetworkServer {
                         answer = "";
                         if (currentUser.getCurrentRoom() != null) {
                             for (NetworkUser user : currentUser.getCurrentRoom().users) {
-                                answer += user.name + ",";
+                                answer += user.name + "|"+user.team+",";
                             }
                         } else {
                             answer = "error client no_room";
@@ -122,6 +121,20 @@ public class NetworkServer {
                             this.roomMap.remove(room.name);
                         }
                         answer = "okay";
+                    } else if (command.matches("change_team .+")) {
+                        String team = command.substring(12);
+                        if (
+                                team.equals("spectator") ||
+                                currentUser.getCurrentRoom().availableColors.isEmpty() ||
+                                !currentUser.getCurrentRoom().availableColors.contains(team)
+                        ) {
+                            currentUser.team = "spectator";
+                        } else {
+                            currentUser.team = team;
+                        }
+                        // Propagate
+                        currentUser.getCurrentRoom().propagate("change_team "+currentUser.name+" "+team);
+                        answer = "okay";
                     } else if (command.matches("chat .+")) {
                         String message = command.substring(5);
                         for (NetworkUser user : userMap.values()) {
@@ -138,10 +151,8 @@ public class NetworkServer {
                             }
                         }
 
-                        // Set the room ready
-                        if (everyoneReady) {
-                            currentUser.getCurrentRoom().setRoomReady(everyoneReady);
-                        } else if (currentUser.getCurrentRoom().roomReady) { // Not everyone is ready now, but the room is still ready
+                        // Set the room ready or not ready
+                        if (everyoneReady || currentUser.getCurrentRoom().roomReady) {
                             currentUser.getCurrentRoom().setRoomReady(everyoneReady);
                         }
                         answer = "okay";
@@ -152,7 +163,6 @@ public class NetworkServer {
                                 for (NetworkUser user : currentUser.getCurrentRoom().users) {
                                     user.game = game;
                                     user.send("game started");
-                                    // TODO bootstrap initial data here
                                 }
                                 answer = "okay";
                             } else {

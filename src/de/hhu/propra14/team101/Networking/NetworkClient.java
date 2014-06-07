@@ -20,7 +20,8 @@ import java.util.*;
 public class NetworkClient {
 
     public String currentRoom;
-    public ArrayList<String> roomUsers = new ArrayList<>();
+    /** Map of room users. Map key is the user name, Map value is the users team */
+    public Map<String, String> roomUsers = new HashMap<>();
     public String ourName;
     public boolean roomReady = false;
 
@@ -32,7 +33,6 @@ public class NetworkClient {
     private Main main;
     private PriorityQueue<String> globalMessages = new PriorityQueue<>();
     private PriorityQueue<String> roomMessages = new PriorityQueue<>();
-    // Maximum time in multiples of 50ms to wait for until timeout
 
     /**
      * Constructs a class for networking
@@ -139,8 +139,10 @@ public class NetworkClient {
             } else if (type == 'r') {
                 roomMessages.add(user + ">: " + message);
             }
+        } else if (line.matches("change_team .+ .+")) {
+            this.roomUsers.replace(line.split(" ")[1], line.split(" ")[2]);
         } else if (line.matches("room_joined .+")) {
-            this.roomUsers.add(line.split(" ")[1]);
+            this.roomUsers.put(line.split(" ")[1], "spectator");
         } else if (line.matches("room_left .+")) {
             this.roomUsers.remove(line.split(" ")[1]);
         } else if (line.equals("everyone_ready")) {
@@ -252,7 +254,9 @@ public class NetworkClient {
 
     public void loadRoomUsers() throws TimeoutException {
         this.send("list_room_users", true);
-        Collections.addAll(roomUsers, this.lastAnswer.split(","));
+        for (String user : this.lastAnswer.split(",")) {
+            roomUsers.put(user.split("\\|")[0], user.split("\\|")[1]);
+        }
     }
 
     public void chat(char type, String message) throws TimeoutException {
@@ -281,6 +285,10 @@ public class NetworkClient {
 
     public void startGame() throws TimeoutException {
         this.send("start_game", true);
+    }
+
+    public void changeColor(String team) throws TimeoutException {
+        this.send("change_team " + team, false);
     }
 
     /**

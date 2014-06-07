@@ -4,14 +4,20 @@ import de.hhu.propra14.team101.Networking.Exceptions.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.*;
 import javafx.scene.control.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.input.*;
+import javafx.util.Callback;
 import javafx.util.Duration;
+
+import java.util.*;
 
 /**
  * Class to implement a Lobby for users to chat and find games in
@@ -154,13 +160,24 @@ public class Lobby {
         Button advanced = new Button("Advanced");
 
 
-        final ComboBox<String> color = new ComboBox<>();
-        color.getItems().add("Red");
-        color.getItems().add("Blue");
-        color.getItems().add("Green");
-        color.getItems().add("Yellow");
-        color.getItems().add("Spectator");
-        color.setValue("Red");
+        final ComboBox<String> team = new ComboBox<>();
+        team.getItems().add("Red");
+        team.getItems().add("Blue");
+        team.getItems().add("Green");
+        team.getItems().add("Yellow");
+        team.getItems().add("Spectator");
+        team.setValue("Spectator");
+
+        team.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try {
+                    main.client.changeColor(newValue.toLowerCase());
+                } catch (TimeoutException e) {
+                    //
+                }
+            }
+        });
 
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -175,21 +192,51 @@ public class Lobby {
             }
         });
 
-        final ListView<String> list = new ListView<>();
+        final ListView<String[]> list = new ListView<>();
         try {
             this.main.client.loadRoomUsers();
-            list.setItems(FXCollections.observableArrayList(this.main.client.roomUsers));
+
+            ObservableList<String[]> data = FXCollections.observableArrayList();
+            for (Map.Entry<String, String> user : this.main.client.roomUsers.entrySet()) {
+                String color;
+                if (!user.getValue().equals("spectator")) {
+                    if (user.getValue().equals("red")) {
+                        color = "FF0000";
+                    } else if (user.getValue().equals("blue")) {
+                        color = "0044FF";
+                    } else if (user.getValue().equals("green")) {
+                        color = "00FF00";
+                    } else if (user.getValue().equals("yellow")) {
+                        color = "FFFF00";
+                    } else {
+                        color = "000000";
+                    }
+                } else {
+                    color = "FFFFFF";
+                }
+                data.add(new String[]{user.getKey(), color});
+            }
+            list.setItems(data);
+            list.setCellFactory(
+                    new Callback<ListView<String[]>, ListCell<String[]>>() {
+                        @Override
+                        public ListCell<String[]> call(ListView<String[]> list) {
+                            return new ColoredListCell();
+                        }
+                    }
+            );
         } catch (TimeoutException exceptionName) {
             System.out.println(exceptionName.getMessage());
         }
+
         list.setPrefWidth(250);
         list.setPrefHeight(150);
 
         final Button ready;
         boolean owner;
         try {
-            owner = this.main.client.roomUsers.get(0).equals(main.client.ourName);
-        } catch (IndexOutOfBoundsException e) {
+            owner = list.getItems().get(0)[0].equals(main.client.ourName);
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
             // If there's no one in here yet we're the owner
             owner = true;
         }
@@ -228,7 +275,7 @@ public class Lobby {
         this.main.grid.add(ready, 1, 12);
         this.main.grid.add(advanced, 2, 2);
         this.main.grid.add(scenetitle, 0, 0, 3, 1);
-        this.main.grid.add(color, 2, 1);
+        this.main.grid.add(team, 2, 1);
         this.main.grid.add(list, 0, 1, 2, 2);
         this.main.grid.add(this.roomChatArea, 0, 3, 3, 5);
         this.main.grid.add(chatfield, 0, 7, 3, 9);
@@ -244,7 +291,7 @@ public class Lobby {
         ready.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (list.getItems().get(0).toString().equals(main.client.ourName)) {
+                if (list.getItems().get(0)[0].equals(main.client.ourName)) {
                     try {
                         if (main.client.roomReady) {
                             main.client.startGame();
@@ -276,7 +323,8 @@ public class Lobby {
                             roomChatArea.appendText(main.client.getLastRoomMessage() + "\n");
                         }
 
-                        if (list.getItems().get(0).toString().equals(main.client.ourName)) {
+                        // TODO ask the server who's the owner and save that instead
+                        if (list.getItems().get(0)[0].equals(main.client.ourName)) {
                             ready.setText("Start");
                             if (main.client.roomReady) {
                                 ready.setStyle(("-fx-background-color: #00ff00"));
@@ -284,10 +332,31 @@ public class Lobby {
                                 ready.setStyle("-fx-background-color: #ff0000");
                             }
                         } else {
-
+                            System.out.println("Not the owner");
                         }
 
-                        list.setItems(FXCollections.observableArrayList(main.client.roomUsers));
+
+                        ObservableList<String[]> data = FXCollections.observableArrayList();
+                        for (Map.Entry<String, String> user : main.client.roomUsers.entrySet()) {
+                            String color;
+                            if (!user.getValue().equals("spectator")) {
+                                if (user.getValue().equals("red")) {
+                                    color = "FF0000";
+                                } else if (user.getValue().equals("blue")) {
+                                    color = "0044FF";
+                                } else if (user.getValue().equals("green")) {
+                                    color = "00FF00";
+                                } else if (user.getValue().equals("yellow")) {
+                                    color = "FFFF00";
+                                } else {
+                                    color = "000000";
+                                }
+                            } else {
+                                color = "FFFFFF";
+                            }
+                            data.add(new String[]{user.getKey(), color});
+                        }
+                        list.setItems(data);
 
                         if (Game.startMe) {
                             roomTimeline.stop();
@@ -361,7 +430,7 @@ public class Lobby {
                     main.client.createRoom(text1.getText());
                     addroombtns();
                 } catch (RoomExistsException e) {
-                    //
+                    text1.setText("");
                 } catch (NetworkException e) {
                     //
                 }
@@ -423,5 +492,16 @@ public class Lobby {
                 addroombtns();
             }
         });
+    }
+
+    static class ColoredListCell extends ListCell<String[]> {
+        @Override
+        public void updateItem(String[] item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item != null) {
+                setText(item[0]);
+                setStyle("-fx-background-color: #"+item[1]);
+            }
+        }
     }
 }
