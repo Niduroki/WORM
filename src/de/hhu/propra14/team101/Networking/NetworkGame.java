@@ -48,6 +48,7 @@ public class NetworkGame {
         }
         this.game = new Game(players);
         this.game.loadLevel(room.selectedMap);
+        this.game.fps = 16;
         this.game.startGameplay();
     }
 
@@ -72,6 +73,7 @@ public class NetworkGame {
             } else if (line.equals("pause") && user == this.room.owner) {
                 this.game.paused = !this.game.paused;
             }
+            this.game.doAction(line);
             this.room.propagate("game " + line);
         }
         // Just don't do anything otherwise

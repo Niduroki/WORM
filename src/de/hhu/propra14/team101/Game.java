@@ -28,7 +28,7 @@ public class Game {
     public int round = 0;
     public int turnOfPlayer = 0;
     public int roundTimer = 20;
-    public int fps = 16;
+    public int fps;
     public GraphicsContext gc;
     public Queue<String> onlineCommandQueue = new PriorityQueue<>();
     // Necessary to tell the lobby javafx process to start the game now
@@ -271,7 +271,12 @@ public class Game {
                     wormArrayList.addAll(playerItem.wormList);
                 }
                 Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
-                Collision collision = bullet.physics.hasCollision(currentWorm, wormArrayList, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+                Collision collision;
+                if (Main.headless) {
+                    collision = bullet.physics.hasCollision(currentWorm, wormArrayList, 600, 400);
+                } else {
+                    collision = bullet.physics.hasCollision(currentWorm, wormArrayList, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+                }
                 if (collision != null) {
                     switch (collision.getType()) {
                         case Worm:
@@ -304,6 +309,7 @@ public class Game {
         // Reset frame counter for seconds and roundTimer
         this.secondCounter = 0;
         this.roundTimer = 20;
+        System.out.println("Next");
     }
 
     /**
@@ -325,15 +331,6 @@ public class Game {
      */
     public void startGameplay() {
         this.startLevel();
-
-        // Load fps from settings
-        int fps;
-        SettingSaves loader = new SettingSaves();
-        try {
-            fps = Integer.parseInt((String) loader.load("settings.gz").get("fps"));
-        } catch (FileNotFoundException | NullPointerException | NumberFormatException e) {
-            fps = 16;
-        }
 
         //Prepare updating game
         final Duration oneFrameAmt = Duration.millis(1000/fps);
@@ -359,6 +356,10 @@ public class Game {
             this.timeline = new Timeline(keyFrame);
             this.timeline.setCycleCount(Animation.INDEFINITE);
             this.timeline.play();
+        } else {
+            Thread gameUpdateThread = new Thread(new GameUpdateThread(this));
+            gameUpdateThread.setDaemon(true);
+            gameUpdateThread.start();
         }
     }
 
@@ -368,6 +369,7 @@ public class Game {
     }
 
     public void doAction(String action) {
+        System.out.println("Do the action");
         if (action.equals("move_right")) {
             int currentWorm = players.get(this.turnOfPlayer).currentWorm;
             players.get(this.turnOfPlayer).wormList.get(currentWorm).move('r');
@@ -417,5 +419,26 @@ public class Game {
             result.add(Player.deserialize(anInput));
         }
         return result;
+    }
+
+    static class GameUpdateThread implements Runnable {
+
+        private Game game;
+
+        public GameUpdateThread(Game game) {
+            this.game = game;
+        }
+
+        @Override
+        public void run() {
+            while (!game.isGameFinished()) {
+                game.updateGame();
+                try {
+                    Thread.sleep(1000 / game.fps);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

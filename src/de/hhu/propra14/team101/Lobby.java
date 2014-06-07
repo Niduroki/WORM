@@ -4,8 +4,6 @@ import de.hhu.propra14.team101.Networking.Exceptions.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.*;
@@ -368,6 +366,8 @@ public class Lobby {
                             main.grid.add(main.field, 0, 0);
                             main.initializeHandlers();
                             main.game.gc = main.field.getGraphicsContext2D();
+                            // Everyone needs the same fps, otherwise bullets fly at different speed
+                            main.game.fps = 16;
                             main.game.startGameplay();
                         }
                     }
