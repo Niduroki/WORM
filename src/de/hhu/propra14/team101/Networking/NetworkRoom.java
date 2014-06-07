@@ -9,9 +9,9 @@ public class NetworkRoom {
     public ArrayList<String> availableColors = new ArrayList<>();
     public boolean empty = false;
     public boolean roomReady = false;
-    public int selectedMap;
+    public String selectedMap;
 
-    public NetworkRoom(String name, int selectedMap) {
+    public NetworkRoom(String name, String selectedMap) {
         this.name = name;
         this.selectedMap = selectedMap;
         Collections.addAll(availableColors, "Red", "Blue", "Green", "Yellow");

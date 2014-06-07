@@ -14,7 +14,7 @@ public class NetworkGame {
     public NetworkRoom room;
     public Game game;
 
-    public NetworkGame(NetworkRoom room, String levelName) {
+    public NetworkGame(NetworkRoom room) {
         this.room = room;
         // TODO construct an ArrayList<Player> from room here
         ArrayList<Player> players = new ArrayList<>();
@@ -28,7 +28,7 @@ public class NetworkGame {
             players.add(tmpPlayer);
         }
         this.game = new Game(players);
-        this.game.loadLevel(levelName);
+        this.game.loadLevel(room.selectedMap);
         this.game.startLevel();
     }
 

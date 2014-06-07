@@ -229,15 +229,13 @@ public class Lobby {
         list.setPrefHeight(150);
 
         final Button ready;
-        boolean owner;
         try {
-            owner = list.getItems().get(0)[0].equals(main.client.ourName);
-        } catch (NullPointerException | IndexOutOfBoundsException e) {
-            // If there's no one in here yet we're the owner
-            owner = true;
+            this.main.client.weAreOwner = this.main.client.getOwner().equals(this.main.client.ourName);
+        } catch (TimeoutException e) {
+            this.main.client.weAreOwner = false;
         }
 
-        if (owner) {
+        if (this.main.client.weAreOwner) {
             ready = new Button("Start");
         } else {
             ready = new Button("Ready");
@@ -287,7 +285,7 @@ public class Lobby {
         ready.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (list.getItems().get(0)[0].equals(main.client.ourName)) {
+                if (main.client.weAreOwner) {
                     try {
                         if (main.client.roomReady) {
                             main.client.startGame();
@@ -319,16 +317,13 @@ public class Lobby {
                             roomChatArea.appendText(main.client.getLastRoomMessage() + "\n");
                         }
 
-                        // TODO ask the server who's the owner and save that instead
-                        if (list.getItems().get(0)[0].equals(main.client.ourName)) {
+                        if (main.client.weAreOwner) {
                             ready.setText("Start");
                             if (main.client.roomReady) {
                                 ready.setStyle(("-fx-background-color: #00ff00"));
                             } else {
                                 ready.setStyle("-fx-background-color: #ff0000");
                             }
-                        } else {
-                            System.out.println("Not the owner");
                         }
 
 
@@ -437,6 +432,7 @@ public class Lobby {
             public void handle(ActionEvent actionEvent) {
                 try {
                     main.client.createRoom(text1.getText());
+                    main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
                     addroombtns();
                 } catch (RoomExistsException e) {
                     text1.setText("");

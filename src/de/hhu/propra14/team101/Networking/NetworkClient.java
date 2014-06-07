@@ -24,6 +24,7 @@ public class NetworkClient {
     public Map<String, String> roomUsers = new HashMap<>();
     public String ourName;
     public boolean roomReady = false;
+    public boolean weAreOwner = false;
     public String color;
 
     private UUID uuid;
@@ -146,6 +147,8 @@ public class NetworkClient {
             this.roomUsers.put(line.split(" ")[1], "spectator");
         } else if (line.matches("room_left .+")) {
             this.roomUsers.remove(line.split(" ")[1]);
+        } else if (line.equals("youre_owner")) {
+            this.weAreOwner = true;
         } else if (line.equals("everyone_ready")) {
             this.roomReady = true;
         } else if (line.equals("everyone_not_ready")) {
@@ -232,6 +235,11 @@ public class NetworkClient {
         }
     }
 
+    public String getOwner() throws TimeoutException {
+        this.send("get_owner", true);
+        return this.lastAnswer;
+    }
+
     public boolean hasGlobalMessages() {
         return !(globalMessages.size() == 0);
     }
@@ -266,6 +274,10 @@ public class NetworkClient {
 
     public void switchReady() throws TimeoutException {
         this.send("ready", true);
+    }
+
+    public void changeMap(String name) throws TimeoutException {
+        this.send("change_map "+name, false);
     }
 
     public void nextWeapon() throws TimeoutException {

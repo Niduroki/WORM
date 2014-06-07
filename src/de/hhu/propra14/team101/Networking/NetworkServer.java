@@ -100,7 +100,10 @@ public class NetworkServer {
                         if (this.roomMap.containsKey(roomName)) {
                             answer = "exists";
                         } else {
-                            this.roomMap.put(roomName, new NetworkRoom(roomName, 0)); // TODO use the actual selected map instead of 0
+                            this.roomMap.put(
+                                    roomName,
+                                    new NetworkRoom(roomName, "Map1") // Map1 is a placeholder - for the case the initial change_map got lost
+                            );
                             currentUser.joinRoom(this.roomMap.get(roomName));
                             answer = "okay";
                         }
@@ -119,6 +122,8 @@ public class NetworkServer {
                         currentUser.leaveRoom();
                         if (room.empty) {
                             this.roomMap.remove(room.name);
+                        } else {
+                            room.users.get(0).send("youre_owner");
                         }
                         answer = "okay";
                     } else if (command.matches("change_team .+")) {
@@ -133,8 +138,19 @@ public class NetworkServer {
                             currentUser.team = team;
                         }
                         // Propagate
-                        currentUser.getCurrentRoom().propagate("change_team "+currentUser.name+" "+team);
+                        currentUser.getCurrentRoom().propagate("change_team " + currentUser.name + " " + team);
                         answer = "okay";
+                    } else if (command.matches("change_map .+")) {
+                        if (currentUser == currentUser.getCurrentRoom().users.get(0)) {
+                            currentUser.getCurrentRoom().selectedMap = command.split(" ")[1];
+                        }
+                        answer = "okay";
+                    } else if (command.equals("get_owner")) {
+                        if (currentUser.getCurrentRoom() != null) {
+                            answer = currentUser.getCurrentRoom().users.get(0).name;
+                        } else {
+                            answer = "error client no_room";
+                        }
                     } else if (command.matches("chat .+")) {
                         String message = command.substring(5);
                         for (NetworkUser user : userMap.values()) {
@@ -159,7 +175,7 @@ public class NetworkServer {
                     } else if (command.equals("start_game")) {
                         if (currentUser == currentUser.getCurrentRoom().users.get(0)) {
                             if (currentUser.getCurrentRoom().roomReady) {
-                                NetworkGame game = new NetworkGame(currentUser.getCurrentRoom(), "Map1"); // TODO pass the actual selected map here
+                                NetworkGame game = new NetworkGame(currentUser.getCurrentRoom());
                                 for (NetworkUser user : currentUser.getCurrentRoom().users) {
                                     user.game = game;
                                     user.send("game started");
