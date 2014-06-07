@@ -6,6 +6,7 @@ import java.util.Collections;
 public class NetworkRoom {
     public String name;
     public ArrayList<NetworkUser> users = new ArrayList<>();
+    public NetworkUser owner;
     public ArrayList<String> availableColors = new ArrayList<>();
     public boolean empty = false;
     public boolean roomReady = false;
@@ -19,11 +20,13 @@ public class NetworkRoom {
 
     public void addUser(NetworkUser user) {
         this.users.add(user);
+        this.updateOwner();
     }
 
     public void removeUser(NetworkUser user) {
         this.users.remove(user);
         this.updateEmpty();
+        this.updateOwner();
     }
 
     public void setRoomReady(boolean state) {
@@ -42,6 +45,10 @@ public class NetworkRoom {
         for (NetworkUser user : this.users) {
             user.send(line);
         }
+    }
+
+    private void updateOwner() {
+        this.owner = this.users.get(0);
     }
 
     private void updateEmpty() {

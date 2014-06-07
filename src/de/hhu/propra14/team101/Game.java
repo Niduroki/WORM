@@ -3,11 +3,17 @@ package de.hhu.propra14.team101;
 import com.sun.istack.internal.Nullable;
 import de.hhu.propra14.team101.Savers.LevelSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.canvas.*;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -35,6 +41,7 @@ public class Game {
     private Terrain currentTerrain;
     private int secondCounter = 0;
     private Image background;
+    protected Timeline timeline;
 
     /**
      * Initialize a new game.
@@ -214,7 +221,7 @@ public class Game {
     /**
      * Update game
      */
-    public void updateGame(GraphicsContext gc) {
+    public void updateGame() {
         if (this.online && !this.onlineCommandQueue.isEmpty()) {
             this.doAction(this.onlineCommandQueue.poll());
         }
@@ -283,10 +290,6 @@ public class Game {
                 }
             }
         }
-
-        if (!Main.headless) {
-            draw(gc);
-        }
     }
 
     public void nextRound() {
@@ -317,6 +320,53 @@ public class Game {
         }
     }
 
+    /**
+     * Starts the gameplay
+     */
+    public void startGameplay() {
+        this.startLevel();
+
+        // Load fps from settings
+        int fps;
+        SettingSaves loader = new SettingSaves();
+        try {
+            fps = Integer.parseInt((String) loader.load("settings.gz").get("fps"));
+        } catch (FileNotFoundException | NullPointerException | NumberFormatException e) {
+            fps = 16;
+        }
+
+        //Prepare updating game
+        final Duration oneFrameAmt = Duration.millis(1000/fps);
+        final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
+                new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        if(gameFinished)
+                        {
+                            stopUpdating();
+                        } else{
+                            updateGame();
+                            if (!Main.headless) {
+                                draw(gc);
+                            }
+                            //System.out.println("Ausgabe");
+                        }
+
+                    }
+                });
+
+        if (!Main.headless) {
+            // Construct a timeline with the mainloop
+            this.timeline = new Timeline(keyFrame);
+            this.timeline.setCycleCount(Animation.INDEFINITE);
+            this.timeline.play();
+        }
+    }
+
+    private void stopUpdating() {
+        this.timeline.stop();
+        //this.gui.winScreen(game.getPlayers().get(0).name);
+    }
+
     public void doAction(String action) {
         if (action.equals("move_right")) {
             int currentWorm = players.get(this.turnOfPlayer).currentWorm;
@@ -324,6 +374,14 @@ public class Game {
         } else if (action.equals("move_left")) {
             int currentWorm = players.get(this.turnOfPlayer).currentWorm;
             players.get(this.turnOfPlayer).wormList.get(currentWorm).move('l');
+        } else if (action.equals("pause")) {
+            this.paused = !this.paused;
+        } else if (action.matches("fire .+ .+")) {
+            Worm currentWorm = players.get(this.turnOfPlayer).wormList.get(players.get(this.turnOfPlayer).currentWorm);
+            // Don't fire without a weapon
+            if (currentWorm.weaponList.size() != 0) {
+                this.fireBullet(currentWorm.fireWeapon(Double.parseDouble(action.split(" ")[1]), Double.parseDouble(action.split(" ")[2])));
+            }
         }
     }
 

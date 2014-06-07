@@ -301,7 +301,9 @@ public class GUI {
                 main.grid.add(main.field, 0, 0);
                 main.game = new Game(main.players);
                 main.game.loadLevel(mapSelection.getValue());
-                main.startGameplay();
+                main.initializeHandlers();
+                main.game.gc = main.field.getGraphicsContext2D();
+                main.game.startGameplay();
             }
         });
     }

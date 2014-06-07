@@ -26,28 +26,35 @@ public class NetworkGame {
                 Collections.addAll(worms, new Worm(weapons, true), new Worm(weapons, true));
                 Player tmpPlayer = new Player(worms, user.name);
                 tmpPlayer.color = Color.RED;
-                if (user.team.equals("red")) {
-                    tmpPlayer.color = Color.RED;
-                } else if (user.team.equals("blue")) {
-                    tmpPlayer.color = Color.BLUE;
-                } else if (user.team.equals("green")) {
-                    tmpPlayer.color = Color.GREEN;
-                } else if (user.team.equals("yellow")) {
-                    tmpPlayer.color = Color.YELLOW;
-                } else {
-                    tmpPlayer.color = Color.BROWN;
+                switch (user.team) {
+                    case "red":
+                        tmpPlayer.color = Color.RED;
+                        break;
+                    case "blue":
+                        tmpPlayer.color = Color.BLUE;
+                        break;
+                    case "green":
+                        tmpPlayer.color = Color.GREEN;
+                        break;
+                    case "yellow":
+                        tmpPlayer.color = Color.YELLOW;
+                        break;
+                    default:
+                        tmpPlayer.color = Color.BROWN;
+                        break;
                 }
                 players.add(tmpPlayer);
             }
         }
         this.game = new Game(players);
         this.game.loadLevel(room.selectedMap);
-        this.game.startLevel();
+        this.game.startGameplay();
     }
 
     public void doAction(NetworkUser user, String line) {
+        System.out.println("Turn of:"+this.game.turnOfPlayer+",sender:"+this.room.users.indexOf(user));
         if (this.game.turnOfPlayer == this.room.users.indexOf(user)) {
-            Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
+            Worm currentWorm = this.game.getPlayers().get(this.game.turnOfPlayer).wormList.get(this.game.getPlayers().get(this.game.turnOfPlayer).currentWorm);
             if (line.equals("move_left")) {
                 currentWorm.move('l');
             } else if (line.equals("move_right")) {
@@ -60,13 +67,12 @@ public class NetworkGame {
                 // Don't fire without a weapon
                 if (currentWorm.weaponList.size() != 0) {
                     String[] coords = line.split(" ");
-                    game.fireBullet(currentWorm.fireWeapon(Double.parseDouble(coords[1]), Double.parseDouble(coords[2])));
+                    this.game.fireBullet(currentWorm.fireWeapon(Double.parseDouble(coords[1]), Double.parseDouble(coords[2])));
                 }
+            } else if (line.equals("pause") && user == this.room.owner) {
+                this.game.paused = !this.game.paused;
             }
-            for (NetworkUser anUser: this.room.users) {
-                // Propagate the action
-                anUser.send("game " + line);
-            }
+            this.room.propagate("game " + line);
         }
         // Just don't do anything otherwise
     }

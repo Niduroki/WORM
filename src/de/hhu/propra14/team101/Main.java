@@ -8,23 +8,17 @@ import java.util.ResourceBundle;
 import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
-import de.hhu.propra14.team101.Savers.SettingSaves;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.util.Duration;
 
 
 /**
@@ -38,7 +32,6 @@ public class Main extends Application implements Initializable {
     protected Stage primaryStage;
     //private int jumping = 0;
     //private Worm jumpingWorm;
-    private Timeline timeline;
     protected ArrayList<Player> players;
     protected ArrayList<String> availableColors;
     protected NetworkClient client;
@@ -82,12 +75,7 @@ public class Main extends Application implements Initializable {
         grid.setStyle("-fx-background-color: #00BFFF");
     }
 
-    /**
-     * Starts the gameplay
-     */
-    public void startGameplay() {
-        assert this.game != null;
-
+    public void initializeHandlers() {
         final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -98,13 +86,13 @@ public class Main extends Application implements Initializable {
                 if (mouseEvent.isSecondaryButtonDown()) {
                     if (game.turnOfPlayer < game.getPlayers().size()) {
                         if (game.online) {
-                            //
-                        } else {
-                            Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
-                            // Don't fire without a weapon
-                            if (currentWorm.weaponList.size() != 0) {
-                                game.fireBullet(currentWorm.fireWeapon(mouseEvent.getX(), mouseEvent.getY()));
+                            try {
+                                client.fireWeapon((int) mouseEvent.getX(), (int) mouseEvent.getY());
+                            } catch (TimeoutException e) {
+                                //
                             }
+                        } else {
+                            game.doAction("fire "+String.valueOf((int) mouseEvent.getX())+" "+String.valueOf((int) mouseEvent.getY()));
                         }
                     }
                 }
@@ -153,7 +141,7 @@ public class Main extends Application implements Initializable {
                 }
                 if (keyEvent.getCode() == KeyCode.ESCAPE && !game.online) {
                     // Close the game
-                    timeline.stop();
+                    game.timeline.stop();
                     gui.addMainButtons();
                     // Remove old handlers
                     primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
@@ -191,9 +179,23 @@ public class Main extends Application implements Initializable {
                     // Show the inventory
                 } else if (keyEvent.getCode() == KeyCode.P) {
                     // (Un-)Pause the game
-                    game.paused = !game.paused;
+                    if (game.online) {
+                        try {
+                            client.pause();
+                        } catch (TimeoutException e) {
+                            //
+                        }
+                    } else {
+                        game.doAction("pause");
+                    }
                 } else if (keyEvent.getCode() == KeyCode.T && game.online) {
                     // Show the chat ingame here
+                } else if (keyEvent.getCode() == KeyCode.X && game.online) {
+                    try {
+                        client.requestSyncGame();
+                    } catch (TimeoutException e) {
+                        //
+                    }
                 } else if (keyEvent.getCode() == KeyCode.S && !game.online) {
                     // Save a game
                     GameSaves saver = new GameSaves();
@@ -213,45 +215,6 @@ public class Main extends Application implements Initializable {
         this.primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keypressHandler);
         this.primaryStage.getScene().addEventHandler(MouseEvent.ANY, mouseHandler);
         this.primaryStage.getScene().addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-
-        this.game.gc = this.field.getGraphicsContext2D();
-        this.game.startLevel();
-
-        // Load fps from settings
-        int fps;
-        SettingSaves loader = new SettingSaves();
-        try {
-            fps = Integer.parseInt((String) loader.load("settings.gz").get("fps"));
-        } catch (FileNotFoundException | NullPointerException | NumberFormatException e) {
-            fps = 16;
-        }
-
-        //Prepare updating game
-        final Duration oneFrameAmt = Duration.millis(1000/fps);
-        final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
-                new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent event) {
-                        if(game.isGameFinished())
-                        {
-                           stopUpdating();
-                           gui.winScreen(game.getPlayers().get(0).name);
-                        } else{
-                            game.updateGame(field.getGraphicsContext2D());
-                            //System.out.println("Ausgabe");
-                        }
-                       
-                    }
-                });
-
-        // Construct a timeline with the mainloop
-        this.timeline = new Timeline(keyFrame);
-        this.timeline.setCycleCount(Animation.INDEFINITE);
-        this.timeline.play();
-    }
-
-    private void stopUpdating() {
-        this.timeline.stop();
-        this.gui.winScreen(game.getPlayers().get(0).name);
     }
 }
 

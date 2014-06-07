@@ -283,11 +283,15 @@ public class NetworkClient {
     }
 
     public void nextWeapon() throws TimeoutException {
-        this.send("next_weapon", true);
+        this.send("game next_weapon", true);
     }
 
     public void prevWeapon() throws TimeoutException {
-        this.send("prev_weapon", true);
+        this.send("game prev_weapon", true);
+    }
+
+    public void fireWeapon(int x, int y) throws TimeoutException {
+        this.send("game fire "+String.valueOf(x)+" "+String.valueOf(y), true);
     }
 
     public void move(char direction) throws TimeoutException {
@@ -296,6 +300,10 @@ public class NetworkClient {
         } else if (direction == 'r') {
             this.send("game move_right", true);
         }
+    }
+
+    public void pause() throws TimeoutException {
+        this.send("game pause", true);
     }
 
     public void startGame() throws TimeoutException {
