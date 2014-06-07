@@ -139,7 +139,8 @@ public class Main extends Application implements Initializable {
                     // Don't do anything
                     return;
                 }
-                if (keyEvent.getCode() == KeyCode.ESCAPE && !game.online) {
+                // Only allow this when we're not online, but if we're online allow it when the game is finished
+                if (keyEvent.getCode() == KeyCode.ESCAPE && (game.isGameFinished() || !game.online)) {
                     // Close the game
                     game.timeline.stop();
                     gui.addMainButtons();

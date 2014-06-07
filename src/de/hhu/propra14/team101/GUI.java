@@ -308,40 +308,6 @@ public class GUI {
         });
     }
 
-    public void winScreen(String winner) {
-        // Clean up
-        main.grid.getChildren().clear();
-
-        // Create buttons and other objects
-        BorderPane border = new BorderPane();
-        border.setPadding(new Insets(20, 0, 20, 20));
-
-        Text scenetitle = new Text("Player "+winner+" won!");
-        Button returnbtn = new Button("Return");
-
-        returnbtn.setMaxWidth(Double.MAX_VALUE);
-
-        VBox vbButtons = new VBox();
-        vbButtons.setSpacing(10);
-        vbButtons.setPadding(new Insets(0, 20, 10, 20));
-        vbButtons.getChildren().add(returnbtn);
-
-
-        // Configure each object
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-
-        // Add the objects
-        this.main.grid.add(scenetitle, 0, 0, 2, 1);
-        this.main.grid.add(returnbtn, 1, 2);
-
-        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                addMainButtons();
-            }
-        });
-    }
-
     private Player parsePlayerSelection(Map<String, Boolean> weaponMap, String colorName, String playerName) {
         ArrayList<AbstractWeapon> weapons = new ArrayList<>();
         if (weaponMap.get("AtomicBomb")) {
