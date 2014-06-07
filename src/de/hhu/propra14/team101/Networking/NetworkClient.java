@@ -24,6 +24,7 @@ public class NetworkClient {
     public Map<String, String> roomUsers = new HashMap<>();
     public String ourName;
     public boolean roomReady = false;
+    public String color;
 
     private UUID uuid;
     private PrintWriter output;
@@ -289,6 +290,7 @@ public class NetworkClient {
 
     public void changeColor(String team) throws TimeoutException {
         this.send("change_team " + team, false);
+        this.color = team;
     }
 
     /**

@@ -161,18 +161,14 @@ public class Lobby {
 
 
         final ComboBox<String> team = new ComboBox<>();
-        team.getItems().add("Red");
-        team.getItems().add("Blue");
-        team.getItems().add("Green");
-        team.getItems().add("Yellow");
-        team.getItems().add("Spectator");
+        team.getItems().addAll("Red", "Blue", "Green", "Yellow", "Spectator");
         team.setValue("Spectator");
 
-        team.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        team.setOnHiding(new EventHandler<Event>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            public void handle(Event event) {
                 try {
-                    main.client.changeColor(newValue.toLowerCase());
+                    main.client.changeColor(team.getSelectionModel().getSelectedItem().toLowerCase());
                 } catch (TimeoutException e) {
                     //
                 }
@@ -357,6 +353,19 @@ public class Lobby {
                             data.add(new String[]{user.getKey(), color});
                         }
                         list.setItems(data);
+
+                        String selection = team.getSelectionModel().getSelectedItem();
+                        team.getItems().clear();
+                        team.getItems().addAll("Red", "Blue", "Green", "Yellow", "Spectator");
+                        ArrayList<String> usedColors = new ArrayList<>();
+                        for (String color: main.client.roomUsers.values()) {
+                            if (!color.equals("spectator") || !color.equals(main.client.color)) {
+                                // Capitalize
+                                usedColors.add(Character.toUpperCase(color.charAt(0)) + color.substring(1));
+                            }
+                        }
+                        team.getItems().removeAll(usedColors);
+                        team.getSelectionModel().select(selection);
 
                         if (Game.startMe) {
                             roomTimeline.stop();
