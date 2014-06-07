@@ -44,7 +44,6 @@ public class Main extends Application implements Initializable {
     protected NetworkClient client;
     protected GUI gui;
     protected Lobby lobby;
-    public boolean isOnlineGame = false;
 
     public static boolean headless = false;
 
@@ -98,13 +97,14 @@ public class Main extends Application implements Initializable {
                 }
                 if (mouseEvent.isSecondaryButtonDown()) {
                     if (game.turnOfPlayer < game.getPlayers().size()) {
-                        if (isOnlineGame) {
+                        if (game.online) {
                             //
-                        }
-                        Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
-                        // Don't fire without a weapon
-                        if (currentWorm.weaponList.size() != 0) {
-                            game.fireBullet(currentWorm.fireWeapon(mouseEvent.getX(), mouseEvent.getY()));
+                        } else {
+                            Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
+                            // Don't fire without a weapon
+                            if (currentWorm.weaponList.size() != 0) {
+                                game.fireBullet(currentWorm.fireWeapon(mouseEvent.getX(), mouseEvent.getY()));
+                            }
                         }
                     }
                 }
@@ -121,23 +121,25 @@ public class Main extends Application implements Initializable {
                 // Scrolled up
                 Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
                 if (scrollEvent.getDeltaY() > 0) {
-                    if (isOnlineGame) {
+                    if (game.online) {
                         try {
                             client.nextWeapon();
                         } catch (TimeoutException e) {
                             //
                         }
+                    } else {
+                        currentWorm.nextWeapon();
                     }
-                    currentWorm.nextWeapon();
                 } else if (scrollEvent.getDeltaY() < 0) { // Scrolled down
-                    if (isOnlineGame) {
+                    if (game.online) {
                         try {
                             client.prevWeapon();
                         } catch (TimeoutException e) {
                             //
                         }
+                    } else {
+                        currentWorm.prevWeapon();
                     }
-                    currentWorm.prevWeapon();
                 }
             }
         };
@@ -149,7 +151,7 @@ public class Main extends Application implements Initializable {
                     // Don't do anything
                     return;
                 }
-                if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                if (keyEvent.getCode() == KeyCode.ESCAPE && !game.online) {
                     // Close the game
                     timeline.stop();
                     gui.addMainButtons();
@@ -166,39 +168,37 @@ public class Main extends Application implements Initializable {
                     //    jumpingWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm);
                     //}
                 } else if (keyEvent.getCode() == KeyCode.LEFT) {
-                    if (isOnlineGame) {
+                    if (game.online) {
                         try {
                             client.move('l');
                         } catch (TimeoutException e) {
                             //
                         }
+                    } else {
+                        game.doAction("move_left");
                     }
-                    int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
-                    game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('l');
                 } else if (keyEvent.getCode() == KeyCode.RIGHT) {
-                    int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
-                    game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('r');
-                    if (isOnlineGame) {
+                    if (game.online) {
                         try {
                             client.move('r');
                         } catch (TimeoutException e) {
                             //
                         }
+                    } else {
+                        game.doAction("move_right");
                     }
                 } else if (keyEvent.getCode() == KeyCode.I) {
                     // Show the inventory
                 } else if (keyEvent.getCode() == KeyCode.P) {
                     // (Un-)Pause the game
                     game.paused = !game.paused;
-                } else if (keyEvent.getCode() == KeyCode.T) {
-                    if (isOnlineGame) {
-                        // Show the chat ingame here
-                    }
-                } else if (keyEvent.getCode() == KeyCode.S) {
+                } else if (keyEvent.getCode() == KeyCode.T && game.online) {
+                    // Show the chat ingame here
+                } else if (keyEvent.getCode() == KeyCode.S && !game.online) {
                     // Save a game
                     GameSaves saver = new GameSaves();
                     saver.save(game, "GameSave.gz");
-                } else if (keyEvent.getCode() == KeyCode.L) {
+                } else if (keyEvent.getCode() == KeyCode.L && !game.online) {
                     // Load a game
                     GameSaves loader = new GameSaves();
                     try {

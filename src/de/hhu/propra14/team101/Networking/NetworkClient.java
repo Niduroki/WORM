@@ -175,6 +175,8 @@ public class NetworkClient {
             this.main.game = Game.deserialize((Map<String, Object>) yaml.load(command.substring(5).replace(';', '\n')));
             this.main.game.online = true;
             Game.startMe = true;
+        } else {
+            this.main.game.doAction(command);
         }
     }
 
@@ -290,9 +292,9 @@ public class NetworkClient {
 
     public void move(char direction) throws TimeoutException {
         if (direction == 'l') {
-            this.send("move_left", true);
+            this.send("game move_left", true);
         } else if (direction == 'r') {
-            this.send("move_right", true);
+            this.send("game move_right", true);
         }
     }
 

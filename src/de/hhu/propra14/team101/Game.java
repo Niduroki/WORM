@@ -24,6 +24,7 @@ public class Game {
     public int roundTimer = 20;
     public int fps = 16;
     public GraphicsContext gc;
+    public Queue<String> onlineCommandQueue = new PriorityQueue<>();
     // Necessary to tell the lobby javafx process to start the game now
     public static boolean startMe = false;
 
@@ -214,6 +215,9 @@ public class Game {
      * Update game
      */
     public void updateGame(GraphicsContext gc) {
+        if (this.online && !this.onlineCommandQueue.isEmpty()) {
+            this.doAction(this.onlineCommandQueue.poll());
+        }
 
         if (!this.paused) {
             this.secondCounter += 1;
@@ -310,6 +314,16 @@ public class Game {
 
         if (!Main.headless) {
             draw(this.gc);
+        }
+    }
+
+    public void doAction(String action) {
+        if (action.equals("move_right")) {
+            int currentWorm = players.get(this.turnOfPlayer).currentWorm;
+            players.get(this.turnOfPlayer).wormList.get(currentWorm).move('r');
+        } else if (action.equals("move_left")) {
+            int currentWorm = players.get(this.turnOfPlayer).currentWorm;
+            players.get(this.turnOfPlayer).wormList.get(currentWorm).move('l');
         }
     }
 

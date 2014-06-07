@@ -19,13 +19,26 @@ public class NetworkGame {
         // TODO construct an ArrayList<Player> from room here
         ArrayList<Player> players = new ArrayList<>();
         for (NetworkUser user: room.users) {
-            ArrayList<Worm> worms = new ArrayList<>();
-            ArrayList<AbstractWeapon> weapons = new ArrayList<>();
-            weapons.add(new Bazooka());
-            Collections.addAll(worms, new Worm(weapons, true), new Worm(weapons, true));
-            Player tmpPlayer = new Player(worms, user.name);
-            tmpPlayer.color = Color.RED;
-            players.add(tmpPlayer);
+            if (!user.team.equals("spectator")) {
+                ArrayList<Worm> worms = new ArrayList<>();
+                ArrayList<AbstractWeapon> weapons = new ArrayList<>();
+                weapons.add(new Bazooka());
+                Collections.addAll(worms, new Worm(weapons, true), new Worm(weapons, true));
+                Player tmpPlayer = new Player(worms, user.name);
+                tmpPlayer.color = Color.RED;
+                if (user.team.equals("red")) {
+                    tmpPlayer.color = Color.RED;
+                } else if (user.team.equals("blue")) {
+                    tmpPlayer.color = Color.BLUE;
+                } else if (user.team.equals("green")) {
+                    tmpPlayer.color = Color.GREEN;
+                } else if (user.team.equals("yellow")) {
+                    tmpPlayer.color = Color.YELLOW;
+                } else {
+                    tmpPlayer.color = Color.BROWN;
+                }
+                players.add(tmpPlayer);
+            }
         }
         this.game = new Game(players);
         this.game.loadLevel(room.selectedMap);

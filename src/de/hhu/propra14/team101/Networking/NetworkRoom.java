@@ -14,7 +14,7 @@ public class NetworkRoom {
     public NetworkRoom(String name, String selectedMap) {
         this.name = name;
         this.selectedMap = selectedMap;
-        Collections.addAll(availableColors, "Red", "Blue", "Green", "Yellow");
+        Collections.addAll(availableColors, "red", "blue", "green", "yellow");
     }
 
     public void addUser(NetworkUser user) {
