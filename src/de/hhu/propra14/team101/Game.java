@@ -265,7 +265,7 @@ public class Game {
             }
 
             if (bulletFired) {
-                bullet.physics.move();
+                bullet.physics.move(4);
                 ArrayList<Worm> wormArrayList = new ArrayList<>();
                 for (Player playerItem : this.getPlayers()) {
                     wormArrayList.addAll(playerItem.wormList);
@@ -273,9 +273,9 @@ public class Game {
                 Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
                 Collision collision;
                 if (Main.headless) {
-                    collision = bullet.physics.hasCollision(currentWorm, wormArrayList, 600, 400);
+                    collision = bullet.physics.hasCollision(currentWorm, wormArrayList, this.getCurrentTerrain(), 600, 400);
                 } else {
-                    collision = bullet.physics.hasCollision(currentWorm, wormArrayList, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+                    collision = bullet.physics.hasCollision(currentWorm, wormArrayList, this.getCurrentTerrain(),  gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
                 }
                 if (collision != null) {
                     switch (collision.getType()) {
@@ -284,6 +284,7 @@ public class Game {
                             bulletFired = false;
                             nextRound();
                             break;
+                        case Terrain:
                         case TopOrDown:
                             bulletFired = false;
                             nextRound();

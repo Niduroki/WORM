@@ -92,8 +92,6 @@ public class Main extends Application implements Initializable {
         primaryStage.setScene(scene);
         primaryStage.show();
         grid.setStyle("-fx-background-color: #00BFFF");
-
-        
     }
 
     public class SecondWindow extends Application
@@ -256,4 +254,3 @@ public class Main extends Application implements Initializable {
         this.primaryStage.getScene().addEventHandler(ScrollEvent.SCROLL, scrollHandler);
     }
 }
-
