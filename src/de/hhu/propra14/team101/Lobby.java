@@ -302,7 +302,7 @@ public class Lobby {
                             main.client.startGame();
                             roomTimeline.stop();
                             Stage stage = new Stage();
-                            InagmeChat sw = new InagmeChat();
+                            IngameChat sw = new IngameChat();
                             sw.start(stage);
 
                         }
@@ -567,7 +567,10 @@ public class Lobby {
     }
 
 
-    public class InagmeChat extends Application {
+    public class IngameChat extends Application {
+
+        private Timeline ingameTimeline;
+        private TextArea ingameChatArea;
 
         @Override
         public void start(Stage primaryStage) {
@@ -579,17 +582,49 @@ public class Lobby {
             grid.setVgap(10);
             grid.setPadding(new Insets(25, 25, 25, 25));
 
-            //TODO extra timeline for second window
-            // globalChatArea = new TextArea();
-            //globalChatArea.setEditable(false);
-            // globalChatArea.setWrapText(false);
+            ingameChatArea = new TextArea();
+            ingameChatArea.setEditable(false);
+            ingameChatArea.setWrapText(false);
 
-            final ListView userlist = new ListView<String>();
-            String[] users = new String[0];
-            userlist.setItems(FXCollections.observableArrayList(users));
+            final ListView<String[]> userList = new ListView<>();
+            try {
+                main.client.loadRoomUsers();
 
-            userlist.setMaxWidth(150);
-            userlist.setMaxHeight(200);
+                ObservableList<String[]> data = FXCollections.observableArrayList();
+                for (Map.Entry<String, String> user : main.client.roomUsers.entrySet()) {
+                    String color;
+                    if (!user.getValue().equals("spectator")) {
+                        if (user.getValue().equals("red")) {
+                            color = "FF0000";
+                        } else if (user.getValue().equals("blue")) {
+                            color = "0044FF";
+                        } else if (user.getValue().equals("green")) {
+                            color = "00FF00";
+                        } else if (user.getValue().equals("yellow")) {
+                            color = "FFFF00";
+                        } else {
+                            color = "000000";
+                        }
+                    } else {
+                        color = "FFFFFF";
+                    }
+                    data.add(new String[]{user.getKey(), color});
+                }
+                userList.setItems(data);
+                userList.setCellFactory(
+                        new Callback<ListView<String[]>, ListCell<String[]>>() {
+                            @Override
+                            public ListCell<String[]> call(ListView<String[]> list) {
+                                return new ColoredListCell();
+                            }
+                        }
+                );
+            } catch (TimeoutException exceptionName) {
+                System.out.println(exceptionName.getMessage());
+            }
+
+            userList.setMaxWidth(150);
+            userList.setMaxHeight(200);
 
             final TextField chatField = new TextField("");
             final EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>() {
@@ -610,17 +645,61 @@ public class Lobby {
                 }
             };
             chatField.addEventHandler(KeyEvent.KEY_RELEASED, handler);
+
             // Add the objects
-            grid.add (userlist,3,0,5,20);
-            grid.add(globalChatArea, 0, 0, 3, 20);
+            grid.add (userList,3,0,5,20);
+            grid.add(ingameChatArea, 0, 0, 3, 20);
             grid.add(chatField, 0, 17, 3, 9);
 
-
-            //this.grid.setGridLinesVisible(true);
             primaryStage.setScene(new Scene(grid, 450, 300));
             primaryStage.show();
             grid.setStyle("-fx-background-color: #00BFFF");
 
+
+            //Prepare updating the chat
+            final Duration oneFrameAmt = Duration.seconds(1);
+            final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
+                    new EventHandler<ActionEvent>() {
+                        public void handle(ActionEvent event) {
+                            if (main.client.hasRoomMessages()) {
+                                ingameChatArea.appendText(main.client.getLastRoomMessage() + "\n");
+                            }
+
+                            ObservableList<String[]> data = FXCollections.observableArrayList();
+                            for (Map.Entry<String, String> user : main.client.roomUsers.entrySet()) {
+                                String color;
+                                if (!user.getValue().equals("spectator")) {
+                                    if (user.getValue().equals("red")) {
+                                        color = "FF0000";
+                                    } else if (user.getValue().equals("blue")) {
+                                        color = "0044FF";
+                                    } else if (user.getValue().equals("green")) {
+                                        color = "00FF00";
+                                    } else if (user.getValue().equals("yellow")) {
+                                        color = "FFFF00";
+                                    } else {
+                                        color = "000000";
+                                    }
+                                } else {
+                                    color = "FFFFFF";
+                                }
+                                data.add(new String[]{user.getKey(), color});
+                            }
+                            userList.setItems(data);
+
+                            if (main.client.kicked) {
+                                ingameTimeline.stop();
+                                addMpButtons();
+                                main.client.kicked = false;
+                            }
+                        }
+                    }
+            );
+
+            // Construct a timeline with the loop
+            this.ingameTimeline = new Timeline(keyFrame);
+            this.ingameTimeline.setCycleCount(Animation.INDEFINITE);
+            this.ingameTimeline.play();
         }
 
     }
