@@ -611,13 +611,13 @@ public class Lobby {
             };
             chatField.addEventHandler(KeyEvent.KEY_RELEASED, handler);
             // Add the objects
-            grid.add (userlist,3,3,5,5);
-            grid.add(globalChatArea, 0, 3, 3, 5);
-            grid.add(chatField, 0, 7, 3, 9);
+            grid.add (userlist,3,0,5,20);
+            grid.add(globalChatArea, 0, 0, 3, 20);
+            grid.add(chatField, 0, 17, 3, 9);
 
 
             //this.grid.setGridLinesVisible(true);
-            primaryStage.setScene(new Scene(grid, 300, 200));
+            primaryStage.setScene(new Scene(grid, 450, 300));
             primaryStage.show();
             grid.setStyle("-fx-background-color: #00BFFF");
 
