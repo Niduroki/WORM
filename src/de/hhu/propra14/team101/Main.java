@@ -2,6 +2,7 @@ package de.hhu.propra14.team101;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -23,6 +24,7 @@ import javafx.geometry.Pos;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import org.newdawn.easyogg.OggClip;
 
 /**
  * Main class, that starts the program
@@ -57,10 +59,18 @@ public class Main extends Application implements Initializable {
      */
     @Override
     public void start (final Stage primaryStage){
-        final String resource = new File("resources/music/Main-Theme.mp3").toURI().toString();
-        final Media media = new Media(resource);
-        final MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+        try {
+            OggClip ogg = new OggClip("music/Main-Theme.ogg");
+            ogg.loop();
+            /*ogg.setBalance(-1.0f);
+            ogg.play();
+            ogg.pause();
+            ogg.resume();
+            ogg.stop();
+            ogg.setGain(1.0f);*/
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.gui = new GUI(this);
         this.lobby = new Lobby(this);
 
