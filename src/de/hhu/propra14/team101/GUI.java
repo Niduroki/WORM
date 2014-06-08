@@ -70,8 +70,8 @@ public class GUI {
         startbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                main.players = new ArrayList<Player>();
-                main.availableColors = new ArrayList<String>();
+                main.players = new ArrayList<>();
+                main.availableColors = new ArrayList<>();
                 main.availableColors.add("Red");
                 main.availableColors.add("Green");
                 main.availableColors.add("Blue");

@@ -64,7 +64,6 @@ public class Main extends Application implements Initializable {
         this.gui = new GUI(this);
         this.lobby = new Lobby(this);
 
-
         primaryStage.setTitle("Name");
         this.grid = new GridPane();
         this.grid.setAlignment(Pos.CENTER);
