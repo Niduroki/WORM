@@ -31,6 +31,13 @@ public class GZipper {
             while ((line = reader.readLine()) != null) {
                 out += line + "\n";
             }
+            try {
+                stream.close();
+                zipper.close();
+                reader.close();
+            } catch (IOException e) {
+                //
+            }
             return out;
         } catch (FileNotFoundException e) {
             throw e;

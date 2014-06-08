@@ -7,3 +7,4 @@ Some magical key-combinations:
  - Mousewheel to scroll weapons
  - S to save a game
  - L to load a game
+ - X to sync an online game
