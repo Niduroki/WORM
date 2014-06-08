@@ -21,6 +21,7 @@ abstract public class AbstractWeapon {
     /** Graphic of the weapon */
     public Image image;
 
+
     abstract public Bullet fire (Physics physics);
 
     public Map serialize() {
