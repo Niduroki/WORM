@@ -4,7 +4,15 @@ import java.io.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * Class to gzip data
+ */
 public class GZipper {
+    /**
+     * Compresses a string
+     * @param input String to compress
+     * @return Compressed data in a byte array
+     */
     public static byte[] gzip(String input) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try {
@@ -18,10 +26,22 @@ public class GZipper {
         return bytes.toByteArray();
     }
 
+    /**
+     * Uncompresses a string
+     * @param path Path to uncompress
+     * @return Uncompressed String
+     * @throws FileNotFoundException If file not found
+     */
     public static String gunzip (String path) throws FileNotFoundException {
         return GZipper.gunzip(new FileInputStream(path));
     }
 
+    /**
+     * Uncompresses a String
+     * @param stream Stream to uncompress
+     * @return Uncompressed String
+     * @throws FileNotFoundException If file not found
+     */
     public static String gunzip (InputStream stream) throws FileNotFoundException {
         try {
             GZIPInputStream zipper = new GZIPInputStream(stream);

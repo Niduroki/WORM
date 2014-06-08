@@ -12,11 +12,12 @@ import java.util.Map;
 public class LevelSaves extends AbstractSaver {
 
     /**
-     * @param path Path to load from
-     * @return Level
-     * @throws java.io.FileNotFoundException
      * Loads a map from a yaml file
+     * @param path Path to load from
+     * @return loaded Level
+     * @throws java.io.FileNotFoundException If file not found
      */
+
     public Level load (String path) throws FileNotFoundException {
         String data;
         try {
@@ -31,6 +32,7 @@ public class LevelSaves extends AbstractSaver {
     }
 
     /**
+     * Saves Game
      * @param level level to save
      * @param path path to save to
      */

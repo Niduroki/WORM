@@ -12,17 +12,19 @@ import java.util.*;
 public class MapSaves extends AbstractSaver {
 
     /**
+     * Loads a map from a yaml file
      * @param path Path to load from
      * @return The 2-dimensional map
-     * @throws FileNotFoundException
-     * Loads a map from a yaml file
+     * @throws FileNotFoundException If file not found
      */
+
     public Terrain load (String path) throws FileNotFoundException {
         ArrayList<ArrayList<Map>> rawTerrain = (ArrayList<ArrayList<Map>>) this.yaml.load(GZipper.gunzip(path));
         return Terrain.deserialize(rawTerrain);
     }
 
     /**
+     * Saves a map
      * @param terrain 2-dimensional map to save
      * @param path path to save to
      */

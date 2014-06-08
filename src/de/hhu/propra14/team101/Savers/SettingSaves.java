@@ -10,6 +10,7 @@ import java.util.Map;
 public class SettingSaves extends AbstractSaver {
 
     /**
+     * Saves Settings
      * @param data Settings data
      * @param path Path to save to
      */
@@ -26,7 +27,9 @@ public class SettingSaves extends AbstractSaver {
     }
 
     /**
+     * Loaded Settings
      * @param path Path to settings file
+     * @return Map with Settings data
      */
     public Map load(String path) throws FileNotFoundException {
         Map<String, Object> data = (Map<String, Object>) this.yaml.load(GZipper.gunzip(path));
