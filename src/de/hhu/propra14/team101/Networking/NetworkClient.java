@@ -143,8 +143,8 @@ public class NetworkClient {
                 roomMessages.add(user + ">: " + message);
             }
         } else if (line.matches("change_team .+ .+")) {
-            // TODO this is an error somehow (replace() isn't found)
-            //this.roomUsers.replace(line.split(" ")[1], line.split(" ")[2]);
+            this.roomUsers.remove(line.split(" ")[1]);
+            this.roomUsers.put(line.split(" ")[1], line.split(" ")[2]);
         } else if (line.matches("room_joined .+")) {
             this.roomUsers.put(line.split(" ")[1], "spectator");
         } else if (line.matches("room_left .+")) {
