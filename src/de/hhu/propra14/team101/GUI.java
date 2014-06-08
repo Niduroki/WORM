@@ -19,10 +19,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import org.newdawn.easyogg.OggClip;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -298,18 +296,6 @@ public class GUI {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                try {
-                    OggClip ogg = new OggClip("music/Main-Theme.ogg");
-                    ogg.loop();
-                    /*ogg.setBalance(-1.0f);
-                    ogg.play();
-                    ogg.pause();
-                    ogg.resume();
-                    ogg.stop();
-                    ogg.setGain(1.0f);*/
-                } catch (IOException f) {
-                    f.printStackTrace();
-                }
                 main.field = new Canvas(600, 400);
                 main.grid.getChildren().clear();
                 main.grid.add(main.field, 0, 0);
