@@ -25,6 +25,7 @@ public class NetworkClient {
     public String ourName;
     public boolean roomReady = false;
     public boolean weAreOwner = false;
+    public boolean kicked = false;
     public String color;
 
     private UUID uuid;
@@ -149,6 +150,8 @@ public class NetworkClient {
             this.roomUsers.remove(line.split(" ")[1]);
         } else if (line.equals("youre_owner")) {
             this.weAreOwner = true;
+        } else if (line.equals("youre_kicked")) {
+            this.kicked = true;
         } else if (line.equals("everyone_ready")) {
             this.roomReady = true;
         } else if (line.equals("everyone_not_ready")) {
@@ -258,10 +261,10 @@ public class NetworkClient {
         return roomMessages.poll();
     }
 
-    public String[] getUsers() throws TimeoutException {
+    /*public String[] getUsers() throws TimeoutException {
         this.send("list_users", true);
         return this.lastAnswer.split(",");
-    }
+    }*/
 
     public void loadRoomUsers() throws TimeoutException {
         this.send("list_room_users", true);
@@ -313,6 +316,10 @@ public class NetworkClient {
     public void changeColor(String team) throws TimeoutException {
         this.send("change_team " + team, false);
         this.color = team;
+    }
+
+    public void kickUser (String name) throws TimeoutException {
+        this.send("kick_user " + name, false);
     }
 
     /**

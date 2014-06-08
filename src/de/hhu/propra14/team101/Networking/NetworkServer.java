@@ -141,10 +141,29 @@ public class NetworkServer {
                         currentUser.getCurrentRoom().propagate("change_team " + currentUser.name + " " + team);
                         answer = "okay";
                     } else if (command.matches("change_map .+")) {
-                        if (currentUser == currentUser.getCurrentRoom().users.get(0)) {
+                        if (currentUser == currentUser.getCurrentRoom().owner) {
                             currentUser.getCurrentRoom().selectedMap = command.split(" ")[1];
                         }
                         answer = "okay";
+                    } else if (command.matches("kick_user .+")) {
+                        if (currentUser == currentUser.getCurrentRoom().owner) {
+                            // Search the user
+                            NetworkUser toKick = null;
+                            for (NetworkUser anUser : currentUser.getCurrentRoom().users) {
+                                if (anUser.name.equals(command.substring(10))) {
+                                    toKick = anUser;
+                                }
+                            }
+                            if (toKick == null) {
+                                answer = "error client no_user";
+                            } else {
+                                toKick.send("youre_kicked");
+                                toKick.leaveRoom();
+                                answer = "okay";
+                            }
+                        } else {
+                            answer = "error client not_owner";
+                        }
                     } else if (command.equals("get_owner")) {
                         if (currentUser.getCurrentRoom() != null) {
                             answer = currentUser.getCurrentRoom().users.get(0).name;

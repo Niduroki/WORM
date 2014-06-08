@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101;
 
+import de.hhu.propra14.team101.GUIElements.NumberTextField;
 import de.hhu.propra14.team101.Networking.Exceptions.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -249,7 +250,11 @@ public class Lobby {
             public void handle(KeyEvent keyEvent) {
                 try {
                     if (keyEvent.getCode() == KeyCode.ENTER) {
-                        main.client.chat('r', chatfield.getText());
+                        if (chatfield.getText().matches("/kick .+")) {
+                            main.client.kickUser(chatfield.getText().substring(6));
+                        } else {
+                            main.client.chat('r', chatfield.getText());
+                        }
                         chatfield.clear();
                     }
                 } catch (TimeoutException ex) {
@@ -370,6 +375,12 @@ public class Lobby {
                             main.game.fps = 16;
                             main.game.startGameplay();
                         }
+
+                        if (main.client.kicked) {
+                            roomTimeline.stop();
+                            addMpButtons();
+                            main.client.kicked = false;
+                        }
                     }
                 }
         );
@@ -392,14 +403,15 @@ public class Lobby {
         Text title1 = new Text("Name");
         Text title2 = new Text("Password");
         Text title3 = new Text("Map");
+        Text title4 = new Text("Maximum players");
         final TextField text1 = new TextField("");
-        TextField text2 = new TextField("");
+        final TextField text2 = new TextField("");
 
         final ComboBox<String> map = new ComboBox<>();
-        map.getItems().add("Map 1");
-        map.getItems().add("Map 2");
-        map.getItems().add("Map 3");
+        map.getItems().addAll("Map 1", "Map 2", "Map 3");
         map.setValue("Map 1");
+
+        final NumberTextField maxPlayers = new NumberTextField();
 
         final CheckBox weaponBox1 = new CheckBox("Atomic Bomb");
         final CheckBox weaponBox2 = new CheckBox("Grenade");
@@ -416,12 +428,14 @@ public class Lobby {
         this.main.grid.add(title1, 0, 1);
         this.main.grid.add(title2, 0, 2);
         this.main.grid.add(title3, 0, 3);
+        this.main.grid.add(title4, 0, 4);
         this.main.grid.add(map, 1, 3);
+        this.main.grid.add(maxPlayers, 1, 4);
         this.main.grid.add(returnbtn, 0, 11);
         this.main.grid.add(startBtn, 1, 11);
-        this.main.grid.add(weaponBox1, 0, 4);
-        this.main.grid.add(weaponBox2, 1, 4);
-        this.main.grid.add(weaponBox3, 2, 4);
+        this.main.grid.add(weaponBox1, 0, 5);
+        this.main.grid.add(weaponBox2, 1, 5);
+        this.main.grid.add(weaponBox3, 2, 5);
 
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -434,7 +448,15 @@ public class Lobby {
             public void handle(ActionEvent actionEvent) {
                 try {
                     main.client.createRoom(text1.getText());
+                    // If there's a password: Use it
+                    if (!text2.getText().isEmpty()) {
+                        //main.client.changePassword();
+                    }
                     main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
+                    // If the owner defined a password: Use it
+                    if (!maxPlayers.getText().isEmpty()) {
+                        //main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
+                    }
                     addroombtns();
                 } catch (RoomExistsException e) {
                     text1.setText("");
@@ -452,19 +474,20 @@ public class Lobby {
         // Create buttons and other objects
         Text scenetitle = new Text("Advanced");
         Button returnbtn = new Button("Back");
-        Button Create = new Button("Change Properties");
+        Button submitBtn = new Button("Change Properties");
 
         Text title1 = new Text("Name");
         Text title2 = new Text("Password");
         Text title3 = new Text("Map");
-        TextField text1 = new TextField("");
-        TextField text2 = new TextField("");
+        Text title4 = new Text("Maximum Players");
+        final TextField text1 = new TextField("");
+        final TextField text2 = new TextField("");
 
         final ComboBox<String> map = new ComboBox<>();
-        map.getItems().add("Map 1");
-        map.getItems().add("Map 2");
-        map.getItems().add("Map 3");
+        map.getItems().addAll("Map 1", "Map 2", "Map 3");
         map.setValue("Map 1");
+
+        final NumberTextField maxPlayers = new NumberTextField();
 
         final CheckBox weaponBox1 = new CheckBox("Atomic Bomb");
         final CheckBox weaponBox2 = new CheckBox("Grenade");
@@ -481,11 +504,16 @@ public class Lobby {
         this.main.grid.add(title1, 0, 1);
         this.main.grid.add(title2, 0, 2);
         this.main.grid.add(title3, 0, 3);
+        this.main.grid.add(title4, 0, 4);
         this.main.grid.add(map, 1, 3);
-        this.main.grid.add(Create, 0, 11);
-        this.main.grid.add(weaponBox1, 0, 4);
-        this.main.grid.add(weaponBox2, 1, 4);
-        this.main.grid.add(weaponBox3, 2, 4);
+        this.main.grid.add(maxPlayers, 1, 4);
+        this.main.grid.add(returnbtn, 0, 11);
+        this.main.grid.add(submitBtn, 1, 11);
+        this.main.grid.add(weaponBox1, 0, 5);
+        this.main.grid.add(weaponBox2, 1, 5);
+        this.main.grid.add(weaponBox3, 2, 5);
+
+        // TODO prefill every input with the values we have right now
 
         returnbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -493,10 +521,25 @@ public class Lobby {
                 addroombtns();
             }
         });
-        Create.setOnAction(new EventHandler<ActionEvent>() {
+        submitBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                addroombtns();
+                try {
+                    // TODO change which values changed here
+                    //main.client.changeRoomName(text1.getText());
+                    // If there's a password: Use it
+                    if (!text2.getText().isEmpty()) {
+                        //main.client.changePassword();
+                    }
+                    main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
+                    // If the owner defined a password: Use it
+                    if (!maxPlayers.getText().isEmpty()) {
+                        //main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
+                    }
+                    addroombtns();
+                } catch (NetworkException e) {
+                    //
+                }
             }
         });
     }
