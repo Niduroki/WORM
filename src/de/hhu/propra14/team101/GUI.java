@@ -39,35 +39,35 @@ public class GUI {
         BorderPane border = new BorderPane();
         border.setPadding(new Insets(20, 0, 20, 20));
 
-        Text scenetitle = new Text("Name");
-        Button startbtn = new Button("Start");
-        Button multibtn = new Button("Multiplayer");
-        Button optionsbtn = new Button("Options");
-        Button exitbtn = new Button("Exit");
+        Text sceneTitle = new Text("Name");
+        Button startButton = new Button("Start");
+        Button multiButton= new Button("Multiplayer");
+        Button optionsButton = new Button("Options");
+        Button exitButton = new Button("Exit");
 
 
-        startbtn.setMaxWidth(Double.MAX_VALUE);
-        multibtn.setMaxWidth(Double.MAX_VALUE);
-        optionsbtn.setMaxWidth(Double.MAX_VALUE);
-        exitbtn.setMaxWidth(Double.MAX_VALUE);
+        startButton.setMaxWidth(Double.MAX_VALUE);
+        multiButton.setMaxWidth(Double.MAX_VALUE);
+        optionsButton.setMaxWidth(Double.MAX_VALUE);
+        exitButton.setMaxWidth(Double.MAX_VALUE);
 
         VBox vbButtons = new VBox();
         vbButtons.setSpacing(10);
         vbButtons.setPadding(new Insets(0, 20, 10, 20));
-        vbButtons.getChildren().addAll(startbtn, multibtn, optionsbtn, exitbtn);
+        vbButtons.getChildren().addAll(startButton, multiButton, optionsButton, exitButton);
 
 
         // Configure each object
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
-        this.main.grid.add(scenetitle, 0, 0, 2, 1);
-        this.main.grid.add(startbtn, 1, 2);
-        this.main.grid.add(multibtn, 1, 4);
-        this.main.grid.add(optionsbtn, 1, 6);
-        this.main.grid.add(exitbtn, 1, 8);
+        this.main.grid.add(sceneTitle, 0, 0, 2, 1);
+        this.main.grid.add(startButton, 1, 2);
+        this.main.grid.add(multiButton, 1, 4);
+        this.main.grid.add(optionsButton, 1, 6);
+        this.main.grid.add(exitButton, 1, 8);
 
-        startbtn.setOnAction(new EventHandler<ActionEvent>() {
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 main.players = new ArrayList<>();
@@ -80,14 +80,14 @@ public class GUI {
             }
         });
 
-        optionsbtn.setOnAction(new EventHandler<ActionEvent>() {
+        optionsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 addOptionsButtons();
             }
         });
 
-        multibtn.setOnAction(new EventHandler<ActionEvent>() {
+        multiButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 main.client = new NetworkClient(main);
@@ -95,7 +95,7 @@ public class GUI {
             }
         });
 
-        exitbtn.setOnAction(new EventHandler<ActionEvent>() {
+        exitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 main.primaryStage.close();
@@ -108,11 +108,11 @@ public class GUI {
         this.main.grid.getChildren().clear();
 
         // Create buttons and other objects
-        Text scenetitle = new Text("Options");
+        Text sceneTitle = new Text("Options");
         Text title1 = new Text("Multiplayer Server");
         Text title2 = new Text("Multiplayer Name");
         Text title3 = new Text("Frames per second");
-        Button returnbtn = new Button("Save & Return");
+        Button returnButton = new Button("Save & Return");
 
 
         final ComboBox<String> fpsBox = new ComboBox<>();
@@ -141,19 +141,19 @@ public class GUI {
         final TextField nameField = new TextField(initialValue2);
 
         // Configure each object
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
-        this.main.grid.add(scenetitle, 0, 0, 2, 1);
+        this.main.grid.add(sceneTitle, 0, 0, 2, 1);
         this.main.grid.add(title1, 1, 2);
         this.main.grid.add(serverField, 2, 2);
         this.main.grid.add(title2, 1, 4);
         this.main.grid.add(nameField, 2, 4);
         this.main.grid.add(title3, 1, 6);
         this.main.grid.add(fpsBox, 2, 6);
-        this.main.grid.add(returnbtn, 1, 8);
+        this.main.grid.add(returnButton, 1, 8);
 
-        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+        returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 SettingSaves saver = new SettingSaves();
@@ -173,10 +173,10 @@ public class GUI {
         Integer currentPlayer = this.main.players.size()+1;
 
         // Create buttons and other objects
-        Text scenetitle = new Text( "Player " + currentPlayer.toString());
+        Text sceneTitle = new Text( "Player " + currentPlayer.toString());
         Text title1 = new Text("Name");
         Text title2 = new Text("Color");
-        Button backbtn = new Button("Back");
+        Button backButton = new Button("Back");
 
         final ComboBox<String> colorSelection = new ComboBox<>();
         colorSelection.getItems().addAll(this.main.availableColors);
@@ -188,10 +188,10 @@ public class GUI {
         nameField.setMaxSize(100, 20);
 
         // Configure each object
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
-        this.main.grid.add(scenetitle, 0, 0, 2, 1);
+        this.main.grid.add(sceneTitle, 0, 0, 2, 1);
         this.main.grid.add(title1, 1, 2);
         this.main.grid.add(nameField, 2, 2);
         this.main.grid.add(title2, 1, 4);
@@ -199,13 +199,13 @@ public class GUI {
         this.main.grid.add(weaponBox1, 1, 6);
         this.main.grid.add(weaponBox2, 2, 6);
         this.main.grid.add(weaponBox3, 3, 6);
-        this.main.grid.add(backbtn, 1, 8);
+        this.main.grid.add(backButton, 1, 8);
 
         if (this.main.players.size() != 0) {
-            Button startbtn = new Button("Start");
-            this.main.grid.add(startbtn, 3, 8);
+            Button startButton = new Button("Start");
+            this.main.grid.add(startButton, 3, 8);
 
-            startbtn.setOnAction(new EventHandler<ActionEvent>() {
+            startButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
                     // Don't start without a weapon
@@ -228,7 +228,7 @@ public class GUI {
             });
         }
 
-        backbtn.setOnAction(new EventHandler<ActionEvent>() {
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 addMainButtons();
@@ -236,18 +236,18 @@ public class GUI {
         });
 
         if (this.main.players.size() <= 2) {
-            Button addplayerbtn = new Button("Another Player");
+            Button addPlayerButton = new Button("Another Player");
 
-            this.main.grid.add(addplayerbtn, 2, 8);
+            this.main.grid.add(addPlayerButton, 2, 8);
 
-            addplayerbtn.setOnAction(new EventHandler<ActionEvent>() {
+            addPlayerButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     // Don't start without a weapon
                     if (!(
                             weaponBox1.selectedProperty().getValue() ||
-                            weaponBox2.selectedProperty().getValue() ||
-                            weaponBox3.selectedProperty().getValue()
+                                    weaponBox2.selectedProperty().getValue() ||
+                                    weaponBox3.selectedProperty().getValue()
                     )) {
                         return;
                     }
@@ -268,31 +268,31 @@ public class GUI {
         this.main.grid.getChildren().clear();
 
         // Create buttons and other objects
-        Text scenetitle = new Text("Select a map");
-        Button backbtn = new Button("Back");
-        Button startbtn = new Button("Start");
+        Text sceneTitle = new Text("Select a map");
+        Button backButton = new Button("Back");
+        Button startButton = new Button("Start");
 
         final ComboBox<String> mapSelection = new ComboBox<>();
         mapSelection.getItems().addAll("Map1", "Map2", "Map3");
         mapSelection.setValue("Map1");
 
         // Configure each object
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
-        this.main.grid.add(scenetitle, 0, 0, 2, 1);
+        this.main.grid.add(sceneTitle, 0, 0, 2, 1);
         this.main.grid.add(mapSelection, 0, 4);
-        this.main.grid.add(backbtn, 0, 8);
-        this.main.grid.add(startbtn, 1, 8);
+        this.main.grid.add(backButton, 0, 8);
+        this.main.grid.add(startButton, 1, 8);
 
-        backbtn.setOnAction(new EventHandler<ActionEvent>() {
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 addMainButtons();
             }
         });
 
-        startbtn.setOnAction(new EventHandler<ActionEvent>() {
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
 

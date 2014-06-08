@@ -38,8 +38,8 @@ public class Lobby {
         this.main.grid.getChildren().clear();
 
         // Create buttons and other objects
-        Text scenetitle = new Text("Lobby");
-        Button returnbtn = new Button("Back");
+        Text sceneTitle = new Text("Lobby");
+        Button returnButton = new Button("Back");
         Button create = new Button("Create Game");
         Button join = new Button("Join Game");
 
@@ -47,7 +47,7 @@ public class Lobby {
             @Override
             public void handle(ActionEvent actionEvent) {
                 globalTimeline.stop();
-                addcreateGameBtns();
+                addCreateGameButtons();
             }
         });
 
@@ -71,7 +71,7 @@ public class Lobby {
                     if (selectedRoom != null) {
                         main.client.joinRoom(selectedRoom);
                         globalTimeline.stop();
-                        addroombtns();
+                        addRoomButtons();
                     }
                 } catch (RoomFullException e) {
                     System.out.println("Room full!");
@@ -87,14 +87,14 @@ public class Lobby {
         globalChatArea.setEditable(false);
         globalChatArea.setWrapText(false);
 
-        final TextField chatfield = new TextField("");
+        final TextField chatField = new TextField("");
         final EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>(){
             @Override
             public void handle(KeyEvent keyEvent) {
                 try {
                     if (keyEvent.getCode() == KeyCode.ENTER) {
-                        main.client.chat('g', chatfield.getText());
-                        chatfield.clear();
+                        main.client.chat('g', chatField.getText());
+                        chatField.clear();
                     }
                 } catch (TimeoutException ex) {
                     System.out.println(ex.getMessage());
@@ -102,22 +102,22 @@ public class Lobby {
             }
         };
 
-        chatfield.addEventHandler(KeyEvent.KEY_RELEASED, handler);
+        chatField.addEventHandler(KeyEvent.KEY_RELEASED, handler);
 
         // Configure each object
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
-        this.main.grid.add(scenetitle, 0, 0, 3, 1);
+        this.main.grid.add(sceneTitle, 0, 0, 3, 1);
         this.main.grid.add(list, 0, 1, 3, 2);
         this.main.grid.add(globalChatArea, 0, 3, 3, 5);
-        this.main.grid.add(chatfield, 0, 7, 3, 9);
-        this.main.grid.add(returnbtn, 0, 11);
+        this.main.grid.add(chatField, 0, 7, 3, 9);
+        this.main.grid.add(returnButton, 0, 11);
         this.main.grid.add(create, 1, 11);
         this.main.grid.add(join, 2, 11);
 
 
-        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+        returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 main.client.logoff();
@@ -151,13 +151,13 @@ public class Lobby {
         this.globalTimeline.play();
     }
 
-    public void addroombtns() {
+    public void addRoomButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
 
         // Create buttons and other objects
-        Text scenetitle = new Text(this.main.client.currentRoom);
-        Button returnbtn = new Button("Leave");
+        Text sceneTitle = new Text(this.main.client.currentRoom);
+        Button returnButton = new Button("Leave");
         Button advanced = new Button("Advanced");
 
 
@@ -176,7 +176,7 @@ public class Lobby {
             }
         });
 
-        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+        returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
@@ -245,19 +245,19 @@ public class Lobby {
 
         this.roomChatArea = new TextArea();
         this.roomChatArea.setEditable(false);
-        final TextField chatfield = new TextField("");
+        final TextField chatField = new TextField("");
 
         final EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>(){
             @Override
             public void handle(KeyEvent keyEvent) {
                 try {
                     if (keyEvent.getCode() == KeyCode.ENTER) {
-                        if (chatfield.getText().matches("/kick .+")) {
-                            main.client.kickUser(chatfield.getText().substring(6));
+                        if (chatField.getText().matches("/kick .+")) {
+                            main.client.kickUser(chatField.getText().substring(6));
                         } else {
-                            main.client.chat('r', chatfield.getText());
+                            main.client.chat('r', chatField.getText());
                         }
-                        chatfield.clear();
+                        chatField.clear();
                     }
                 } catch (TimeoutException ex) {
                     System.out.println(ex.getMessage());
@@ -265,25 +265,25 @@ public class Lobby {
             }
         };
 
-        chatfield.addEventHandler(KeyEvent.KEY_RELEASED, handler);
+        chatField.addEventHandler(KeyEvent.KEY_RELEASED, handler);
 
         // Configure each object
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
         this.main.grid.add(ready, 1, 12);
         this.main.grid.add(advanced, 2, 2);
-        this.main.grid.add(scenetitle, 0, 0, 3, 1);
+        this.main.grid.add(sceneTitle, 0, 0, 3, 1);
         this.main.grid.add(team, 2, 1);
         this.main.grid.add(list, 0, 1, 2, 2);
         this.main.grid.add(this.roomChatArea, 0, 3, 3, 5);
-        this.main.grid.add(chatfield, 0, 7, 3, 9);
-        this.main.grid.add(returnbtn, 0, 12);
+        this.main.grid.add(chatField, 0, 7, 3, 9);
+        this.main.grid.add(returnButton, 0, 12);
 
         advanced.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                addadvancebtns();
+                addAdvanceButtons();
             }
         });
 
@@ -393,14 +393,14 @@ public class Lobby {
         this.roomTimeline.play();
     }
 
-    private void addcreateGameBtns() {
+    private void addCreateGameButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
 
         // Create buttons and other objects
-        Text scenetitle = new Text("Create game");
-        Button returnbtn = new Button("Back");
-        Button startBtn = new Button("Start");
+        Text sceneTitle = new Text("Create game");
+        Button returnButton = new Button("Back");
+        Button startButton = new Button("Start");
 
         Text title1 = new Text("Name");
         Text title2 = new Text("Password");
@@ -420,11 +420,11 @@ public class Lobby {
         final CheckBox weaponBox3 = new CheckBox("Bazooka");
 
         // Configure each object
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
 
-        this.main.grid.add(scenetitle, 0, 0, 3, 1);
+        this.main.grid.add(sceneTitle, 0, 0, 3, 1);
         this.main.grid.add(text1, 1, 1);
         this.main.grid.add(text2, 1, 2);
         this.main.grid.add(title1, 0, 1);
@@ -433,19 +433,19 @@ public class Lobby {
         this.main.grid.add(title4, 0, 4);
         this.main.grid.add(map, 1, 3);
         this.main.grid.add(maxPlayers, 1, 4);
-        this.main.grid.add(returnbtn, 0, 11);
-        this.main.grid.add(startBtn, 1, 11);
+        this.main.grid.add(returnButton, 0, 11);
+        this.main.grid.add(startButton, 1, 11);
         this.main.grid.add(weaponBox1, 0, 5);
         this.main.grid.add(weaponBox2, 1, 5);
         this.main.grid.add(weaponBox3, 2, 5);
 
-        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+        returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 addMpButtons();
             }
         });
-        startBtn.setOnAction(new EventHandler<ActionEvent>() {
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
@@ -459,7 +459,7 @@ public class Lobby {
                     if (!maxPlayers.getText().isEmpty()) {
                         main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
                     }
-                    addroombtns();
+                    addRoomButtons();
                 } catch (RoomExistsException e) {
                     text1.setText("");
                 } catch (NetworkException e) {
@@ -469,14 +469,14 @@ public class Lobby {
         });
     }
 
-    private void addadvancebtns() {
+    private void addAdvanceButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
 
         // Create buttons and other objects
-        Text scenetitle = new Text("Advanced");
-        Button returnbtn = new Button("Back");
-        Button submitBtn = new Button("Change Properties");
+        Text sceneTitle = new Text("Advanced");
+        Button returnButton = new Button("Back");
+        Button submitButton = new Button("Change Properties");
 
         Text title1 = new Text("Name");
         Text title2 = new Text("Password");
@@ -496,11 +496,11 @@ public class Lobby {
         final CheckBox weaponBox3 = new CheckBox("Bazooka");
 
         // Configure each object
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         // Add the objects
 
-        this.main.grid.add(scenetitle, 0, 0, 3, 1);
+        this.main.grid.add(sceneTitle, 0, 0, 3, 1);
         this.main.grid.add(text1, 1, 1);
         this.main.grid.add(text2, 1, 2);
         this.main.grid.add(title1, 0, 1);
@@ -509,21 +509,21 @@ public class Lobby {
         this.main.grid.add(title4, 0, 4);
         this.main.grid.add(map, 1, 3);
         this.main.grid.add(maxPlayers, 1, 4);
-        this.main.grid.add(returnbtn, 0, 11);
-        this.main.grid.add(submitBtn, 1, 11);
+        this.main.grid.add(returnButton, 0, 11);
+        this.main.grid.add(submitButton, 1, 11);
         this.main.grid.add(weaponBox1, 0, 5);
         this.main.grid.add(weaponBox2, 1, 5);
         this.main.grid.add(weaponBox3, 2, 5);
 
         // TODO prefill every input with the values we have right now
 
-        returnbtn.setOnAction(new EventHandler<ActionEvent>() {
+        returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                addroombtns();
+                addRoomButtons();
             }
         });
-        submitBtn.setOnAction(new EventHandler<ActionEvent>() {
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
@@ -538,7 +538,7 @@ public class Lobby {
                     if (!maxPlayers.getText().isEmpty()) {
                         main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
                     }
-                    addroombtns();
+                    addRoomButtons();
                 } catch (NetworkException e) {
                     //
                 }
