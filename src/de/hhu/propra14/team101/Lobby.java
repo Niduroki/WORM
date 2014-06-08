@@ -5,17 +5,28 @@ import de.hhu.propra14.team101.Networking.Exceptions.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.*;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.input.*;
 import javafx.util.Callback;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.newdawn.easyogg.OggClip;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -32,6 +43,68 @@ public class Lobby {
     public Lobby(Main main) {
         this.main = main;
     }
+
+    public class SecondWindow extends Application
+    {
+
+        @Override
+        public void start(Stage primaryStage) {
+            primaryStage.setTitle("Chat");
+            Button btn = new Button();
+
+            GridPane grid = new GridPane();
+            grid = new GridPane();
+            grid.setAlignment(Pos.CENTER);
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(25, 25, 25, 25));
+
+           //TODO extra timeline for second window
+           // globalChatArea = new TextArea();
+           //globalChatArea.setEditable(false);
+           // globalChatArea.setWrapText(false);
+
+            final ListView list2 = new ListView<String>();
+            String[] users = new String[0];
+            list2.setItems(FXCollections.observableArrayList(users));
+
+            list2.setMaxWidth(150);
+            list2.setMaxHeight(200);
+
+            final TextField chatField = new TextField("");
+            final EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent keyEvent) {
+                    try {
+                        if (keyEvent.getCode() == KeyCode.ENTER) {
+                            if (chatField.getText().matches("/kick .+")) {
+                                main.client.kickUser(chatField.getText().substring(6));
+                            } else {
+                                main.client.chat('r', chatField.getText());
+                            }
+                            chatField.clear();
+                        }
+                    } catch (TimeoutException ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+            };
+            chatField.addEventHandler(KeyEvent.KEY_RELEASED, handler);
+            // Add the objects
+            main.grid.add (list2,3,3,5,5);
+            main.grid.add(globalChatArea, 0, 3, 3, 5);
+            main.grid.add(chatField, 0, 7, 3, 9);
+
+
+            //this.grid.setGridLinesVisible(true);
+            primaryStage.setScene(new Scene(grid, 600, 400));
+            primaryStage.show();
+            grid.setStyle("-fx-background-color: #00BFFF");
+
+        }
+
+    }
+
 
     public void addChatButtons() {
         // Clean up
@@ -340,6 +413,11 @@ public class Lobby {
                     try {
                         if (main.client.roomReady) {
                             main.client.startGame();
+                            roomTimeline.stop();
+                            Stage stage = new Stage();
+                            SecondWindow sw = new SecondWindow();
+                            sw.start(stage);
+
                         }
                     } catch (TimeoutException e) {
                         //

@@ -93,9 +93,7 @@ public class Main extends Application implements Initializable {
         primaryStage.show();
         grid.setStyle("-fx-background-color: #00BFFF");
 
-        Stage stage = new Stage();
-        SecondWindow sw = new SecondWindow();
-        sw.start(stage);
+        
     }
 
     public class SecondWindow extends Application
