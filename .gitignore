@@ -11,4 +11,6 @@ hs_err_pid*
 
 # Own files
 settings.yml
+settings.gz
 GameSave.yml
+GameSave.gz

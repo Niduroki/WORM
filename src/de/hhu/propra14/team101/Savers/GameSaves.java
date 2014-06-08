@@ -13,26 +13,30 @@ import java.util.Map;
 public class GameSaves extends AbstractSaver {
 
     /**
+     * Saves game to specified File
+     * @param game Game to save
      * @param path Path to save to
      */
     public void save(Game game, String path) {
         StringWriter writer = new StringWriter();
         yaml.dump(game.serialize(), writer);
         try {
-            FileWriter file = new FileWriter(path);
-            file.write(writer.toString());
+            FileOutputStream file = new FileOutputStream(path);
+            file.write(GZipper.gzip(writer.toString()));
             file.close();
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             //
         }
     }
 
     /**
+     * Load Game from specified File
      * @param path Path to save file
+     * @return loaded Game
+     * @throws FileNotFoundException If file not found
      */
-    public Game load(String path) throws FileNotFoundException {
-        InputStream input = new FileInputStream(new File(path));
-        Map<String, Object> data = (Map<String, Object>) this.yaml.load(input);
+    public Game load(String path, boolean headless) throws FileNotFoundException {
+        Map<String, Object> data = (Map<String, Object>) this.yaml.load(GZipper.gunzip(path));
         Game game = Game.deserialize(data);
         return game;
     }

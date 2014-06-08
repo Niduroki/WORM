@@ -12,34 +12,36 @@ import java.util.Map;
 public class LevelSaves extends AbstractSaver {
 
     /**
-     * @param path Path to load from
-     * @return Level
-     * @throws java.io.FileNotFoundException
      * Loads a map from a yaml file
+     * @param path Path to load from
+     * @return loaded Level
+     * @throws java.io.FileNotFoundException If file not found
      */
+
     public Level load (String path) throws FileNotFoundException {
-        InputStream input;
+        String data;
         try {
             // If we're not in a jar the maps are under resources
-            input = new FileInputStream(new File("resources/" + path));
+            data = GZipper.gunzip("resources/" + path);
         } catch (FileNotFoundException e) {
             // Read from a jar
-            input = this.getClass().getResourceAsStream("/"+path);
+            data = GZipper.gunzip(this.getClass().getResourceAsStream("/"+path));
         }
-        Map<String, Object> raw = (Map<String, Object>) this.yaml.load(input);
+        Map<String, Object> raw = (Map<String, Object>) this.yaml.load(data);
         return Level.deserialize(raw);
     }
 
     /**
+     * Saves Game
      * @param level level to save
      * @param path path to save to
      */
     public void save (Level level, String path) {
         StringWriter writer = new StringWriter();
-        this.yaml.dump(level.serialize(), writer);
+        yaml.dump(level.serialize(), writer);
         try {
-            FileWriter file = new FileWriter(path);
-            file.write(writer.toString());
+            FileOutputStream file = new FileOutputStream(path);
+            file.write(GZipper.gzip(writer.toString()));
             file.close();
         } catch (IOException e) {
             //

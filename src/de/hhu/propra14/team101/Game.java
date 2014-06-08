@@ -3,11 +3,17 @@ package de.hhu.propra14.team101;
 import com.sun.istack.internal.Nullable;
 import de.hhu.propra14.team101.Savers.LevelSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.canvas.*;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -18,20 +24,24 @@ import java.util.*;
 public class Game {
     public boolean paused = false;
     public boolean bulletFired = false;
-    public boolean headless = false;
+    public boolean online = false;
     public int round = 0;
     public int turnOfPlayer = 0;
     public int roundTimer = 20;
-    public int fps = 16;
+    public int fps;
+    public GraphicsContext gc;
+    public Queue<String> onlineCommandQueue = new PriorityQueue<>();
+    // Necessary to tell the lobby javafx process to start the game now
+    public static boolean startMe = false;
 
     private ArrayList<Player> players = new ArrayList<>();
-    private ArrayList<Level> levels = new ArrayList<>();
+    private Level level;
     private Bullet bullet;
     private boolean gameFinished = false;
-    private int selectedLevelNumber;
     private Terrain currentTerrain;
     private int secondCounter = 0;
     private Image background;
+    protected Timeline timeline;
 
     /**
      * Initialize a new game.
@@ -40,7 +50,7 @@ public class Game {
         // Load fps from settings
         SettingSaves settingsLoader = new SettingSaves();
         try {
-            this.fps = Integer.parseInt((String) settingsLoader.load("settings.yml").get("fps"));
+            this.fps = Integer.parseInt((String) settingsLoader.load("settings.gz").get("fps"));
         } catch (FileNotFoundException | NumberFormatException e) {
             this.fps = 16;
         }
@@ -49,15 +59,9 @@ public class Game {
             this.getPlayers().add((Player) player);
         }
 
-        LevelSaves loader = new LevelSaves();
-        try {
-            levels.add(loader.load("maps/Map1.yml"));
-            levels.add(loader.load("maps/Map2.yml"));
-            levels.add(loader.load("maps/Map3.yml"));
-        } catch (FileNotFoundException e) {
-            System.out.println("Couldn't find level-files");
+        if (!Main.headless) {
+            this.background = new Image("Background.jpg");
         }
-
         // Hard coded levels - if save-files change uncomment this and save this structure
         /*
         //level1
@@ -108,43 +112,6 @@ public class Game {
         }
         levels.add(level3);
         */
-
-    }
-
-    /**
-     * Get number of level, which is selected.
-     */
-    public int getSelectedLevelNumber() {
-        return selectedLevelNumber;
-    }
-
-    /**
-     * Get count of levels.
-     */
-    public int getCountLevel() {
-        return levels.size();
-    }
-
-    /**
-     * Add a level. Overwrites level, if level number exists.
-     *
-     * @param level The new level.
-     * @throws java.lang.IllegalArgumentException if level number is negative
-     */
-    public void addLevel(Level level) {
-        if (level.getNumber() < 0) {
-            throw new IllegalArgumentException("level number must be positive or null");
-        }
-
-        if (level.getNumber() < levels.size()) {
-            levels.set(level.getNumber(), level);
-        } else {
-            int index;
-            for (index = levels.size(); index < level.getNumber(); index++) {
-                levels.add(null);
-            }
-            levels.add(level);
-        }
     }
 
     public void fireBullet(Bullet bullet) {
@@ -154,18 +121,21 @@ public class Game {
 
     /**
      * Gets a level.
-     *
-     * @param number the level number
      * @return a specific level
      * @throws java.lang.IllegalArgumentException
      */
     @Nullable
-    public Level getLevel(int number) {
-        if (number >= levels.size() || number < 0) {
-            throw new IllegalArgumentException("number has to exist");
-        }
+    public Level getLevel() {
+        return level;
+    }
 
-        return levels.get(number);
+    public void loadLevel(String levelName) {
+        LevelSaves loader = new LevelSaves();
+        try {
+            level = loader.load("maps/"+levelName+".gz");
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldn't find level-file");
+        }
     }
 
     /**
@@ -251,7 +221,10 @@ public class Game {
     /**
      * Update game
      */
-    public void updateGame(GraphicsContext gc) {
+    public void updateGame() {
+        if (this.online && !this.onlineCommandQueue.isEmpty()) {
+            this.doAction(this.onlineCommandQueue.poll());
+        }
 
         if (!this.paused) {
             this.secondCounter += 1;
@@ -298,7 +271,12 @@ public class Game {
                     wormArrayList.addAll(playerItem.wormList);
                 }
                 Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
-                Collision collision = bullet.physics.hasCollision(currentWorm, wormArrayList, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+                Collision collision;
+                if (Main.headless) {
+                    collision = bullet.physics.hasCollision(currentWorm, wormArrayList, 600, 400);
+                } else {
+                    collision = bullet.physics.hasCollision(currentWorm, wormArrayList, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+                }
                 if (collision != null) {
                     switch (collision.getType()) {
                         case Worm:
@@ -317,10 +295,6 @@ public class Game {
                 }
             }
         }
-
-        if (!this.headless) {
-            draw(gc);
-        }
     }
 
     public void nextRound() {
@@ -335,37 +309,87 @@ public class Game {
         // Reset frame counter for seconds and roundTimer
         this.secondCounter = 0;
         this.roundTimer = 20;
+        System.out.println("Next");
     }
 
     /**
      * Start the level and initialize terrain and worms.
-     *
-     * @throws java.lang.IllegalArgumentException if levelNumber does not exist.
      */
-    public void startLevel(int levelNumber, GraphicsContext gc) {
-        this.background = new Image("Background.jpg");
-
-        if (levelNumber >= levels.size() || levelNumber < 0) {
-            throw new IllegalArgumentException("Level does not exist.");
+    public void startLevel() {
+        if (!this.online) {
+            this.currentTerrain = level.getTerrain();
+            level.setWormsStartPosition(this.getPlayers());
         }
-        selectedLevelNumber = levelNumber;
-        this.currentTerrain = levels.get(selectedLevelNumber).getTerrain();
-        levels.get(selectedLevelNumber).setWormsStartPosition(this.getPlayers());
 
-        draw(gc);
+        if (!Main.headless) {
+            draw(this.gc);
+        }
     }
 
     /**
-     * Start the level without drawing anything (thus not needing a gc)
-     * @param levelNumber
+     * Starts the gameplay
      */
-    public void startLevel(int levelNumber) {
-        if (levelNumber >= levels.size() || levelNumber < 0) {
-            throw new IllegalArgumentException("Level does not exist.");
+    public void startGameplay() {
+        this.startLevel();
+
+        //Prepare updating game
+        final Duration oneFrameAmt = Duration.millis(1000/fps);
+        final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
+                new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        if(gameFinished) {
+                            stopUpdating();
+                        } else{
+                            updateGame();
+                            draw(gc);
+                        }
+
+                    }
+                });
+
+        if (!Main.headless) {
+            // Construct a timeline with the mainloop
+            this.timeline = new Timeline(keyFrame);
+            this.timeline.setCycleCount(Animation.INDEFINITE);
+            this.timeline.play();
+        } else {
+            Thread gameUpdateThread = new Thread(new GameUpdateThread(this));
+            gameUpdateThread.setDaemon(true);
+            gameUpdateThread.start();
         }
-        selectedLevelNumber = levelNumber;
-        this.currentTerrain = levels.get(selectedLevelNumber).getTerrain();
-        levels.get(selectedLevelNumber).setWormsStartPosition(this.getPlayers());
+    }
+
+    private void stopUpdating() {
+        this.timeline.stop();
+        this.winScreen(players.get(0).name);
+    }
+
+    private void winScreen(String name) {
+        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(Color.BLACK);
+        gc.setFont(new Font(25));
+        gc.fillText("Player " + name + " won!", 70, 150);
+        gc.setFont(new Font(15));
+        gc.fillText("Press Escape to return to main menu", 70, 200);
+    }
+
+    public void doAction(String action) {
+        System.out.println("Do the action");
+        if (action.equals("move_right")) {
+            int currentWorm = players.get(this.turnOfPlayer).currentWorm;
+            players.get(this.turnOfPlayer).wormList.get(currentWorm).move('r');
+        } else if (action.equals("move_left")) {
+            int currentWorm = players.get(this.turnOfPlayer).currentWorm;
+            players.get(this.turnOfPlayer).wormList.get(currentWorm).move('l');
+        } else if (action.equals("pause")) {
+            this.paused = !this.paused;
+        } else if (action.matches("fire .+ .+")) {
+            Worm currentWorm = players.get(this.turnOfPlayer).wormList.get(players.get(this.turnOfPlayer).currentWorm);
+            // Don't fire without a weapon
+            if (currentWorm.weaponList.size() != 0) {
+                this.fireBullet(currentWorm.fireWeapon(Double.parseDouble(action.split(" ")[1]), Double.parseDouble(action.split(" ")[2])));
+            }
+        }
     }
 
     public Map<String, Object> serialize() {
@@ -400,5 +424,26 @@ public class Game {
             result.add(Player.deserialize(anInput));
         }
         return result;
+    }
+
+    static class GameUpdateThread implements Runnable {
+
+        private Game game;
+
+        public GameUpdateThread(Game game) {
+            this.game = game;
+        }
+
+        @Override
+        public void run() {
+            while (!game.isGameFinished()) {
+                game.updateGame();
+                try {
+                    Thread.sleep(1000 / game.fps);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

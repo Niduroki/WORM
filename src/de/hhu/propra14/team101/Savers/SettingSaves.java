@@ -10,6 +10,7 @@ import java.util.Map;
 public class SettingSaves extends AbstractSaver {
 
     /**
+     * Saves Settings
      * @param data Settings data
      * @param path Path to save to
      */
@@ -17,20 +18,21 @@ public class SettingSaves extends AbstractSaver {
         StringWriter writer = new StringWriter();
         yaml.dump(data, writer);
         try {
-            FileWriter file = new FileWriter(path);
-            file.write(writer.toString());
+            FileOutputStream file = new FileOutputStream(path);
+            file.write(GZipper.gzip(writer.toString()));
             file.close();
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             //
         }
     }
 
     /**
+     * Loaded Settings
      * @param path Path to settings file
+     * @return Map with Settings data
      */
     public Map load(String path) throws FileNotFoundException {
-        InputStream input = new FileInputStream(new File(path));
-        Map<String, Object> data = (Map<String, Object>) this.yaml.load(input);
+        Map<String, Object> data = (Map<String, Object>) this.yaml.load(GZipper.gunzip(path));
         return data;
     }
 }

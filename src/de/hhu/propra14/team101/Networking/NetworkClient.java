@@ -4,6 +4,7 @@ import de.hhu.propra14.team101.Game;
 import de.hhu.propra14.team101.Main;
 import de.hhu.propra14.team101.Networking.Exceptions.*;
 import de.hhu.propra14.team101.Savers.SettingSaves;
+import javafx.scene.canvas.Canvas;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileNotFoundException;
@@ -19,18 +20,19 @@ import java.util.*;
 public class NetworkClient {
 
     public String currentRoom;
+    /** Map of room users. Map key is the user name, Map value is the users team */
+    public Map<String, String> roomUsers = new HashMap<>();
     public String ourName;
     public boolean roomReady = false;
+    public boolean weAreOwner = false;
+    public boolean kicked = false;
+    public String color;
 
-    private Socket connection;
-    private String server;
     private UUID uuid;
-    private Scanner input;
     private PrintWriter output;
     private int sentCounter = 0;
     private int lastReceivedCounter = -1;
-    private String lastAnswer;
-    private ArrayList<NetworkRequest> toSend = new ArrayList<>();
+    private String lastAnswer = "";
     private Main main;
     private PriorityQueue<String> globalMessages = new PriorityQueue<>();
     private PriorityQueue<String> roomMessages = new PriorityQueue<>();
@@ -41,20 +43,21 @@ public class NetworkClient {
     public NetworkClient(Main main) {
         int port = 7601;
         SettingSaves loader = new SettingSaves();
+        String server;
         try {
-            Map data = loader.load("settings.yml");
+            Map data = loader.load("settings.gz");
             if (data.get("multiplayer_server") != null) {
                 server = (String) data.get("multiplayer_server");
             } else {
                 server = "schaepers.it";
             }
         } catch (FileNotFoundException e) {
-            //
+            server = "schaepers.it";
         }
 
         try {
-            this.connection = new Socket(server, port);
-            this.input = new Scanner(connection.getInputStream());
+            Socket connection = new Socket(server, port);
+            Scanner input = new Scanner(connection.getInputStream());
             this.output = new PrintWriter(connection.getOutputStream());
             Thread thread = new Thread(new HandleIncomingThread(connection, this));
             thread.setDaemon(true);
@@ -73,46 +76,33 @@ public class NetworkClient {
         this.main = main;
     }
 
-    private void queueSend(String data, boolean waitForAnswer) throws TimeoutException {
-        if (this.toSend.size() == 0) {
-            this.toSend.add(new NetworkRequest(data, waitForAnswer));
-            this.doSending();
-        } else {
-            this.toSend.add(new NetworkRequest(data, waitForAnswer));
-            this.doSending();
-        }
-    }
+    private void send(String data, boolean waitForAnswer) throws TimeoutException {
 
-    private void doSending() throws TimeoutException {
         // Reset last answer
         this.lastAnswer = "";
 
-        while (this.toSend.size() > 0) {
-            NetworkRequest current = this.toSend.get(0);
-
-            int ourCount = this.sentCounter;
-            this.sentCounter += 1;
-            String line = constructLine(current.data, ourCount);
-            this.output.println(line);
-            System.out.println("client send::"+line);
-            this.output.flush();
-            if (current.waitForAnswer) {
-                int waitCounter = 0;
-                while (this.lastReceivedCounter < ourCount) {
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        System.out.println("InterruptedException while waiting!");
-                        e.printStackTrace();
-                    }
-                    waitCounter += 1;
-                    // Wait 2 seconds at most
-                    if (waitCounter > 40) {
-                        throw (new TimeoutException());
-                    }
+        int ourCount = this.sentCounter;
+        this.sentCounter += 1;
+        String line = constructLine(data, ourCount);
+        this.output.println(line);
+        System.out.println("client send::" + line);
+        this.output.flush();
+        if (waitForAnswer) {
+            int waitCounter = 0;
+            while (this.lastReceivedCounter < ourCount) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    System.out.println("InterruptedException while waiting!");
+                    e.printStackTrace();
+                }
+                waitCounter += 1;
+                // Wait 2s at most
+                if (waitCounter > 40) {
+                    System.out.println("TIMEOUT");
+                    throw (new TimeoutException());
                 }
             }
-            this.toSend.remove(0);
         }
     }
 
@@ -138,7 +128,7 @@ public class NetworkClient {
 
         if (line.equals("ping")) {
             try {
-                this.queueSend("pong", true);
+                this.send("pong", false);
             } catch (TimeoutException e) {
                 //
             }
@@ -149,11 +139,20 @@ public class NetworkClient {
             String message = chatline.substring(chatline.indexOf(" ") + 3);
             if (type == 'g') {
                 globalMessages.add(user + ">: " + message);
-                System.out.println(user + " wrote " + message + " globally");
             } else if (type == 'r') {
                 roomMessages.add(user + ">: " + message);
-                System.out.println(user + " wrote " + message + " in " + currentRoom);
             }
+        } else if (line.matches("change_team .+ .+")) {
+            this.roomUsers.remove(line.split(" ")[1]);
+            this.roomUsers.put(line.split(" ")[1], line.split(" ")[2]);
+        } else if (line.matches("room_joined .+")) {
+            this.roomUsers.put(line.split(" ")[1], "spectator");
+        } else if (line.matches("room_left .+")) {
+            this.roomUsers.remove(line.split(" ")[1]);
+        } else if (line.equals("youre_owner")) {
+            this.weAreOwner = true;
+        } else if (line.equals("youre_kicked")) {
+            this.kicked = true;
         } else if (line.equals("everyone_ready")) {
             this.roomReady = true;
         } else if (line.equals("everyone_not_ready")) {
@@ -170,12 +169,18 @@ public class NetworkClient {
     private void interpretGame(String command) {
         if (command.equals("started")) {
             try {
-                this.syncGame();
+                main.field = new Canvas(600, 400);
+                this.requestSyncGame();
             } catch (TimeoutException e) {
-                //
+                System.out.println("Timeout!");
             }
-        } else if (command.equals("...")) {
-            // ...
+        } else if (command.matches("sync .+")) {
+            Yaml yaml = new Yaml();
+            this.main.game = Game.deserialize((Map<String, Object>) yaml.load(command.substring(5).replace(';', '\n')));
+            this.main.game.online = true;
+            Game.startMe = true;
+        } else {
+            this.main.game.doAction(command);
         }
     }
 
@@ -183,13 +188,13 @@ public class NetworkClient {
         SettingSaves loader = new SettingSaves();
 
         try {
-            Map data = loader.load("settings.yml");
+            Map data = loader.load("settings.gz");
             this.ourName = (String) data.get("multiplayer_name");
         } catch (FileNotFoundException | NullPointerException e) {
             this.ourName = "Worms player";
         }
 
-        this.queueSend("hello " + this.ourName, true);
+        this.send("hello " + this.ourName, true);
     }
 
     /**
@@ -197,9 +202,7 @@ public class NetworkClient {
      * @throws de.hhu.propra14.team101.Networking.Exceptions.RoomExistsException
     */
     public void createRoom(String name) throws NetworkException {
-        System.out.println("Creating a room called " + name);
-        this.queueSend("create_room " + name, true);
-        this.waitForAnswer();
+        this.send("create_room " + name, true);
         if (!this.lastAnswer.equals("okay")) {
             throw (new RoomExistsException());
         }
@@ -209,17 +212,17 @@ public class NetworkClient {
     }
 
     public void joinRoom(String name) throws NetworkException {
-        this.queueSend("join_room " + name, true);
-        this.waitForAnswer();
+        this.send("join_room " + name, true);
         if (this.lastAnswer.equals("does_not_exist")) {
-            throw (new RoomDoesNotExistException());
+            throw new RoomDoesNotExistException();
+        } else if (this.lastAnswer.equals("room_full")) {
+            throw new RoomFullException();
         }
         this.currentRoom = name;
     }
 
     public void leaveRoom() throws NetworkException {
-        this.queueSend("leave_room", true);
-        this.waitForAnswer();
+        this.send("leave_room", true);
         if (!this.lastAnswer.equals("okay")) {
             throw (new RoomExistsException());
         }
@@ -227,19 +230,22 @@ public class NetworkClient {
     }
 
     public String[] getRooms() throws TimeoutException {
-        this.queueSend("list_rooms", true);
-        this.waitForAnswer();
+        this.send("list_rooms", true);
         if (this.lastAnswer.equals("none")) {
             return new String[0];
         } else {
             if(this.lastAnswer.startsWith("rooms")) {
                 String rooms = this.lastAnswer.substring(6);
-                String[] roomList = rooms.split(",");
-                return roomList;
+                return rooms.split(",");
             } else {
                 return new String[0];
             }
         }
+    }
+
+    public String getOwner() throws TimeoutException {
+        this.send("get_owner", true);
+        return this.lastAnswer;
     }
 
     public boolean hasGlobalMessages() {
@@ -258,74 +264,88 @@ public class NetworkClient {
         return roomMessages.poll();
     }
 
-    public String[] getUsers() throws TimeoutException {
-        this.queueSend("list_users", true);
-        this.waitForAnswer();
+    /*public String[] getUsers() throws TimeoutException {
+        this.send("list_users", true);
         return this.lastAnswer.split(",");
-    }
+    }*/
 
-    public String[] getRoomUsers() throws TimeoutException {
-        this.queueSend("list_room_users", true);
-        this.waitForAnswer();
-        return this.lastAnswer.split(",");
-    }
-
-    private void waitForAnswer() throws TimeoutException {
-        int counter = 0;
-        while (counter <= 20) {
-            if (!this.lastAnswer.equals("")) {
-                return;
-            }
+    public void loadRoomUsers() throws TimeoutException {
+        this.send("list_room_users", true);
+        for (String user : this.lastAnswer.split(",")) {
+            roomUsers.put(user.split("\\|")[0], user.split("\\|")[1]);
         }
-        throw (new TimeoutException());
     }
 
     public void chat(char type, String message) throws TimeoutException {
-        this.queueSend("chat " + type + " " + message, true);
-        // TODO is this needed?
-        this.waitForAnswer();
+        this.send("chat " + type + " " + message, false);
     }
 
     public void switchReady() throws TimeoutException {
-        this.queueSend("ready", true);
-        this.waitForAnswer();
+        this.send("ready", true);
+    }
+
+    public void changeMap(String name) throws TimeoutException {
+        this.send("change_map "+name, false);
     }
 
     public void nextWeapon() throws TimeoutException {
-        this.queueSend("next_weapon", true);
-        this.waitForAnswer();
+        this.send("game next_weapon", true);
     }
 
     public void prevWeapon() throws TimeoutException {
-        this.queueSend("prev_weapon", true);
-        this.waitForAnswer();
+        this.send("game prev_weapon", true);
+    }
+
+    public void fireWeapon(int x, int y) throws TimeoutException {
+        this.send("game fire "+String.valueOf(x)+" "+String.valueOf(y), true);
     }
 
     public void move(char direction) throws TimeoutException {
         if (direction == 'l') {
-            this.queueSend("move_left", true);
+            this.send("game move_left", true);
         } else if (direction == 'r') {
-            this.queueSend("move_right", true);
+            this.send("game move_right", true);
         }
-        this.waitForAnswer();
+    }
+
+    public void pause() throws TimeoutException {
+        this.send("game pause", true);
     }
 
     public void startGame() throws TimeoutException {
-        this.queueSend("start_game", true);
-        this.waitForAnswer();
+        this.send("start_game", true);
     }
 
-    public void syncGame() throws TimeoutException {
-        this.queueSend("game sync", true);
-        this.waitForAnswer();
-        String answer = this.lastAnswer;
+    public void changeColor(String team) throws TimeoutException {
+        this.send("change_team " + team, false);
+        this.color = team;
+    }
+
+    public void changeMaxPlayers (int amount) throws TimeoutException {
+        this.send("change_max_players "+String.valueOf(amount), true);
+    }
+
+    public void kickUser (String name) throws TimeoutException {
+        this.send("kick_user " + name, false);
+    }
+
+    public Map<String, String> getRoomProperties() throws TimeoutException {
+        this.send("get_room_properties", true);
         Yaml yaml = new Yaml();
-        this.main.game = Game.deserialize((Map<String, Object>) yaml.load(answer.replace(';', '\n')));
+        return (Map<String, String>) yaml.load(this.lastAnswer.replace(';', '\n'));
+    }
+
+    /**
+     * Hard resyncs the game by asking the server to send the current game state as a save and substitutes the current game with that
+     * @throws TimeoutException
+     */
+    public void requestSyncGame() throws TimeoutException {
+        this.send("game sync", false);
     }
 
     public void logoff() {
         try {
-            this.queueSend("logoff", false);
+            this.send("logoff", false);
         } catch (TimeoutException e) {
             //
         }

@@ -1,9 +1,9 @@
 package de.hhu.propra14.team101.Networking;
 
+import de.hhu.propra14.team101.Networking.Exceptions.RoomFullException;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.*;
 
 /**
@@ -82,7 +82,7 @@ public class NetworkServer {
                         answer = "";
                         if (currentUser.getCurrentRoom() != null) {
                             for (NetworkUser user : currentUser.getCurrentRoom().users) {
-                                answer += user.name + ",";
+                                answer += user.name + "|"+user.team+",";
                             }
                         } else {
                             answer = "error client no_room";
@@ -101,17 +101,24 @@ public class NetworkServer {
                         if (this.roomMap.containsKey(roomName)) {
                             answer = "exists";
                         } else {
-                            this.roomMap.put(roomName, new NetworkRoom(roomName, 0)); // TODO use the actual selected map instead of 0
+                            this.roomMap.put(
+                                    roomName,
+                                    new NetworkRoom(roomName, "Map1") // Map1 is a placeholder - for the case the initial change_map got lost
+                            );
                             currentUser.joinRoom(this.roomMap.get(roomName));
                             answer = "okay";
                         }
                     } else if (command.matches("join_room .+")) {
                         String roomName = command.substring(command.indexOf(" ")+1);
                         if (this.roomMap.containsKey(roomName)) {
-                            currentUser.joinRoom(this.roomMap.get(roomName));
-                            // One user who isn't ready just joined
-                            currentUser.getCurrentRoom().setRoomReady(false);
-                            answer = "okay";
+                            try {
+                                currentUser.joinRoom(this.roomMap.get(roomName));
+                                // One user who isn't ready just joined
+                                currentUser.getCurrentRoom().setRoomReady(false);
+                                answer = "okay";
+                            } catch (RoomFullException e) {
+                                answer = "room_full";
+                            }
                         } else {
                             answer = "does_not_exist";
                         }
@@ -120,8 +127,68 @@ public class NetworkServer {
                         currentUser.leaveRoom();
                         if (room.empty) {
                             this.roomMap.remove(room.name);
+                        } else {
+                            room.users.get(0).send("youre_owner");
                         }
                         answer = "okay";
+                    } else if (command.matches("change_team .+")) {
+                        String team = command.substring(12);
+                        if (
+                                team.equals("spectator") ||
+                                currentUser.getCurrentRoom().availableColors.isEmpty() ||
+                                !currentUser.getCurrentRoom().availableColors.contains(team)
+                        ) {
+                            currentUser.team = "spectator";
+                        } else {
+                            currentUser.team = team;
+                        }
+                        // Propagate
+                        currentUser.getCurrentRoom().propagate("change_team " + currentUser.name + " " + team);
+                        answer = "okay";
+                    } else if (command.matches("change_max_players .+")) {
+                        if (currentUser == currentUser.getCurrentRoom().owner) {
+                            currentUser.getCurrentRoom().maxUsers = Integer.parseInt(command.split(" ")[1]);
+                        }
+                        answer = "okay";
+                    } else if (command.matches("change_map .+")) {
+                        if (currentUser == currentUser.getCurrentRoom().owner) {
+                            currentUser.getCurrentRoom().selectedMap = command.split(" ")[1];
+                        }
+                        answer = "okay";
+                    } else if (command.matches("kick_user .+")) {
+                        if (currentUser == currentUser.getCurrentRoom().owner) {
+                            // Search the user
+                            NetworkUser toKick = null;
+                            for (NetworkUser anUser : currentUser.getCurrentRoom().users) {
+                                if (anUser.name.equals(command.substring(10))) {
+                                    toKick = anUser;
+                                }
+                            }
+                            if (toKick == null) {
+                                answer = "error client no_user";
+                            } else {
+                                toKick.send("youre_kicked");
+                                toKick.leaveRoom();
+                                answer = "okay";
+                            }
+                        } else {
+                            answer = "error client not_owner";
+                        }
+                    } else if (command.equals("get_owner")) {
+                        if (currentUser.getCurrentRoom() != null) {
+                            answer = currentUser.getCurrentRoom().users.get(0).name;
+                        } else {
+                            answer = "error client no_room";
+                        }
+                    } else if (command.equals("get_room_properties")) {
+                        Map<String, String> data = new HashMap<>();
+                        data.put("map", currentUser.getCurrentRoom().selectedMap);
+                        data.put("name", currentUser.getCurrentRoom().name);
+                        data.put("password", currentUser.getCurrentRoom().password);
+                        data.put("max_players", String.valueOf(currentUser.getCurrentRoom().maxUsers));
+                        // TODO put checked weapons in here
+                        Yaml yaml = new Yaml();
+                        answer = yaml.dump(data).replace('\n', ';');
                     } else if (command.matches("chat .+")) {
                         String message = command.substring(5);
                         for (NetworkUser user : userMap.values()) {
@@ -138,21 +205,18 @@ public class NetworkServer {
                             }
                         }
 
-                        // Set the room ready
-                        if (everyoneReady) {
-                            currentUser.getCurrentRoom().setRoomReady(everyoneReady);
-                        } else if (currentUser.getCurrentRoom().roomReady) { // Not everyone is ready now, but the room is still ready
+                        // Set the room ready or not ready
+                        if (everyoneReady || currentUser.getCurrentRoom().roomReady) {
                             currentUser.getCurrentRoom().setRoomReady(everyoneReady);
                         }
                         answer = "okay";
                     } else if (command.equals("start_game")) {
                         if (currentUser == currentUser.getCurrentRoom().users.get(0)) {
                             if (currentUser.getCurrentRoom().roomReady) {
-                                NetworkGame game = new NetworkGame(currentUser.getCurrentRoom(), 0); // TODO pass the actual selected map here
+                                NetworkGame game = new NetworkGame(currentUser.getCurrentRoom());
                                 for (NetworkUser user : currentUser.getCurrentRoom().users) {
                                     user.game = game;
                                     user.send("game started");
-                                    // TODO bootstrap initial data here
                                 }
                                 answer = "okay";
                             } else {

@@ -1,6 +1,8 @@
 package de.hhu.propra14.team101;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -8,12 +10,8 @@ import java.util.ResourceBundle;
 import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
-import de.hhu.propra14.team101.Savers.SettingSaves;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -25,8 +23,10 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.util.Duration;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import org.newdawn.easyogg.OggClip;
 
 /**
  * Main class, that starts the program
@@ -39,13 +39,13 @@ public class Main extends Application implements Initializable {
     protected Stage primaryStage;
     //private int jumping = 0;
     //private Worm jumpingWorm;
-    private Timeline timeline;
     protected ArrayList<Player> players;
     protected ArrayList<String> availableColors;
     protected NetworkClient client;
     protected GUI gui;
     protected Lobby lobby;
-    public boolean isOnlineGame = false;
+
+    public static boolean headless = false;
 
     public static void main (String[] args) {
         launch(args);
@@ -61,6 +61,18 @@ public class Main extends Application implements Initializable {
      */
     @Override
     public void start (final Stage primaryStage){
+        try {
+            OggClip ogg = new OggClip("music/Main-Theme.ogg");
+            ogg.loop();
+            /*ogg.setBalance(-1.0f);
+            ogg.play();
+            ogg.pause();
+            ogg.resume();
+            ogg.stop();
+            ogg.setGain(1.0f);*/
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.gui = new GUI(this);
         this.lobby = new Lobby(this);
 
@@ -103,16 +115,7 @@ public class Main extends Application implements Initializable {
 
     }
 
-    /**
-     * Starts the gameplay
-     */
-    public void startGameplay(int levelNumber, GraphicsContext gc) {
-
-        // Don't redefine game, if we already have one (e.g. in network gaming)
-        if (this.game == null) {
-            this.game = new Game(players);
-        }
-
+    public void initializeHandlers() {
         final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -122,13 +125,14 @@ public class Main extends Application implements Initializable {
                 }
                 if (mouseEvent.isSecondaryButtonDown()) {
                     if (game.turnOfPlayer < game.getPlayers().size()) {
-                        if (isOnlineGame) {
-                            //
-                        }
-                        Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
-                        // Don't fire without a weapon
-                        if (currentWorm.weaponList.size() != 0) {
-                            game.fireBullet(currentWorm.fireWeapon(mouseEvent.getX(), mouseEvent.getY()));
+                        if (game.online) {
+                            try {
+                                client.fireWeapon((int) mouseEvent.getX(), (int) mouseEvent.getY());
+                            } catch (TimeoutException e) {
+                                //
+                            }
+                        } else {
+                            game.doAction("fire "+String.valueOf((int) mouseEvent.getX())+" "+String.valueOf((int) mouseEvent.getY()));
                         }
                     }
                 }
@@ -145,23 +149,25 @@ public class Main extends Application implements Initializable {
                 // Scrolled up
                 Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
                 if (scrollEvent.getDeltaY() > 0) {
-                    if (isOnlineGame) {
+                    if (game.online) {
                         try {
                             client.nextWeapon();
                         } catch (TimeoutException e) {
                             //
                         }
+                    } else {
+                        currentWorm.nextWeapon();
                     }
-                    currentWorm.nextWeapon();
                 } else if (scrollEvent.getDeltaY() < 0) { // Scrolled down
-                    if (isOnlineGame) {
+                    if (game.online) {
                         try {
                             client.prevWeapon();
                         } catch (TimeoutException e) {
                             //
                         }
+                    } else {
+                        currentWorm.prevWeapon();
                     }
-                    currentWorm.prevWeapon();
                 }
             }
         };
@@ -173,9 +179,10 @@ public class Main extends Application implements Initializable {
                     // Don't do anything
                     return;
                 }
-                if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                // Only allow this when we're not online, but if we're online allow it when the game is finished
+                if (keyEvent.getCode() == KeyCode.ESCAPE && (game.isGameFinished() || !game.online)) {
                     // Close the game
-                    timeline.stop();
+                    game.timeline.stop();
                     gui.addMainButtons();
                     // Remove old handlers
                     primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
@@ -190,43 +197,55 @@ public class Main extends Application implements Initializable {
                     //    jumpingWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm);
                     //}
                 } else if (keyEvent.getCode() == KeyCode.LEFT) {
-                    if (isOnlineGame) {
+                    if (game.online) {
                         try {
                             client.move('l');
                         } catch (TimeoutException e) {
                             //
                         }
+                    } else {
+                        game.doAction("move_left");
                     }
-                    int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
-                    game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('l');
                 } else if (keyEvent.getCode() == KeyCode.RIGHT) {
-                    int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
-                    game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm).move('r');
-                    if (isOnlineGame) {
+                    if (game.online) {
                         try {
                             client.move('r');
                         } catch (TimeoutException e) {
                             //
                         }
+                    } else {
+                        game.doAction("move_right");
                     }
                 } else if (keyEvent.getCode() == KeyCode.I) {
                     // Show the inventory
                 } else if (keyEvent.getCode() == KeyCode.P) {
                     // (Un-)Pause the game
-                    game.paused = !game.paused;
-                } else if (keyEvent.getCode() == KeyCode.T) {
-                    if (isOnlineGame) {
-                        // Show the chat ingame here
+                    if (game.online) {
+                        try {
+                            client.pause();
+                        } catch (TimeoutException e) {
+                            //
+                        }
+                    } else {
+                        game.doAction("pause");
                     }
-                } else if (keyEvent.getCode() == KeyCode.S) {
+                } else if (keyEvent.getCode() == KeyCode.T && game.online) {
+                    // Show the chat ingame here
+                } else if (keyEvent.getCode() == KeyCode.X && game.online) {
+                    try {
+                        client.requestSyncGame();
+                    } catch (TimeoutException e) {
+                        //
+                    }
+                } else if (keyEvent.getCode() == KeyCode.S && !game.online) {
                     // Save a game
                     GameSaves saver = new GameSaves();
-                    saver.save(game, "GameSave.yml");
-                } else if (keyEvent.getCode() == KeyCode.L) {
+                    saver.save(game, "GameSave.gz");
+                } else if (keyEvent.getCode() == KeyCode.L && !game.online) {
                     // Load a game
                     GameSaves loader = new GameSaves();
                     try {
-                        game = loader.load("GameSave.yml");
+                        game = loader.load("GameSave.gz", false);
                     } catch (FileNotFoundException e) {
                         //
                     }
@@ -237,44 +256,6 @@ public class Main extends Application implements Initializable {
         this.primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keypressHandler);
         this.primaryStage.getScene().addEventHandler(MouseEvent.ANY, mouseHandler);
         this.primaryStage.getScene().addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-
-        this.game.startLevel(levelNumber, gc);
-
-        // Load fps from settings
-        int fps;
-        SettingSaves loader = new SettingSaves();
-        try {
-            fps = Integer.parseInt((String) loader.load("settings.yml").get("fps"));
-        } catch (FileNotFoundException | NullPointerException | NumberFormatException e) {
-            fps = 16;
-        }
-
-        //Prepare updating game
-        final Duration oneFrameAmt = Duration.millis(1000/fps);
-        final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
-                new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent event) {
-                        if(game.isGameFinished())
-                        {
-                           stopUpdating();
-                           gui.winScreen(game.getPlayers().get(0).name);
-                        } else{
-                            game.updateGame(field.getGraphicsContext2D());
-                            //System.out.println("Ausgabe");
-                        }
-                       
-                    }
-                });
-
-        // Construct a timeline with the mainloop
-        this.timeline = new Timeline(keyFrame);
-        this.timeline.setCycleCount(Animation.INDEFINITE);
-        this.timeline.play();
-    }
-
-    private void stopUpdating() {
-        this.timeline.stop();
-        this.gui.winScreen(game.getPlayers().get(0).name);
     }
 }
 
