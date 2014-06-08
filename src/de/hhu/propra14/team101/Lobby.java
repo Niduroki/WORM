@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101;
 
+import de.hhu.propra14.team101.GUIElements.ColoredListCell;
 import de.hhu.propra14.team101.GUIElements.NumberTextField;
 import de.hhu.propra14.team101.Networking.Exceptions.*;
 import javafx.animation.Animation;
@@ -553,16 +554,5 @@ public class Lobby {
                 }
             }
         });
-    }
-
-    static class ColoredListCell extends ListCell<String[]> {
-        @Override
-        public void updateItem(String[] item, boolean empty) {
-            super.updateItem(item, empty);
-            if (item != null) {
-                setText(item[0]);
-                setStyle("-fx-background-color: #"+item[1]);
-            }
-        }
     }
 }
