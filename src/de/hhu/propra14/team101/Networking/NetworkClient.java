@@ -213,7 +213,9 @@ public class NetworkClient {
     public void joinRoom(String name) throws NetworkException {
         this.send("join_room " + name, true);
         if (this.lastAnswer.equals("does_not_exist")) {
-            throw (new RoomDoesNotExistException());
+            throw new RoomDoesNotExistException();
+        } else if (this.lastAnswer.equals("room_full")) {
+            throw new RoomFullException();
         }
         this.currentRoom = name;
     }
@@ -316,6 +318,10 @@ public class NetworkClient {
     public void changeColor(String team) throws TimeoutException {
         this.send("change_team " + team, false);
         this.color = team;
+    }
+
+    public void changeMaxPlayers (int amount) throws TimeoutException {
+        this.send("change_max_players "+String.valueOf(amount), true);
     }
 
     public void kickUser (String name) throws TimeoutException {

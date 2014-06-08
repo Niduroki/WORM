@@ -1,5 +1,7 @@
 package de.hhu.propra14.team101.Networking;
 
+import de.hhu.propra14.team101.Networking.Exceptions.RoomFullException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -11,6 +13,8 @@ public class NetworkRoom {
     public boolean empty = false;
     public boolean roomReady = false;
     public String selectedMap;
+    /** 0 means infinite */
+    public int maxUsers = 0;
 
     public NetworkRoom(String name, String selectedMap) {
         this.name = name;
@@ -18,7 +22,10 @@ public class NetworkRoom {
         Collections.addAll(availableColors, "red", "blue", "green", "yellow");
     }
 
-    public void addUser(NetworkUser user) {
+    public void addUser(NetworkUser user) throws RoomFullException {
+        if (this.maxUsers != 0 && this.users.size() == this.maxUsers) {
+            throw new RoomFullException();
+        }
         this.users.add(user);
         this.updateOwner();
     }

@@ -1,5 +1,7 @@
 package de.hhu.propra14.team101.Networking;
 
+import de.hhu.propra14.team101.Networking.Exceptions.RoomFullException;
+
 import java.io.PrintWriter;
 import java.util.UUID;
 
@@ -21,7 +23,7 @@ public class NetworkUser {
         this.networkOutput = networkOutput;
     }
 
-    public void joinRoom(NetworkRoom room) {
+    public void joinRoom(NetworkRoom room) throws RoomFullException {
         if (this.currentRoom != null) {
             this.leaveRoom();
         }

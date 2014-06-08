@@ -73,8 +73,10 @@ public class Lobby {
                         globalTimeline.stop();
                         addroombtns();
                     }
+                } catch (RoomFullException e) {
+                    System.out.println("Room full!");
                 } catch (RoomDoesNotExistException e) {
-                    //
+                    System.out.println("Room does not exist!");
                 } catch (NetworkException e) {
                     System.out.println(e.getMessage());
                 }
@@ -450,12 +452,12 @@ public class Lobby {
                     main.client.createRoom(text1.getText());
                     // If there's a password: Use it
                     if (!text2.getText().isEmpty()) {
-                        //main.client.changePassword();
+                        //main.client.changePassword(text2.getText());
                     }
                     main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
-                    // If the owner defined a password: Use it
+                    // If the owner defined a max player amount: Use it
                     if (!maxPlayers.getText().isEmpty()) {
-                        //main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
+                        main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
                     }
                     addroombtns();
                 } catch (RoomExistsException e) {
@@ -534,7 +536,7 @@ public class Lobby {
                     main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
                     // If the owner defined a password: Use it
                     if (!maxPlayers.getText().isEmpty()) {
-                        //main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
+                        main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
                     }
                     addroombtns();
                 } catch (NetworkException e) {

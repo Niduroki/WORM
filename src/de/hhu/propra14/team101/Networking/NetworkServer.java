@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101.Networking;
 
+import de.hhu.propra14.team101.Networking.Exceptions.RoomFullException;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.PrintWriter;
@@ -110,10 +111,14 @@ public class NetworkServer {
                     } else if (command.matches("join_room .+")) {
                         String roomName = command.substring(command.indexOf(" ")+1);
                         if (this.roomMap.containsKey(roomName)) {
-                            currentUser.joinRoom(this.roomMap.get(roomName));
-                            // One user who isn't ready just joined
-                            currentUser.getCurrentRoom().setRoomReady(false);
-                            answer = "okay";
+                            try {
+                                currentUser.joinRoom(this.roomMap.get(roomName));
+                                // One user who isn't ready just joined
+                                currentUser.getCurrentRoom().setRoomReady(false);
+                                answer = "okay";
+                            } catch (RoomFullException e) {
+                                answer = "room_full";
+                            }
                         } else {
                             answer = "does_not_exist";
                         }
@@ -139,6 +144,11 @@ public class NetworkServer {
                         }
                         // Propagate
                         currentUser.getCurrentRoom().propagate("change_team " + currentUser.name + " " + team);
+                        answer = "okay";
+                    } else if (command.matches("change_max_players .+")) {
+                        if (currentUser == currentUser.getCurrentRoom().owner) {
+                            currentUser.getCurrentRoom().maxUsers = Integer.parseInt(command.split(" ")[1]);
+                        }
                         answer = "okay";
                     } else if (command.matches("change_map .+")) {
                         if (currentUser == currentUser.getCurrentRoom().owner) {
