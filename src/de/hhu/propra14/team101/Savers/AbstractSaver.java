@@ -2,7 +2,7 @@ package de.hhu.propra14.team101.Savers;
 
 import org.yaml.snakeyaml.Yaml;
 
-public class AbstractSaver {
+public abstract class AbstractSaver {
     protected Yaml yaml;
 
     /**
