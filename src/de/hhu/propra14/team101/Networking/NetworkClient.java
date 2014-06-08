@@ -143,7 +143,8 @@ public class NetworkClient {
                 roomMessages.add(user + ">: " + message);
             }
         } else if (line.matches("change_team .+ .+")) {
-           // this.roomUsers.replace(line.split(" ")[1], line.split(" ")[2]);
+            // TODO this is an error somehow (replace() isn't found)
+            //this.roomUsers.replace(line.split(" ")[1], line.split(" ")[2]);
         } else if (line.matches("room_joined .+")) {
             this.roomUsers.put(line.split(" ")[1], "spectator");
         } else if (line.matches("room_left .+")) {
@@ -326,6 +327,12 @@ public class NetworkClient {
 
     public void kickUser (String name) throws TimeoutException {
         this.send("kick_user " + name, false);
+    }
+
+    public Map<String, String> getRoomProperties() throws TimeoutException {
+        this.send("get_room_properties", true);
+        Yaml yaml = new Yaml();
+        return (Map<String, String>) yaml.load(this.lastAnswer.replace(';', '\n'));
     }
 
     /**

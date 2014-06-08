@@ -13,6 +13,7 @@ public class NetworkRoom {
     public boolean empty = false;
     public boolean roomReady = false;
     public String selectedMap;
+    public String password = "";
     /** 0 means infinite */
     public int maxUsers = 0;
 

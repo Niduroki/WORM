@@ -180,6 +180,15 @@ public class NetworkServer {
                         } else {
                             answer = "error client no_room";
                         }
+                    } else if (command.equals("get_room_properties")) {
+                        Map<String, String> data = new HashMap<>();
+                        data.put("map", currentUser.getCurrentRoom().selectedMap);
+                        data.put("name", currentUser.getCurrentRoom().name);
+                        data.put("password", currentUser.getCurrentRoom().password);
+                        data.put("max_players", String.valueOf(currentUser.getCurrentRoom().maxUsers));
+                        // TODO put checked weapons in here
+                        Yaml yaml = new Yaml();
+                        answer = yaml.dump(data).replace('\n', ';');
                     } else if (command.matches("chat .+")) {
                         String message = command.substring(5);
                         for (NetworkUser user : userMap.values()) {

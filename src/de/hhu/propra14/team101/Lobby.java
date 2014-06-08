@@ -515,7 +515,16 @@ public class Lobby {
         this.main.grid.add(weaponBox2, 1, 5);
         this.main.grid.add(weaponBox3, 2, 5);
 
-        // TODO prefill every input with the values we have right now
+        try {
+            Map<String, String> data = this.main.client.getRoomProperties();
+            text1.setText(data.get("name"));
+            text2.setText(data.get("password"));
+            map.getSelectionModel().select("Map "+data.get("map").charAt(3));
+            maxPlayers.setText(data.get("max_players"));
+            // TODO check selected weapons
+        } catch (TimeoutException e) {
+            System.out.println("Timeout while loading room properties!");
+        }
 
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
