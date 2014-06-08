@@ -1,32 +1,29 @@
 package de.hhu.propra14.team101;
 
-import java.io.File;
+import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
+import de.hhu.propra14.team101.Networking.NetworkClient;
+import de.hhu.propra14.team101.Savers.GameSaves;
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
-import de.hhu.propra14.team101.Networking.NetworkClient;
-import de.hhu.propra14.team101.Savers.GameSaves;
-import javafx.animation.Timeline;
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.input.*;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import org.newdawn.easyogg.OggClip;
 
 /**
  * Main class, that starts the program
@@ -61,18 +58,6 @@ public class Main extends Application implements Initializable {
      */
     @Override
     public void start (final Stage primaryStage){
-        try {
-            OggClip ogg = new OggClip("music/Main-Theme.ogg");
-            ogg.loop();
-            /*ogg.setBalance(-1.0f);
-            ogg.play();
-            ogg.pause();
-            ogg.resume();
-            ogg.stop();
-            ogg.setGain(1.0f);*/
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         this.gui = new GUI(this);
         this.lobby = new Lobby(this);
 
