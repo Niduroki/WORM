@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 /**
  * Main class, that starts the program
@@ -54,8 +57,13 @@ public class Main extends Application implements Initializable {
      */
     @Override
     public void start (final Stage primaryStage){
+        final String resource = new File("resources/music/Main-Theme.mp3").toURI().toString();
+        final Media media = new Media(resource);
+        final MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
         this.gui = new GUI(this);
         this.lobby = new Lobby(this);
+
 
         primaryStage.setTitle("Name");
         this.grid = new GridPane();
