@@ -337,15 +337,11 @@ public class Game {
         final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
-                        if(gameFinished)
-                        {
+                        if(gameFinished) {
                             stopUpdating();
                         } else{
                             updateGame();
-                            if (!Main.headless) {
-                                draw(gc);
-                            }
-                            //System.out.println("Ausgabe");
+                            draw(gc);
                         }
 
                     }
@@ -365,7 +361,16 @@ public class Game {
 
     private void stopUpdating() {
         this.timeline.stop();
-        //this.gui.winScreen(game.getPlayers().get(0).name);
+        this.winScreen(players.get(0).name);
+    }
+
+    private void winScreen(String name) {
+        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.setFill(Color.BLACK);
+        gc.setFont(new Font(25));
+        gc.fillText("Player " + name + " won!", 70, 150);
+        gc.setFont(new Font(15));
+        gc.fillText("Press Escape to return to main menu", 70, 200);
     }
 
     public void doAction(String action) {
