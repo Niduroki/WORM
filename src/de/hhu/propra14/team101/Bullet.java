@@ -36,7 +36,11 @@ public class Bullet {
    }
 
     public void draw (GraphicsContext gc) {
-        gc.setFill(Color.RED);
-        gc.fillRect(physics.getXCoordinate(), physics.getYCoordinate(), 5, 5);
+        if (this.weapon.image != null) {
+            gc.drawImage(this.weapon.image, physics.getXCoordinate(), physics.getYCoordinate(), 5, 5);
+        } else {
+            gc.setFill(Color.RED);
+            gc.fillRect(physics.getXCoordinate(), physics.getYCoordinate(), 5, 5);
+        }
     }
 }

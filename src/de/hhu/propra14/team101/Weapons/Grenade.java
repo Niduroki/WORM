@@ -5,11 +5,13 @@ import de.hhu.propra14.team101.Physics;
 import javafx.scene.image.Image;
 
 public class Grenade extends AbstractWeapon {
-    public Image image = new Image("grenade.png");
+
+
     public Grenade() {
         this.name = "Grenade";
         this.damage = 20;
         this.radius = 3.0;
+        this.image = new Image ("grenade.png");
     }
 
     public Bullet fire(Physics physics) {
