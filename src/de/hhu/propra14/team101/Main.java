@@ -16,6 +16,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -90,6 +92,25 @@ public class Main extends Application implements Initializable {
         primaryStage.setScene(scene);
         primaryStage.show();
         grid.setStyle("-fx-background-color: #00BFFF");
+
+        
+    }
+
+    public class SecondWindow extends Application
+    {
+
+        @Override
+        public void start(Stage primaryStage) {
+            primaryStage.setTitle("Second window");
+            Button btn = new Button();
+            btn.setText("Test");
+
+            StackPane root = new StackPane();
+            root.getChildren().add(btn);
+            primaryStage.setScene(new Scene(root, 100, 100));
+            primaryStage.show();
+        }
+
     }
 
     public void initializeHandlers() {
