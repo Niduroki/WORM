@@ -1,18 +1,19 @@
 package de.hhu.propra14.team101;
 
-import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.SettingSaves;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import de.hhu.propra14.team101.Weapons.AtomicBomb;
 import de.hhu.propra14.team101.Weapons.Bazooka;
 import de.hhu.propra14.team101.Weapons.Grenade;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -295,7 +296,6 @@ public class GUI {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-
                 main.field = new Canvas(600, 400);
                 main.grid.getChildren().clear();
                 main.grid.add(main.field, 0, 0);

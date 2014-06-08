@@ -14,8 +14,10 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+import org.newdawn.easyogg.OggClip;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -33,6 +35,7 @@ public class Game {
     public Queue<String> onlineCommandQueue = new PriorityQueue<>();
     // Necessary to tell the lobby javafx process to start the game now
     public static boolean startMe = false;
+    private OggClip music;
 
     private ArrayList<Player> players = new ArrayList<>();
     private Level level;
@@ -317,6 +320,12 @@ public class Game {
      * Start the level and initialize terrain and worms.
      */
     public void startLevel() {
+        try {
+            music = new OggClip("music/Main-Theme.ogg");
+            music.loop();
+        } catch (IOException f) {
+            f.printStackTrace();
+        }
         if (!this.online) {
             this.currentTerrain = level.getTerrain();
             level.setWormsStartPosition(this.getPlayers());
@@ -339,6 +348,7 @@ public class Game {
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
                         if(gameFinished) {
+                            music.pause();
                             stopUpdating();
                         } else{
                             updateGame();
@@ -362,6 +372,12 @@ public class Game {
 
     private void stopUpdating() {
         this.timeline.stop();
+        try {
+            music = new OggClip("music/Victory.ogg");
+            music.resume();
+        } catch (IOException f) {
+            f.printStackTrace();
+        }
         this.winScreen(players.get(0).name);
     }
 
