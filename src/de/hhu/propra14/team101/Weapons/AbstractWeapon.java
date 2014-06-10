@@ -18,8 +18,12 @@ abstract public class AbstractWeapon {
     public double damage;
     /** Radius of the weapon */
     public double radius;
-    /** Graphic of the weapon */
-    public Image image;
+    /** Weight of the weapons bullet */
+    public double weight;
+    /** Graphic of the weapon itself */
+    public Image weaponImage;
+    /** Graphic of the weapons bullet */
+    public Image bulletImage;
 
 
     abstract public Bullet fire (Physics physics);
@@ -27,21 +31,21 @@ abstract public class AbstractWeapon {
     public Map serialize() {
         Map<String, Object> data = new HashMap<>();
         data.put("name", this.name);
-        data.put("damage", this.damage);
-        data.put("radius", this.radius);
         return data;
     }
 
     public static AbstractWeapon deserialize(Map input) {
-        if (input.get("name").toString().equals("Atomic bomb")) {
-            return new AtomicBomb();
-        } else if (input.get("name").toString().equals("Bazooka")) {
-            return new Bazooka();
-        } else if (input.get("name").toString().equals("Grenade")) {
-            return new Grenade();
-        } else {
-            System.out.println("AbstractWeapon.deserialize: Unknown weapon");
-            return null;
+        String weaponName = input.get("name").toString();
+        switch (weaponName) {
+            case "Atomic bomb":
+                return new AtomicBomb();
+            case "Bazooka":
+                return new Bazooka();
+            case "Grenade":
+                return new Grenade();
+            default:
+                System.out.println("AbstractWeapon.deserialize: Unknown weapon");
+                return null;
         }
     }
 }

@@ -12,8 +12,10 @@ public class Bazooka extends AbstractWeapon {
         this.name = "Bazooka";
         this.damage = 10;
         this.radius = 5.5;
+        this.weight = 1;
         if (!Main.headless) {
-            this.image = new Image("Bazooka.png");
+            this.weaponImage = new Image("images/Bazooka.png");
+            this.bulletImage = new Image("images/Bazooka.png");
         }
     }
 

@@ -12,8 +12,10 @@ public class Grenade extends AbstractWeapon {
         this.name = "Grenade";
         this.damage = 20;
         this.radius = 3.0;
+        this.weight = 1;
         if (!Main.headless) {
-            this.image = new Image("grenade.png");
+            this.weaponImage = new Image("images/Grenade.png");
+            this.bulletImage = new Image("images/Grenade.png");
         }
     }
 

@@ -12,8 +12,10 @@ public class AtomicBomb extends AbstractWeapon {
         this.name = "Atomic bomb";
         this.damage = 25;
         this.radius = 20.5;
+        this.weight = 1;
         if (!Main.headless) {
-            this.image = new Image("atomicbomb.png");
+            this.weaponImage = new Image("images/AtomicBomb.png");
+            this.bulletImage = new Image("images/AtomicBomb.png");
         }
     }
 
