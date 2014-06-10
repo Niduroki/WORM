@@ -3,6 +3,7 @@ package de.hhu.propra14.team101;
 import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
+import de.hhu.propra14.team101.Savers.LevelSaves;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -206,6 +207,10 @@ public class Main extends Application {
                     } catch (FileNotFoundException e) {
                         //
                     }
+                } else if (keyEvent.getCode() == KeyCode.M) {
+                    // Save the map, in case the map format changed, yet old maps are still loadable
+                    LevelSaves saver = new LevelSaves();
+                    saver.save(game.getLevel(), "LevelSave.gz");
                 }
             }
         };

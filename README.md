@@ -8,3 +8,4 @@ Some magical key-combinations:
  - S to save a game
  - L to load a game
  - X to sync an online game
+ - M to save the current map (useful to create new map files)
