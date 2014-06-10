@@ -460,22 +460,26 @@ public class Lobby {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                try {
-                    main.client.createRoom(text1.getText());
-                    // If there's a password: Use it
-                    if (!text2.getText().isEmpty()) {
-                        //main.client.changePassword(text2.getText());
+                // Don't do anything if no name for the room is provided and no weapon selected (latter is a TODO)
+                if (!text1.getText().isEmpty()) {
+                    try {
+                        main.client.createRoom(text1.getText());
+                        // If there's a password: Use it
+                        if (!text2.getText().isEmpty()) {
+                            //main.client.changePassword(text2.getText());
+                        }
+                        main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
+                        // If the owner defined a max player amount: Use it
+                        if (!maxPlayers.getText().isEmpty()) {
+                            main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
+                        }
+                        //
+                        addRoomButtons();
+                    } catch (RoomExistsException e) {
+                        text1.setText("");
+                    } catch (NetworkException e) {
+                        //
                     }
-                    main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
-                    // If the owner defined a max player amount: Use it
-                    if (!maxPlayers.getText().isEmpty()) {
-                        main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
-                    }
-                    addRoomButtons();
-                } catch (RoomExistsException e) {
-                    text1.setText("");
-                } catch (NetworkException e) {
-                    //
                 }
             }
         });
@@ -528,12 +532,12 @@ public class Lobby {
         this.main.grid.add(weaponBox3, 2, 5);
 
         try {
-            Map<String, String> data = this.main.client.getRoomProperties();
-            text1.setText(data.get("name"));
-            text2.setText(data.get("password"));
-            map.getSelectionModel().select("Map "+data.get("map").charAt(3));
-            maxPlayers.setText(data.get("max_players"));
-            // TODO check selected weapons
+            Map<String, Object> data = this.main.client.getRoomProperties();
+            text1.setText((String) data.get("name"));
+            text2.setText((String) data.get("password"));
+            map.getSelectionModel().select("Map "+ ((String) data.get("map")).charAt(3));
+            maxPlayers.setText((String) data.get("max_players"));
+            // TODO tick selected weapons (they're saved in data.get("weapons"))
         } catch (TimeoutException e) {
             System.out.println("Timeout while loading room properties!");
         }
@@ -547,21 +551,24 @@ public class Lobby {
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                try {
-                    // TODO change which values changed here
-                    //main.client.changeRoomName(text1.getText());
-                    // If there's a password: Use it
-                    if (!text2.getText().isEmpty()) {
-                        //main.client.changePassword();
+                // Don't do anything if no name for the room is provided and no weapon selected (latter is a TODO)
+                if (!text1.getText().isEmpty()) {
+                    try {
+                        // TODO change which values changed here
+                        //main.client.changeRoomName(text1.getText());
+                        // If there's a password: Use it
+                        if (!text2.getText().isEmpty()) {
+                            //main.client.changePassword();
+                        }
+                        main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
+                        // If the owner defined a password: Use it
+                        if (!maxPlayers.getText().isEmpty()) {
+                            main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
+                        }
+                        addRoomButtons();
+                    } catch (NetworkException e) {
+                        //
                     }
-                    main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
-                    // If the owner defined a password: Use it
-                    if (!maxPlayers.getText().isEmpty()) {
-                        main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
-                    }
-                    addRoomButtons();
-                } catch (NetworkException e) {
-                    //
                 }
             }
         });

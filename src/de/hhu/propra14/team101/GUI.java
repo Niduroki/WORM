@@ -122,7 +122,7 @@ public class GUI {
         String initialValue2;
         SettingSaves loader = new SettingSaves();
         try {
-            Map<String, Object> data = (Map<String, Object>) loader.load("settings.gz");
+            Map<String, Object> data = loader.load("settings.gz");
             initialValue1 = data.get("multiplayer_server").toString();
             initialValue2 = data.get("multiplayer_name").toString();
             fpsBox.getSelectionModel().select(data.get("fps").toString());
@@ -296,7 +296,7 @@ public class GUI {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                main.field = new Canvas(600, 400);
+                main.field = new Canvas(600*Main.sizeMultiplier, 400*Main.sizeMultiplier);
                 main.grid.getChildren().clear();
                 main.grid.add(main.field, 0, 0);
                 main.game = new Game(main.players);
