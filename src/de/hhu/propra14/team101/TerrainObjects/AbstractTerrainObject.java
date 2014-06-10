@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101.TerrainObjects;
 
+import de.hhu.propra14.team101.Main;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -7,9 +8,7 @@ import javafx.scene.image.Image;
  * Class to create terrain with
  */
 abstract public class AbstractTerrainObject {
-    protected int size = 10;
-
-    protected int color;
+    public static int baseSize = 10;
 
     protected boolean destructible;
 
@@ -45,22 +44,6 @@ abstract public class AbstractTerrainObject {
     }
 
     /**
-     * @param color Color for the object
-     * Sets the color
-     */
-    public void setColor (int color) {
-        this.color = color;
-    }
-
-    /**
-     * @return Color of the object
-     * Gets the color
-     */
-    public int getColor () {
-        return this.color;
-    }
-
-    /**
      * @param destructible Destructibility of the object
      * Sets the destructibility
      */
@@ -76,11 +59,16 @@ abstract public class AbstractTerrainObject {
         return this.destructible;
     }
 
-
     /**
      * Draws the object
      */
     public void draw (GraphicsContext gc) {
-        gc.drawImage(this.image, this.xCoordinate*this.size, this.yCoordinate*this.size, this.size, this.size);
+        gc.drawImage(
+                this.image,
+                this.xCoordinate*(AbstractTerrainObject.baseSize * Main.sizeMultiplier),
+                this.yCoordinate*(AbstractTerrainObject.baseSize * Main.sizeMultiplier),
+                (AbstractTerrainObject.baseSize * Main.sizeMultiplier),
+                (AbstractTerrainObject.baseSize * Main.sizeMultiplier)
+        );
     }
 }

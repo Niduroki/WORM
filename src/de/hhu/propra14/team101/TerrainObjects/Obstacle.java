@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101.TerrainObjects;
 
+import de.hhu.propra14.team101.Main;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -8,7 +9,7 @@ import javafx.scene.paint.Color;
  */
 public class Obstacle extends AbstractTerrainObject {
 
-    protected int size = 10;
+    private int color;
 
     public Obstacle (int x, int y) {
         super(x, y);
@@ -22,9 +23,10 @@ public class Obstacle extends AbstractTerrainObject {
     public void draw (GraphicsContext gc) {
         gc.setFill(Color.web(Integer.toHexString(this.color)));
         gc.fillOval(
-                this.xCoordinate * this.size,
-                this.yCoordinate * this.size,
-                this.size, this.size
+                this.xCoordinate * (AbstractTerrainObject.baseSize * Main.sizeMultiplier),
+                this.yCoordinate * (AbstractTerrainObject.baseSize * Main.sizeMultiplier),
+                (AbstractTerrainObject.baseSize * Main.sizeMultiplier),
+                (AbstractTerrainObject.baseSize * Main.sizeMultiplier)
         );
     }
 }

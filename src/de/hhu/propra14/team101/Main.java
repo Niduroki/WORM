@@ -5,24 +5,19 @@ import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 
 /**
@@ -43,6 +38,8 @@ public class Main extends Application {
     protected Lobby lobby;
 
     public static boolean headless = false;
+    /** Used for screen resizing. E.g. one TerrainBlock is AbstractTerrainBlock.baseSize*Main.sizeMultiplier big */
+    public static double sizeMultiplier = 1;
 
     public static void main (String[] args) {
         launch(args);
@@ -73,23 +70,6 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         grid.setStyle("-fx-background-color: #00BFFF");
-    }
-
-    public class SecondWindow extends Application
-    {
-
-        @Override
-        public void start(Stage primaryStage) {
-            primaryStage.setTitle("Second window");
-            Button btn = new Button();
-            btn.setText("Test");
-
-            StackPane root = new StackPane();
-            root.getChildren().add(btn);
-            primaryStage.setScene(new Scene(root, 100, 100));
-            primaryStage.show();
-        }
-
     }
 
     public void initializeHandlers() {
@@ -222,7 +202,7 @@ public class Main extends Application {
                     // Load a game
                     GameSaves loader = new GameSaves();
                     try {
-                        game = loader.load("GameSave.gz", false);
+                        game = loader.load("GameSave.gz");
                     } catch (FileNotFoundException e) {
                         //
                     }
