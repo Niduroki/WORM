@@ -57,7 +57,7 @@ public class NetworkClient {
 
         try {
             Socket connection = new Socket(server, port);
-            Scanner input = new Scanner(connection.getInputStream());
+            //Scanner input = new Scanner(connection.getInputStream());
             this.output = new PrintWriter(connection.getOutputStream());
             Thread thread = new Thread(new HandleIncomingThread(connection, this));
             thread.setDaemon(true);
@@ -329,10 +329,10 @@ public class NetworkClient {
         this.send("kick_user " + name, false);
     }
 
-    public Map<String, String> getRoomProperties() throws TimeoutException {
+    public Map<String, Object> getRoomProperties() throws TimeoutException {
         this.send("get_room_properties", true);
         Yaml yaml = new Yaml();
-        return (Map<String, String>) yaml.load(this.lastAnswer.replace(';', '\n'));
+        return (Map<String, Object>) yaml.load(this.lastAnswer.replace(';', '\n'));
     }
 
     /**
@@ -366,7 +366,7 @@ public class NetworkClient {
             try {
 
                 Scanner input = new Scanner(socket.getInputStream());
-                PrintWriter output = new PrintWriter(socket.getOutputStream());
+                //PrintWriter output = new PrintWriter(socket.getOutputStream());
 
                 while (true) {
                     String line = input.nextLine();

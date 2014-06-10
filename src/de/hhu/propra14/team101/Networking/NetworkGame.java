@@ -23,7 +23,7 @@ public class NetworkGame {
                 ArrayList<Worm> worms = new ArrayList<>();
                 ArrayList<AbstractWeapon> weapons = new ArrayList<>();
                 weapons.add(new Bazooka());
-                Collections.addAll(worms, new Worm(weapons, true), new Worm(weapons, true));
+                Collections.addAll(worms, new Worm(weapons), new Worm(weapons));
                 Player tmpPlayer = new Player(worms, user.name);
                 tmpPlayer.color = Color.RED;
                 switch (user.team) {
@@ -48,6 +48,7 @@ public class NetworkGame {
         }
         this.game = new Game(players);
         this.game.loadLevel(room.selectedMap);
+        // TODO check who's got the lowest fps and use that, instead of 16
         this.game.fps = 16;
         this.game.startGameplay();
     }

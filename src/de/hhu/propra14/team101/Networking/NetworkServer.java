@@ -181,11 +181,12 @@ public class NetworkServer {
                             answer = "error client no_room";
                         }
                     } else if (command.equals("get_room_properties")) {
-                        Map<String, String> data = new HashMap<>();
+                        Map<String, Object> data = new HashMap<>();
                         data.put("map", currentUser.getCurrentRoom().selectedMap);
                         data.put("name", currentUser.getCurrentRoom().name);
                         data.put("password", currentUser.getCurrentRoom().password);
-                        data.put("max_players", String.valueOf(currentUser.getCurrentRoom().maxUsers));
+                        data.put("max_players", currentUser.getCurrentRoom().maxUsers);
+                        data.put("weapons", currentUser.getCurrentRoom().selectedWeapons);
                         // TODO put checked weapons in here
                         Yaml yaml = new Yaml();
                         answer = yaml.dump(data).replace('\n', ';');

@@ -4,6 +4,8 @@ import de.hhu.propra14.team101.Networking.Exceptions.RoomFullException;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NetworkRoom {
     public String name;
@@ -14,6 +16,7 @@ public class NetworkRoom {
     public boolean roomReady = false;
     public String selectedMap;
     public String password = "";
+    public Map<String, Boolean> selectedWeapons = new HashMap<>();
     /** 0 means infinite */
     public int maxUsers = 0;
 
