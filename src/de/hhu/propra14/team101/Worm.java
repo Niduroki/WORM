@@ -1,9 +1,6 @@
 package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
-import de.hhu.propra14.team101.Weapons.AtomicBomb;
-import de.hhu.propra14.team101.Weapons.Bazooka;
-import de.hhu.propra14.team101.Weapons.Grenade;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -19,22 +16,15 @@ import java.util.Map;
 public class Worm {
 
     public ArrayList<AbstractWeapon> weaponList;
-
     public int size = 25;
-
     public int armor = 0;
-
     public int health = 100;
-
     public int currentWeapon = 0;
 
-    protected int x_coord = 0;
-
-    protected int y_coord = 0;
-
+    protected int xCoord = 0;
+    protected int yCoord = 0;
     protected char orientation = 'l';
 
-    private int jumpProcess = 0;
     private Image image;
 
     public Worm (ArrayList weapons) {
@@ -42,39 +32,30 @@ public class Worm {
         for (Object weapon : weapons) {
             this.weaponList.add((AbstractWeapon) weapon);
         }
-        this.image = new Image("worm.gif");
-    }
 
-    /**
-     * Construct a worm without an image for headless mode (on the server)
-     * @param weapons
-     * @param headless
-     */
-    public Worm (ArrayList weapons, boolean headless) {
-        this.weaponList = new ArrayList<>();
-        for (Object weapon : weapons) {
-            this.weaponList.add((AbstractWeapon) weapon);
+        if (!Main.headless) {
+            this.image = new Image("images/Worm.gif");
         }
     }
 
     public int getXCoordinate()
     {
-        return x_coord;
+        return xCoord;
     }
 
     public void setXCoordinate(int xCoordinate)
     {
-        x_coord = xCoordinate;
+        xCoord = xCoordinate;
     }
 
     public int getYCoordinate()
     {
-        return y_coord;
+        return yCoord;
     }
 
     public void setYCoordinate(int yCoordinate)
     {
-        y_coord = yCoordinate;
+        yCoord = yCoordinate;
     }
 
     /**
@@ -82,11 +63,11 @@ public class Worm {
      * Draws the worm
      */
     public void draw (GraphicsContext gc, Color color) {
-        gc.drawImage(this.image, this.x_coord, this.y_coord, this.size, this.size);
+        gc.drawImage(this.image, this.xCoord, this.yCoord, this.size, this.size);
         gc.setFill(color);
-        gc.fillText("H"+String.valueOf(this.health), this.x_coord, this.y_coord-4);
+        gc.fillText("H"+String.valueOf(this.health), this.xCoord, this.yCoord -4);
         if (this.armor != 0) {
-            gc.fillText("A" + String.valueOf(this.armor), this.x_coord, this.y_coord-14);
+            gc.fillText("A" + String.valueOf(this.armor), this.xCoord, this.yCoord -14);
         }
     }
 
@@ -96,71 +77,63 @@ public class Worm {
      */
     public void move (char direction) {
         // Can't move while jumping
-        if (this.jumpProcess == 0) {
+        //if (this.jumpProcess == 0) {
             if (direction == 'l') {
                 // Don't run out of the terrain
-                if (this.x_coord >= 5) {
-                    this.x_coord -= 5;
-                    // Send movement-left to the server
+                if (this.xCoord >= 5) {
+                    this.xCoord -= 5;
                 }
             } else if (direction == 'r') {
                 // Don't run out of the terrain TODO substitute 600 with terrain.getWidth
-                if (this.x_coord <= 585) {
-                    this.x_coord += 5;
-                    // Send movement-right to the server
+                if (this.xCoord <= 585) {
+                    this.xCoord += 5;
                 }
             }
             this.orientation = direction;
-        }
+        //}
     }
 
     public void jump () {
-        switch (this.jumpProcess) {
+        /*switch (this.jumpProcess) {
             case 0:
-                this.y_coord -= 5;
+                this.yCoord -= 5;
                 this.jumpProcess += 1;
-                // Send jump-left/right-0 to the server
                 break;
             case 1:
-                this.y_coord -= 3;
+                this.yCoord -= 3;
                 if (this.orientation == 'l') {
                     // Don't run out of the terrain
-                    if (this.x_coord >= 5) {
-                        this.x_coord -= 3;
-                        // Send jump-left-1 to the server
+                    if (this.xCoord >= 5) {
+                        this.xCoord -= 3;
                     }
                 } else if (this.orientation == 'r') {
                     // Don't run out of the terrain TODO substitute 600 with terrain.getWidth
-                    if (this.x_coord <= 585) {
-                        this.x_coord += 3;
-                        // Send jump-right-1 to the server
+                    if (this.xCoord <= 585) {
+                        this.xCoord += 3;
                     }
                 }
                 this.jumpProcess += 1;
                 break;
             case 2:
-                this.y_coord += 3;
+                this.yCoord += 3;
                 if (this.orientation == 'l') {
                     // Don't run out of the terrain
-                    if (this.x_coord >= 2) {
-                        this.x_coord -= 2;
-                        // Send jump-left-2 to the server
+                    if (this.xCoord >= 2) {
+                        this.xCoord -= 2;
                     }
                 } else if (this.orientation == 'r') {
                     // Don't run out of the terrain TODO substitute 600 with terrain.getWidth
-                    if (this.x_coord <= 588) {
-                        this.x_coord += 2;
-                        // Send jump-right-2 to the server
+                    if (this.xCoord <= 588) {
+                        this.xCoord += 2;
                     }
                 }
                 this.jumpProcess += 1;
                 break;
             case 3:
-                this.y_coord += 5;
+                this.yCoord += 5;
                 this.jumpProcess = 0;
-                // Send jump-done to the server
                 break;
-        }
+        }*/
     }
 
     public void nextWeapon() {
@@ -200,8 +173,8 @@ public class Worm {
 
     public Map serialize() {
         Map<String, Object> data = new HashMap<>();
-        data.put("x", this.x_coord);
-        data.put("y", this.y_coord);
+        data.put("x", this.xCoord);
+        data.put("y", this.yCoord);
         data.put("armor", this.armor);
         data.put("health", this.health);
         data.put("orientation", this.orientation);
@@ -220,8 +193,8 @@ public class Worm {
             weaponList.add(AbstractWeapon.deserialize(rawWeapon));
         }
         Worm result = new Worm(weaponList);
-        result.x_coord = (Integer) input.get("x");
-        result.y_coord = (Integer) input.get("y");
+        result.xCoord = (Integer) input.get("x");
+        result.yCoord = (Integer) input.get("y");
         result.armor = (Integer) input.get("armor");
         result.health = (Integer) input.get("health");
         result.orientation = input.get("orientation").toString().charAt(0);
