@@ -9,22 +9,21 @@ import java.util.*;
  */
 public class Level {
     private Terrain terrain;
-    private int levelNumber;
     private ArrayList<int[]> wormStartPoints = new ArrayList<>();
+
+    public String theme = "normal";
 
     /**
      * Initialized a new level.
      * @param terrain terrain of the new level.
-     * @param levelNumber the level number.
      */
-    public Level(Terrain terrain, int levelNumber) {
+    public Level(Terrain terrain) {
         if(terrain == null)
         {
             throw new IllegalArgumentException("terrain must not be null.");
         }
 
         this.terrain = terrain;
-        this.levelNumber = levelNumber;
     }
 
     /**
@@ -33,24 +32,6 @@ public class Level {
     public int getCountWormStartPositions()
     {
         return wormStartPoints.size();
-    }
-
-    /**
-     * Get the number of level.
-     * @return the number
-     */
-    public int getNumber()
-    {
-        return this.levelNumber;
-    }
-
-    /**
-     * Set level number.
-     * @param number
-     */
-    public void setNumber(int number)
-    {
-        this.levelNumber = number;
     }
 
     /**
@@ -92,13 +73,11 @@ public class Level {
     public void setWormsStartPosition(ArrayList<Player> players)
     {
         int indexStartPosition = 0;
-        for(int index = 0; index < players.size(); index++)
-        {
-            for(int indexWorm = 0; indexWorm < players.get(index).wormList.size(); indexWorm++)
-            {
-                if(indexStartPosition < wormStartPoints.size()) {
-                    players.get(index).wormList.get(indexWorm).setXCoordinate(wormStartPoints.get(indexStartPosition)[0]*10); // TODO remove the hardcoded 10 (AbstractTerrainObject.size)
-                    players.get(index).wormList.get(indexWorm).setYCoordinate(wormStartPoints.get(indexStartPosition)[1]*10); // TODO remove the hardcoded 10 (AbstractTerrainObject.size)
+        for (Player player : players) {
+            for (int indexWorm = 0; indexWorm < player.wormList.size(); indexWorm++) {
+                if (indexStartPosition < wormStartPoints.size()) {
+                    player.wormList.get(indexWorm).setXCoordinate(wormStartPoints.get(indexStartPosition)[0] * (int) (AbstractTerrainObject.baseSize * Main.sizeMultiplier));
+                    player.wormList.get(indexWorm).setYCoordinate(wormStartPoints.get(indexStartPosition)[1] * (int) (AbstractTerrainObject.baseSize * Main.sizeMultiplier));
                     indexStartPosition++;
                 }
             }
@@ -108,20 +87,19 @@ public class Level {
 
     public Map<String, Object> serialize () {
         Map<String, Object> result = new HashMap<>();
-        result.put("level_number", this.levelNumber);
         result.put("spawns", wormStartPoints);
         result.put("terrain", this.terrain.serialize());
+        result.put("theme", this.theme);
         return result;
     }
 
     public static Level deserialize (Map<String, Object> input) {
         Terrain terrain = Terrain.deserialize((ArrayList<ArrayList<Map>>) input.get("terrain"));
         ArrayList spawns = (ArrayList) input.get("spawns");
-        int levelNumber = (int) input.get("level_number");
-        Level result = new Level(terrain, levelNumber);
-        for (int i=0; i<spawns.size(); i++) {
-            ArrayList currentSpawn = (ArrayList) spawns.get(i);
-            result.addWormStartPosition((int)currentSpawn.get(0), (int)currentSpawn.get(1));
+        Level result = new Level(terrain);
+        for (Object spawn : spawns) {
+            ArrayList currentSpawn = (ArrayList) spawn;
+            result.addWormStartPosition((int) currentSpawn.get(0), (int) currentSpawn.get(1));
         }
         return result;
     }
