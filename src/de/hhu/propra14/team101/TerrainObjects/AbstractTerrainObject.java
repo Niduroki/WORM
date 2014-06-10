@@ -44,14 +44,6 @@ abstract public class AbstractTerrainObject {
     }
 
     /**
-     * @param destructible Destructibility of the object
-     * Sets the destructibility
-     */
-    public void setDestructible(boolean destructible) {
-        this.destructible = destructible;
-    }
-
-    /**
      * @return Destructibility of the object
      * Gets the destructibility
      */

@@ -18,8 +18,6 @@ public class Terrain {
     private int width;
     private int height;
 
-    protected String theme;
-
     /**
      * Initialize a new terrain.
      * @param width width of terrain. measurement: size of a block
@@ -109,7 +107,6 @@ public class Terrain {
                 AbstractTerrainObject workingBlock = this.terrainObjects[i][j];
                 if (workingBlock != null) {
                     HashMap<String, Object> map = new HashMap<>();
-                    map.put("color", workingBlock.getColor());
                     map.put("coords", workingBlock.getCoords());
                     map.put("destructibility", workingBlock.getDestructible());
                     map.put("class", workingBlock.getClass().getName());
@@ -131,24 +128,19 @@ public class Terrain {
             for (Map yInput : xInput) {
                 if (yInput != null) {
                     //Rebuild the block
-                    Map workingMap = yInput;
-                    boolean destructibility = Boolean.parseBoolean(workingMap.get("destructibility").toString());
-                    ArrayList<Integer> coords = (ArrayList<Integer>) workingMap.get("coords");
-                    if (workingMap.get("class").equals("de.hhu.propra14.team101.TerrainObjects.SquareBuildingBlock")) {
+                    ArrayList<Integer> coords = (ArrayList<Integer>) yInput.get("coords");
+                    if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.SquareBuildingBlock")) {
                         SquareBuildingBlock workingBlock = new SquareBuildingBlock(coords.get(0), coords.get(1));
-                        workingBlock.setDestructible(destructibility);
                         terrain.addTerrainObject(workingBlock);
-                    } else if (workingMap.get("class").equals("de.hhu.propra14.team101.TerrainObjects.TriangleBuildingBlock")) {
-                        boolean slopedLeft = Boolean.parseBoolean(workingMap.get("slopedLeft").toString());
+                    } else if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.TriangleBuildingBlock")) {
+                        boolean slopedLeft = Boolean.parseBoolean(yInput.get("slopedLeft").toString());
                         TriangleBuildingBlock workingBlock = new TriangleBuildingBlock(coords.get(0), coords.get(1), slopedLeft);
-                        workingBlock.setDestructible(destructibility);
                         terrain.addTerrainObject(workingBlock);
-                    } else if (workingMap.get("class").equals("de.hhu.propra14.team101.TerrainObjects.Obstacle")) {
+                    } else if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.Obstacle")) {
                         Obstacle workingBlock = new Obstacle(coords.get(0), coords.get(1));
-                        workingBlock.setDestructible(destructibility);
                         terrain.addTerrainObject(workingBlock);
                     } else {
-                        System.out.println("MapSaves.deserialize:Unknown block");
+                        System.out.println("Terrain.deserialize:Unknown block");
                     }
                 }
             }
