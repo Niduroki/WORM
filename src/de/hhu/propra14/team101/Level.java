@@ -97,6 +97,7 @@ public class Level {
         Terrain terrain = Terrain.deserialize((ArrayList<ArrayList<Map>>) input.get("terrain"));
         ArrayList spawns = (ArrayList) input.get("spawns");
         Level result = new Level(terrain);
+        result.theme = input.get("theme").toString();
         for (Object spawn : spawns) {
             ArrayList currentSpawn = (ArrayList) spawn;
             result.addWormStartPosition((int) currentSpawn.get(0), (int) currentSpawn.get(1));
