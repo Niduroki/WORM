@@ -108,7 +108,6 @@ public class Terrain {
                 if (workingBlock != null) {
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("coords", workingBlock.getCoords());
-                    map.put("destructibility", workingBlock.getDestructible());
                     map.put("class", workingBlock.getClass().getName());
                     // Save slope if we have a triangle
                     if (workingBlock.getClass().getName().equals("de.hhu.propra14.team101.TerrainObjects.TriangleBuildingBlock")) {
