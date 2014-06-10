@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 /**
  * Main class, that starts the program
  */
-public class Main extends Application implements Initializable {
+public class Main extends Application {
 
     public Canvas field;
     public Game game;
@@ -46,10 +46,6 @@ public class Main extends Application implements Initializable {
 
     public static void main (String[] args) {
         launch(args);
-    }
-
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        // TODO use fxml
     }
 
     /**
