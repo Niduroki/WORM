@@ -37,7 +37,10 @@ public class NetworkRoom {
     public void removeUser(NetworkUser user) {
         this.users.remove(user);
         this.updateEmpty();
-        this.updateOwner();
+        // Don't update the owner if the room is empty now
+        if (!this.users.isEmpty()) {
+            this.updateOwner();
+        }
     }
 
     public void setRoomReady(boolean state) {
