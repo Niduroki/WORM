@@ -32,3 +32,16 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
         return this.slopedLeft;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
