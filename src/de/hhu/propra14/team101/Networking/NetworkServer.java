@@ -80,8 +80,8 @@ public class NetworkServer {
                         }
                     } else if (command.equals("list_room_users")) {
                         answer = "";
-                        if (currentUser.getCurrentRoom() != null) {
-                            for (NetworkUser user : currentUser.getCurrentRoom().users) {
+                        if (currentUser.currentRoom != null) {
+                            for (NetworkUser user : currentUser.currentRoom.users) {
                                 answer += user.name + "|"+user.team+",";
                             }
                         } else {
@@ -114,7 +114,7 @@ public class NetworkServer {
                             try {
                                 currentUser.joinRoom(this.roomMap.get(roomName));
                                 // One user who isn't ready just joined
-                                currentUser.getCurrentRoom().setRoomReady(false);
+                                currentUser.currentRoom.setRoomReady(false);
                                 answer = "okay";
                             } catch (RoomFullException e) {
                                 answer = "room_full";
@@ -123,7 +123,7 @@ public class NetworkServer {
                             answer = "does_not_exist";
                         }
                     } else if (command.equals("leave_room")) {
-                        NetworkRoom room = currentUser.getCurrentRoom();
+                        NetworkRoom room = currentUser.currentRoom;
                         currentUser.leaveRoom();
                         if (room.empty) {
                             this.roomMap.remove(room.name);
@@ -135,31 +135,31 @@ public class NetworkServer {
                         String team = command.substring(12);
                         if (
                                 team.equals("spectator") ||
-                                currentUser.getCurrentRoom().availableColors.isEmpty() ||
-                                !currentUser.getCurrentRoom().availableColors.contains(team)
+                                currentUser.currentRoom.availableColors.isEmpty() ||
+                                !currentUser.currentRoom.availableColors.contains(team)
                         ) {
                             currentUser.team = "spectator";
                         } else {
                             currentUser.team = team;
                         }
                         // Propagate
-                        currentUser.getCurrentRoom().propagate("change_team " + currentUser.name + " " + team);
+                        currentUser.currentRoom.propagate("change_team " + currentUser.name + " " + team);
                         answer = "okay";
                     } else if (command.matches("change_max_players .+")) {
-                        if (currentUser == currentUser.getCurrentRoom().owner) {
-                            currentUser.getCurrentRoom().maxUsers = Integer.parseInt(command.split(" ")[1]);
+                        if (currentUser == currentUser.currentRoom.owner) {
+                            currentUser.currentRoom.maxUsers = Integer.parseInt(command.split(" ")[1]);
                         }
                         answer = "okay";
                     } else if (command.matches("change_map .+")) {
-                        if (currentUser == currentUser.getCurrentRoom().owner) {
-                            currentUser.getCurrentRoom().selectedMap = command.split(" ")[1];
+                        if (currentUser == currentUser.currentRoom.owner) {
+                            currentUser.currentRoom.selectedMap = command.split(" ")[1];
                         }
                         answer = "okay";
                     } else if (command.matches("kick_user .+")) {
-                        if (currentUser == currentUser.getCurrentRoom().owner) {
+                        if (currentUser == currentUser.currentRoom.owner) {
                             // Search the user
                             NetworkUser toKick = null;
-                            for (NetworkUser anUser : currentUser.getCurrentRoom().users) {
+                            for (NetworkUser anUser : currentUser.currentRoom.users) {
                                 if (anUser.name.equals(command.substring(10))) {
                                     toKick = anUser;
                                 }
@@ -175,18 +175,18 @@ public class NetworkServer {
                             answer = "error client not_owner";
                         }
                     } else if (command.equals("get_owner")) {
-                        if (currentUser.getCurrentRoom() != null) {
-                            answer = currentUser.getCurrentRoom().users.get(0).name;
+                        if (currentUser.currentRoom != null) {
+                            answer = currentUser.currentRoom.users.get(0).name;
                         } else {
                             answer = "error client no_room";
                         }
                     } else if (command.equals("get_room_properties")) {
                         Map<String, Object> data = new HashMap<>();
-                        data.put("map", currentUser.getCurrentRoom().selectedMap);
-                        data.put("name", currentUser.getCurrentRoom().name);
-                        data.put("password", currentUser.getCurrentRoom().password);
-                        data.put("max_players", currentUser.getCurrentRoom().maxUsers);
-                        data.put("weapons", currentUser.getCurrentRoom().selectedWeapons);
+                        data.put("map", currentUser.currentRoom.selectedMap);
+                        data.put("name", currentUser.currentRoom.name);
+                        data.put("password", currentUser.currentRoom.password);
+                        data.put("max_players", currentUser.currentRoom.maxUsers);
+                        data.put("weapons", currentUser.currentRoom.selectedWeapons);
                         // TODO put checked weapons in here
                         Yaml yaml = new Yaml();
                         answer = yaml.dump(data).replace('\n', ';');
@@ -200,22 +200,22 @@ public class NetworkServer {
                         currentUser.gameReady = !currentUser.gameReady;
 
                         boolean everyoneReady = true;
-                        for (NetworkUser user : currentUser.getCurrentRoom().users) {
+                        for (NetworkUser user : currentUser.currentRoom.users) {
                             if (!user.gameReady) {
                                 everyoneReady = false;
                             }
                         }
 
                         // Set the room ready or not ready
-                        if (everyoneReady || currentUser.getCurrentRoom().roomReady) {
-                            currentUser.getCurrentRoom().setRoomReady(everyoneReady);
+                        if (everyoneReady || currentUser.currentRoom.roomReady) {
+                            currentUser.currentRoom.setRoomReady(everyoneReady);
                         }
                         answer = "okay";
                     } else if (command.equals("start_game")) {
-                        if (currentUser == currentUser.getCurrentRoom().users.get(0)) {
-                            if (currentUser.getCurrentRoom().roomReady) {
-                                NetworkGame game = new NetworkGame(currentUser.getCurrentRoom());
-                                for (NetworkUser user : currentUser.getCurrentRoom().users) {
+                        if (currentUser == currentUser.currentRoom.users.get(0)) {
+                            if (currentUser.currentRoom.roomReady) {
+                                NetworkGame game = new NetworkGame(currentUser.currentRoom);
+                                for (NetworkUser user : currentUser.currentRoom.users) {
                                     user.game = game;
                                     user.send("game started");
                                 }
@@ -281,6 +281,28 @@ public class NetworkServer {
         for (UUID uuid: toRemove) {
             userMap.remove(uuid);
         }
+    }
+
+    /**
+     * Cleans up, when an user hard-quits with by closing the application
+     * @param uuid UUID of the user (took from the last line received from the user)
+     */
+    public void cleanUp(UUID uuid) {
+        NetworkUser user = userMap.get(uuid);
+        if (user.currentRoom != null) {
+            NetworkRoom oldRoom = user.currentRoom;
+
+            user.leaveRoom();
+            // If the room is empty delete it
+            if (oldRoom.empty) {
+                roomMap.remove(oldRoom.name);
+            }
+        }
+
+        // TODO if there's an empty game now it should be removed and stopped, too
+
+        // Remove the user himself
+        userMap.remove(uuid);
     }
 
 }

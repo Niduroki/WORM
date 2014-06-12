@@ -9,6 +9,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Start the server in here
@@ -52,14 +55,16 @@ public class ServerBootstrap {
 
         @Override
         public void run() {
+            String line = "NIL";
+            String answer;
             try {
 
                 Scanner input = new Scanner(client.getInputStream());
                 PrintWriter output = new PrintWriter(client.getOutputStream());
 
                 while (true) {
-                    String line = input.nextLine();
-                    String answer = networkServer.interpret(line, output);
+                    line = input.nextLine();
+                    answer = networkServer.interpret(line, output);
 
                     output.println(answer);
                     output.flush();
@@ -68,7 +73,14 @@ public class ServerBootstrap {
                 System.out.println("Error while communicating with client");
                 e.printStackTrace();
             } catch (NoSuchElementException e) {
-                System.out.println("Client seemed to quit");
+                // Search for an UUID in the last line, to clean up the associated user
+                Pattern pattern = Pattern.compile("("+NetworkServer.uuidRegex+")");
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.find()) {
+                    String uuid = matcher.group(1);
+                    System.out.println("Cleaning up after user " + uuid);
+                    networkServer.cleanUp(UUID.fromString(uuid));
+                }
             }
         }
     }
