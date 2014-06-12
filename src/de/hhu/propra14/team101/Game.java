@@ -35,7 +35,7 @@ public class Game {
     public Queue<String> onlineCommandQueue = new PriorityQueue<>();
     // Necessary to tell the lobby javafx process to start the game now
     public static boolean startMe = false;
-    private OggClip music;
+    public OggClip music;
 
     private ArrayList<Player> players = new ArrayList<>();
     private Level level;
