@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101;
 
+import com.sun.istack.internal.Nullable;
 import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
 import de.hhu.propra14.team101.TerrainObjects.Obstacle;
 import de.hhu.propra14.team101.TerrainObjects.SquareBuildingBlock;
@@ -37,10 +38,24 @@ public class Terrain {
     }
 
     /**
+     * Get the height of the terrain.
+     */
+    public double getHeightInPixel() {
+        return height * AbstractTerrainObject.baseSize;
+    }
+
+    /**
      * Get the width of the terrain.
      */
     public int getWidth() {
         return width;
+    }
+
+    /**
+     * Get the width of the terrain.
+     */
+    public double getWidthInPixel() {
+        return width * AbstractTerrainObject.baseSize;
     }
 
     /**
@@ -50,7 +65,7 @@ public class Terrain {
         int xCoordinate = object.getCoords()[0];
         int yCoordinate = object.getCoords()[1];
 
-        if (xCoordinate < 0 || xCoordinate > width || yCoordinate < 0 || yCoordinate > height) {
+        if (xCoordinate < 0 || xCoordinate > this.getWidth() || yCoordinate < 0 || yCoordinate > this.getHeight()) {
             throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
         }
 
@@ -73,26 +88,32 @@ public class Terrain {
     }
 
     /**
-     * true, if at the specific position is a terrain object
+     * terrainObject, if at the specific position is a terrain object, otherwise null. measurement in pixel
+     * @exception java.lang.IllegalArgumentException
      */
-    public boolean isTerrain(int xCoordinate, int yCoordinate) {
-        if (xCoordinate < 0 || xCoordinate > width || yCoordinate < 0 || yCoordinate > height) {
-            throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
+    @Nullable
+    public AbstractTerrainObject isTerrain(double xCoordinate, double yCoordinate) {
+        int integerXCoordinate = (new Double(xCoordinate)).intValue()/AbstractTerrainObject.baseSize;
+        int integerYCoordinate = (new Double(yCoordinate)).intValue()/AbstractTerrainObject.baseSize;
+        if (integerXCoordinate < 0 || integerXCoordinate > this.getWidth() || integerYCoordinate < 0 || integerYCoordinate > this.getHeight()) {
+            throw new IllegalArgumentException("x- and integerYCoordinate must be positive and not higher or wider as the terrain.");
         }
 
-        return terrainObjects[xCoordinate][yCoordinate] != null;
+        return terrainObjects[integerXCoordinate][integerYCoordinate];
     }
 
     /**
      * Remove a terrain object.
-     * @exception java.lang.IllegalArgumentException if x or y-coordinate is negative or higher or wider as the terrain.
      */
-    public void removeTerrainObject(int xCoordinate, int yCoordinate) {
-        if (xCoordinate < 0 || xCoordinate > width || yCoordinate < 0 || yCoordinate > height) {
-            throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
+    public void removeTerrainObject(AbstractTerrainObject terrainObject) {
+        for (int rowIndex = 0; rowIndex < terrainObjects.length; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < terrainObjects[rowIndex].length;columnIndex++) {
+                if (terrainObjects[rowIndex][columnIndex] ==  terrainObject) {
+                    terrainObjects[rowIndex][columnIndex] = null;
+                    return;
+                }
+            }
         }
-
-        this.terrainObjects[xCoordinate][yCoordinate] = null;
     }
 
     /**

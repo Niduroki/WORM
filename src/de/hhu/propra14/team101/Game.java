@@ -4,6 +4,7 @@ import com.sun.istack.internal.Nullable;
 import de.hhu.propra14.team101.Physics.*;
 import de.hhu.propra14.team101.Savers.LevelSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
+import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -239,6 +240,10 @@ public class Game {
                             nextRound();
                             break;
                         case Terrain:
+                            AbstractTerrainObject terrainObject = (AbstractTerrainObject)collision.getCollisionElement();
+                            if(terrainObject.getDestructible()) {
+                                this.getCurrentTerrain().removeTerrainObject(terrainObject);
+                            }
                         case TopOrDown:
                             bulletFired = false;
                             nextRound();

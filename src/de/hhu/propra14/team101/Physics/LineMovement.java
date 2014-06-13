@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101.Physics;
 
 import de.hhu.propra14.team101.Terrain;
+import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
 import de.hhu.propra14.team101.Worm;
 
 import java.util.ArrayList;
@@ -62,14 +63,11 @@ public class LineMovement {
             return new Collision(null, CollisionType.TopOrDown);
         }
 
-        if(terrain.isTerrain(new Double(this.getXCoordinate()/10).intValue(), new Double(this.getYCoordinate()/10).intValue())) {
-            //TODO: remove array
-            try {
-                int[] obj = {new Double(this.getXCoordinate()).intValue(), new Double(this.getYCoordinate()).intValue()};
-                return new Collision(obj, CollisionType.Terrain);
-            } catch(IllegalArgumentException ex) {
-             System.out.println(ex.getMessage());
-            }
+        try {
+            AbstractTerrainObject obj = terrain.isTerrain(this.getXCoordinate(), this.getYCoordinate());
+            return new Collision(obj, CollisionType.Terrain);
+        } catch (IllegalArgumentException ex) {
+            System.out.println(ex.getMessage());
         }
 
         for (Worm worm : worms) {
