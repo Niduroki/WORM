@@ -14,8 +14,7 @@ public class NetworkUser {
     public long lastPong = System.currentTimeMillis();
     public UUID uuid;
     public String team;
-
-    private NetworkRoom currentRoom;
+    public NetworkRoom currentRoom;
 
     public NetworkUser(String name, UUID uuid, PrintWriter networkOutput) {
         this.name = name;
@@ -52,10 +51,6 @@ public class NetworkUser {
             }
         }
         this.currentRoom = null;
-    }
-
-    public NetworkRoom getCurrentRoom() {
-        return this.currentRoom;
     }
 
     public void send (String line) {
