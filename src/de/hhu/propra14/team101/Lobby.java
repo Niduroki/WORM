@@ -458,20 +458,28 @@ public class Lobby {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                // Don't do anything if no name for the room is provided and no weapon selected (latter is a TODO)
-                if (!text1.getText().isEmpty()) {
+                // Don't do anything if no name for the room is provided and no weapon selected
+                if (!text1.getText().isEmpty() && (
+                        weaponBox1.selectedProperty().get() ||
+                        weaponBox2.selectedProperty().get() ||
+                        weaponBox3.selectedProperty().get()
+                )) {
                     try {
                         main.client.createRoom(text1.getText());
                         // If there's a password: Use it
                         if (!text2.getText().isEmpty()) {
-                            //main.client.changePassword(text2.getText());
+                            main.client.changePassword(text2.getText());
                         }
                         main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
                         // If the owner defined a max player amount: Use it
                         if (!maxPlayers.getText().isEmpty()) {
                             main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
                         }
-                        //
+
+                        //Submit selected weapons
+                        main.client.setWeapon("bazooka", weaponBox1.selectedProperty().get());
+                        main.client.setWeapon("grenade", weaponBox2.selectedProperty().get());
+                        main.client.setWeapon("atomicbomb", weaponBox3.selectedProperty().get());
                         addRoomButtons();
                     } catch (RoomExistsException e) {
                         text1.setText("");
@@ -534,8 +542,22 @@ public class Lobby {
             text1.setText((String) data.get("name"));
             text2.setText((String) data.get("password"));
             map.getSelectionModel().select("Map "+ ((String) data.get("map")).charAt(3));
-            maxPlayers.setText((String) data.get("max_players"));
-            // TODO tick selected weapons (they're saved in data.get("weapons"))
+            // Don't prefill maxPlayers with a 0
+            if (!String.valueOf(data.get("max_players")).equals("0")) {
+                maxPlayers.setText(String.valueOf(data.get("max_players")));
+            }
+            // Tick selected weapons
+            for (Map.Entry<String, Boolean> entry : ((Map<String, Boolean>) data.get("weapons")).entrySet()) {
+                if (entry.getKey().equals("bazooka")) {
+                    weaponBox1.selectedProperty().set(entry.getValue());
+                } else if (entry.getKey().equals("grenade")) {
+                    weaponBox2.selectedProperty().set(entry.getValue());
+                } else if (entry.getKey().equals("atomicbomb")) {
+                    weaponBox3.selectedProperty().set(entry.getValue());
+                } else {
+                    System.out.println("Unknown weapon: " + entry.getKey());
+                }
+            }
         } catch (TimeoutException e) {
             System.out.println("Timeout while loading room properties!");
         }
@@ -549,20 +571,29 @@ public class Lobby {
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                // Don't do anything if no name for the room is provided and no weapon selected (latter is a TODO)
-                if (!text1.getText().isEmpty()) {
+                // Don't do anything if no name for the room is provided and no weapon selected
+                if (!text1.getText().isEmpty() && (
+                        weaponBox1.selectedProperty().get() ||
+                        weaponBox2.selectedProperty().get() ||
+                        weaponBox3.selectedProperty().get()
+                )) {
                     try {
-                        // TODO change which values changed here
-                        //main.client.changeRoomName(text1.getText());
+                        // TODO submit only values which changed here
+                        main.client.changeRoomName(text1.getText());
                         // If there's a password: Use it
                         if (!text2.getText().isEmpty()) {
-                            //main.client.changePassword();
+                            main.client.changePassword(text2.getText());
                         }
                         main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
-                        // If the owner defined a password: Use it
+                        // If the owner defined a max player amount: Use it
                         if (!maxPlayers.getText().isEmpty()) {
                             main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
                         }
+
+                        // Submit selected weapons
+                        main.client.setWeapon("bazooka", weaponBox1.selectedProperty().get());
+                        main.client.setWeapon("grenade", weaponBox2.selectedProperty().get());
+                        main.client.setWeapon("atomicbomb", weaponBox3.selectedProperty().get());
                         addRoomButtons();
                     } catch (NetworkException e) {
                         //

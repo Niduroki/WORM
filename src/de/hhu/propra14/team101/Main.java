@@ -105,7 +105,6 @@ public class Main extends Application {
                     return;
                 }
                 // Scrolled up
-                Worm currentWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(game.getPlayers().get(game.turnOfPlayer).currentWorm);
                 if (scrollEvent.getDeltaY() > 0) {
                     if (game.online) {
                         try {
@@ -114,7 +113,7 @@ public class Main extends Application {
                             //
                         }
                     } else {
-                        currentWorm.nextWeapon();
+                        game.doAction("next_weapon");
                     }
                 } else if (scrollEvent.getDeltaY() < 0) { // Scrolled down
                     if (game.online) {
@@ -124,7 +123,7 @@ public class Main extends Application {
                             //
                         }
                     } else {
-                        currentWorm.prevWeapon();
+                        game.doAction("prev_weapon");
                     }
                 }
             }
@@ -133,6 +132,7 @@ public class Main extends Application {
         final EventHandler<KeyEvent> keypressHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
+                // If the game is paused only allow P and T
                 if (game.paused && keyEvent.getCode() != KeyCode.P && keyEvent.getCode() != KeyCode.T) {
                     // Don't do anything
                     return;
@@ -201,6 +201,7 @@ public class Main extends Application {
                     GameSaves saver = new GameSaves();
                     saver.save(game, "GameSave.gz");
                 } else if (keyEvent.getCode() == KeyCode.L && !game.online) {
+                    // TODO remove this, when #19 is fixed
                     // Load a game
                     GameSaves loader = new GameSaves();
                     try {

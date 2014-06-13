@@ -2,13 +2,13 @@ package de.hhu.propra14.team101.Networking;
 
 import de.hhu.propra14.team101.Game;
 import de.hhu.propra14.team101.Player;
-import de.hhu.propra14.team101.Weapons.AbstractWeapon;
-import de.hhu.propra14.team101.Weapons.Bazooka;
+import de.hhu.propra14.team101.Weapons.*;
 import de.hhu.propra14.team101.Worm;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 
 public class NetworkGame {
     public NetworkRoom room;
@@ -22,10 +22,24 @@ public class NetworkGame {
             if (!user.team.equals("spectator")) {
                 ArrayList<Worm> worms = new ArrayList<>();
                 ArrayList<AbstractWeapon> weapons = new ArrayList<>();
-                weapons.add(new Bazooka());
-                Collections.addAll(worms, new Worm(weapons), new Worm(weapons));
+                for (Map.Entry<String, Boolean> entry: this.room.selectedWeapons.entrySet()) {
+                    if (entry.getValue()) {
+                        if (entry.getKey().equals("bazooka")) {
+                            weapons.add(new Bazooka());
+                        } else if (entry.getKey().equals("grenade")) {
+                            weapons.add(new Grenade());
+                        } else if (entry.getKey().equals("atomicbomb")) {
+                            weapons.add(new AtomicBomb());
+                        } else {
+                            System.out.println("Unknown weapon: "+entry.getKey());
+                        }
+                    }
+                }
+                // Add three worms for each team with the created weapons
+                Collections.addAll(worms, new Worm(weapons), new Worm(weapons), new Worm(weapons));
                 Player tmpPlayer = new Player(worms, user.name);
-                tmpPlayer.color = Color.RED;
+
+                // Assign a color
                 switch (user.team) {
                     case "red":
                         tmpPlayer.color = Color.RED;

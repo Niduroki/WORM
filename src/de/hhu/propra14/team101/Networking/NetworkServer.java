@@ -145,6 +145,11 @@ public class NetworkServer {
                         // Propagate
                         currentUser.currentRoom.propagate("change_team " + currentUser.name + " " + team);
                         answer = "okay";
+                    } else if (command.matches("change_weapon .+ .+")) {
+                        if (currentUser == currentUser.currentRoom.owner) {
+                            currentUser.currentRoom.setWeapon(command.split(" ")[1], Boolean.parseBoolean(command.split(" ")[2]));
+                        }
+                        answer = "okay";
                     } else if (command.matches("change_max_players .+")) {
                         if (currentUser == currentUser.currentRoom.owner) {
                             currentUser.currentRoom.maxUsers = Integer.parseInt(command.split(" ")[1]);
@@ -289,7 +294,7 @@ public class NetworkServer {
      */
     public void cleanUp(UUID uuid) {
         NetworkUser user = userMap.get(uuid);
-        if (user.currentRoom != null) {
+        try {
             NetworkRoom oldRoom = user.currentRoom;
 
             user.leaveRoom();
@@ -302,9 +307,9 @@ public class NetworkServer {
             if (user.game != null && oldRoom.empty) {
                 user.game.game.gameUpdateThread.interrupt();
             }
+        } catch (NullPointerException e) {
+            System.out.println("User was in no room");
         }
-
-        // TODO if there's an empty game now it should be removed and stopped, too
 
         // Remove the user himself
         userMap.remove(uuid);

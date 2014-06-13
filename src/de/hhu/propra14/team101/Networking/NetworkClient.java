@@ -243,6 +243,14 @@ public class NetworkClient {
         }
     }
 
+    public void changeRoomName(String name) throws TimeoutException {
+        // TODO
+    }
+
+    public void changePassword(String password) throws TimeoutException {
+        // TODO
+    }
+
     public String getOwner() throws TimeoutException {
         this.send("get_owner", true);
         return this.lastAnswer;
@@ -333,6 +341,18 @@ public class NetworkClient {
         this.send("get_room_properties", true);
         Yaml yaml = new Yaml();
         return (Map<String, Object>) yaml.load(this.lastAnswer.replace(';', '\n'));
+    }
+
+    /**
+     * Sets a weapon enabled/disabled for the game
+     * @param weaponName lowercase name of the weapon
+     * @param active boolean whether the weapon should be enabled
+     */
+    public void setWeapon(String weaponName, boolean active) throws TimeoutException {
+        // Make sure weaponName is lowercase
+        weaponName = weaponName.toLowerCase();
+
+        this.send("change_weapon " + weaponName + " " + String.valueOf(active), true);
     }
 
     /**

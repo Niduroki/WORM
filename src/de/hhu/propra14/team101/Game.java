@@ -366,6 +366,10 @@ public class Game {
         } else if (action.equals("move_left")) {
             int currentWorm = players.get(this.turnOfPlayer).currentWorm;
             players.get(this.turnOfPlayer).wormList.get(currentWorm).move('l');
+        } else if (action.equals("next_weapon")) {
+            players.get(this.turnOfPlayer).wormList.get(players.get(this.turnOfPlayer).currentWorm).nextWeapon();
+        } else if (action.equals("prev_weapon")) {
+            players.get(this.turnOfPlayer).wormList.get(players.get(this.turnOfPlayer).currentWorm).prevWeapon();
         } else if (action.equals("pause")) {
             this.paused = !this.paused;
         } else if (action.matches("fire .+ .+")) {
@@ -374,6 +378,8 @@ public class Game {
             if (currentWorm.weaponList.size() != 0) {
                 this.fireBullet(currentWorm.fireWeapon(Double.parseDouble(action.split(" ")[1]), Double.parseDouble(action.split(" ")[2])));
             }
+        } else {
+            System.out.println("Unknown action");
         }
     }
 

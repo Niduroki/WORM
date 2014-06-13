@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101.Networking;
 
 import de.hhu.propra14.team101.Networking.Exceptions.RoomFullException;
+import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +54,19 @@ public class NetworkRoom {
             this.roomReady = state;
         }
         // Do nothing otherwise
+    }
+
+    /**
+     * Sets a weapon enabled/disabled for the game
+     * @param weaponName lowercased name of the weapon
+     * @param active boolean whether the weapon should be enabled
+     */
+    public void setWeapon(String weaponName, boolean active) {
+        // Make sure weaponName is lowercase
+        weaponName = weaponName.toLowerCase();
+
+        this.selectedWeapons.remove(weaponName);
+        this.selectedWeapons.put(weaponName, active);
     }
 
     public void propagate(String line) {
