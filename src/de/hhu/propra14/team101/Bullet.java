@@ -1,5 +1,7 @@
 package de.hhu.propra14.team101;
 
+import de.hhu.propra14.team101.Physics.BallisticMovement;
+import de.hhu.propra14.team101.Physics.LineMovement;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -9,7 +11,7 @@ import javafx.scene.paint.Color;
  */
 public class Bullet {
 
-    public  Physics physics;
+    public BallisticMovement physics;
 
     /** What weapon we are */
     public AbstractWeapon weapon;
@@ -22,7 +24,7 @@ public class Bullet {
      * @param physics physics for the weapon
      * @param weapon weapon that's fired
      */
-    public Bullet(Physics physics, AbstractWeapon weapon) {
+    public Bullet(BallisticMovement physics, AbstractWeapon weapon) {
         this.physics = physics;
         this.weapon = weapon;
     }

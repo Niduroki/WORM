@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101;
 
 import com.sun.istack.internal.Nullable;
+import de.hhu.propra14.team101.Physics.*;
 import de.hhu.propra14.team101.Savers.LevelSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
 import javafx.animation.Animation;
@@ -218,7 +219,7 @@ public class Game {
             }
 
             if (bulletFired) {
-                bullet.physics.move(4);
+                bullet.physics.move(1);
                 ArrayList<Worm> wormArrayList = new ArrayList<>();
                 for (Player playerItem : this.getPlayers()) {
                     wormArrayList.addAll(playerItem.wormList);
@@ -243,7 +244,7 @@ public class Game {
                             nextRound();
                             break;
                         case LeftOrRight:
-                            bullet.physics = Physics.Revert(bullet.physics);
+                            bullet.physics = BallisticMovement.Revert(bullet.physics);
                             break;
                     }
                 }

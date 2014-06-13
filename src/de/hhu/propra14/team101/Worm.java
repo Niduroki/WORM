@@ -1,5 +1,7 @@
 package de.hhu.propra14.team101;
 
+import de.hhu.propra14.team101.Physics.BallisticMovement;
+import de.hhu.propra14.team101.Physics.LineMovement;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -154,7 +156,7 @@ public class Worm {
 
     public Bullet fireWeapon(double xPos, double yPos) {
         Bullet bullet = this.weaponList.get(this.currentWeapon).fire(
-                new Physics(this.getXCoordinate(),
+                new BallisticMovement(this.getXCoordinate(),
                 this.getYCoordinate(),
                 xPos, yPos)
         );

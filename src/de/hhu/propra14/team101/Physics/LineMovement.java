@@ -1,11 +1,14 @@
-package de.hhu.propra14.team101;
+package de.hhu.propra14.team101.Physics;
+
+import de.hhu.propra14.team101.Terrain;
+import de.hhu.propra14.team101.Worm;
 
 import java.util.ArrayList;
 
 /**
  * Class to manage a movement.
  */
-public class Physics {
+public class LineMovement {
     private Vector directionVector;
     private double xCoordinate;
     private double yCoordinate;
@@ -17,14 +20,14 @@ public class Physics {
      * @param posXDirection x-coordinate of the direction vector
      * @param posYDirection y-coordinate of the direction vector
      */
-    public Physics(double startPosX, double startPosY, double posXDirection, double posYDirection) {
+    public LineMovement(double startPosX, double startPosY, double posXDirection, double posYDirection) {
         directionVector = new Vector(startPosX, startPosY, posXDirection, posYDirection);
         directionVector.normalize();
         xCoordinate = startPosX;
         yCoordinate = startPosY;
     }
 
-    private Physics(double startPosX, double startPosY, Vector vector) {
+    private LineMovement(double startPosX, double startPosY, Vector vector) {
         directionVector = vector;
         directionVector.normalize();
         xCoordinate = startPosX;
@@ -94,8 +97,8 @@ public class Physics {
     /**
      * Revert the given movement.
      */
-    public static Physics Revert(Physics physics) {
-        return new Physics(physics.getXCoordinate(), physics.getYCoordinate(), new Vector(0, 0, -physics.directionVector.getXCoordinate(), physics.directionVector.getYCoordinate()));
+    public static LineMovement Revert(LineMovement physics) {
+        return new LineMovement(physics.getXCoordinate(), physics.getYCoordinate(), new Vector(0, 0, -physics.directionVector.getXCoordinate(), physics.directionVector.getYCoordinate()));
     }
 
 }

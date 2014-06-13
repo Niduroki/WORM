@@ -1,7 +1,8 @@
 package de.hhu.propra14.team101.Weapons;
 
 import de.hhu.propra14.team101.Bullet;
-import de.hhu.propra14.team101.Physics;
+import de.hhu.propra14.team101.Physics.BallisticMovement;
+import de.hhu.propra14.team101.Physics.LineMovement;
 import javafx.scene.image.Image;
 
 import java.util.HashMap;
@@ -26,7 +27,7 @@ abstract public class AbstractWeapon {
     public Image bulletImage;
 
 
-    abstract public Bullet fire (Physics physics);
+    abstract public Bullet fire (BallisticMovement physics);
 
     public Map serialize() {
         Map<String, Object> data = new HashMap<>();
