@@ -301,11 +301,6 @@ public class Lobby {
                     try {
                         if (main.client.roomReady) {
                             main.client.startGame();
-                            roomTimeline.stop();
-                            Stage stage = new Stage();
-                            IngameChat sw = new IngameChat();
-                            sw.start(stage);
-
                         }
                     } catch (TimeoutException e) {
                         //
@@ -381,6 +376,9 @@ public class Lobby {
 
                         if (Game.startMe) {
                             roomTimeline.stop();
+                            Stage stage = new Stage();
+                            IngameChat sw = new IngameChat();
+                            sw.start(stage);
                             main.grid.getChildren().clear();
                             main.grid.add(main.field, 0, 0);
                             main.initializeHandlers();
