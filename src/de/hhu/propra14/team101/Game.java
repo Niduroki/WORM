@@ -46,6 +46,7 @@ public class Game {
     private int secondCounter = 0;
     private Image background;
     protected Timeline timeline;
+    public Thread gameUpdateThread;
 
     /**
      * Initialize a new game.
@@ -318,7 +319,7 @@ public class Game {
             this.timeline.setCycleCount(Animation.INDEFINITE);
             this.timeline.play();
         } else {
-            Thread gameUpdateThread = new Thread(new GameUpdateThread(this));
+            gameUpdateThread = new Thread(new GameUpdateThread(this));
             gameUpdateThread.setDaemon(true);
             gameUpdateThread.start();
         }
@@ -326,6 +327,12 @@ public class Game {
 
     private void stopUpdating() {
         this.timeline.stop();
+
+        if (Main.headless) {
+            // If we're using a thread instead of a timeline interrupt (i.e. stop) it
+            gameUpdateThread.interrupt();
+        }
+
         if (!Main.headless) {
             try {
                 music = new OggClip("music/Victory.ogg");
@@ -409,12 +416,16 @@ public class Game {
 
         @Override
         public void run() {
-            while (!game.isGameFinished()) {
+            // Will be set to false when interrupted, thus interrupt=stop
+            boolean run = true;
+
+            while (run && !game.isGameFinished()) {
                 game.updateGame();
                 try {
                     Thread.sleep(1000 / game.fps);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println("GameUpdateThread was interrupted. Stopping now.");
+                    run = false;
                 }
             }
         }

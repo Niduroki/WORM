@@ -297,6 +297,11 @@ public class NetworkServer {
             if (oldRoom.empty) {
                 roomMap.remove(oldRoom.name);
             }
+
+            // If the user was in a game, and the room he was in is empty: stop the game, too
+            if (user.game != null && oldRoom.empty) {
+                user.game.game.gameUpdateThread.interrupt();
+            }
         }
 
         // TODO if there's an empty game now it should be removed and stopped, too
