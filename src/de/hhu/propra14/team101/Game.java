@@ -5,6 +5,7 @@ import de.hhu.propra14.team101.Physics.*;
 import de.hhu.propra14.team101.Savers.LevelSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
 import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
+import de.hhu.propra14.team101.TerrainObjects.ExplosiveBuildingBlock;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -243,7 +244,11 @@ public class Game {
                         case Terrain:
                             AbstractTerrainObject terrainObject = (AbstractTerrainObject)collision.getCollisionElement();
                             if(terrainObject.getDestructible()) {
-                                this.getCurrentTerrain().removeTerrainObject(terrainObject);
+                                if(terrainObject.getClass() == ExplosiveBuildingBlock.class) {
+                                    this.getCurrentTerrain().removeTerrainObject(terrainObject, true);
+                                } else {
+                                    this.getCurrentTerrain().removeTerrainObject(terrainObject, false);
+                                }
                             }
                         case TopOrDown:
                             bulletFired = false;

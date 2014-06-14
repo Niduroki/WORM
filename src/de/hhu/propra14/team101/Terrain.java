@@ -1,10 +1,7 @@
 package de.hhu.propra14.team101;
 
 import com.sun.istack.internal.Nullable;
-import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
-import de.hhu.propra14.team101.TerrainObjects.Obstacle;
-import de.hhu.propra14.team101.TerrainObjects.SquareBuildingBlock;
-import de.hhu.propra14.team101.TerrainObjects.TriangleBuildingBlock;
+import de.hhu.propra14.team101.TerrainObjects.*;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -93,8 +90,8 @@ public class Terrain {
      */
     @Nullable
     public AbstractTerrainObject isTerrain(double xCoordinate, double yCoordinate) {
-        int integerXCoordinate = (new Double(xCoordinate)).intValue()/AbstractTerrainObject.baseSize;
-        int integerYCoordinate = (new Double(yCoordinate)).intValue()/AbstractTerrainObject.baseSize;
+        int integerXCoordinate = (new Double(xCoordinate/AbstractTerrainObject.baseSize)).intValue();
+        int integerYCoordinate = (new Double(yCoordinate/AbstractTerrainObject.baseSize)).intValue();
         if (integerXCoordinate < 0 || integerXCoordinate > this.getWidth() || integerYCoordinate < 0 || integerYCoordinate > this.getHeight()) {
             throw new IllegalArgumentException("x- and integerYCoordinate must be positive and not higher or wider as the terrain.");
         }
@@ -105,13 +102,38 @@ public class Terrain {
     /**
      * Remove a terrain object.
      */
-    public void removeTerrainObject(AbstractTerrainObject terrainObject) {
+    public void removeTerrainObject(AbstractTerrainObject terrainObject, boolean withExplosion) {
+        if(terrainObject == null) {
+            System.out.println("terrainObject is null");
+            return;
+        }
+
         for (int rowIndex = 0; rowIndex < terrainObjects.length; rowIndex++) {
             for (int columnIndex = 0; columnIndex < terrainObjects[rowIndex].length;columnIndex++) {
                 if (terrainObjects[rowIndex][columnIndex] ==  terrainObject) {
-                    terrainObjects[rowIndex][columnIndex] = null;
+                    if(withExplosion) {
+                        removeTerrainObject(rowIndex,columnIndex);
+                        removeTerrainObject(rowIndex + 1, columnIndex + 1);
+                        removeTerrainObject(rowIndex+1, columnIndex);
+                        removeTerrainObject(rowIndex, columnIndex+1);
+                        removeTerrainObject(rowIndex-1, columnIndex-1);
+                        removeTerrainObject(rowIndex-1, columnIndex);
+                        removeTerrainObject(rowIndex, columnIndex-1);
+                        removeTerrainObject(rowIndex-1, columnIndex+1);
+                        removeTerrainObject(rowIndex+1, columnIndex-1);
+                    } else {
+                        removeTerrainObject(rowIndex, columnIndex);
+                    }
                     return;
                 }
+            }
+        }
+    }
+
+    private void removeTerrainObject(int y, int x) {
+        if(y < terrainObjects.length) {
+            if (x < terrainObjects[y].length) {
+                if (terrainObjects[y][x] != null) terrainObjects[y][x] = null;
             }
         }
     }
@@ -119,7 +141,7 @@ public class Terrain {
     /**
      * @return 2-dimensional array to use with snakeyaml
      */
-    public Object[][] serialize () {
+     public Object[][] serialize () {
         /** 2-dimensional array to store terrain in.*/
         Object[][] result = new Object[this.getWidth()][this.getHeight()];
 
@@ -158,6 +180,9 @@ public class Terrain {
                         terrain.addTerrainObject(workingBlock);
                     } else if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.Obstacle")) {
                         Obstacle workingBlock = new Obstacle(coords.get(0), coords.get(1));
+                        terrain.addTerrainObject(workingBlock);
+                    } else if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.ExplosiveBuildingBlock")){
+                        ExplosiveBuildingBlock workingBlock = new ExplosiveBuildingBlock(coords.get(0), coords.get(1));
                         terrain.addTerrainObject(workingBlock);
                     } else {
                         System.out.println("Terrain.deserialize:Unknown block");

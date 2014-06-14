@@ -274,7 +274,7 @@ public class GUI {
         Button startButton = new Button("Start");
 
         final ComboBox<String> mapSelection = new ComboBox<>();
-        mapSelection.getItems().addAll("Map1", "Map2", "Map3");
+        mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4");
         mapSelection.setValue("Map1");
 
         // Configure each object
