@@ -15,11 +15,12 @@ public class BallisticMovement {
     private double yCoordinate;
     private double startXCoordinate;
     private double startYCoordinate;
-    private double angle;
     private final double g = 0.981;
     private double startVelocityX;
     private double startVelocityY;
     private double time = 0;
+    private boolean finished = false;
+    private boolean autoStop;
 
     /**
      * Initialize a new movement.
@@ -29,7 +30,7 @@ public class BallisticMovement {
      * @param posXDirection x-coordinate of the direction vector
      * @param posYDirection y-coordinate of the direction vector
      */
-    public BallisticMovement(double startPosX, double startPosY, double posXDirection, double posYDirection) {
+    public BallisticMovement(double startPosX, double startPosY, double posXDirection, double posYDirection, boolean autoStop) {
         directionVector = new Vector(startPosX, startPosY, posXDirection, posYDirection);
         startVelocityX = (posXDirection - startPosX) * 0.1;
         startVelocityY = (posYDirection - startPosY) * 0.1;
@@ -37,7 +38,7 @@ public class BallisticMovement {
         yCoordinate = startPosY;
         startXCoordinate = startPosX;
         startYCoordinate = startPosY;
-        angle = Vector.internalAngle(directionVector, new Vector(0, 0, 1, 0));
+        this.autoStop = autoStop;
     }
 
     private BallisticMovement(double startPosX, double startPosY, Vector vector) {
@@ -48,16 +49,24 @@ public class BallisticMovement {
         startYCoordinate = startPosY;
     }
 
+    public boolean hasFinished() {
+        return finished;
+    }
+
     /**
      * Execute steps of the movement
      *
      * @param speed count of movement steps'
      */
     public void move(double speed) {
-        time += speed;
-        xCoordinate = startXCoordinate + (startVelocityX * time);
-        yCoordinate = startYCoordinate + (startVelocityY * time + ((g / 2) * Math.pow(time, 2)));
-        int test = 3 + 3;
+        if(!finished) {
+            time += speed;
+            xCoordinate = startXCoordinate + (startVelocityX * time);
+            yCoordinate = startYCoordinate + (startVelocityY * time + ((g / 2) * Math.pow(time, 2)));
+            if(autoStop) {
+                if(yCoordinate > startYCoordinate) finished = true;
+            }
+        }
     }
 
     /**

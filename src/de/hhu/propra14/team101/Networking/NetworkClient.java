@@ -316,6 +316,10 @@ public class NetworkClient {
         }
     }
 
+    public void jump() throws  TimeoutException {
+        this.send("game jump", true);
+    }
+
     public void pause() throws TimeoutException {
         this.send("game pause", true);
     }

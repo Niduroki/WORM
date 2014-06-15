@@ -1,8 +1,11 @@
 package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.Physics.BallisticMovement;
+import de.hhu.propra14.team101.Physics.Collision;
+import de.hhu.propra14.team101.Physics.CollisionType;
 import de.hhu.propra14.team101.Physics.LineMovement;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -23,9 +26,9 @@ public class Worm {
     public int armor = 0;
     public int health = 100;
     public int currentWeapon = 0;
-
-    protected int xCoord = 0;
-    protected int yCoord = 0;
+    private BallisticMovement jumpPhysic = null;
+    protected double xCoord = 0;
+    protected double yCoord = 0;
     protected char orientation = 'l';
 
     private Image image;
@@ -41,22 +44,22 @@ public class Worm {
         }
     }
 
-    public int getXCoordinate()
+    public double getXCoordinate()
     {
         return xCoord;
     }
 
-    public void setXCoordinate(int xCoordinate)
+    public void setXCoordinate(double xCoordinate)
     {
         xCoord = xCoordinate;
     }
 
-    public int getYCoordinate()
+    public double getYCoordinate()
     {
         return yCoord;
     }
 
-    public void setYCoordinate(int yCoordinate)
+    public void setYCoordinate(double yCoordinate)
     {
         yCoord = yCoordinate;
     }
@@ -81,7 +84,7 @@ public class Worm {
     public void move (char direction, Terrain terrain, ArrayList<Player> players) {
             if (direction == 'l') {
                 // Don't run out of the terrain
-                int newXPos = this.getXCoordinate() - 5;
+                double newXPos = this.getXCoordinate() - 5;
                 //Collision?
                 if(terrain.isTerrain(newXPos,this.getYCoordinate()+size-6) == null) {
                     for(Player player : players) {
@@ -94,12 +97,13 @@ public class Worm {
                     if (this.getXCoordinate() >= 5) {
                         this.xCoord = newXPos;
                     }
+                    freeFall(terrain);
                 }
             } else if (direction == 'r') {
                 // Don't run out of the terrain
-                int newXPos = this.getXCoordinate() + 5;
+                double newXPos = this.getXCoordinate() + 5;
                 //Collision?
-                if(terrain.isTerrain(newXPos + size,this.getYCoordinate()+size-6) == null) {
+                if(terrain.isTerrain(newXPos + size, this.getYCoordinate()+size-6) == null) {
                     for(Player player : players) {
                         for(Worm worm : player.wormList) {
                             if(worm != this && worm.isHitted(newXPos + size,this.getYCoordinate())) {
@@ -110,14 +114,62 @@ public class Worm {
                     if (this.getXCoordinate() < terrain.getWidthInPixel()-size) {
                         this.xCoord = newXPos;
                     }
+                    freeFall(terrain);
                 }
             }
             this.orientation = direction;
         //}
     }
 
-    public void jump () {
+    private void freeFall(Terrain terrain) {
+        int height = 0;
+        while((terrain.isTerrain(this.getXCoordinate(),this.getYCoordinate()+size-5) == null) && terrain.isTerrain(this.getXCoordinate() + size, this.getYCoordinate()+size-5) == null && this.getYCoordinate()+size-5<terrain.getHeightInPixel()) {
+            this.setYCoordinate(this.getYCoordinate()+ 1);
+        }
 
+        if(height > 23) {
+            health -= height/4;
+        }
+    }
+
+    /**
+     * Perform one step of a jump.
+     * @param terrain current terrain
+     * @param worms all worms
+     * @return true, if finished
+     */
+    public boolean jump (Terrain terrain, ArrayList<Worm> worms) {
+        if(jumpPhysic == null) {
+            if(orientation == 'l') {
+                jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(),this.getXCoordinate() - 50,this.getYCoordinate() - 50, true);
+            } else {
+                jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(),this.getXCoordinate() + 50,this.getYCoordinate() - 50, true);
+            }
+        }
+        jumpPhysic.move(1);
+        this.setXCoordinate(jumpPhysic.getXCoordinate());
+        this.setYCoordinate(jumpPhysic.getYCoordinate());
+        Collision collision = jumpPhysic.hasCollision(this,worms,terrain,terrain.getWidthInPixel(), terrain.getHeightInPixel());
+        if(collision != null) {
+            if(collision.getType() == CollisionType.Terrain) {
+                jumpPhysic = null;
+                this.setYCoordinate(this.getYCoordinate()-10);
+                freeFall(terrain);
+                return true;
+            } else {
+                jumpPhysic = null;
+                this.health = 0;
+                return true;
+            }
+        }
+        if(jumpPhysic.hasFinished()) {
+            jumpPhysic = null;
+            this.setYCoordinate(this.getYCoordinate()-10);
+            freeFall(terrain);
+            return true;
+        }
+
+        return false;
     }
 
     public void nextWeapon() {
@@ -140,7 +192,7 @@ public class Worm {
         Bullet bullet = this.weaponList.get(this.currentWeapon).fire(
                 new BallisticMovement(this.getXCoordinate(),
                 this.getYCoordinate(),
-                xPos, yPos)
+                xPos, yPos, false)
         );
         return bullet;
     }

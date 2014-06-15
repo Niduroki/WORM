@@ -148,13 +148,15 @@ public class Main extends Application {
                     primaryStage.getScene().removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
                     primaryStage.getScene().removeEventHandler(MouseEvent.ANY, mouseHandler);
                 } else if (keyEvent.getCode() == KeyCode.UP) {
-                    // Don't do weird double-jumps
-                    //TODO: Add jumping again with physics
-                    //if (jumping == 0) {
-                    //    int currentWorm = game.getPlayers().get(game.turnOfPlayer).currentWorm;
-                    //    jumping = 4;
-                    //    jumpingWorm = game.getPlayers().get(game.turnOfPlayer).wormList.get(currentWorm);
-                    //}
+                    if(game.online) {
+                        try {
+                            client.jump();
+                        } catch(TimeoutException ex) {
+
+                        }
+                    } else {
+                        game.doAction("jump");
+                    }
                 } else if (keyEvent.getCode() == KeyCode.LEFT) {
                     if (game.online) {
                         try {

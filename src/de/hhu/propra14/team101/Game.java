@@ -29,6 +29,7 @@ import java.util.*;
 public class Game {
     public boolean paused = false;
     public boolean bulletFired = false;
+    private boolean isJumping = false;
     public boolean online = false;
     public boolean loaded = false;
     public int round = 0;
@@ -79,6 +80,7 @@ public class Game {
 
     /**
      * Gets a level.
+     *
      * @return a specific level
      * @throws java.lang.IllegalArgumentException
      */
@@ -90,7 +92,7 @@ public class Game {
     public void loadLevel(String levelName) {
         LevelSaves loader = new LevelSaves();
         try {
-            level = loader.load("maps/"+levelName+".gz");
+            level = loader.load("maps/" + levelName + ".gz");
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find level-file");
         }
@@ -116,6 +118,10 @@ public class Game {
      */
     public void setCurrentTerrain(Terrain terrain) {
         this.currentTerrain = terrain;
+    }
+
+    public boolean getIsJumping() {
+        return isJumping;
     }
 
     /**
@@ -155,8 +161,8 @@ public class Game {
         gc.setFill(Color.BLACK);
         gc.setFont(new Font(12));
         gc.fillText("Current weapon: " + text, 0, 10);
-        gc.fillText(String.valueOf(this.round), gc.getCanvas().getWidth()/2, 15);
-        gc.fillText(String.valueOf(this.roundTimer), gc.getCanvas().getWidth()-15, 10);
+        gc.fillText(String.valueOf(this.round), gc.getCanvas().getWidth() / 2, 15);
+        gc.fillText(String.valueOf(this.roundTimer), gc.getCanvas().getWidth() - 15, 10);
 
         this.currentTerrain.draw(gc);
 
@@ -185,80 +191,91 @@ public class Game {
         }
 
         if (!this.paused) {
-            this.secondCounter += 1;
+            if (!this.getIsJumping()) {
+                this.secondCounter += 1;
 
-            if (this.secondCounter == this.fps) {
-                this.secondCounter = 0;
-                this.roundTimer -= 1;
-                if (this.roundTimer == 0) {
-                    this.nextRound();
-                    this.roundTimer = 20;
+                if (this.secondCounter == this.fps) {
+                    this.secondCounter = 0;
+                    this.roundTimer -= 1;
+                    if (this.roundTimer == 0) {
+                        this.nextRound();
+                        this.roundTimer = 20;
+                    }
                 }
-            }
 
 
-            // Remove dead players
-            for (int i = 0; i < this.getPlayers().size(); i++) {
-                if (this.getPlayers().get(i).wormList.isEmpty()) {
-                    this.getPlayers().remove(i);
+                // Remove dead players
+                for (int i = 0; i < this.getPlayers().size(); i++) {
+                    if (this.getPlayers().get(i).wormList.isEmpty()) {
+                        this.getPlayers().remove(i);
+                    }
                 }
-            }
 
-            // Remove dead worms
-            for (int i = 0; i < this.getPlayers().size(); i++) {
-                for (int j = 0; j < this.getPlayers().get(i).wormList.size(); j++) {
-                    if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
-                        this.getPlayers().get(i).wormList.remove(j);
+                // Remove dead worms
+                for (int i = 0; i < this.getPlayers().size(); i++) {
+                    for (int j = 0; j < this.getPlayers().get(i).wormList.size(); j++) {
+                        if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
+                            this.getPlayers().get(i).wormList.remove(j);
 
-                        // Decrement current worm to prevent an IndexOutOfBoundsException
-                        if (this.getPlayers().get(i).currentWorm != 0) {
-                            this.getPlayers().get(i).currentWorm -= 1;
+                            // Decrement current worm to prevent an IndexOutOfBoundsException
+                            if (this.getPlayers().get(i).currentWorm != 0) {
+                                this.getPlayers().get(i).currentWorm -= 1;
+                            }
                         }
                     }
                 }
-            }
 
-            if (this.getPlayers().size() == 1) {
-                this.gameFinished = true;
-            }
+                if (this.getPlayers().size() == 1) {
+                    this.gameFinished = true;
+                }
 
-            if (bulletFired) {
-                bullet.physics.move(1);
+                if (bulletFired) {
+                    bullet.physics.move(1);
+                    ArrayList<Worm> wormArrayList = new ArrayList<>();
+                    for (Player playerItem : this.getPlayers()) {
+                        wormArrayList.addAll(playerItem.wormList);
+                    }
+                    Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
+                    Collision collision;
+                    if (Main.headless) {
+                        collision = bullet.physics.hasCollision(currentWorm, wormArrayList, this.getCurrentTerrain(), 600, 400);
+                    } else {
+                        collision = bullet.physics.hasCollision(currentWorm, wormArrayList, this.getCurrentTerrain(), gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+                    }
+                    if (collision != null) {
+                        switch (collision.getType()) {
+                            case Worm:
+                                ((Worm) collision.getCollisionElement()).health -= bullet.weapon.damage;
+                                bulletFired = false;
+                                nextRound();
+                                break;
+                            case Terrain:
+                                AbstractTerrainObject terrainObject = (AbstractTerrainObject) collision.getCollisionElement();
+                                if (terrainObject.getDestructible()) {
+                                    if (terrainObject.getClass() == ExplosiveBuildingBlock.class) {
+                                        this.getCurrentTerrain().removeTerrainObject(terrainObject, true);
+                                    } else {
+                                        this.getCurrentTerrain().removeTerrainObject(terrainObject, false);
+                                    }
+                                }
+                            case TopOrDown:
+                                bulletFired = false;
+                                nextRound();
+                                break;
+                            case LeftOrRight:
+                                bullet.physics = BallisticMovement.Revert(bullet.physics);
+                                break;
+                        }
+                    }
+                }
+            } else {
                 ArrayList<Worm> wormArrayList = new ArrayList<>();
                 for (Player playerItem : this.getPlayers()) {
                     wormArrayList.addAll(playerItem.wormList);
                 }
                 Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
-                Collision collision;
-                if (Main.headless) {
-                    collision = bullet.physics.hasCollision(currentWorm, wormArrayList, this.getCurrentTerrain(), 600, 400);
-                } else {
-                    collision = bullet.physics.hasCollision(currentWorm, wormArrayList, this.getCurrentTerrain(),  gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-                }
-                if (collision != null) {
-                    switch (collision.getType()) {
-                        case Worm:
-                            ((Worm) collision.getCollisionElement()).health -= bullet.weapon.damage;
-                            bulletFired = false;
-                            nextRound();
-                            break;
-                        case Terrain:
-                            AbstractTerrainObject terrainObject = (AbstractTerrainObject)collision.getCollisionElement();
-                            if(terrainObject.getDestructible()) {
-                                if(terrainObject.getClass() == ExplosiveBuildingBlock.class) {
-                                    this.getCurrentTerrain().removeTerrainObject(terrainObject, true);
-                                } else {
-                                    this.getCurrentTerrain().removeTerrainObject(terrainObject, false);
-                                }
-                            }
-                        case TopOrDown:
-                            bulletFired = false;
-                            nextRound();
-                            break;
-                        case LeftOrRight:
-                            bullet.physics = BallisticMovement.Revert(bullet.physics);
-                            break;
-                    }
+                if (currentWorm.jump(this.getCurrentTerrain(), wormArrayList)) {
+                    isJumping = false;
                 }
             }
         }
@@ -309,20 +326,21 @@ public class Game {
         this.startLevel();
 
         //Prepare updating game
-        final Duration oneFrameAmt = Duration.millis(1000/fps);
+        final Duration oneFrameAmt = Duration.millis(1000 / fps);
         final KeyFrame keyFrame = new KeyFrame(oneFrameAmt,
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent event) {
-                        if(gameFinished) {
+                        if (gameFinished) {
                             music.pause();
                             stopUpdating();
-                        } else{
+                        } else {
                             updateGame();
                             draw(gc);
                         }
 
                     }
-                });
+                }
+        );
 
         if (!Main.headless) {
             // Construct a timeline with the mainloop
@@ -368,10 +386,18 @@ public class Game {
         System.out.println("Do the action");
         if (action.equals("move_right")) {
             int currentWorm = players.get(this.turnOfPlayer).currentWorm;
-            players.get(this.turnOfPlayer).wormList.get(currentWorm).move('r',this.getCurrentTerrain(), this.getPlayers());
+            players.get(this.turnOfPlayer).wormList.get(currentWorm).move('r', this.getCurrentTerrain(), this.getPlayers());
         } else if (action.equals("move_left")) {
             int currentWorm = players.get(this.turnOfPlayer).currentWorm;
             players.get(this.turnOfPlayer).wormList.get(currentWorm).move('l', this.getCurrentTerrain(), this.getPlayers());
+        } else if (action.equals("jump")) {
+            ArrayList<Worm> wormArrayList = new ArrayList<>();
+            for (Player playerItem : this.getPlayers()) {
+                wormArrayList.addAll(playerItem.wormList);
+            }
+            isJumping = true;
+            int currentWorm = players.get(this.turnOfPlayer).currentWorm;
+            players.get(this.turnOfPlayer).wormList.get(currentWorm).jump(this.getCurrentTerrain(), wormArrayList);
         } else if (action.equals("next_weapon")) {
             players.get(this.turnOfPlayer).wormList.get(players.get(this.turnOfPlayer).currentWorm).nextWeapon();
         } else if (action.equals("prev_weapon")) {
@@ -409,8 +435,8 @@ public class Game {
 
     private Object[] serializePlayerArray() {
         Object[] result = new Object[players.size()];
-        for (int i=0; i<players.size(); i++) {
-            result[i] =  players.get(i).serialize();
+        for (int i = 0; i < players.size(); i++) {
+            result[i] = players.get(i).serialize();
         }
         return result;
     }
