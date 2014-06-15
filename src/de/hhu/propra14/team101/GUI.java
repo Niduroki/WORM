@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.Networking.NetworkClient;
+import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import de.hhu.propra14.team101.Weapons.AtomicBomb;
@@ -178,6 +179,7 @@ public class GUI {
         Text title1 = new Text("Name");
         Text title2 = new Text("Color");
         Button backButton = new Button("Back");
+        Button loadButton = new Button("Load");
 
         final ComboBox<String> colorSelection = new ComboBox<>();
         colorSelection.getItems().addAll(this.main.availableColors);
@@ -201,6 +203,30 @@ public class GUI {
         this.main.grid.add(weaponBox2, 2, 6);
         this.main.grid.add(weaponBox3, 3, 6);
         this.main.grid.add(backButton, 1, 8);
+
+        if (this.main.players.size() == 0) {
+            Button startButton = new Button("Load");
+            this.main.grid.add(startButton, 3, 8);
+
+            startButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    main.field = new Canvas(600*Main.sizeMultiplier, 400*Main.sizeMultiplier);
+                    main.grid.getChildren().clear();
+                    main.grid.add(main.field, 0, 0);
+                    GameSaves loader = new GameSaves();
+                    try {
+                        main.game = loader.load("GameSave.gz");
+                    } catch (FileNotFoundException ex) {
+                        //
+                    }
+                    main.initializeHandlers();
+                    main.game.gc = main.field.getGraphicsContext2D();
+                    main.game.startGameplay();
+
+                }
+            });
+        }
 
         if (this.main.players.size() != 0) {
             Button startButton = new Button("Start");

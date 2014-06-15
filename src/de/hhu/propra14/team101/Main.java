@@ -200,15 +200,6 @@ public class Main extends Application {
                     // Save a game
                     GameSaves saver = new GameSaves();
                     saver.save(game, "GameSave.gz");
-                } else if (keyEvent.getCode() == KeyCode.L && !game.online) {
-                    // TODO remove this, when #19 is fixed
-                    // Load a game
-                    GameSaves loader = new GameSaves();
-                    try {
-                        game = loader.load("GameSave.gz");
-                    } catch (FileNotFoundException e) {
-                        //
-                    }
                 } else if (keyEvent.getCode() == KeyCode.M) {
                     // Save the map, in case the map format changed, yet old maps are still loadable
                     LevelSaves saver = new LevelSaves();
