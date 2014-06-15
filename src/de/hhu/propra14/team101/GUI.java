@@ -222,13 +222,11 @@ public class GUI {
                     }
                     main.initializeHandlers();
                     main.game.gc = main.field.getGraphicsContext2D();
+                    main.game.loaded = true;
                     main.game.startGameplay();
-
                 }
             });
-        }
-
-        if (this.main.players.size() != 0) {
+        } else {
             Button startButton = new Button("Start");
             this.main.grid.add(startButton, 3, 8);
 

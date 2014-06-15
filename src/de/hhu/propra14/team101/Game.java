@@ -30,6 +30,7 @@ public class Game {
     public boolean paused = false;
     public boolean bulletFired = false;
     public boolean online = false;
+    public boolean loaded = false;
     public int round = 0;
     public int turnOfPlayer = 0;
     public int roundTimer = 20;
@@ -291,7 +292,7 @@ public class Game {
             }
         }
 
-        if (!this.online) {
+        if (!this.online && !this.loaded) {
             this.currentTerrain = level.getTerrain();
             level.setWormsStartPosition(this.getPlayers());
         }
