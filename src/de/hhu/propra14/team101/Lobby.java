@@ -420,7 +420,7 @@ public class Lobby {
         final TextField text2 = new TextField("");
 
         final ComboBox<String> map = new ComboBox<>();
-        map.getItems().addAll("Map 1", "Map 2", "Map 3");
+        map.getItems().addAll("Map 1", "Map 2", "Map 3", "Map 4", "Mountain", "Plains", "Castle");
         map.setValue("Map 1");
 
         final NumberTextField maxPlayers = new NumberTextField();
@@ -508,7 +508,7 @@ public class Lobby {
         final TextField text2 = new TextField("");
 
         final ComboBox<String> map = new ComboBox<>();
-        map.getItems().addAll("Map 1", "Map 2", "Map 3");
+        map.getItems().addAll("Map 1", "Map 2", "Map 3", "Map 4", "Mountain", "Plains", "Castle");
         map.setValue("Map 1");
 
         final NumberTextField maxPlayers = new NumberTextField();
