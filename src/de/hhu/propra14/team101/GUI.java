@@ -20,7 +20,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -215,8 +217,13 @@ public class GUI {
                     main.grid.getChildren().clear();
                     main.grid.add(main.field, 0, 0);
                     GameSaves loader = new GameSaves();
+                    //Show FileSelection for Savegame
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Maps", "gz"));
+                    File gameSave = fileChooser.showOpenDialog(main.primaryStage);
+                    System.out.println(gameSave.toString());
                     try {
-                        main.game = loader.load("GameSave.gz");
+                        main.game = loader.load(gameSave.toString());
                     } catch (FileNotFoundException ex) {
                         //
                     }
