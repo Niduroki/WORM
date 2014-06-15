@@ -4,7 +4,7 @@ import de.hhu.propra14.team101.Main;
 import javafx.scene.image.Image;
 
 /**
- * a explosive terrain block
+ * An explosive terrain block
  */
 public class ExplosiveBuildingBlock extends AbstractTerrainObject {
     public ExplosiveBuildingBlock(int x, int y) {

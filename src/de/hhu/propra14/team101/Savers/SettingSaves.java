@@ -31,6 +31,7 @@ public class SettingSaves extends AbstractSaver {
      * @param path Path to settings file
      * @return Map with Settings data
      */
+    @SuppressWarnings("unchecked")
     public Map<String, Object> load(String path) throws FileNotFoundException {
         return (Map<String, Object>) this.yaml.load(GZipper.gunzip(path));
     }

@@ -550,6 +550,8 @@ public class Lobby {
         final String oldPassword = (String) roomProperties.get("password");
         final String oldMap = (String) roomProperties.get("map");
         final int oldMaxPlayers = (int) roomProperties.get("max_players");
+
+        @SuppressWarnings("unchecked")
         final Map<String, Boolean> oldWeapons = (Map<String, Boolean>) roomProperties.get("weapons");
 
         nameField.setText(oldName);

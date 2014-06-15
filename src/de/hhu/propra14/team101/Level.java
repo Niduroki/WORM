@@ -94,6 +94,7 @@ public class Level {
     }
 
     public static Level deserialize (Map<String, Object> input) {
+        @SuppressWarnings("unchecked")
         Terrain terrain = Terrain.deserialize((ArrayList<ArrayList<Map>>) input.get("terrain"));
         ArrayList spawns = (ArrayList) input.get("spawns");
         Level result = new Level(terrain);

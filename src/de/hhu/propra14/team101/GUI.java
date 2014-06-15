@@ -180,7 +180,6 @@ public class GUI {
         Text title1 = new Text("Name");
         Text title2 = new Text("Color");
         Button backButton = new Button("Back");
-        Button loadButton = new Button("Load");
 
         final ComboBox<String> colorSelection = new ComboBox<>();
         colorSelection.getItems().addAll(this.main.availableColors);

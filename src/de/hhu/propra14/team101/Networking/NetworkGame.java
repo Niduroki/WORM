@@ -16,7 +16,6 @@ public class NetworkGame {
 
     public NetworkGame(NetworkRoom room) {
         this.room = room;
-        // TODO construct an ArrayList<Player> from room here
         ArrayList<Player> players = new ArrayList<>();
         for (NetworkUser user: room.users) {
             if (!user.team.equals("spectator")) {

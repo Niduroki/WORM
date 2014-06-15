@@ -399,6 +399,7 @@ public class Game {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     public static Game deserialize(Map<String, Object> data) {
         Game game = new Game(Game.deserializePlayerArray((ArrayList<Map>) data.get("players")));
         game.setCurrentTerrain(Terrain.deserialize((ArrayList<ArrayList<Map>>) data.get("terrain")));

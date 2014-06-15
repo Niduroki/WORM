@@ -1,7 +1,6 @@
 package de.hhu.propra14.team101.Networking;
 
 import de.hhu.propra14.team101.Networking.Exceptions.RoomFullException;
-import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 
 import java.util.ArrayList;
 import java.util.Collections;
