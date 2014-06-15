@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,18 +78,38 @@ public class Worm {
      * Move the worm
      * @param direction either 'l' to move left or 'r' to move right
      */
-    public void move (char direction) {
-        // Can't move while jumping
-        //if (this.jumpProcess == 0) {
+    public void move (char direction, Terrain terrain, ArrayList<Player> players) {
             if (direction == 'l') {
                 // Don't run out of the terrain
-                if (this.xCoord >= 5) {
-                    this.xCoord -= 5;
+                int newXPos = this.getXCoordinate() - 5;
+                //Collision?
+                if(terrain.isTerrain(newXPos,this.getYCoordinate()+size-6) == null) {
+                    for(Player player : players) {
+                        for(Worm worm : player.wormList) {
+                            if(worm != this && worm.isHitted(newXPos,this.getYCoordinate())) {
+                                return;
+                            }
+                        }
+                    }
+                    if (this.getXCoordinate() >= 5) {
+                        this.xCoord = newXPos;
+                    }
                 }
             } else if (direction == 'r') {
-                // Don't run out of the terrain TODO substitute 600 with terrain.getWidth
-                if (this.xCoord <= 585) {
-                    this.xCoord += 5;
+                // Don't run out of the terrain
+                int newXPos = this.getXCoordinate() + 5;
+                //Collision?
+                if(terrain.isTerrain(newXPos + size,this.getYCoordinate()+size-6) == null) {
+                    for(Player player : players) {
+                        for(Worm worm : player.wormList) {
+                            if(worm != this && worm.isHitted(newXPos + size,this.getYCoordinate())) {
+                                return;
+                            }
+                        }
+                    }
+                    if (this.getXCoordinate() < terrain.getWidthInPixel()-size) {
+                        this.xCoord = newXPos;
+                    }
                 }
             }
             this.orientation = direction;
@@ -96,46 +117,7 @@ public class Worm {
     }
 
     public void jump () {
-        /*switch (this.jumpProcess) {
-            case 0:
-                this.yCoord -= 5;
-                this.jumpProcess += 1;
-                break;
-            case 1:
-                this.yCoord -= 3;
-                if (this.orientation == 'l') {
-                    // Don't run out of the terrain
-                    if (this.xCoord >= 5) {
-                        this.xCoord -= 3;
-                    }
-                } else if (this.orientation == 'r') {
-                    // Don't run out of the terrain TODO substitute 600 with terrain.getWidth
-                    if (this.xCoord <= 585) {
-                        this.xCoord += 3;
-                    }
-                }
-                this.jumpProcess += 1;
-                break;
-            case 2:
-                this.yCoord += 3;
-                if (this.orientation == 'l') {
-                    // Don't run out of the terrain
-                    if (this.xCoord >= 2) {
-                        this.xCoord -= 2;
-                    }
-                } else if (this.orientation == 'r') {
-                    // Don't run out of the terrain TODO substitute 600 with terrain.getWidth
-                    if (this.xCoord <= 588) {
-                        this.xCoord += 2;
-                    }
-                }
-                this.jumpProcess += 1;
-                break;
-            case 3:
-                this.yCoord += 5;
-                this.jumpProcess = 0;
-                break;
-        }*/
+
     }
 
     public void nextWeapon() {
@@ -164,8 +146,8 @@ public class Worm {
     }
 
     public boolean isHitted(double xCoordinate, double yCoordinate) {
-        if (this.getXCoordinate() < xCoordinate && this.getXCoordinate() + this.size > xCoordinate) {
-            if (this.getYCoordinate() < yCoordinate && this.getYCoordinate() + this.size > yCoordinate) {
+        if (this.getXCoordinate() <= xCoordinate && this.getXCoordinate() + this.size >= xCoordinate) {
+            if (this.getYCoordinate() <= yCoordinate && this.getYCoordinate() + this.size >= yCoordinate) {
                 return true;
             }
         }

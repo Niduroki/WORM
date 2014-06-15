@@ -72,9 +72,9 @@ public class NetworkGame {
         if (this.game.turnOfPlayer == this.room.users.indexOf(user)) {
             Worm currentWorm = this.game.getPlayers().get(this.game.turnOfPlayer).wormList.get(this.game.getPlayers().get(this.game.turnOfPlayer).currentWorm);
             if (line.equals("move_left")) {
-                currentWorm.move('l');
+                currentWorm.move('l',game.getCurrentTerrain(),game.getPlayers());
             } else if (line.equals("move_right")) {
-                currentWorm.move('r');
+                currentWorm.move('r', game.getCurrentTerrain(),game.getPlayers());
             } else if (line.equals("next_weapon")) {
                 currentWorm.nextWeapon();
             } else if (line.equals("prev_weapon")) {

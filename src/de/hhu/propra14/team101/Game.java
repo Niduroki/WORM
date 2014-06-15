@@ -368,10 +368,10 @@ public class Game {
         System.out.println("Do the action");
         if (action.equals("move_right")) {
             int currentWorm = players.get(this.turnOfPlayer).currentWorm;
-            players.get(this.turnOfPlayer).wormList.get(currentWorm).move('r');
+            players.get(this.turnOfPlayer).wormList.get(currentWorm).move('r',this.getCurrentTerrain(), this.getPlayers());
         } else if (action.equals("move_left")) {
             int currentWorm = players.get(this.turnOfPlayer).currentWorm;
-            players.get(this.turnOfPlayer).wormList.get(currentWorm).move('l');
+            players.get(this.turnOfPlayer).wormList.get(currentWorm).move('l', this.getCurrentTerrain(), this.getPlayers());
         } else if (action.equals("next_weapon")) {
             players.get(this.turnOfPlayer).wormList.get(players.get(this.turnOfPlayer).currentWorm).nextWeapon();
         } else if (action.equals("prev_weapon")) {
