@@ -16,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.input.*;
 import javafx.util.Callback;
@@ -112,7 +111,7 @@ public class Lobby {
         chatField.addEventHandler(KeyEvent.KEY_RELEASED, handler);
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
         this.main.grid.add(sceneTitle, 0, 0, 3, 1);
@@ -275,7 +274,7 @@ public class Lobby {
         chatField.addEventHandler(KeyEvent.KEY_RELEASED, handler);
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
         this.main.grid.add(ready, 1, 12);
@@ -430,7 +429,7 @@ public class Lobby {
         final CheckBox weaponBox3 = new CheckBox("Bazooka");
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
 
@@ -518,7 +517,7 @@ public class Lobby {
         final CheckBox weaponBox3 = new CheckBox("Bazooka");
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
 

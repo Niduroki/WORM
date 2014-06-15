@@ -18,7 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
@@ -62,7 +61,7 @@ public class GUI {
 
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
         this.main.grid.add(sceneTitle, 0, 0, 2, 1);
@@ -145,7 +144,7 @@ public class GUI {
         final TextField nameField = new TextField(initialValue2);
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
         this.main.grid.add(sceneTitle, 0, 0, 2, 1);
@@ -193,7 +192,7 @@ public class GUI {
         nameField.setMaxSize(100, 20);
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
         this.main.grid.add(sceneTitle, 0, 0, 2, 1);
@@ -309,7 +308,7 @@ public class GUI {
         mapSelection.setValue("Map1");
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
         this.main.grid.add(sceneTitle, 0, 0, 2, 1);
