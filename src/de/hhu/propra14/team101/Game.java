@@ -256,7 +256,7 @@ public class Game {
                             nextRound();
                             break;
                         case LeftOrRight:
-                            bullet.physics = BallisticMovement.Revert(bullet.physics);
+                            bullet.physics = BallisticMovement.revert(bullet.physics);
                             break;
                     }
                 }

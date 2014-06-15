@@ -37,7 +37,7 @@ public class LineMovement {
 
     /**
      * Execute steps of the movement
-     * @param speed count of movement steps'
+     * @param speed count of movement steps
      */
     public void move(int speed) {
         for(int step = 0; step < speed; step++) {
@@ -47,13 +47,13 @@ public class LineMovement {
     }
 
     /**
-     * Test, if there are collision.
+     * Test, if there is a collision
      * @param currentWorm current worm
      * @param worms all worms of the game
      * @param terrain terrain of the game
      * @param width width of game field
      * @param height height of the game field
-     * @return
+     * @return Collision
      */
     public Collision hasCollision(Worm currentWorm, ArrayList<Worm> worms, Terrain terrain, double width, double height) {
         if (this.getXCoordinate() < 0 || this.getXCoordinate() > width) {
@@ -95,7 +95,7 @@ public class LineMovement {
     /**
      * Revert the given movement.
      */
-    public static LineMovement Revert(LineMovement physics) {
+    public static LineMovement revert(LineMovement physics) {
         return new LineMovement(physics.getXCoordinate(), physics.getYCoordinate(), new Vector(0, 0, -physics.directionVector.getXCoordinate(), physics.directionVector.getYCoordinate()));
     }
 

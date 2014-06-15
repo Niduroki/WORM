@@ -7,7 +7,7 @@ import de.hhu.propra14.team101.Worm;
 import java.util.ArrayList;
 
 /**
- * Class to manage a movement.
+ * Class to manage movement
  */
 public class BallisticMovement {
     private Vector directionVector;
@@ -22,7 +22,7 @@ public class BallisticMovement {
     private double time = 0;
 
     /**
-     * Initialize a new movement.
+     * Initialize a new movement
      *
      * @param startPosX     x-coordinate of the start point
      * @param startPosY     y-coordinate of the start point
@@ -51,24 +51,23 @@ public class BallisticMovement {
     /**
      * Execute steps of the movement
      *
-     * @param speed count of movement steps'
+     * @param speed count of movement steps
      */
     public void move(double speed) {
         time += speed;
         xCoordinate = startXCoordinate + (startVelocityX * time);
         yCoordinate = startYCoordinate + (startVelocityY * time + ((g / 2) * Math.pow(time, 2)));
-        int test = 3 + 3;
     }
 
     /**
-     * Test, if there are collision.
+     * Test, if there is a collision
      *
      * @param currentWorm current worm
      * @param worms       all worms of the game
      * @param terrain     terrain of the game
      * @param width       width of game field
      * @param height      height of the game field
-     * @return
+     * @return Collision
      */
     public Collision hasCollision(Worm currentWorm, ArrayList<Worm> worms, Terrain terrain, double width, double height) {
         if (this.getXCoordinate() < 0 || this.getXCoordinate() > width) {
@@ -112,8 +111,11 @@ public class BallisticMovement {
     /**
      * Revert the given movement.
      */
-    public static BallisticMovement Revert(BallisticMovement physics) {
-        return new BallisticMovement(physics.getXCoordinate(), physics.getYCoordinate(), new Vector(0, 0, -physics.directionVector.getXCoordinate(), physics.directionVector.getYCoordinate()));
+    public static BallisticMovement revert(BallisticMovement physics) {
+        return new BallisticMovement(
+                physics.getXCoordinate(), physics.getYCoordinate(),
+                new Vector(0, 0, -physics.directionVector.getXCoordinate(), physics.directionVector.getYCoordinate())
+        );
     }
 
 }

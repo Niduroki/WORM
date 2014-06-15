@@ -6,14 +6,14 @@ public class Collision {
 
     public Collision(Object collisionElement, CollisionType type) {
         this.collisionElement = collisionElement;
-        collisionType = type;
+        this.collisionType = type;
     }
 
     public Object getCollisionElement() {
-        return collisionElement;
+        return this.collisionElement;
     }
 
     public CollisionType getType() {
-        return collisionType;
+        return this.collisionType;
     }
 }
