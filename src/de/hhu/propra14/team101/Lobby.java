@@ -420,7 +420,7 @@ public class Lobby {
         final TextField text2 = new TextField("");
 
         final ComboBox<String> map = new ComboBox<>();
-        map.getItems().addAll("Map 1", "Map 2", "Map 3", "Map 4", "Mountain", "Plains", "Castle");
+        map.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle");
         map.setValue("Map 1");
 
         final NumberTextField maxPlayers = new NumberTextField();
@@ -470,16 +470,16 @@ public class Lobby {
                         if (!text2.getText().isEmpty()) {
                             main.client.changePassword(text2.getText());
                         }
-                        main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
+                        main.client.changeMap(map.getSelectionModel().getSelectedItem());
                         // If the owner defined a max player amount: Use it
                         if (!maxPlayers.getText().isEmpty()) {
                             main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
                         }
 
                         //Submit selected weapons
-                        main.client.setWeapon("bazooka", weaponBox1.selectedProperty().get());
+                        main.client.setWeapon("bazooka", weaponBox3.selectedProperty().get());
                         main.client.setWeapon("grenade", weaponBox2.selectedProperty().get());
-                        main.client.setWeapon("atomicbomb", weaponBox3.selectedProperty().get());
+                        main.client.setWeapon("atomicbomb", weaponBox1.selectedProperty().get());
                         addRoomButtons();
                     } catch (RoomExistsException e) {
                         text1.setText("");
@@ -508,7 +508,7 @@ public class Lobby {
         final TextField text2 = new TextField("");
 
         final ComboBox<String> map = new ComboBox<>();
-        map.getItems().addAll("Map 1", "Map 2", "Map 3", "Map 4", "Mountain", "Plains", "Castle");
+        map.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle");
         map.setValue("Map 1");
 
         final NumberTextField maxPlayers = new NumberTextField();
@@ -537,29 +537,38 @@ public class Lobby {
         this.main.grid.add(weaponBox2, 1, 5);
         this.main.grid.add(weaponBox3, 2, 5);
 
+        Map<String, Object> data = new HashMap<>();
         try {
-            Map<String, Object> data = this.main.client.getRoomProperties();
-            text1.setText((String) data.get("name"));
-            text2.setText((String) data.get("password"));
-            map.getSelectionModel().select("Map "+ ((String) data.get("map")).charAt(3));
-            // Don't prefill maxPlayers with a 0
-            if (!String.valueOf(data.get("max_players")).equals("0")) {
-                maxPlayers.setText(String.valueOf(data.get("max_players")));
-            }
-            // Tick selected weapons
-            for (Map.Entry<String, Boolean> entry : ((Map<String, Boolean>) data.get("weapons")).entrySet()) {
-                if (entry.getKey().equals("bazooka")) {
-                    weaponBox1.selectedProperty().set(entry.getValue());
-                } else if (entry.getKey().equals("grenade")) {
-                    weaponBox2.selectedProperty().set(entry.getValue());
-                } else if (entry.getKey().equals("atomicbomb")) {
-                    weaponBox3.selectedProperty().set(entry.getValue());
-                } else {
-                    System.out.println("Unknown weapon: " + entry.getKey());
-                }
-            }
+            data = this.main.client.getRoomProperties();
         } catch (TimeoutException e) {
             System.out.println("Timeout while loading room properties!");
+        }
+
+        final String oldName = (String) data.get("name");
+        final String oldPassword = (String) data.get("password");
+        final String oldMap = (String) data.get("map");
+        final int oldMaxPlayers = (int) data.get("max_players");
+        final Map<String, Boolean> oldWeapons = (Map<String, Boolean>) data.get("weapons");
+
+        text1.setText(oldName);
+        text2.setText(oldPassword);
+        map.getSelectionModel().select(oldMap);
+        // Don't prefill maxPlayers with a 0
+        if (oldMaxPlayers != 0) {
+            maxPlayers.setText(String.valueOf(oldMaxPlayers));
+        }
+
+        // Tick selected weapons
+        for (Map.Entry<String, Boolean> entry : oldWeapons.entrySet()) {
+            if (entry.getKey().equals("bazooka")) {
+                weaponBox1.selectedProperty().set(entry.getValue());
+            } else if (entry.getKey().equals("grenade")) {
+                weaponBox2.selectedProperty().set(entry.getValue());
+            } else if (entry.getKey().equals("atomicbomb")) {
+                weaponBox3.selectedProperty().set(entry.getValue());
+            } else {
+                System.out.println("Unknown weapon: " + entry.getKey());
+            }
         }
 
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -578,22 +587,47 @@ public class Lobby {
                         weaponBox3.selectedProperty().get()
                 )) {
                     try {
-                        // TODO submit only values which changed here
-                        main.client.changeRoomName(text1.getText());
-                        // If there's a password: Use it
-                        if (!text2.getText().isEmpty()) {
-                            main.client.changePassword(text2.getText());
-                        }
-                        main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
-                        // If the owner defined a max player amount: Use it
-                        if (!maxPlayers.getText().isEmpty()) {
-                            main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
+                        // Change the room name
+                        if (!text1.getText().equals(oldName)) {
+                            main.client.changeRoomName(text1.getText());
                         }
 
-                        // Submit selected weapons
-                        main.client.setWeapon("bazooka", weaponBox1.selectedProperty().get());
-                        main.client.setWeapon("grenade", weaponBox2.selectedProperty().get());
-                        main.client.setWeapon("atomicbomb", weaponBox3.selectedProperty().get());
+                        // Change the password
+                        if (!text2.getText().isEmpty() && !text2.getText().equals(oldPassword)) {
+                            main.client.changePassword(text2.getText());
+                        }
+
+                        // Change the map
+                        if (!map.getSelectionModel().getSelectedItem().equals(oldMap)) {
+                            main.client.changeMap(map.getSelectionModel().getSelectedItem());
+                        }
+
+                        // Change max players
+                        if (
+                                // Not old = new
+                                !maxPlayers.getText().equals(String.valueOf(oldMaxPlayers)) &&
+                                // Not (old = 0 and new = nothing, i.e. 0)
+                                !(oldMaxPlayers == 0 && maxPlayers.getText().equals(""))
+                        ) {
+                            // Old value 1+, new value: Nothing, i.e. 0
+                            if (oldMaxPlayers != 0 && maxPlayers.getText().equals("")) {
+                                main.client.changeMaxPlayers(0);
+                            } else {
+                                main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
+                            }
+                        }
+
+                        // Submit changed weapons
+                        if (oldWeapons.get("bazooka") != weaponBox3.selectedProperty().get()) {
+                            main.client.setWeapon("bazooka", weaponBox3.selectedProperty().get());
+                        }
+                        if (oldWeapons.get("grenade") != weaponBox2.selectedProperty().get()) {
+                            main.client.setWeapon("grenade", weaponBox2.selectedProperty().get());
+                        }
+                        if (oldWeapons.get("atomicbomb") != weaponBox1.selectedProperty().get()) {
+                            main.client.setWeapon("atomicbomb", weaponBox1.selectedProperty().get());
+                        }
+
                         addRoomButtons();
                     } catch (NetworkException e) {
                         //
