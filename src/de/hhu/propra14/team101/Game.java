@@ -215,6 +215,13 @@ public class Game {
                 for (int i = 0; i < this.getPlayers().size(); i++) {
                     for (int j = 0; j < this.getPlayers().get(i).wormList.size(); j++) {
                         if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
+                            try {
+                                OggClip goodbyeClip = new OggClip("sfx/worms/Goodbye.ogg");
+                                goodbyeClip.play();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                             this.getPlayers().get(i).wormList.remove(j);
 
                             // Decrement current worm to prevent an IndexOutOfBoundsException
@@ -246,6 +253,34 @@ public class Game {
                         switch (collision.getType()) {
                             case Worm:
                                 ((Worm) collision.getCollisionElement()).health -= bullet.weapon.damage;
+                                Random random = new Random();
+                                int randomInt = random.nextInt(2);
+
+                                // Play a random sound, if a worm is hit
+                                OggClip damageClip = null;
+                                if (randomInt == 0) {
+                                    try {
+                                        damageClip = new OggClip("sfx/worms/Fleshwound.ogg");
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else if (randomInt == 1) {
+                                    try {
+                                        damageClip = new OggClip("sfx/worms/Oh no.ogg");
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    try {
+                                        damageClip = new OggClip("sfx/worms/You'll pay.ogg");
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                if (damageClip != null) {
+                                    damageClip.play();
+                                }
+
                                 bulletFired = false;
                                 nextRound();
                                 break;
@@ -290,6 +325,14 @@ public class Game {
             this.turnOfPlayer += 1;
         }
 
+        // Make the worm say "Let's do this"
+        try {
+            OggClip doThisClip = new OggClip("sfx/worms/Do this.ogg");
+            doThisClip.play();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         // Reset frame counter for seconds and roundTimer
         this.secondCounter = 0;
         this.roundTimer = 20;
@@ -302,7 +345,14 @@ public class Game {
     public void startLevel() {
         if (!Main.headless) {
             try {
-                music = new OggClip("music/Normal-Game.ogg");
+                // Default music: Normal
+                String musicPath = "Normal-Game.ogg";
+                if (level.theme.equals("oriental")) {
+                    musicPath = "Oriental-Game.ogg";
+                } else if (level.theme.equals("horror")) {
+                    musicPath = "Horror-Game.ogg";
+                }
+                music = new OggClip("music/"+musicPath);
                 music.loop();
             } catch (IOException f) {
                 f.printStackTrace();
