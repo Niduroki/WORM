@@ -17,7 +17,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 
@@ -67,7 +66,7 @@ public class Main extends Application {
         //this.grid.setGridLinesVisible(true);
 
         this.primaryStage = primaryStage;
-        Scene scene = new Scene(grid, 600, 400);
+        Scene scene = new Scene(grid, 600*Main.sizeMultiplier, 400*Main.sizeMultiplier);
         primaryStage.setScene(scene);
         primaryStage.show();
         grid.setStyle("-fx-background-color: #00BFFF");
@@ -152,7 +151,7 @@ public class Main extends Application {
                         try {
                             client.jump();
                         } catch(TimeoutException ex) {
-
+                            //
                         }
                     } else {
                         game.doAction("jump");

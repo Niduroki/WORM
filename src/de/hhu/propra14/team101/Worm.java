@@ -2,6 +2,7 @@ package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.Physics.BallisticMovement;
 import de.hhu.propra14.team101.Physics.*;
+import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -18,7 +19,7 @@ import java.util.Map;
 public class Worm {
 
     public ArrayList<AbstractWeapon> weaponList;
-    public int size = 25;
+    public static int size = 25*(int)Main.sizeMultiplier;
     public int armor = 0;
     public int health = 100;
     public int currentWeapon = 0;
@@ -65,7 +66,7 @@ public class Worm {
      * Draws the worm
      */
     public void draw (GraphicsContext gc, Color color) {
-        gc.drawImage(this.image, this.xCoord, this.yCoord, this.size, this.size);
+        gc.drawImage(this.image, this.xCoord, this.yCoord, size, size);
         gc.setFill(color);
         gc.fillText("H"+String.valueOf(this.health), this.xCoord, this.yCoord -4);
         if (this.armor != 0) {
@@ -78,52 +79,49 @@ public class Worm {
      * @param direction either 'l' to move left or 'r' to move right
      */
     public void move (char direction, Terrain terrain, ArrayList<Player> players) {
-            if (direction == 'l') {
-                // Don't run out of the terrain
-                double newXPos = this.getXCoordinate() - 5;
-                //Collision?
-                if(terrain.isTerrain(newXPos,this.getYCoordinate()+size-6) == null) {
-                    for(Player player : players) {
-                        for(Worm worm : player.wormList) {
-                            if(worm != this && worm.isHitted(newXPos,this.getYCoordinate())) {
-                                return;
-                            }
-                        }
+        double newXPos = 0;
+        double collisionXPos = 0;
+        if (direction == 'l') {
+            newXPos = this.getXCoordinate() - (AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 2;
+            collisionXPos = newXPos;
+        } else if (direction == 'r') {
+            newXPos = this.getXCoordinate() + (AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 2;
+            collisionXPos = newXPos + size;
+        }
+
+        //Collision?
+        if (terrain.isTerrain(collisionXPos, this.getYCoordinate() + size - 6 * Main.sizeMultiplier) == null) {
+            for (Player player : players) {
+                for (Worm worm : player.wormList) {
+                    if (worm != this && worm.isHitted(collisionXPos, this.getYCoordinate())) {
+                        return;
                     }
-                    if (this.getXCoordinate() >= 5) {
-                        this.xCoord = newXPos;
-                    }
-                    freeFall(terrain);
-                }
-            } else if (direction == 'r') {
-                // Don't run out of the terrain
-                double newXPos = this.getXCoordinate() + 5;
-                //Collision?
-                if(terrain.isTerrain(newXPos + size, this.getYCoordinate()+size-6) == null) {
-                    for(Player player : players) {
-                        for(Worm worm : player.wormList) {
-                            if(worm != this && worm.isHitted(newXPos + size,this.getYCoordinate())) {
-                                return;
-                            }
-                        }
-                    }
-                    if (this.getXCoordinate() < terrain.getWidthInPixel()-size) {
-                        this.xCoord = newXPos;
-                    }
-                    freeFall(terrain);
                 }
             }
-            this.orientation = direction;
-        //}
+
+            // Don't run out of the terrain
+            if (
+                    (direction == 'l' && this.getXCoordinate() >= (AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 2) ||
+                    (direction == 'r' && this.getXCoordinate() < Terrain.getWidthInPixel() - size)
+            ) {
+                this.xCoord = newXPos;
+            }
+            freeFall(terrain);
+        }
+        this.orientation = direction;
     }
 
     private void freeFall(Terrain terrain) {
         int height = 0;
-        while((terrain.isTerrain(this.getXCoordinate(),this.getYCoordinate()+size-5) == null) && terrain.isTerrain(this.getXCoordinate() + size, this.getYCoordinate()+size-5) == null && this.getYCoordinate()+size-5<terrain.getHeightInPixel()) {
+        while(
+                (terrain.isTerrain(this.getXCoordinate(),this.getYCoordinate()+size-5*Main.sizeMultiplier) == null)
+                        && terrain.isTerrain(this.getXCoordinate() + size, this.getYCoordinate()+size-5*Main.sizeMultiplier) == null
+                        && this.getYCoordinate()+size-((AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 2)<Terrain.getHeightInPixel()
+                ) {
             this.setYCoordinate(this.getYCoordinate()+ 1);
         }
 
-        if(height > 23) {
+        if(height > size-2*Main.sizeMultiplier) {
             health -= height/4;
         }
     }
@@ -137,19 +135,19 @@ public class Worm {
     public boolean jump (Terrain terrain, ArrayList<Worm> worms) {
         if(jumpPhysic == null) {
             if(orientation == 'l') {
-                jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(),this.getXCoordinate() - 50,this.getYCoordinate() - 50, true);
+                jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(),this.getXCoordinate() - 50*Main.sizeMultiplier,this.getYCoordinate() - 50*Main.sizeMultiplier, true);
             } else {
-                jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(),this.getXCoordinate() + 50,this.getYCoordinate() - 50, true);
+                jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(),this.getXCoordinate() + 50*Main.sizeMultiplier,this.getYCoordinate() - 50*Main.sizeMultiplier, true);
             }
         }
         jumpPhysic.move(1);
         this.setXCoordinate(jumpPhysic.getXCoordinate());
         this.setYCoordinate(jumpPhysic.getYCoordinate());
-        Collision collision = jumpPhysic.hasCollision(this,worms,terrain,terrain.getWidthInPixel(), terrain.getHeightInPixel());
+        Collision collision = jumpPhysic.hasCollision(this,worms,terrain,Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
         if(collision != null) {
             if(collision.getType() == CollisionType.Terrain) {
                 jumpPhysic = null;
-                this.setYCoordinate(this.getYCoordinate()-10);
+                this.setYCoordinate(this.getYCoordinate()-AbstractTerrainObject.baseSize*Main.sizeMultiplier);
                 freeFall(terrain);
                 return true;
             } else {
@@ -160,7 +158,7 @@ public class Worm {
         }
         if(jumpPhysic.hasFinished()) {
             jumpPhysic = null;
-            this.setYCoordinate(this.getYCoordinate()-10);
+            this.setYCoordinate(this.getYCoordinate()-AbstractTerrainObject.baseSize*Main.sizeMultiplier);
             freeFall(terrain);
             return true;
         }
@@ -194,8 +192,8 @@ public class Worm {
     }
 
     public boolean isHitted(double xCoordinate, double yCoordinate) {
-        if (this.getXCoordinate() <= xCoordinate && this.getXCoordinate() + this.size >= xCoordinate) {
-            if (this.getYCoordinate() <= yCoordinate && this.getYCoordinate() + this.size >= yCoordinate) {
+        if (this.getXCoordinate() <= xCoordinate && this.getXCoordinate() + size >= xCoordinate) {
+            if (this.getYCoordinate() <= yCoordinate && this.getYCoordinate() + size >= yCoordinate) {
                 return true;
             }
         }

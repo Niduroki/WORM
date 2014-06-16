@@ -61,7 +61,7 @@ public class LevelCreator {
         reader = new InputStreamReader(stream);
 
         // Terrain will be created in here
-        terrain = new Terrain(60, 40);
+        terrain = new Terrain();
 
         int character;
 

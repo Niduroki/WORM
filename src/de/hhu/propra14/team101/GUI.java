@@ -3,10 +3,7 @@ package de.hhu.propra14.team101;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
-import de.hhu.propra14.team101.Weapons.AbstractWeapon;
-import de.hhu.propra14.team101.Weapons.AtomicBomb;
-import de.hhu.propra14.team101.Weapons.Bazooka;
-import de.hhu.propra14.team101.Weapons.Grenade;
+import de.hhu.propra14.team101.Weapons.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -211,7 +208,7 @@ public class GUI {
             startButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    main.field = new Canvas(600*Main.sizeMultiplier, 400*Main.sizeMultiplier);
+                    main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
                     main.grid.getChildren().clear();
                     main.grid.add(main.field, 0, 0);
                     GameSaves loader = new GameSaves();
@@ -325,7 +322,7 @@ public class GUI {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                main.field = new Canvas(600*Main.sizeMultiplier, 400*Main.sizeMultiplier);
+                main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
                 main.grid.getChildren().clear();
                 main.grid.add(main.field, 0, 0);
                 main.game = new Game(main.players);

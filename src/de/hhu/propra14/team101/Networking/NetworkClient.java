@@ -4,6 +4,7 @@ import de.hhu.propra14.team101.Game;
 import de.hhu.propra14.team101.Main;
 import de.hhu.propra14.team101.Networking.Exceptions.*;
 import de.hhu.propra14.team101.Savers.SettingSaves;
+import de.hhu.propra14.team101.Terrain;
 import javafx.scene.canvas.Canvas;
 import org.yaml.snakeyaml.Yaml;
 
@@ -170,7 +171,7 @@ public class NetworkClient {
     private void interpretGame(String command) {
         if (command.equals("started")) {
             try {
-                main.field = new Canvas(600, 400);
+                main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
                 this.requestSyncGame();
             } catch (TimeoutException e) {
                 System.out.println("Timeout!");

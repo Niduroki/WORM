@@ -245,7 +245,7 @@ public class Game {
                     Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
                     Collision collision;
                     if (Main.headless) {
-                        collision = bullet.physics.hasCollision(currentWorm, wormArrayList, this.getCurrentTerrain(), 600, 400);
+                        collision = bullet.physics.hasCollision(currentWorm, wormArrayList, this.getCurrentTerrain(), Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
                     } else {
                         collision = bullet.physics.hasCollision(currentWorm, wormArrayList, this.getCurrentTerrain(), gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
                     }

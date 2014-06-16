@@ -12,47 +12,30 @@ import java.util.Map;
  * Class to create terrain
  */
 public class Terrain {
+    public static int width = 60;
+    public static int height = 40;
+
     protected AbstractTerrainObject[][] terrainObjects;
-    private int width;
-    private int height;
 
     /**
      * Initialize a new terrain.
-     * @param width width of terrain. measurement: size of a block
-     * @param height height of terrain. measurement size of a block.
      */
-    public Terrain (int width, int height) {
+    public Terrain () {
         this.terrainObjects = new AbstractTerrainObject[width][height];
-        this.width = width;
-        this.height = height;
     }
 
     /**
      * Get the height of the terrain.
      */
-    public int getHeight() {
-        return height;
-    }
-
-    /**
-     * Get the height of the terrain.
-     */
-    public double getHeightInPixel() {
-        return height * AbstractTerrainObject.baseSize;
+    public static double getHeightInPixel() {
+        return height * AbstractTerrainObject.baseSize * Main.sizeMultiplier;
     }
 
     /**
      * Get the width of the terrain.
      */
-    public int getWidth() {
-        return width;
-    }
-
-    /**
-     * Get the width of the terrain.
-     */
-    public double getWidthInPixel() {
-        return width * AbstractTerrainObject.baseSize;
+    public static double getWidthInPixel() {
+        return width * AbstractTerrainObject.baseSize * Main.sizeMultiplier;
     }
 
     /**
@@ -62,7 +45,7 @@ public class Terrain {
         int xCoordinate = object.getCoords()[0];
         int yCoordinate = object.getCoords()[1];
 
-        if (xCoordinate < 0 || xCoordinate > this.getWidth() || yCoordinate < 0 || yCoordinate > this.getHeight()) {
+        if (xCoordinate < 0 || xCoordinate > width || yCoordinate < 0 || yCoordinate > height) {
             throw new IllegalArgumentException("x- and yCoordinate must be positive and not higher or wider as the terrain.");
         }
 
@@ -90,9 +73,9 @@ public class Terrain {
      */
     @Nullable
     public AbstractTerrainObject isTerrain(double xCoordinate, double yCoordinate) {
-        int integerXCoordinate = (new Double(xCoordinate/AbstractTerrainObject.baseSize)).intValue();
-        int integerYCoordinate = (new Double(yCoordinate/AbstractTerrainObject.baseSize)).intValue();
-        if (integerXCoordinate < 0 || integerXCoordinate > this.getWidth() || integerYCoordinate < 0 || integerYCoordinate > this.getHeight()) {
+        int integerXCoordinate = (new Double(xCoordinate/(AbstractTerrainObject.baseSize*Main.sizeMultiplier))).intValue();
+        int integerYCoordinate = (new Double(yCoordinate/(AbstractTerrainObject.baseSize*Main.sizeMultiplier))).intValue();
+        if (integerXCoordinate < 0 || integerXCoordinate >= width || integerYCoordinate < 0 || integerYCoordinate >= height) {
             throw new IllegalArgumentException("x- and integerYCoordinate must be positive and not higher or wider as the terrain.");
         }
 
@@ -143,10 +126,10 @@ public class Terrain {
      */
      public Object[][] serialize () {
         /** 2-dimensional array to store terrain in.*/
-        Object[][] result = new Object[this.getWidth()][this.getHeight()];
+        Object[][] result = new Object[width][height];
 
-        for (int i=0; i<this.getWidth(); i++) {
-            for (int j=0; j<this.getHeight(); j++) {
+        for (int i=0; i<width; i++) {
+            for (int j=0; j<height; j++) {
                 AbstractTerrainObject workingBlock = this.terrainObjects[i][j];
                 if (workingBlock != null) {
                     HashMap<String, Object> map = new HashMap<>();
@@ -165,7 +148,7 @@ public class Terrain {
     }
 
     public static Terrain deserialize (ArrayList<ArrayList<Map>> input) {
-        Terrain terrain = new Terrain(input.size(), input.get(0).size());
+        Terrain terrain = new Terrain();
         for (ArrayList<Map> xInput : input) {
             for (Map yInput : xInput) {
                 if (yInput != null) {
