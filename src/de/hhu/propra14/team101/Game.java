@@ -254,7 +254,7 @@ public class Game {
                             case Worm:
                                 ((Worm) collision.getCollisionElement()).health -= bullet.weapon.damage;
                                 Random random = new Random();
-                                int randomInt = random.nextInt(2);
+                                int randomInt = random.nextInt(3);
 
                                 // Play a random sound, if a worm is hit
                                 OggClip damageClip = null;

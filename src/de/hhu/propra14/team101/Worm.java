@@ -19,7 +19,7 @@ import java.util.Map;
 public class Worm {
 
     public ArrayList<AbstractWeapon> weaponList;
-    public static int size = 25*(int)Main.sizeMultiplier;
+    public static double size = 25*Main.sizeMultiplier;
     public int armor = 0;
     public int health = 100;
     public int currentWeapon = 0;
