@@ -147,7 +147,12 @@ public class Worm {
         if(collision != null) {
             if(collision.getType() == CollisionType.Terrain) {
                 jumpPhysic = null;
-                this.setYCoordinate(this.getYCoordinate()-AbstractTerrainObject.baseSize*Main.sizeMultiplier);
+                this.setYCoordinate(this.getYCoordinate() - AbstractTerrainObject.baseSize * Main.sizeMultiplier);
+                freeFall(terrain);
+                return true;
+            } else if (collision.getType() == CollisionType.Worm) {
+                jumpPhysic = null;
+                this.setYCoordinate(this.getYCoordinate() - size);
                 freeFall(terrain);
                 return true;
             } else {
