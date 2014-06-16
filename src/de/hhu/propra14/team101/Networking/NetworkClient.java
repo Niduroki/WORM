@@ -166,6 +166,7 @@ public class NetworkClient {
         this.lastAnswer = line;
     }
 
+    @SuppressWarnings("unchecked")
     private void interpretGame(String command) {
         if (command.equals("started")) {
             try {
@@ -341,6 +342,7 @@ public class NetworkClient {
         this.send("kick_user " + name, false);
     }
 
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getRoomProperties() throws TimeoutException {
         this.send("get_room_properties", true);
         Yaml yaml = new Yaml();

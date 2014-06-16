@@ -263,7 +263,7 @@ public class Game {
                                 nextRound();
                                 break;
                             case LeftOrRight:
-                                bullet.physics = BallisticMovement.Revert(bullet.physics);
+                                bullet.physics = BallisticMovement.revert(bullet.physics);
                                 break;
                         }
                     }
@@ -425,6 +425,7 @@ public class Game {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     public static Game deserialize(Map<String, Object> data) {
         Game game = new Game(Game.deserializePlayerArray((ArrayList<Map>) data.get("players")));
         game.setCurrentTerrain(Terrain.deserialize((ArrayList<ArrayList<Map>>) data.get("terrain")));

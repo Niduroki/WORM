@@ -170,6 +170,7 @@ public class Terrain {
             for (Map yInput : xInput) {
                 if (yInput != null) {
                     //Rebuild the block
+                    @SuppressWarnings("unchecked")
                     ArrayList<Integer> coords = (ArrayList<Integer>) yInput.get("coords");
                     if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.SquareBuildingBlock")) {
                         SquareBuildingBlock workingBlock = new SquareBuildingBlock(coords.get(0), coords.get(1));

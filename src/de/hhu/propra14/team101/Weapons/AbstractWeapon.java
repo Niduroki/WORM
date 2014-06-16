@@ -2,7 +2,6 @@ package de.hhu.propra14.team101.Weapons;
 
 import de.hhu.propra14.team101.Bullet;
 import de.hhu.propra14.team101.Physics.BallisticMovement;
-import de.hhu.propra14.team101.Physics.LineMovement;
 import javafx.scene.image.Image;
 
 import java.util.HashMap;

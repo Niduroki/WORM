@@ -27,6 +27,7 @@ public class LevelSaves extends AbstractSaver {
             // Read from a jar
             data = GZipper.gunzip(this.getClass().getResourceAsStream("/"+path));
         }
+        @SuppressWarnings("unchecked")
         Map<String, Object> raw = (Map<String, Object>) this.yaml.load(data);
         return Level.deserialize(raw);
     }

@@ -58,6 +58,7 @@ public class Player {
     }
 
     public static Player deserialize(Map input) {
+        @SuppressWarnings("unchecked")
         ArrayList<Map> rawWorms = (ArrayList<Map>) input.get("worm_array");
         ArrayList<Worm> wormList = new ArrayList<>();
         for (Map rawWorm : rawWorms) {

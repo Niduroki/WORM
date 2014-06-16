@@ -1,16 +1,12 @@
 package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.Physics.BallisticMovement;
-import de.hhu.propra14.team101.Physics.Collision;
-import de.hhu.propra14.team101.Physics.CollisionType;
-import de.hhu.propra14.team101.Physics.LineMovement;
+import de.hhu.propra14.team101.Physics.*;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -223,6 +219,7 @@ public class Worm {
     }
 
     public static Worm deserialize(Map input) {
+        @SuppressWarnings("unchecked")
         ArrayList<Map> rawWeapons = (ArrayList<Map>) input.get("weapons");
         ArrayList<AbstractWeapon> weaponList = new ArrayList<>();
         for (Map rawWeapon : rawWeapons) {

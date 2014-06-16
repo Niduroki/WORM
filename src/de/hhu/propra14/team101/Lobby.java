@@ -16,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.input.*;
 import javafx.util.Callback;
@@ -30,11 +29,12 @@ import java.util.*;
  */
 public class Lobby {
     protected Main main;
-    private Timeline globalTimeline;
-    private Timeline roomTimeline;
     protected TextArea globalChatArea;
     protected TextArea roomChatArea;
-    protected ListView<String> list;
+    protected ListView<String> roomList;
+
+    private Timeline globalTimeline;
+    private Timeline roomTimeline;
 
     public Lobby(Main main) {
         this.main = main;
@@ -47,10 +47,10 @@ public class Lobby {
         // Create buttons and other objects
         Text sceneTitle = new Text("Lobby");
         Button returnButton = new Button("Back");
-        Button create = new Button("Create Game");
-        Button join = new Button("Join Game");
+        Button createButton = new Button("Create Game");
+        Button joinButton = new Button("Join Game");
 
-        create.setOnAction(new EventHandler<ActionEvent>() {
+        createButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 globalTimeline.stop();
@@ -59,28 +59,29 @@ public class Lobby {
         });
 
 
-        list = new ListView<>();
+        roomList = new ListView<>();
         try {
             String[] rooms = this.main.client.getRooms();
-            list.setItems(FXCollections.observableArrayList(rooms));
+            roomList.setItems(FXCollections.observableArrayList(rooms));
         } catch (TimeoutException exceptionName) {
             System.out.println(exceptionName.getMessage());
         }
 
-        list.setPrefWidth(400);
-        list.setPrefHeight(80);
+        roomList.setPrefWidth(400);
+        roomList.setPrefHeight(80);
 
-        join.setOnAction(new EventHandler<ActionEvent>() {
+        joinButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    String selectedRoom = list.getSelectionModel().getSelectedItems().get(0);
+                    String selectedRoom = roomList.getSelectionModel().getSelectedItems().get(0);
                     if (selectedRoom != null) {
                         main.client.joinRoom(selectedRoom);
                         globalTimeline.stop();
                         addRoomButtons();
                     }
                 } catch (RoomFullException e) {
+                    // TODO show this in the GUI
                     System.out.println("Room full!");
                 } catch (RoomDoesNotExistException e) {
                     System.out.println("Room does not exist!");
@@ -112,16 +113,16 @@ public class Lobby {
         chatField.addEventHandler(KeyEvent.KEY_RELEASED, handler);
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
         this.main.grid.add(sceneTitle, 0, 0, 3, 1);
-        this.main.grid.add(list, 0, 1, 3, 2);
+        this.main.grid.add(roomList, 0, 1, 3, 2);
         this.main.grid.add(globalChatArea, 0, 3, 3, 5);
         this.main.grid.add(chatField, 0, 7, 3, 9);
         this.main.grid.add(returnButton, 0, 11);
-        this.main.grid.add(create, 1, 11);
-        this.main.grid.add(join, 2, 11);
+        this.main.grid.add(createButton, 1, 11);
+        this.main.grid.add(joinButton, 2, 11);
 
 
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -144,7 +145,7 @@ public class Lobby {
 
                         try {
                             String[] rooms = main.client.getRooms();
-                            list.setItems(FXCollections.observableArrayList(rooms));
+                            roomList.setItems(FXCollections.observableArrayList(rooms));
                         } catch (TimeoutException exceptionName) {
                             System.out.println(exceptionName.getMessage());
                         }
@@ -158,7 +159,7 @@ public class Lobby {
         this.globalTimeline.play();
     }
 
-    public void addRoomButtons() {
+    private void addRoomButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
 
@@ -168,15 +169,16 @@ public class Lobby {
         Button advanced = new Button("Advanced");
 
 
-        final ComboBox<String> team = new ComboBox<>();
-        team.getItems().addAll("Red", "Blue", "Green", "Yellow", "Spectator");
-        team.setValue("Spectator");
+        final ComboBox<String> teamSelection = new ComboBox<>();
+        teamSelection.getItems().addAll("Red", "Blue", "Green", "Yellow", "Spectator");
+        teamSelection.setValue("Spectator");
 
-        team.setOnHiding(new EventHandler<Event>() {
+        // When a color is chosen, submit the change
+        teamSelection.setOnHiding(new EventHandler<Event>() {
             @Override
             public void handle(Event event) {
                 try {
-                    main.client.changeColor(team.getSelectionModel().getSelectedItem().toLowerCase());
+                    main.client.changeColor(teamSelection.getSelectionModel().getSelectedItem().toLowerCase());
                 } catch (TimeoutException e) {
                     //
                 }
@@ -221,6 +223,7 @@ public class Lobby {
                 data.add(new String[]{user.getKey(), color});
             }
             list.setItems(data);
+            // Creates cells with a background color
             list.setCellFactory(
                     new Callback<ListView<String[]>, ListCell<String[]>>() {
                         @Override
@@ -252,6 +255,7 @@ public class Lobby {
 
         this.roomChatArea = new TextArea();
         this.roomChatArea.setEditable(false);
+        this.roomChatArea.setWrapText(false);
         final TextField chatField = new TextField("");
 
         final EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>(){
@@ -275,13 +279,13 @@ public class Lobby {
         chatField.addEventHandler(KeyEvent.KEY_RELEASED, handler);
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
         this.main.grid.add(ready, 1, 12);
         this.main.grid.add(advanced, 2, 2);
         this.main.grid.add(sceneTitle, 0, 0, 3, 1);
-        this.main.grid.add(team, 2, 1);
+        this.main.grid.add(teamSelection, 2, 1);
         this.main.grid.add(list, 0, 1, 2, 2);
         this.main.grid.add(this.roomChatArea, 0, 3, 3, 5);
         this.main.grid.add(chatField, 0, 7, 3, 9);
@@ -290,7 +294,7 @@ public class Lobby {
         advanced.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                addAdvanceButtons();
+                addAdvancedButtons();
             }
         });
 
@@ -361,9 +365,9 @@ public class Lobby {
                         }
                         list.setItems(data);
 
-                        String selection = team.getSelectionModel().getSelectedItem();
-                        team.getItems().clear();
-                        team.getItems().addAll("Red", "Blue", "Green", "Yellow", "Spectator");
+                        String selection = teamSelection.getSelectionModel().getSelectedItem();
+                        teamSelection.getItems().clear();
+                        teamSelection.getItems().addAll("Red", "Blue", "Green", "Yellow", "Spectator");
                         ArrayList<String> usedColors = new ArrayList<>();
                         for (String color: main.client.roomUsers.values()) {
                             if (!color.equals("spectator") || !color.equals(main.client.color)) {
@@ -371,8 +375,8 @@ public class Lobby {
                                 usedColors.add(Character.toUpperCase(color.charAt(0)) + color.substring(1));
                             }
                         }
-                        team.getItems().removeAll(usedColors);
-                        team.getSelectionModel().select(selection);
+                        teamSelection.getItems().removeAll(usedColors);
+                        teamSelection.getSelectionModel().select(selection);
 
                         if (Game.startMe) {
                             roomTimeline.stop();
@@ -397,7 +401,7 @@ public class Lobby {
                 }
         );
 
-        // Construct a globalTimeline with the mainloop
+        // Construct a timeline and start it
         this.roomTimeline = new Timeline(keyFrame);
         this.roomTimeline.setCycleCount(Animation.INDEFINITE);
         this.roomTimeline.play();
@@ -412,42 +416,41 @@ public class Lobby {
         Button returnButton = new Button("Back");
         Button startButton = new Button("Start");
 
-        Text title1 = new Text("Name");
-        Text title2 = new Text("Password");
-        Text title3 = new Text("Map");
-        Text title4 = new Text("Maximum players");
-        final TextField text1 = new TextField("");
-        final TextField text2 = new TextField("");
+        Text nameTitle = new Text("Name");
+        Text passwordTitle = new Text("Password");
+        Text mapTitle = new Text("Map");
+        Text maxPlayersTitle = new Text("Maximum players");
+        final TextField nameField = new TextField("");
+        final TextField passwordField = new TextField("");
 
-        final ComboBox<String> map = new ComboBox<>();
-        map.getItems().addAll("Map 1", "Map 2", "Map 3");
-        map.setValue("Map 1");
+        final ComboBox<String> mapSelection = new ComboBox<>();
+        mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle");
+        mapSelection.setValue("Map1");
 
-        final NumberTextField maxPlayers = new NumberTextField();
+        final NumberTextField maxPlayersField = new NumberTextField();
 
-        final CheckBox weaponBox1 = new CheckBox("Atomic Bomb");
-        final CheckBox weaponBox2 = new CheckBox("Grenade");
-        final CheckBox weaponBox3 = new CheckBox("Bazooka");
+        final CheckBox atomicBombBox = new CheckBox("Atomic Bomb");
+        final CheckBox grenadeBox = new CheckBox("Grenade");
+        final CheckBox bazookaBox = new CheckBox("Bazooka");
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
-
         this.main.grid.add(sceneTitle, 0, 0, 3, 1);
-        this.main.grid.add(text1, 1, 1);
-        this.main.grid.add(text2, 1, 2);
-        this.main.grid.add(title1, 0, 1);
-        this.main.grid.add(title2, 0, 2);
-        this.main.grid.add(title3, 0, 3);
-        this.main.grid.add(title4, 0, 4);
-        this.main.grid.add(map, 1, 3);
-        this.main.grid.add(maxPlayers, 1, 4);
+        this.main.grid.add(nameField, 1, 1);
+        this.main.grid.add(passwordField, 1, 2);
+        this.main.grid.add(nameTitle, 0, 1);
+        this.main.grid.add(passwordTitle, 0, 2);
+        this.main.grid.add(mapTitle, 0, 3);
+        this.main.grid.add(maxPlayersTitle, 0, 4);
+        this.main.grid.add(mapSelection, 1, 3);
+        this.main.grid.add(maxPlayersField, 1, 4);
         this.main.grid.add(returnButton, 0, 11);
         this.main.grid.add(startButton, 1, 11);
-        this.main.grid.add(weaponBox1, 0, 5);
-        this.main.grid.add(weaponBox2, 1, 5);
-        this.main.grid.add(weaponBox3, 2, 5);
+        this.main.grid.add(atomicBombBox, 0, 5);
+        this.main.grid.add(grenadeBox, 1, 5);
+        this.main.grid.add(bazookaBox, 2, 5);
 
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -455,34 +458,35 @@ public class Lobby {
                 addMpButtons();
             }
         });
+
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 // Don't do anything if no name for the room is provided and no weapon selected
-                if (!text1.getText().isEmpty() && (
-                        weaponBox1.selectedProperty().get() ||
-                        weaponBox2.selectedProperty().get() ||
-                        weaponBox3.selectedProperty().get()
+                if (!nameField.getText().isEmpty() && (
+                        atomicBombBox.selectedProperty().get() ||
+                        grenadeBox.selectedProperty().get() ||
+                        bazookaBox.selectedProperty().get()
                 )) {
                     try {
-                        main.client.createRoom(text1.getText());
+                        main.client.createRoom(nameField.getText());
                         // If there's a password: Use it
-                        if (!text2.getText().isEmpty()) {
-                            main.client.changePassword(text2.getText());
+                        if (!passwordField.getText().isEmpty()) {
+                            main.client.changePassword(passwordField.getText());
                         }
-                        main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
+                        main.client.changeMap(mapSelection.getSelectionModel().getSelectedItem());
                         // If the owner defined a max player amount: Use it
-                        if (!maxPlayers.getText().isEmpty()) {
-                            main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
+                        if (!maxPlayersField.getText().isEmpty()) {
+                            main.client.changeMaxPlayers(Integer.parseInt(maxPlayersField.getText()));
                         }
 
                         //Submit selected weapons
-                        main.client.setWeapon("bazooka", weaponBox1.selectedProperty().get());
-                        main.client.setWeapon("grenade", weaponBox2.selectedProperty().get());
-                        main.client.setWeapon("atomicbomb", weaponBox3.selectedProperty().get());
+                        main.client.setWeapon("bazooka", bazookaBox.selectedProperty().get());
+                        main.client.setWeapon("grenade", grenadeBox.selectedProperty().get());
+                        main.client.setWeapon("atomicbomb", atomicBombBox.selectedProperty().get());
                         addRoomButtons();
                     } catch (RoomExistsException e) {
-                        text1.setText("");
+                        nameField.setText("");
                     } catch (NetworkException e) {
                         //
                     }
@@ -491,7 +495,7 @@ public class Lobby {
         });
     }
 
-    private void addAdvanceButtons() {
+    private void addAdvancedButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
 
@@ -500,66 +504,75 @@ public class Lobby {
         Button returnButton = new Button("Back");
         Button submitButton = new Button("Change Properties");
 
-        Text title1 = new Text("Name");
-        Text title2 = new Text("Password");
-        Text title3 = new Text("Map");
-        Text title4 = new Text("Maximum Players");
-        final TextField text1 = new TextField("");
-        final TextField text2 = new TextField("");
+        Text nameTitle = new Text("Name");
+        Text passwordTitle = new Text("Password");
+        Text mapTitle = new Text("Map");
+        Text maxPlayersTitle = new Text("Maximum Players");
+        final TextField nameField = new TextField("");
+        final TextField passwordField = new TextField("");
 
-        final ComboBox<String> map = new ComboBox<>();
-        map.getItems().addAll("Map 1", "Map 2", "Map 3");
-        map.setValue("Map 1");
+        final ComboBox<String> mapSelection = new ComboBox<>();
+        mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle");
 
-        final NumberTextField maxPlayers = new NumberTextField();
+        final NumberTextField maxPlayersField = new NumberTextField();
 
-        final CheckBox weaponBox1 = new CheckBox("Atomic Bomb");
-        final CheckBox weaponBox2 = new CheckBox("Grenade");
-        final CheckBox weaponBox3 = new CheckBox("Bazooka");
+        final CheckBox atomicBombBox = new CheckBox("Atomic Bomb");
+        final CheckBox grenadeBox = new CheckBox("Grenade");
+        final CheckBox bazookaBox = new CheckBox("Bazooka");
 
         // Configure each object
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        sceneTitle.setFont(new Font(20));
 
         // Add the objects
-
         this.main.grid.add(sceneTitle, 0, 0, 3, 1);
-        this.main.grid.add(text1, 1, 1);
-        this.main.grid.add(text2, 1, 2);
-        this.main.grid.add(title1, 0, 1);
-        this.main.grid.add(title2, 0, 2);
-        this.main.grid.add(title3, 0, 3);
-        this.main.grid.add(title4, 0, 4);
-        this.main.grid.add(map, 1, 3);
-        this.main.grid.add(maxPlayers, 1, 4);
+        this.main.grid.add(nameField, 1, 1);
+        this.main.grid.add(passwordField, 1, 2);
+        this.main.grid.add(nameTitle, 0, 1);
+        this.main.grid.add(passwordTitle, 0, 2);
+        this.main.grid.add(mapTitle, 0, 3);
+        this.main.grid.add(maxPlayersTitle, 0, 4);
+        this.main.grid.add(mapSelection, 1, 3);
+        this.main.grid.add(maxPlayersField, 1, 4);
         this.main.grid.add(returnButton, 0, 11);
         this.main.grid.add(submitButton, 1, 11);
-        this.main.grid.add(weaponBox1, 0, 5);
-        this.main.grid.add(weaponBox2, 1, 5);
-        this.main.grid.add(weaponBox3, 2, 5);
+        this.main.grid.add(atomicBombBox, 0, 5);
+        this.main.grid.add(grenadeBox, 1, 5);
+        this.main.grid.add(bazookaBox, 2, 5);
 
+        Map<String, Object> roomProperties = new HashMap<>();
         try {
-            Map<String, Object> data = this.main.client.getRoomProperties();
-            text1.setText((String) data.get("name"));
-            text2.setText((String) data.get("password"));
-            map.getSelectionModel().select("Map "+ ((String) data.get("map")).charAt(3));
-            // Don't prefill maxPlayers with a 0
-            if (!String.valueOf(data.get("max_players")).equals("0")) {
-                maxPlayers.setText(String.valueOf(data.get("max_players")));
-            }
-            // Tick selected weapons
-            for (Map.Entry<String, Boolean> entry : ((Map<String, Boolean>) data.get("weapons")).entrySet()) {
-                if (entry.getKey().equals("bazooka")) {
-                    weaponBox1.selectedProperty().set(entry.getValue());
-                } else if (entry.getKey().equals("grenade")) {
-                    weaponBox2.selectedProperty().set(entry.getValue());
-                } else if (entry.getKey().equals("atomicbomb")) {
-                    weaponBox3.selectedProperty().set(entry.getValue());
-                } else {
-                    System.out.println("Unknown weapon: " + entry.getKey());
-                }
-            }
+            roomProperties = this.main.client.getRoomProperties();
         } catch (TimeoutException e) {
             System.out.println("Timeout while loading room properties!");
+        }
+
+        final String oldName = (String) roomProperties.get("name");
+        final String oldPassword = (String) roomProperties.get("password");
+        final String oldMap = (String) roomProperties.get("map");
+        final int oldMaxPlayers = (int) roomProperties.get("max_players");
+
+        @SuppressWarnings("unchecked")
+        final Map<String, Boolean> oldWeapons = (Map<String, Boolean>) roomProperties.get("weapons");
+
+        nameField.setText(oldName);
+        passwordField.setText(oldPassword);
+        mapSelection.getSelectionModel().select(oldMap);
+        // Don't prefill maxPlayers with a 0
+        if (oldMaxPlayers != 0) {
+            maxPlayersField.setText(String.valueOf(oldMaxPlayers));
+        }
+
+        // Tick selected weapons
+        for (Map.Entry<String, Boolean> entry : oldWeapons.entrySet()) {
+            if (entry.getKey().equals("bazooka")) {
+                atomicBombBox.selectedProperty().set(entry.getValue());
+            } else if (entry.getKey().equals("grenade")) {
+                grenadeBox.selectedProperty().set(entry.getValue());
+            } else if (entry.getKey().equals("atomicbomb")) {
+                bazookaBox.selectedProperty().set(entry.getValue());
+            } else {
+                System.out.println("Unknown weapon: " + entry.getKey());
+            }
         }
 
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -568,32 +581,58 @@ public class Lobby {
                 addRoomButtons();
             }
         });
+
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 // Don't do anything if no name for the room is provided and no weapon selected
-                if (!text1.getText().isEmpty() && (
-                        weaponBox1.selectedProperty().get() ||
-                        weaponBox2.selectedProperty().get() ||
-                        weaponBox3.selectedProperty().get()
+                if (!nameField.getText().isEmpty() && (
+                        atomicBombBox.selectedProperty().get() ||
+                        grenadeBox.selectedProperty().get() ||
+                        bazookaBox.selectedProperty().get()
                 )) {
                     try {
-                        // TODO submit only values which changed here
-                        main.client.changeRoomName(text1.getText());
-                        // If there's a password: Use it
-                        if (!text2.getText().isEmpty()) {
-                            main.client.changePassword(text2.getText());
-                        }
-                        main.client.changeMap(map.getSelectionModel().getSelectedItem().replace(" ", "")); // Remove spaces
-                        // If the owner defined a max player amount: Use it
-                        if (!maxPlayers.getText().isEmpty()) {
-                            main.client.changeMaxPlayers(Integer.parseInt(maxPlayers.getText()));
+                        // Change the room name
+                        if (!nameField.getText().equals(oldName)) {
+                            main.client.changeRoomName(nameField.getText());
                         }
 
-                        // Submit selected weapons
-                        main.client.setWeapon("bazooka", weaponBox1.selectedProperty().get());
-                        main.client.setWeapon("grenade", weaponBox2.selectedProperty().get());
-                        main.client.setWeapon("atomicbomb", weaponBox3.selectedProperty().get());
+                        // Change the password
+                        if (!passwordField.getText().isEmpty() && !passwordField.getText().equals(oldPassword)) {
+                            main.client.changePassword(passwordField.getText());
+                        }
+
+                        // Change the map
+                        if (!mapSelection.getSelectionModel().getSelectedItem().equals(oldMap)) {
+                            main.client.changeMap(mapSelection.getSelectionModel().getSelectedItem());
+                        }
+
+                        // Change max players
+                        if (
+                                // Not old = new
+                                !maxPlayersField.getText().equals(String.valueOf(oldMaxPlayers)) &&
+                                // Not (old = 0 and new = nothing, i.e. 0)
+                                !(oldMaxPlayers == 0 && maxPlayersField.getText().equals(""))
+                        ) {
+                            // Old value 1+, new value: Nothing, i.e. 0
+                            if (oldMaxPlayers != 0 && maxPlayersField.getText().equals("")) {
+                                main.client.changeMaxPlayers(0);
+                            } else {
+                                main.client.changeMaxPlayers(Integer.parseInt(maxPlayersField.getText()));
+                            }
+                        }
+
+                        // Submit changed weapons
+                        if (oldWeapons.get("bazooka") != bazookaBox.selectedProperty().get()) {
+                            main.client.setWeapon("bazooka", bazookaBox.selectedProperty().get());
+                        }
+                        if (oldWeapons.get("grenade") != grenadeBox.selectedProperty().get()) {
+                            main.client.setWeapon("grenade", grenadeBox.selectedProperty().get());
+                        }
+                        if (oldWeapons.get("atomicbomb") != atomicBombBox.selectedProperty().get()) {
+                            main.client.setWeapon("atomicbomb", atomicBombBox.selectedProperty().get());
+                        }
+
                         addRoomButtons();
                     } catch (NetworkException e) {
                         //
@@ -647,6 +686,7 @@ public class Lobby {
                     data.add(new String[]{user.getKey(), color});
                 }
                 userList.setItems(data);
+                // Produces cells with background color
                 userList.setCellFactory(
                         new Callback<ListView<String[]>, ListCell<String[]>>() {
                             @Override
@@ -732,7 +772,7 @@ public class Lobby {
                     }
             );
 
-            // Construct a timeline with the loop
+            // Construct a timeline and start it
             this.ingameTimeline = new Timeline(keyFrame);
             this.ingameTimeline.setCycleCount(Animation.INDEFINITE);
             this.ingameTimeline.play();

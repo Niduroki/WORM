@@ -192,7 +192,6 @@ public class NetworkServer {
                         data.put("password", currentUser.currentRoom.password);
                         data.put("max_players", currentUser.currentRoom.maxUsers);
                         data.put("weapons", currentUser.currentRoom.selectedWeapons);
-                        // TODO put checked weapons in here
                         Yaml yaml = new Yaml();
                         answer = yaml.dump(data).replace('\n', ';');
                     } else if (command.matches("chat .+")) {

@@ -1,7 +1,6 @@
 package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.Physics.BallisticMovement;
-import de.hhu.propra14.team101.Physics.LineMovement;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
