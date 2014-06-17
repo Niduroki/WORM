@@ -119,6 +119,7 @@ public class Worm {
                         && this.getYCoordinate()+size-((AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 2)<Terrain.getHeightInPixel()
                 ) {
             this.setYCoordinate(this.getYCoordinate()+ 1);
+            height++;
         }
 
         if(height > size-2*Main.sizeMultiplier) {
