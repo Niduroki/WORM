@@ -214,7 +214,7 @@ public class GUI {
                     GameSaves loader = new GameSaves();
                     //Show FileSelection for Savegame
                     FileChooser fileChooser = new FileChooser();
-                    fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Maps", "gz"));
+                    //fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Maps", "gz"));
                     File gameSave = fileChooser.showOpenDialog(main.primaryStage);
                     System.out.println(gameSave.toString());
                     try {
