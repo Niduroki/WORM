@@ -458,7 +458,10 @@ public class Game {
             Worm currentWorm = players.get(this.turnOfPlayer).wormList.get(players.get(this.turnOfPlayer).currentWorm);
             // Don't fire without a weapon
             if (currentWorm.weaponList.size() != 0) {
-                this.fireBullet(currentWorm.fireWeapon(Double.parseDouble(action.split(" ")[1]), Double.parseDouble(action.split(" ")[2])));
+                // Network fired weapon coordinates are with Main.sizeMultiplier = 1, scale it up if needed
+                double xCoordinate = Double.parseDouble(action.split(" ")[1])*Main.sizeMultiplier;
+                double yCoordinate = Double.parseDouble(action.split(" ")[2])*Main.sizeMultiplier;
+                this.fireBullet(currentWorm.fireWeapon(xCoordinate, yCoordinate));
             }
         } else {
             System.out.println("Unknown action");

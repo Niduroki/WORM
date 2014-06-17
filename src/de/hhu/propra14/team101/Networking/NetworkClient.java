@@ -307,7 +307,8 @@ public class NetworkClient {
     }
 
     public void fireWeapon(int x, int y) throws TimeoutException {
-        this.send("game fire "+String.valueOf(x)+" "+String.valueOf(y), true);
+        // The network game needs the Main.sizeMultiplier==1 coordinates
+        this.send("game fire "+String.valueOf(x/Main.sizeMultiplier)+" "+String.valueOf(y/Main.sizeMultiplier), true);
     }
 
     public void move(char direction) throws TimeoutException {
