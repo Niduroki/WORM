@@ -123,10 +123,16 @@ public class GUI {
         Button convertEditor = new Button("Convert");
         Button returnButton = new Button("Return");
 
+        final ComboBox<String> themeSelection = new ComboBox<>();
+        themeSelection.getItems().addAll("Normal", "Horror", "Oriental");
+        themeSelection.setValue("Normal");
+
+
         inputButton.setMaxWidth(Double.MAX_VALUE);
         outputButton.setMaxWidth(Double.MAX_VALUE);
         convertEditor.setMaxWidth(Double.MAX_VALUE);
         returnButton.setMaxWidth(Double.MAX_VALUE);
+        themeSelection.setMaxWidth(Double.MAX_VALUE);
 
         VBox vbButtons = new VBox();
         vbButtons.setSpacing(10);
@@ -134,9 +140,10 @@ public class GUI {
         vbButtons.getChildren().addAll(inputButton, outputButton, convertEditor, returnButton);
 
         this.main.grid.add(inputButton, 1, 2);
+        this.main.grid.add(themeSelection, 1,6);
         this.main.grid.add(outputButton, 1, 4);
-        this.main.grid.add(convertEditor, 1, 6);
-        this.main.grid.add(returnButton, 1, 8);
+        this.main.grid.add(convertEditor, 1, 8);
+        this.main.grid.add(returnButton, 1, 10);
 
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -161,6 +168,8 @@ public class GUI {
                 File outputFile = fileChooser.showSaveDialog(main.primaryStage);
             }
         });
+
+
 
     }
 
