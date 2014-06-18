@@ -26,6 +26,8 @@ import java.util.Map;
 
 public class GUI {
     private Main main;
+    protected String levelCreatorInputPath;
+    protected String levelCreatoroutputPath;
 
     public GUI (Main main) {
         this.main = main;
@@ -126,7 +128,8 @@ public class GUI {
         final ComboBox<String> themeSelection = new ComboBox<>();
         themeSelection.getItems().addAll("Normal", "Horror", "Oriental");
         themeSelection.setValue("Normal");
-
+        final String selectedTheme= themeSelection.getSelectionModel().getSelectedItem();
+        selectedTheme.toLowerCase();
 
         inputButton.setMaxWidth(Double.MAX_VALUE);
         outputButton.setMaxWidth(Double.MAX_VALUE);
@@ -158,14 +161,25 @@ public class GUI {
             public void handle(ActionEvent e) {
                 FileChooser fileChooser = new FileChooser();
                 File inputFile = fileChooser.showOpenDialog(main.primaryStage);
+                levelCreatorInputPath = inputFile.toString();
             }
         });
+
 
         outputButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 FileChooser fileChooser = new FileChooser();
                 File outputFile = fileChooser.showSaveDialog(main.primaryStage);
+                levelCreatoroutputPath = outputFile.toString();
+            }
+        });
+
+        convertEditor.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            LevelCreator.convert(levelCreatorInputPath,levelCreatoroutputPath,selectedTheme);
+
             }
         });
 
