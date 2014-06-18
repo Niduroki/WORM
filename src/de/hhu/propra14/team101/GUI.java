@@ -42,12 +42,14 @@ public class GUI {
         Text sceneTitle = new Text("Name");
         Button startButton = new Button("Start");
         Button multiButton= new Button("Multiplayer");
+        Button levelEditor=new Button ("Leveleditor");
         Button optionsButton = new Button("Options");
         Button exitButton = new Button("Exit");
 
 
         startButton.setMaxWidth(Double.MAX_VALUE);
         multiButton.setMaxWidth(Double.MAX_VALUE);
+        levelEditor.setMaxWidth(Double.MAX_VALUE);
         optionsButton.setMaxWidth(Double.MAX_VALUE);
         exitButton.setMaxWidth(Double.MAX_VALUE);
 
@@ -64,8 +66,9 @@ public class GUI {
         this.main.grid.add(sceneTitle, 0, 0, 2, 1);
         this.main.grid.add(startButton, 1, 2);
         this.main.grid.add(multiButton, 1, 4);
-        this.main.grid.add(optionsButton, 1, 6);
-        this.main.grid.add(exitButton, 1, 8);
+        this.main.grid.add(levelEditor,1,6);
+        this.main.grid.add(optionsButton, 1, 8);
+        this.main.grid.add(exitButton, 1, 10);
 
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -95,12 +98,54 @@ public class GUI {
             }
         });
 
+        levelEditor.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                addEditorButtons();
+            }
+        });
+
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 main.primaryStage.close();
             }
         });
+    }
+
+    private void addEditorButtons() {
+        this.main.grid.getChildren().clear();
+        BorderPane border = new BorderPane();
+        border.setPadding(new Insets(20, 0, 20, 20));
+
+        Button inputButton = new Button("Select Input ...");
+        Button outputButton = new Button("Select Output ...");
+        Button convertEditor = new Button("Convert");
+        Button returnButton = new Button("Return");
+
+        inputButton.setMaxWidth(Double.MAX_VALUE);
+        outputButton.setMaxWidth(Double.MAX_VALUE);
+        convertEditor.setMaxWidth(Double.MAX_VALUE);
+        returnButton.setMaxWidth(Double.MAX_VALUE);
+
+        VBox vbButtons = new VBox();
+        vbButtons.setSpacing(10);
+        vbButtons.setPadding(new Insets(0, 20, 10, 20));
+        vbButtons.getChildren().addAll(inputButton, outputButton, returnButton);
+
+        this.main.grid.add(inputButton, 1, 2);
+        this.main.grid.add(outputButton, 1, 4);
+        this.main.grid.add(convertEditor, 1, 6);
+        this.main.grid.add(returnButton, 1, 8);
+
+        returnButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                addMainButtons();
+            }
+        });
+
     }
 
     public void addOptionsButtons() {
