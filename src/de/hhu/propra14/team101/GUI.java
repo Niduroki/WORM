@@ -3,7 +3,10 @@ package de.hhu.propra14.team101;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
-import de.hhu.propra14.team101.Weapons.*;
+import de.hhu.propra14.team101.Weapons.AbstractWeapon;
+import de.hhu.propra14.team101.Weapons.AtomicBomb;
+import de.hhu.propra14.team101.Weapons.Bazooka;
+import de.hhu.propra14.team101.Weapons.Grenade;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -17,9 +20,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import org.newdawn.easyogg.OggClip;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +33,7 @@ public class GUI {
     private Main main;
     protected String levelCreatorInputPath;
     protected String levelCreatoroutputPath;
+    public OggClip music;
 
     public GUI (Main main) {
         this.main = main;
@@ -36,6 +42,16 @@ public class GUI {
     public void addMainButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
+
+        //start music
+        try {
+            String musicPath = "Main Theme.ogg";
+            music = new OggClip("music/"+musicPath);
+            music.setGain(0.7f);
+            music.loop();
+        } catch (IOException f) {
+            f.printStackTrace();
+        }
 
         // Create buttons and other objects
         BorderPane border = new BorderPane();
@@ -405,6 +421,7 @@ public class GUI {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                music.stop();
                 main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
                 main.grid.getChildren().clear();
                 main.grid.add(main.field, 0, 0);

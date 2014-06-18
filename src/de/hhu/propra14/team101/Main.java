@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import org.newdawn.easyogg.OggClip;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,7 @@ public class Main extends Application {
     protected NetworkClient client;
     protected GUI gui;
     protected Lobby lobby;
+    public OggClip music;
 
     public static boolean headless = false;
     /** Used for screen resizing. E.g. one TerrainBlock is AbstractTerrainBlock.baseSize*Main.sizeMultiplier big */
