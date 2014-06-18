@@ -7,7 +7,9 @@ import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import org.newdawn.easyogg.OggClip;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -124,6 +126,12 @@ public class Worm {
 
         if(height > size-2*Main.sizeMultiplier) {
             health -= height/4;
+            try {
+                OggClip goodbyeClip = new OggClip("sfx/worms/Bones.ogg");
+                goodbyeClip.play();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
