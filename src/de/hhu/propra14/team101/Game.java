@@ -330,21 +330,25 @@ public class Game {
         } else {
             this.turnOfPlayer += 1;
         }
-        Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
-        if (currentWorm.health <= 15){
-            try {
-                OggClip goodbyeClip = new OggClip("sfx/worms/Heartbeat.ogg");
-                goodbyeClip.play();
-            } catch (IOException e) {
-                e.printStackTrace();
+
+        if (!Main.headless) {
+            Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
+            if (currentWorm.health <= 15) {
+                try {
+                    OggClip goodbyeClip = new OggClip("sfx/worms/Heartbeat.ogg");
+                    goodbyeClip.play();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Make the worm say "Let's do this"
+                try {
+                    OggClip doThisClip = new OggClip("sfx/worms/Do this.ogg");
+                    doThisClip.play();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        // Make the worm say "Let's do this"
-        try {
-            OggClip doThisClip = new OggClip("sfx/worms/Do this.ogg");
-            doThisClip.play();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         // Reset frame counter for seconds and roundTimer
@@ -485,7 +489,7 @@ public class Game {
 
     public Map<String, Object> serialize() {
         Map<String, Object> result = new HashMap<>();
-        result.put("terrain", this.currentTerrain.serialize());
+        result.put("level", this.level.serialize());
         result.put("players", this.serializePlayerArray());
         result.put("round", this.round);
         result.put("turn_of_player", this.turnOfPlayer);
@@ -496,7 +500,8 @@ public class Game {
     @SuppressWarnings("unchecked")
     public static Game deserialize(Map<String, Object> data) {
         Game game = new Game(Game.deserializePlayerArray((ArrayList<Map>) data.get("players")));
-        game.setCurrentTerrain(Terrain.deserialize((ArrayList<ArrayList<Map>>) data.get("terrain")));
+        game.level = Level.deserialize((Map<String, Object>) data.get("level"));
+        game.setCurrentTerrain(game.level.getTerrain());
         game.round = (Integer) data.get("round");
         game.turnOfPlayer = (Integer) data.get("turn_of_player");
         return game;

@@ -238,8 +238,8 @@ public class Worm {
             weaponList.add(AbstractWeapon.deserialize(rawWeapon));
         }
         Worm result = new Worm(weaponList);
-        result.xCoord = (Integer) input.get("x");
-        result.yCoord = (Integer) input.get("y");
+        result.xCoord = ((Double)input.get("x")).intValue();
+        result.yCoord = ((Double)input.get("y")).intValue();
         result.armor = (Integer) input.get("armor");
         result.health = (Integer) input.get("health");
         result.orientation = input.get("orientation").toString().charAt(0);
