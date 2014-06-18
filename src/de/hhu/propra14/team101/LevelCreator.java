@@ -23,7 +23,7 @@ public class LevelCreator {
         // Can't show any graphics
         Main.headless = true;
 
-        if (!theme.equals("normal") || !theme.equals("horror") || !theme.equals("oriental")) {
+        if (!(theme.equals("normal") || theme.equals("horror") || theme.equals("oriental"))) {
             theme = "normal";
         }
 
