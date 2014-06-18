@@ -20,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.scene.control.Slider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -199,6 +200,8 @@ public class GUI {
         Text title2 = new Text("Multiplayer Name");
         Text title3 = new Text("Frames per second");
         Text title4 = new Text("Auflösung");
+        Text title5 = new Text("Musiklautstärke");
+        Text title6 = new Text("Soundlautstärke");
         Button returnButton = new Button("Save & Return");
 
 
@@ -206,6 +209,24 @@ public class GUI {
         fpsBox.getItems().addAll("15", "20", "30", "45", "60");
         final ComboBox<String> resBox = new ComboBox<>();
         resBox.getItems().addAll("300x200", "600x400", "900x600", "1200x800", "1500x1000");
+        Slider musicvol = new Slider();
+        musicvol.setMin(0);
+        musicvol.setMax(100);
+        musicvol.setValue(40);
+        musicvol.setShowTickLabels(true);
+        musicvol.setShowTickMarks(true);
+        musicvol.setMajorTickUnit(50);
+        musicvol.setMinorTickCount(5);
+        musicvol.setBlockIncrement(10);
+        Slider soundvol = new Slider();
+        soundvol.setMin(0);
+        soundvol.setMax(100);
+        soundvol.setValue(40);
+        soundvol.setShowTickLabels(true);
+        soundvol.setShowTickMarks(true);
+        soundvol.setMajorTickUnit(50);
+        soundvol.setMinorTickCount(5);
+        soundvol.setBlockIncrement(10);
         String initialValue1;
         String initialValue2;
         SettingSaves loader = new SettingSaves();
@@ -244,7 +265,11 @@ public class GUI {
         this.main.grid.add(fpsBox, 2, 6);
         this.main.grid.add(title4, 1, 8);
         this.main.grid.add(resBox, 2, 8);
-        this.main.grid.add(returnButton, 1, 10);
+        this.main.grid.add(title5, 1, 10);
+        this.main.grid.add(musicvol, 2, 10);
+        this.main.grid.add(title6, 1, 12);
+        this.main.grid.add(soundvol, 2, 12);
+        this.main.grid.add(returnButton, 1, 14);
 
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
