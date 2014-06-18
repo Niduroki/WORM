@@ -324,7 +324,15 @@ public class Game {
         } else {
             this.turnOfPlayer += 1;
         }
-
+        Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
+        if (currentWorm.health <= 15){
+            try {
+                OggClip goodbyeClip = new OggClip("sfx/worms/Heartbeat.ogg");
+                goodbyeClip.play();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         // Make the worm say "Let's do this"
         try {
             OggClip doThisClip = new OggClip("sfx/worms/Do this.ogg");
