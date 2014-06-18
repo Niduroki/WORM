@@ -131,7 +131,7 @@ public class GUI {
         VBox vbButtons = new VBox();
         vbButtons.setSpacing(10);
         vbButtons.setPadding(new Insets(0, 20, 10, 20));
-        vbButtons.getChildren().addAll(inputButton, outputButton, returnButton);
+        vbButtons.getChildren().addAll(inputButton, outputButton, convertEditor, returnButton);
 
         this.main.grid.add(inputButton, 1, 2);
         this.main.grid.add(outputButton, 1, 4);
@@ -143,6 +143,22 @@ public class GUI {
             public void handle(ActionEvent actionEvent) {
 
                 addMainButtons();
+            }
+        });
+
+        inputButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                FileChooser fileChooser = new FileChooser();
+                File inputFile = fileChooser.showOpenDialog(main.primaryStage);
+            }
+        });
+
+        outputButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                FileChooser fileChooser = new FileChooser();
+                File outputFile = fileChooser.showSaveDialog(main.primaryStage);
             }
         });
 
