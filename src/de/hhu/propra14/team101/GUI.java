@@ -20,11 +20,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import org.newdawn.easyogg.OggClip;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +31,6 @@ public class GUI {
     private Main main;
     protected String levelCreatorInputPath;
     protected String levelCreatoroutputPath;
-    public OggClip music;
 
     public GUI (Main main) {
         this.main = main;
@@ -42,16 +39,6 @@ public class GUI {
     public void addMainButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
-
-        //start music
-        try {
-            String musicPath = "Main Theme.ogg";
-            music = new OggClip("music/"+musicPath);
-            music.setGain(0.7f);
-            music.loop();
-        } catch (IOException f) {
-            f.printStackTrace();
-        }
 
         // Create buttons and other objects
         BorderPane border = new BorderPane();
@@ -211,11 +198,14 @@ public class GUI {
         Text title1 = new Text("Multiplayer Server");
         Text title2 = new Text("Multiplayer Name");
         Text title3 = new Text("Frames per second");
+        Text title4 = new Text("Auflösung");
         Button returnButton = new Button("Save & Return");
 
 
         final ComboBox<String> fpsBox = new ComboBox<>();
         fpsBox.getItems().addAll("15", "20", "30", "45", "60");
+        final ComboBox<String> resBox = new ComboBox<>();
+        resBox.getItems().addAll("300x200", "600x400", "900x600", "1200x800", "1500x1000");
         String initialValue1;
         String initialValue2;
         SettingSaves loader = new SettingSaves();
@@ -224,6 +214,7 @@ public class GUI {
             initialValue1 = data.get("multiplayer_server").toString();
             initialValue2 = data.get("multiplayer_name").toString();
             fpsBox.getSelectionModel().select(data.get("fps").toString());
+            resBox.getSelectionModel().select(data.get("res").toString());
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find settings file!");
             initialValue1 = "schaepers.it";
@@ -234,6 +225,7 @@ public class GUI {
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
             fpsBox.getSelectionModel().select("20");
+            resBox.getSelectionModel().select("600x400");
         }
 
         final TextField serverField = new TextField(initialValue1);
@@ -250,7 +242,9 @@ public class GUI {
         this.main.grid.add(nameField, 2, 4);
         this.main.grid.add(title3, 1, 6);
         this.main.grid.add(fpsBox, 2, 6);
-        this.main.grid.add(returnButton, 1, 8);
+        this.main.grid.add(title4, 1, 8);
+        this.main.grid.add(resBox, 2, 8);
+        this.main.grid.add(returnButton, 1, 10);
 
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -260,6 +254,7 @@ public class GUI {
                 data.put("multiplayer_server", serverField.getText());
                 data.put("multiplayer_name", nameField.getText());
                 data.put("fps", fpsBox.getSelectionModel().getSelectedItem());
+                data.put("res", resBox.getSelectionModel().getSelectedItem());
                 saver.save(data, "settings.gz");
                 addMainButtons();
             }
@@ -421,7 +416,7 @@ public class GUI {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                music.stop();
+                main.music.stop();
                 main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
                 main.grid.getChildren().clear();
                 main.grid.add(main.field, 0, 0);

@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.newdawn.easyogg.OggClip;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -62,6 +63,16 @@ public class Main extends Application {
         this.grid.setHgap(10);
         this.grid.setVgap(10);
         this.grid.setPadding(new Insets(25, 25, 25, 25));
+
+        //start music
+        try {
+            String musicPath = "Main Theme.ogg";
+            music = new OggClip("music/"+musicPath);
+            music.setGain(0.7f);
+            music.loop();
+        } catch (IOException f) {
+            f.printStackTrace();
+        }
 
         this.gui.addMainButtons();
 
@@ -142,6 +153,7 @@ public class Main extends Application {
                 if (keyEvent.getCode() == KeyCode.ESCAPE && (game.isGameFinished() || !game.online)) {
                     // Close the game
                     game.music.stop();
+                    music.loop();
                     game.timeline.stop();
                     gui.addMainButtons();
                     // Remove old handlers
