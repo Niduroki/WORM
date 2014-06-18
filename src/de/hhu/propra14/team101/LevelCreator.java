@@ -19,40 +19,18 @@ public class LevelCreator {
     private static int currentLine = 0;
     private static int currentChar = 0;
 
-    public static void main(String[] args) {
+    public static void convert(String input, String output, String theme) {
         // Can't show any graphics
         Main.headless = true;
 
-        String path;
-        String theme;
-
-        try {
-            if (args[0].equals("help")) {
-                helpMessage();
-                return;
-            }
-
-            path = args[0];
-            try {
-                if (args[1].equals("normal") || args[1].equals("horror") || args[1].equals("oriental")) {
-                    theme = args[1];
-                } else {
-                    helpMessage();
-                    return;
-                }
-            } catch (ArrayIndexOutOfBoundsException ex) {
-                // No supplied theme is okay
-                theme = "normal";
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            helpMessage();
-            return;
+        if (!theme.equals("normal") || !theme.equals("horror") || !theme.equals("oriental")) {
+            theme = "normal";
         }
 
         InputStream stream;
         Reader reader;
         try {
-            stream = new FileInputStream(path);
+            stream = new FileInputStream(input);
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
             return;
@@ -81,7 +59,7 @@ public class LevelCreator {
         level.theme = theme;
 
         LevelSaves saver = new LevelSaves();
-        saver.save(level, "Map.gz");
+        saver.save(level, output);
     }
 
     private static void parseChar(char character) {
@@ -121,7 +99,7 @@ public class LevelCreator {
         }
     }
 
-    private static void helpMessage() {
+    /*private static void helpMessage() {
         System.out.println("Creates a level from a supplied text file.");
         System.out.println("Supplied text file must have 60 columns and 40 rows");
         System.out.println("each containing one of these characters:");
@@ -137,5 +115,5 @@ public class LevelCreator {
         System.out.println("Textfile is the path to the supplied textfile described above");
         System.out.println("Theme is optional and has to be one of: normal, horror, oriental");
         System.out.println("Created map will be written to Map.gz");
-    }
+    }*/
 }
