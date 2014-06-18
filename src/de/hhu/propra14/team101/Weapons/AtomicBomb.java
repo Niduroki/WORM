@@ -4,6 +4,9 @@ import de.hhu.propra14.team101.Bullet;
 import de.hhu.propra14.team101.Main;
 import de.hhu.propra14.team101.Physics.BallisticMovement;
 import javafx.scene.image.Image;
+import org.newdawn.easyogg.OggClip;
+
+import java.io.IOException;
 
 public class AtomicBomb extends AbstractWeapon {
 
@@ -20,7 +23,17 @@ public class AtomicBomb extends AbstractWeapon {
     }
 
     public Bullet fire(BallisticMovement physics) {
-        return new Bullet(physics, this);
-    }
-}
 
+        if (!Main.headless)
+            try {
+                OggClip doThisClip = new OggClip("sfx/weapons/Rocket firing.ogg");
+                doThisClip.play();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        {
+            return new Bullet(physics, this);
+        }
+    }
+
+}

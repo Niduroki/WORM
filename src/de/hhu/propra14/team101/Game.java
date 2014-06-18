@@ -293,6 +293,12 @@ public class Game {
                                         this.getCurrentTerrain().removeTerrainObject(terrainObject, false);
                                     }
                                 }
+                                try {
+                                    OggClip doThisClip = new OggClip("sfx/weapons/Explosion.ogg");
+                                    doThisClip.play();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             case TopOrDown:
                                 bulletFired = false;
                                 nextRound();
@@ -361,6 +367,7 @@ public class Game {
                     musicPath = "Horror-Game.ogg";
                 }
                 music = new OggClip("music/"+musicPath);
+                music.setGain(0);
                 music.loop();
             } catch (IOException f) {
                 f.printStackTrace();
