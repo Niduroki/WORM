@@ -368,7 +368,7 @@ public class Game {
                 }
                 music = new OggClip("music/"+musicPath);
                 music.setGain(0);
-                music.loop();
+                
             } catch (IOException f) {
                 f.printStackTrace();
             }
