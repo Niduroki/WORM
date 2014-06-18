@@ -129,7 +129,6 @@ public class GUI {
         themeSelection.getItems().addAll("Normal", "Horror", "Oriental");
         themeSelection.setValue("Normal");
         final String selectedTheme= themeSelection.getSelectionModel().getSelectedItem();
-        selectedTheme.toLowerCase();
 
         inputButton.setMaxWidth(Double.MAX_VALUE);
         outputButton.setMaxWidth(Double.MAX_VALUE);
@@ -177,8 +176,8 @@ public class GUI {
 
         convertEditor.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent event) {
-            LevelCreator.convert(levelCreatorInputPath,levelCreatoroutputPath,selectedTheme);
+                public void handle(ActionEvent event) {
+                LevelCreator.convert(levelCreatorInputPath,levelCreatoroutputPath,selectedTheme.toLowerCase());
 
             }
         });
