@@ -58,7 +58,7 @@ public class Main extends Application {
      */
     @Override
     public void start (final Stage primaryStage){
-        primaryStage.setResizable(true);
+        primaryStage.setResizable(false);
         SettingSaves tempLoader = new SettingSaves();
         try {
             this.mvol = (((Double)tempLoader.load("settings.gz").get("musicvol")).floatValue())/100;

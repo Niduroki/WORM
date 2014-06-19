@@ -490,9 +490,13 @@ public class Game {
             Worm currentWorm = players.get(this.turnOfPlayer).wormList.get(players.get(this.turnOfPlayer).currentWorm);
             // Don't fire without a weapon
             if (currentWorm.weaponList.size() != 0) {
+                double xCoordinate = Double.parseDouble(action.split(" ")[1]);
+                double yCoordinate = Double.parseDouble(action.split(" ")[2]);
                 // Network fired weapon coordinates are with Main.sizeMultiplier = 1, scale it up if needed
-                double xCoordinate = Double.parseDouble(action.split(" ")[1])*Main.sizeMultiplier;
-                double yCoordinate = Double.parseDouble(action.split(" ")[2])*Main.sizeMultiplier;
+                if (this.online==true) {
+                    xCoordinate *= Main.sizeMultiplier;
+                    yCoordinate *= Main.sizeMultiplier;
+                }
                 this.fireBullet(currentWorm.fireWeapon(xCoordinate, yCoordinate));
             }
         } else {
