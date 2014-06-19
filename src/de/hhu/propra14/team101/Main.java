@@ -58,17 +58,21 @@ public class Main extends Application {
      */
     @Override
     public void start (final Stage primaryStage){
-        SettingSaves settingsLoader = new SettingSaves();
+        SettingSaves tempLoader = new SettingSaves();
         try {
-            this.mvol = (((Double)settingsLoader.load("settings.gz").get("musicvol")).floatValue())/100;
-            this.svol = (((Double)settingsLoader.load("settings.gz").get("soundvol")).floatValue())/100;
+            this.mvol = (((Double)tempLoader.load("settings.gz").get("musicvol")).floatValue())/100;
+            this.svol = (((Double)tempLoader.load("settings.gz").get("soundvol")).floatValue())/100;
+            this.sizeMultiplier = (Double)(tempLoader.load("settings.gz").get("res"));
         } catch (FileNotFoundException | NumberFormatException e) {
             this.mvol = (float)0.5;
             this.svol = (float)0.5;
+            this.sizeMultiplier = 1;
         } catch (NullPointerException e) {
             this.mvol = (float)0.5;
             this.svol = (float)0.5;
+            this.sizeMultiplier = 1;
         }
+        tempLoader = null;
         this.gui = new GUI(this);
         this.lobby = new Lobby(this);
 

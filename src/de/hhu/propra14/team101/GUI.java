@@ -232,7 +232,7 @@ public class GUI {
             initialValue1 = data.get("multiplayer_server").toString();
             initialValue2 = data.get("multiplayer_name").toString();
             fpsBox.getSelectionModel().select(data.get("fps").toString());
-            resBox.getSelectionModel().select(data.get("res").toString());
+            resBox.getSelectionModel().select(data.get("resstring").toString());
             musicvol.setValue(((double) data.get("musicvol")));
             soundvol.setValue(((double) data.get("soundvol")));
         } catch (FileNotFoundException e) {
@@ -296,7 +296,17 @@ public class GUI {
                 data.put("multiplayer_server", serverField.getText());
                 data.put("multiplayer_name", nameField.getText());
                 data.put("fps", fpsBox.getSelectionModel().getSelectedItem());
-                data.put("res", resBox.getSelectionModel().getSelectedItem());
+                data.put("resstring", resBox.getSelectionModel().getSelectedItem());
+                if ((data.get("resstring").toString())=="300x200")
+                    data.put("res", 0.5d);
+                    else if ((data.get("resstring").toString())=="600x400")
+                        data.put("res", 1d);
+                        else if ((data.get("resstring").toString())=="900x600")
+                                data.put("res", 1.5d);
+                            else if ((data.get("resstring").toString())=="1200x800")
+                                    data.put("res", 2d);
+                                else if ((data.get("resstring").toString())=="1500x1000")
+                                        data.put("res", 2.5d);
                 data.put("musicvol", musicvol.getValue());
                 data.put("soundvol", soundvol.getValue());
                 saver.save(data, "settings.gz");
