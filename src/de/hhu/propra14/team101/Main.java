@@ -4,6 +4,7 @@ import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.LevelSaves;
+import de.hhu.propra14.team101.Savers.SettingSaves;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -18,6 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.newdawn.easyogg.OggClip;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -39,6 +41,8 @@ public class Main extends Application {
     protected GUI gui;
     protected Lobby lobby;
     public OggClip music;
+    public static float mvol;
+    public static float svol;
 
     public static boolean headless = false;
     /** Used for screen resizing. E.g. one TerrainBlock is AbstractTerrainBlock.baseSize*Main.sizeMultiplier big */
@@ -54,6 +58,17 @@ public class Main extends Application {
      */
     @Override
     public void start (final Stage primaryStage){
+        SettingSaves settingsLoader = new SettingSaves();
+        try {
+            this.mvol = (((Double)settingsLoader.load("settings.gz").get("musicvol")).floatValue())/100;
+            this.svol = (((Double)settingsLoader.load("settings.gz").get("soundvol")).floatValue())/100;
+        } catch (FileNotFoundException | NumberFormatException e) {
+            this.mvol = (float)0.5;
+            this.svol = (float)0.5;
+        } catch (NullPointerException e) {
+            this.mvol = (float)0.5;
+            this.svol = (float)0.5;
+        }
         this.gui = new GUI(this);
         this.lobby = new Lobby(this);
 
@@ -68,7 +83,7 @@ public class Main extends Application {
         try {
             String musicPath = "Main-Theme.ogg";
             music = new OggClip("music/"+musicPath);
-            music.setGain(0.7f);
+            music.setGain(Main.mvol);
             music.loop();
         } catch (IOException f) {
             f.printStackTrace();

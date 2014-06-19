@@ -364,14 +364,15 @@ public class Game {
         if (!Main.headless) {
             try {
                 // Default music: Normal
-                String musicPath = "Main-Theme.ogg";
+                String musicPath = "Normal-Theme.ogg";
                 if (level.theme.equals("oriental")) {
                     musicPath = "Oriental-Game.ogg";
                 } else if (level.theme.equals("horror")) {
                     musicPath = "Horror-Game.ogg";
                 }
                 music = new OggClip("music/"+musicPath);
-                
+
+                music.setGain(Main.mvol);
                 music.loop();
             } catch (IOException f) {
                 f.printStackTrace();
@@ -434,6 +435,7 @@ public class Game {
         if (!Main.headless) {
             try {
                 music = new OggClip("music/Victory.ogg");
+                music.setGain(Main.mvol);
                 music.resume();
             } catch (IOException f) {
                 f.printStackTrace();

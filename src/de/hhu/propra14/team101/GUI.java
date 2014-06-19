@@ -11,16 +11,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.scene.control.Slider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -209,7 +205,7 @@ public class GUI {
         fpsBox.getItems().addAll("15", "20", "30", "45", "60");
         final ComboBox<String> resBox = new ComboBox<>();
         resBox.getItems().addAll("300x200", "600x400", "900x600", "1200x800", "1500x1000");
-        Slider musicvol = new Slider();
+        final Slider musicvol = new Slider();
         musicvol.setMin(0);
         musicvol.setMax(100);
         musicvol.setValue(50);
@@ -218,7 +214,7 @@ public class GUI {
         musicvol.setMajorTickUnit(50);
         musicvol.setMinorTickCount(5);
         musicvol.setBlockIncrement(10);
-        Slider soundvol = new Slider();
+        final Slider soundvol = new Slider();
         soundvol.setMin(0);
         soundvol.setMax(100);
         soundvol.setValue(50);
@@ -236,11 +232,16 @@ public class GUI {
             initialValue2 = data.get("multiplayer_name").toString();
             fpsBox.getSelectionModel().select(data.get("fps").toString());
             resBox.getSelectionModel().select(data.get("res").toString());
+            musicvol.setValue(((double) data.get("musicvol")));
+            soundvol.setValue(((double) data.get("soundvol")));
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find settings file!");
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
             fpsBox.getSelectionModel().select("20");
+            resBox.getSelectionModel().select("600x400");
+            musicvol.setValue(50);
+            soundvol.setValue(50);
         } catch (NullPointerException e) {
             System.out.println("Missing setting!");
             initialValue1 = "schaepers.it";
@@ -280,6 +281,8 @@ public class GUI {
                 data.put("multiplayer_name", nameField.getText());
                 data.put("fps", fpsBox.getSelectionModel().getSelectedItem());
                 data.put("res", resBox.getSelectionModel().getSelectedItem());
+                data.put("musicvol", musicvol.getValue());
+                data.put("soundvol", soundvol.getValue());
                 saver.save(data, "settings.gz");
                 addMainButtons();
             }
