@@ -90,11 +90,16 @@ public class Game {
     }
 
     public void loadLevel(String levelName) {
-        LevelSaves loader = new LevelSaves();
-        try {
-            level = loader.load("maps/" + levelName + ".gz");
-        } catch (FileNotFoundException e) {
-            System.out.println("Couldn't find level-file");
+        if (levelName.equals("Random")) {
+            RandomLevel generator = new RandomLevel();
+            level = generator.generate();
+        } else {
+            LevelSaves loader = new LevelSaves();
+            try {
+                level = loader.load("maps/" + levelName + ".gz");
+            } catch (FileNotFoundException e) {
+                System.out.println("Couldn't find level-file");
+            }
         }
     }
 
@@ -378,6 +383,7 @@ public class Game {
                 music = new OggClip("music/"+musicPath);
 
                 music.setGain(Main.mvol);
+
                 music.loop();
             } catch (IOException f) {
                 f.printStackTrace();
