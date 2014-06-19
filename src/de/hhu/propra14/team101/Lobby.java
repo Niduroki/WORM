@@ -423,7 +423,7 @@ public class Lobby {
         final TextField passwordField = new TextField("");
 
         final ComboBox<String> mapSelection = new ComboBox<>();
-        mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle");
+        mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle","Random");
         mapSelection.setValue("Map1");
 
         final NumberTextField maxPlayersField = new NumberTextField();
@@ -511,7 +511,7 @@ public class Lobby {
         final TextField passwordField = new TextField("");
 
         final ComboBox<String> mapSelection = new ComboBox<>();
-        mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle");
+        mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle","Random");
 
         final NumberTextField maxPlayersField = new NumberTextField();
 
