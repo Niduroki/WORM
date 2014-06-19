@@ -250,7 +250,15 @@ public class GUI {
             fpsBox.getSelectionModel().select("20");
             resBox.getSelectionModel().select("600x400");
         }
-        musicvol.setOnMouseMoved(new EventHandler<MouseEvent>() {
+        //so that music volume changes are effective immediately
+        musicvol.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Main.mvol=(float)musicvol.getValue()/100;
+                Main.music.setGain(Main.mvol);
+            }
+        });
+        musicvol.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 Main.mvol=(float)musicvol.getValue()/100;
