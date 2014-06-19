@@ -46,7 +46,7 @@ public class Main extends Application {
 
     public static boolean headless = false;
     /** Used for screen resizing. E.g. one TerrainBlock is AbstractTerrainBlock.baseSize*Main.sizeMultiplier big */
-    public static double sizeMultiplier = 1;
+    public static double sizeMultiplier;
 
     public static void main (String[] args) {
         launch(args);
@@ -58,7 +58,7 @@ public class Main extends Application {
      */
     @Override
     public void start (final Stage primaryStage){
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         SettingSaves tempLoader = new SettingSaves();
         try {
             this.mvol = (((Double)tempLoader.load("settings.gz").get("musicvol")).floatValue())/100;
@@ -67,11 +67,11 @@ public class Main extends Application {
         } catch (FileNotFoundException | NumberFormatException e) {
             this.mvol = (float)0.5;
             this.svol = (float)0.5;
-            this.sizeMultiplier = 1;
+            this.sizeMultiplier = 1.5;
         } catch (NullPointerException e) {
             this.mvol = (float)0.5;
             this.svol = (float)0.5;
-            this.sizeMultiplier = 1;
+            this.sizeMultiplier = 1.5;
         }
         tempLoader = null;
         this.gui = new GUI(this);

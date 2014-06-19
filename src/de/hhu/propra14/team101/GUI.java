@@ -205,7 +205,7 @@ public class GUI {
         final ComboBox<String> fpsBox = new ComboBox<>();
         fpsBox.getItems().addAll("15", "20", "30", "45", "60");
         final ComboBox<String> resBox = new ComboBox<>();
-        resBox.getItems().addAll("300x200", "600x400", "900x600", "1200x800", "1500x1000");
+        resBox.getItems().addAll("600x400", "900x600", "1200x800", "1500x1000");
         final Slider musicvol = new Slider();
         musicvol.setMin(0);
         musicvol.setMax(100);
@@ -240,7 +240,7 @@ public class GUI {
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
             fpsBox.getSelectionModel().select("20");
-            resBox.getSelectionModel().select("600x400");
+            resBox.getSelectionModel().select("900x600");
             musicvol.setValue(50);
             soundvol.setValue(50);
         } catch (NullPointerException e) {
@@ -248,7 +248,7 @@ public class GUI {
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
             fpsBox.getSelectionModel().select("20");
-            resBox.getSelectionModel().select("600x400");
+            resBox.getSelectionModel().select("900x600");
         }
         //so that music volume changes are effective immediately
         musicvol.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -297,21 +297,18 @@ public class GUI {
                 data.put("multiplayer_name", nameField.getText());
                 data.put("fps", fpsBox.getSelectionModel().getSelectedItem());
                 data.put("resstring", resBox.getSelectionModel().getSelectedItem());
-                if ((data.get("resstring").toString())=="300x200") {
-                    data.put("res", 0.5d);
-                    Main.sizeMultiplier = 0.5;}
-                    else if ((data.get("resstring").toString())=="600x400") {
-                        data.put("res", 1d);
-                        Main.sizeMultiplier = 1;}
-                        else if ((data.get("resstring").toString())=="900x600") {
-                                data.put("res", 1.5d);
-                                Main.sizeMultiplier = 1.5;}
+                if ((data.get("resstring").toString())=="600x400") {
+                    data.put("res", 1d);
+                    Main.sizeMultiplier = 1;}
+                    else if ((data.get("resstring").toString())=="900x600") {
+                            data.put("res", 1.5d);
+                            Main.sizeMultiplier = 1.5;}
                             else if ((data.get("resstring").toString())=="1200x800") {
-                                    data.put("res", 2d);
-                                    Main.sizeMultiplier = 2;}
+                                data.put("res", 2d);
+                                Main.sizeMultiplier = 2;}
                                 else if ((data.get("resstring").toString())=="1500x1000") {
-                                        data.put("res", 2.5d);
-                                        Main.sizeMultiplier = 2.5;}
+                                    data.put("res", 2.5d);
+                                    Main.sizeMultiplier = 2.5;}
                 data.put("musicvol", musicvol.getValue());
                 data.put("soundvol", soundvol.getValue());
                 saver.save(data, "settings.gz");
