@@ -128,6 +128,7 @@ public class Worm {
             health -= height/4;
             try {
                 OggClip goodbyeClip = new OggClip("sfx/worms/Bones.ogg");
+                goodbyeClip.setGain(Main.svol);
                 goodbyeClip.play();
             } catch (IOException e) {
                 e.printStackTrace();

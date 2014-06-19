@@ -217,6 +217,7 @@ public class Game {
                         if (this.getPlayers().get(i).wormList.get(j).health <= 0) {
                             try {
                                 OggClip goodbyeClip = new OggClip("sfx/worms/Goodbye.ogg");
+                                goodbyeClip.setGain(Main.svol);
                                 goodbyeClip.play();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -258,6 +259,7 @@ public class Game {
 
                                 // Play a random sound, if a worm is hit
                                 OggClip damageClip = null;
+                                damageClip.setGain(Main.svol);
                                 if (randomInt == 0) {
                                     try {
                                         damageClip = new OggClip("sfx/worms/Fleshwound.ogg");
@@ -295,6 +297,7 @@ public class Game {
                                 }
                                 try {
                                     OggClip doThisClip = new OggClip("sfx/weapons/Explosion.ogg");
+                                    doThisClip.setGain(Main.svol);
                                     doThisClip.play();
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -336,6 +339,7 @@ public class Game {
             if (currentWorm.health <= 15) {
                 try {
                     OggClip goodbyeClip = new OggClip("sfx/worms/Heartbeat.ogg");
+                    goodbyeClip.setGain(Main.svol);
                     goodbyeClip.play();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -344,6 +348,7 @@ public class Game {
                 // Make the worm say "Let's do this"
                 try {
                     OggClip doThisClip = new OggClip("sfx/worms/Do this.ogg");
+                    doThisClip.setGain(Main.svol);
                     doThisClip.play();
                 } catch (IOException e) {
                     e.printStackTrace();
