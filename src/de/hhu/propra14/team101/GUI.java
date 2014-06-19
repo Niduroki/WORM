@@ -297,19 +297,27 @@ public class GUI {
                 data.put("multiplayer_name", nameField.getText());
                 data.put("fps", fpsBox.getSelectionModel().getSelectedItem());
                 data.put("resstring", resBox.getSelectionModel().getSelectedItem());
-                if ((data.get("resstring").toString())=="300x200")
+                if ((data.get("resstring").toString())=="300x200") {
                     data.put("res", 0.5d);
-                    else if ((data.get("resstring").toString())=="600x400")
+                    Main.sizeMultiplier = 0.5;}
+                    else if ((data.get("resstring").toString())=="600x400") {
                         data.put("res", 1d);
-                        else if ((data.get("resstring").toString())=="900x600")
+                        Main.sizeMultiplier = 1;}
+                        else if ((data.get("resstring").toString())=="900x600") {
                                 data.put("res", 1.5d);
-                            else if ((data.get("resstring").toString())=="1200x800")
+                                Main.sizeMultiplier = 1.5;}
+                            else if ((data.get("resstring").toString())=="1200x800") {
                                     data.put("res", 2d);
-                                else if ((data.get("resstring").toString())=="1500x1000")
+                                    Main.sizeMultiplier = 2;}
+                                else if ((data.get("resstring").toString())=="1500x1000") {
                                         data.put("res", 2.5d);
+                                        Main.sizeMultiplier = 2.5;}
                 data.put("musicvol", musicvol.getValue());
                 data.put("soundvol", soundvol.getValue());
                 saver.save(data, "settings.gz");
+                // resize window
+                main.primaryStage.setHeight(400*Main.sizeMultiplier);
+                main.primaryStage.setWidth(600*Main.sizeMultiplier);
                 addMainButtons();
             }
         });
