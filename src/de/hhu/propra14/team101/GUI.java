@@ -253,8 +253,8 @@ public class GUI {
         musicvol.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Main.mvol=(float)musicvol.getValue();
-                Main.music.setGain(Main.mvol/100);
+                Main.mvol=(float)musicvol.getValue()/100;
+                Main.music.setGain(Main.mvol);
             }
         });
 
