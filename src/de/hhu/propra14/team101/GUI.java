@@ -48,7 +48,7 @@ public class GUI {
         Text sceneTitle = new Text("Name");
         Button startButton = new Button("Start");
         Button multiButton= new Button("Multiplayer");
-        Button levelEditor=new Button ("Leveleditor");
+        Button levelEditor=new Button ("Level Editor");
         Button optionsButton = new Button("Options");
         Button exitButton = new Button("Exit");
 
@@ -199,9 +199,9 @@ public class GUI {
         Text title1 = new Text("Multiplayer Server");
         Text title2 = new Text("Multiplayer Name");
         Text title3 = new Text("Frames per second");
-        Text title4 = new Text("Auflösung");
-        Text title5 = new Text("Musiklautstärke");
-        Text title6 = new Text("Soundlautstärke");
+        Text title4 = new Text("Resolution");
+        Text title5 = new Text("Music Volume");
+        Text title6 = new Text("Sound Volume");
         Button returnButton = new Button("Save & Return");
 
 
@@ -212,7 +212,7 @@ public class GUI {
         Slider musicvol = new Slider();
         musicvol.setMin(0);
         musicvol.setMax(100);
-        musicvol.setValue(40);
+        musicvol.setValue(50);
         musicvol.setShowTickLabels(true);
         musicvol.setShowTickMarks(true);
         musicvol.setMajorTickUnit(50);
@@ -221,7 +221,7 @@ public class GUI {
         Slider soundvol = new Slider();
         soundvol.setMin(0);
         soundvol.setMax(100);
-        soundvol.setValue(40);
+        soundvol.setValue(50);
         soundvol.setShowTickLabels(true);
         soundvol.setShowTickMarks(true);
         soundvol.setMajorTickUnit(50);
