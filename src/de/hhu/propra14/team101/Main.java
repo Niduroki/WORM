@@ -66,7 +66,7 @@ public class Main extends Application {
 
         //start music
         try {
-            String musicPath = "Main Theme.ogg";
+            String musicPath = "Main-Theme.ogg";
             music = new OggClip("music/"+musicPath);
             music.setGain(0.7f);
             music.loop();
