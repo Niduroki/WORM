@@ -26,6 +26,7 @@ public class Grenade extends AbstractWeapon {
         if (!Main.headless)
             try {
                 OggClip doThisClip = new OggClip("sfx/weapons/Click.ogg");
+                doThisClip.setGain(Main.svol);
                 doThisClip.play();
             } catch (IOException e) {
                 e.printStackTrace();

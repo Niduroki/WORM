@@ -27,6 +27,7 @@ public class AtomicBomb extends AbstractWeapon {
         if (!Main.headless)
             try {
                 OggClip doThisClip = new OggClip("sfx/weapons/Rocket firing.ogg");
+                doThisClip.setGain(Main.svol);
                 doThisClip.play();
             } catch (IOException e) {
                 e.printStackTrace();

@@ -264,7 +264,6 @@ public class Game {
 
                                 // Play a random sound, if a worm is hit
                                 OggClip damageClip = null;
-                                damageClip.setGain(Main.svol);
                                 if (randomInt == 0) {
                                     try {
                                         damageClip = new OggClip("sfx/worms/Fleshwound.ogg");
@@ -285,6 +284,7 @@ public class Game {
                                     }
                                 }
                                 if (damageClip != null) {
+                                    damageClip.setGain(Main.svol);
                                     damageClip.play();
                                 }
 

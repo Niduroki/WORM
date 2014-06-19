@@ -26,6 +26,7 @@ public class Bazooka extends AbstractWeapon {
         if (!Main.headless)
             try {
                 OggClip doThisClip = new OggClip("sfx/weapons/Bazooka fire.ogg");
+                doThisClip.setGain(Main.svol);
                 doThisClip.play();
             } catch (IOException e) {
                 e.printStackTrace();
