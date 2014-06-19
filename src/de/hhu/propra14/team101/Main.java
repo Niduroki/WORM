@@ -40,7 +40,7 @@ public class Main extends Application {
     protected NetworkClient client;
     protected GUI gui;
     protected Lobby lobby;
-    public OggClip music;
+    public static OggClip music;
     public static float mvol;
     public static float svol;
 

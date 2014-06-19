@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -249,6 +250,13 @@ public class GUI {
             fpsBox.getSelectionModel().select("20");
             resBox.getSelectionModel().select("600x400");
         }
+        musicvol.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Main.mvol=(float)musicvol.getValue();
+                Main.music.setGain(Main.mvol/100);
+            }
+        });
 
         final TextField serverField = new TextField(initialValue1);
         final TextField nameField = new TextField(initialValue2);
