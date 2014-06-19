@@ -374,7 +374,7 @@ public class Game {
         if (!Main.headless) {
             try {
                 // Default music: Normal
-                String musicPath = "Normal-Theme.ogg";
+                String musicPath = "Normal-Game.ogg";
                 if (level.theme.equals("oriental")) {
                     musicPath = "Oriental-Game.ogg";
                 } else if (level.theme.equals("horror")) {
