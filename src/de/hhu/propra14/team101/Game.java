@@ -164,10 +164,10 @@ public class Game {
             text = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
         }
         gc.setFill(Color.BLACK);
-        gc.setFont(new Font(12));
-        gc.fillText("Current weapon: " + text, 0, 10);
-        gc.fillText(String.valueOf(this.round), gc.getCanvas().getWidth() / 2, 15);
-        gc.fillText(String.valueOf(this.roundTimer), gc.getCanvas().getWidth() - 15, 10);
+        gc.setFont(new Font(12*Main.sizeMultiplier));
+        gc.fillText("Current weapon: " + text, 5, 20*Main.sizeMultiplier);
+        gc.fillText("Round: " + String.valueOf(this.round), gc.getCanvas().getWidth() / 2-50, 20*Main.sizeMultiplier);
+        gc.fillText("Remaining Time: " + String.valueOf(this.roundTimer), gc.getCanvas().getWidth() - 125*Main.sizeMultiplier, 20*Main.sizeMultiplier);
 
         this.currentTerrain.draw(gc);
 
