@@ -19,7 +19,7 @@ public class Bullet {
     public int currentTime = 0;
 
     /**
-     * Contructs a bullet
+     * Constructs a bullet
      * @param physics physics for the weapon
      * @param weapon weapon that's fired
      */

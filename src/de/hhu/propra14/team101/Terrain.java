@@ -168,6 +168,9 @@ public class Terrain {
                     } else if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.ExplosiveBuildingBlock")){
                         ExplosiveBuildingBlock workingBlock = new ExplosiveBuildingBlock(coords.get(0), coords.get(1));
                         terrain.addTerrainObject(workingBlock);
+                    } else if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.SandBuildingBlock")){
+                        SandBuildingBlock workingBlock = new SandBuildingBlock(coords.get(0), coords.get(1));
+                        terrain.addTerrainObject(workingBlock);
                     } else {
                         System.out.println("Terrain.deserialize:Unknown block");
                     }

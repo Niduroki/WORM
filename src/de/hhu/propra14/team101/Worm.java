@@ -3,6 +3,8 @@ package de.hhu.propra14.team101;
 import de.hhu.propra14.team101.Physics.BallisticMovement;
 import de.hhu.propra14.team101.Physics.*;
 import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
+import de.hhu.propra14.team101.TerrainObjects.Obstacle;
+import de.hhu.propra14.team101.TerrainObjects.SandBuildingBlock;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -70,7 +72,7 @@ public class Worm {
     public void draw (GraphicsContext gc, Color color) {
         gc.drawImage(this.image, this.xCoord, this.yCoord, size, size);
         gc.setFill(color);
-        gc.fillText("H"+String.valueOf(this.health), this.xCoord, this.yCoord -4);
+        gc.fillText("H" + String.valueOf(this.health), this.xCoord, this.yCoord - 4);
         if (this.armor != 0) {
             gc.fillText("A" + String.valueOf(this.armor), this.xCoord, this.yCoord -14);
         }
@@ -83,11 +85,20 @@ public class Worm {
     public void move (char direction, Terrain terrain, ArrayList<Player> players) {
         double newXPos = 0;
         double collisionXPos = 0;
+        double velocity = (AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 2;
+        AbstractTerrainObject terrainObject = terrain.isTerrain(this.getXCoordinate(),this.getYCoordinate()+size-5*Main.sizeMultiplier);
+        if(terrainObject != null) {
+            if(terrainObject.getClass() == Obstacle.class){
+                velocity =  (AbstractTerrainObject.baseSize * Main.sizeMultiplier);
+            } else if(terrainObject.getClass() == SandBuildingBlock.class) {
+                velocity = (AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 6;
+            }
+        }
         if (direction == 'l') {
-            newXPos = this.getXCoordinate() - (AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 2;
+            newXPos = this.getXCoordinate() - velocity;
             collisionXPos = newXPos;
         } else if (direction == 'r') {
-            newXPos = this.getXCoordinate() + (AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 2;
+            newXPos = this.getXCoordinate() + velocity;
             collisionXPos = newXPos + size;
         }
 
