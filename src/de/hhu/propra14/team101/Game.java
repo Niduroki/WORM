@@ -157,17 +157,22 @@ public class Game {
             return;
         }
 
-        String text;
+        String weaponText;
         if (currentWorm.weaponList.size() == 0) {
-            text = "No weapon";
+            weaponText = "No weapon";
         } else {
-            text = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
+            weaponText = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
+        }
+        String itemText = "";
+        for(int index = 0;index < currentWorm.getItems().size();index++) {
+            itemText += (index + 1)+" " +currentWorm.getItems().get(index).getName() + " :: ";
         }
         gc.setFill(Color.BLACK);
         gc.setFont(new Font(12*Main.sizeMultiplier));
-        gc.fillText("Current weapon: " + text, 5, 20*Main.sizeMultiplier);
+        gc.fillText("Current weapon: " + weaponText, 5, 20*Main.sizeMultiplier);
         gc.fillText("Round: " + String.valueOf(this.round), gc.getCanvas().getWidth() / 2-50, 20*Main.sizeMultiplier);
         gc.fillText("Remaining Time: " + String.valueOf(this.roundTimer), gc.getCanvas().getWidth() - 125*Main.sizeMultiplier, 20*Main.sizeMultiplier);
+        gc.fillText("Items: " + itemText, 5, 45*Main.sizeMultiplier);
 
         this.currentTerrain.draw(gc);
 
@@ -502,6 +507,11 @@ public class Game {
         } else {
             System.out.println("Unknown action");
         }
+    }
+
+    public void useItem(int index) {
+           Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
+        currentWorm.useItem(index);
     }
 
     public Map<String, Object> serialize() {

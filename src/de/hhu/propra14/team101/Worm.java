@@ -2,9 +2,7 @@ package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.Physics.BallisticMovement;
 import de.hhu.propra14.team101.Physics.*;
-import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
-import de.hhu.propra14.team101.TerrainObjects.Obstacle;
-import de.hhu.propra14.team101.TerrainObjects.SandBuildingBlock;
+import de.hhu.propra14.team101.TerrainObjects.*;
 import de.hhu.propra14.team101.Weapons.AbstractWeapon;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -28,10 +26,12 @@ public class Worm {
     public int health = 100;
     public int currentWeapon = 0;
     private BallisticMovement jumpPhysic = null;
+    private double shoeFactor = 1;
+    private double springFactor = 1;
     protected double xCoord = 0;
     protected double yCoord = 0;
     protected char orientation = 'l';
-
+    private ArrayList<Item> items  =new ArrayList<>();
     private Image image;
 
     public Worm (ArrayList weapons) {
@@ -65,6 +65,21 @@ public class Worm {
         yCoord = yCoordinate;
     }
 
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+
+    public void useItem(int index) {
+        if(index > 0 && index <= this.getItems().size()) {
+            index--;
+            switch (this.getItems().get(index).getName()){
+                case "Elixir": this.health = this.health * 2; this.getItems().remove(index); break;
+                case "Shoe": shoeFactor = 2; this.getItems().remove(index); break;
+                case "Spring": springFactor = 1.3; this.getItems().remove(index); break;
+            }
+        }
+    }
+
     /**
      * @param gc Canvas to draw on
      * Draws the worm
@@ -85,13 +100,13 @@ public class Worm {
     public void move (char direction, Terrain terrain, ArrayList<Player> players) {
         double newXPos = 0;
         double collisionXPos = 0;
-        double velocity = (AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 2;
+        double velocity = ((AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 2);
         AbstractTerrainObject terrainObject = terrain.isTerrain(this.getXCoordinate(),this.getYCoordinate()+size-5*Main.sizeMultiplier);
         if(terrainObject != null) {
             if(terrainObject.getClass() == Obstacle.class){
                 velocity =  (AbstractTerrainObject.baseSize * Main.sizeMultiplier);
             } else if(terrainObject.getClass() == SandBuildingBlock.class) {
-                velocity = (AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 6;
+                velocity = ((AbstractTerrainObject.baseSize * Main.sizeMultiplier) / 6) *  shoeFactor;
             }
         }
         if (direction == 'l') {
@@ -103,7 +118,8 @@ public class Worm {
         }
 
         //Collision?
-        if (terrain.isTerrain(collisionXPos, this.getYCoordinate() + size - 6 * Main.sizeMultiplier) == null) {
+        terrainObject = terrain.isTerrain(collisionXPos, this.getYCoordinate() + size - 6 * Main.sizeMultiplier);
+        if (terrainObject == null) {
             for (Player player : players) {
                 for (Worm worm : player.wormList) {
                     if (worm != this && worm.isHitted(collisionXPos, this.getYCoordinate())) {
@@ -120,6 +136,12 @@ public class Worm {
                 this.xCoord = newXPos;
             }
             freeFall(terrain);
+        } else {
+            if(terrainObject.getClass() == Elixir.class || terrainObject.getClass() == Shoe.class || terrainObject.getClass() == Spring.class) {
+                Item item  = (Item)terrainObject;
+                items.add(item);
+                terrain.removeTerrainObject(terrainObject, false);
+            }
         }
         this.orientation = direction;
     }
@@ -156,9 +178,9 @@ public class Worm {
     public boolean jump (Terrain terrain, ArrayList<Worm> worms) {
         if(jumpPhysic == null) {
             if(orientation == 'l') {
-                jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(),this.getXCoordinate() - 50*Main.sizeMultiplier,this.getYCoordinate() - 50*Main.sizeMultiplier, true);
+                jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(),this.getXCoordinate() - 50*springFactor*Main.sizeMultiplier,this.getYCoordinate() - 50*springFactor*Main.sizeMultiplier, true);
             } else {
-                jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(),this.getXCoordinate() + 50*Main.sizeMultiplier,this.getYCoordinate() - 50*Main.sizeMultiplier, true);
+                jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(),this.getXCoordinate() + 50*springFactor*Main.sizeMultiplier,this.getYCoordinate() - 50*springFactor*Main.sizeMultiplier, true);
             }
         }
         jumpPhysic.move(1);

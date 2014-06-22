@@ -210,8 +210,24 @@ public class Main extends Application {
                     } else {
                         game.doAction("move_right");
                     }
-                } else if (keyEvent.getCode() == KeyCode.I) {
-                    // Show the inventory
+                } else if (keyEvent.getCode().isDigitKey()) {
+                    int digit = 1;
+                  switch (keyEvent.getCode()) {
+                      case DIGIT1: digit = 1; break;
+                      case DIGIT2: digit = 2; break;
+                      case DIGIT3: digit = 3; break;
+                      case DIGIT4: digit = 4; break;
+                      case DIGIT5: digit = 5; break;
+                      case DIGIT6: digit = 6; break;
+                      case DIGIT7: digit = 7; break;
+                      case DIGIT8: digit = 8; break;
+                      case DIGIT9: digit = 9; break;
+                  }
+                    if(game.online) {
+                        //TODO: Add network support
+                    } else {
+                        game.useItem(digit);
+                    }
                 } else if (keyEvent.getCode() == KeyCode.P) {
                     // (Un-)Pause the game
                     if (game.online) {

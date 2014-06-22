@@ -171,6 +171,15 @@ public class Terrain {
                     } else if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.SandBuildingBlock")){
                         SandBuildingBlock workingBlock = new SandBuildingBlock(coords.get(0), coords.get(1));
                         terrain.addTerrainObject(workingBlock);
+                    } else if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.Shoe")){
+                        Shoe workingBlock = new Shoe(coords.get(0), coords.get(1));
+                        terrain.addTerrainObject(workingBlock);
+                    } else if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.Elixir")){
+                        Elixir workingBlock = new Elixir(coords.get(0), coords.get(1));
+                        terrain.addTerrainObject(workingBlock);
+                    } else if (yInput.get("class").equals("de.hhu.propra14.team101.TerrainObjects.Spring")){
+                        Spring workingBlock = new Spring(coords.get(0), coords.get(1));
+                        terrain.addTerrainObject(workingBlock);
                     } else {
                         System.out.println("Terrain.deserialize:Unknown block");
                     }
