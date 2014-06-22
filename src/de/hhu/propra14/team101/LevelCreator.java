@@ -1,10 +1,7 @@
 package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.Savers.LevelSaves;
-import de.hhu.propra14.team101.TerrainObjects.ExplosiveBuildingBlock;
-import de.hhu.propra14.team101.TerrainObjects.Obstacle;
-import de.hhu.propra14.team101.TerrainObjects.SquareBuildingBlock;
-import de.hhu.propra14.team101.TerrainObjects.TriangleBuildingBlock;
+import de.hhu.propra14.team101.TerrainObjects.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -79,6 +76,8 @@ public class LevelCreator {
             case 't':
                 terrain.addTerrainObject(new TriangleBuildingBlock(currentChar, currentLine, false));
                 break;
+            case 'B':
+                terrain.addTerrainObject(new SandBuildingBlock(currentChar, currentLine));
             case 'O':
                 terrain.addTerrainObject(new Obstacle(currentChar, currentLine));
                 break;
