@@ -78,8 +78,18 @@ public class LevelCreator {
                 break;
             case 'B':
                 terrain.addTerrainObject(new SandBuildingBlock(currentChar, currentLine));
+                break;
             case 'O':
                 terrain.addTerrainObject(new Obstacle(currentChar, currentLine));
+                break;
+            case 'j':
+                terrain.addTerrainObject(new Spring(currentChar, currentLine));
+                break;
+            case 's':
+                terrain.addTerrainObject(new Shoe(currentChar, currentLine));
+                break;
+            case 'e':
+                terrain.addTerrainObject(new Elixir(currentChar, currentLine));
                 break;
             case 'W':
                 spawns.add(new int[]{currentChar, currentLine});
@@ -98,6 +108,7 @@ public class LevelCreator {
         }
     }
 
+    // TODO put this help message somewhere useful
     /*private static void helpMessage() {
         System.out.println("Creates a level from a supplied text file.");
         System.out.println("Supplied text file must have 60 columns and 40 rows");
@@ -107,8 +118,12 @@ public class LevelCreator {
         System.out.println("E: For an exploding block");
         System.out.println("T: For a sloped left triangle block");
         System.out.println("t: For a sloped right triangle block");
+        System.out.println("B: For a sand block (Beach)");
         System.out.println("O: For an obstacle");
         System.out.println("W: For a worm-spawn");
+        System.out.println("j: For a spring item (Jump)");
+        System.out.println("s: For a shoe item");
+        System.out.println("e: For an elixir item");
         System.out.println("Usage:");
         System.out.println("java -jar LevelCreator.jar textfile [theme]");
         System.out.println("Textfile is the path to the supplied textfile described above");
