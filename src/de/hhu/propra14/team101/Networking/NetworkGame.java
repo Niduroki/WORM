@@ -86,6 +86,8 @@ public class NetworkGame {
                     String[] coords = line.split(" ");
                     this.game.fireBullet(currentWorm.fireWeapon(Double.parseDouble(coords[1]), Double.parseDouble(coords[2])));
                 }
+            } else if (line.matches("use_item .")) {
+                currentWorm.useItem(Integer.parseInt(line.split(" ")[1]));
             } else if (line.equals("pause") && user == this.room.owner) {
                 this.game.paused = !this.game.paused;
             }

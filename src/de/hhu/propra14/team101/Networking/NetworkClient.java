@@ -319,6 +319,10 @@ public class NetworkClient {
         }
     }
 
+    public void useItem(int number) throws TimeoutException {
+        this.send("game use_item" + number, true);
+    }
+
     public void jump() throws  TimeoutException {
         this.send("game jump", true);
     }

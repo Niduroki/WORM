@@ -491,6 +491,9 @@ public class Game {
             players.get(this.turnOfPlayer).wormList.get(players.get(this.turnOfPlayer).currentWorm).prevWeapon();
         } else if (action.equals("pause")) {
             this.paused = !this.paused;
+        } else if (action.matches("use_item .")) {
+            Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
+            currentWorm.useItem(Integer.parseInt(action.split(" ")[1]));
         } else if (action.matches("fire .+ .+")) {
             Worm currentWorm = players.get(this.turnOfPlayer).wormList.get(players.get(this.turnOfPlayer).currentWorm);
             // Don't fire without a weapon
@@ -498,7 +501,7 @@ public class Game {
                 double xCoordinate = Double.parseDouble(action.split(" ")[1]);
                 double yCoordinate = Double.parseDouble(action.split(" ")[2]);
                 // Network fired weapon coordinates are with Main.sizeMultiplier = 1, scale it up if needed
-                if (this.online==true) {
+                if (this.online) {
                     xCoordinate *= Main.sizeMultiplier;
                     yCoordinate *= Main.sizeMultiplier;
                 }
@@ -507,11 +510,6 @@ public class Game {
         } else {
             System.out.println("Unknown action");
         }
-    }
-
-    public void useItem(int index) {
-           Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
-        currentWorm.useItem(index);
     }
 
     public Map<String, Object> serialize() {

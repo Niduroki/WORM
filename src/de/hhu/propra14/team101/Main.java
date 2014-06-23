@@ -61,19 +61,14 @@ public class Main extends Application {
         primaryStage.setResizable(false);
         SettingSaves tempLoader = new SettingSaves();
         try {
-            this.mvol = (((Double)tempLoader.load("settings.gz").get("musicvol")).floatValue())/100;
-            this.svol = (((Double)tempLoader.load("settings.gz").get("soundvol")).floatValue())/100;
-            this.sizeMultiplier = (Double)(tempLoader.load("settings.gz").get("res"));
-        } catch (FileNotFoundException | NumberFormatException e) {
-            this.mvol = (float)0.5;
-            this.svol = (float)0.5;
-            this.sizeMultiplier = 1.5;
-        } catch (NullPointerException e) {
-            this.mvol = (float)0.5;
-            this.svol = (float)0.5;
-            this.sizeMultiplier = 1.5;
+            Main.mvol = (((Double)tempLoader.load("settings.gz").get("musicvol")).floatValue())/100;
+            Main.svol = (((Double)tempLoader.load("settings.gz").get("soundvol")).floatValue())/100;
+            Main.sizeMultiplier = (Double)(tempLoader.load("settings.gz").get("res"));
+        } catch (FileNotFoundException | NumberFormatException | NullPointerException e) {
+            Main.mvol = (float)0.5;
+            Main.svol = (float)0.5;
+            Main.sizeMultiplier = 1.5;
         }
-        tempLoader = null;
         this.gui = new GUI(this);
         this.lobby = new Lobby(this);
 
@@ -223,10 +218,14 @@ public class Main extends Application {
                       case DIGIT8: digit = 8; break;
                       case DIGIT9: digit = 9; break;
                   }
-                    if(game.online) {
-                        //TODO: Add network support
+                    if (game.online) {
+                        try {
+                            client.useItem(digit);
+                        } catch (TimeoutException e) {
+                            //
+                        }
                     } else {
-                        game.useItem(digit);
+                        game.doAction("use_item" + digit);
                     }
                 } else if (keyEvent.getCode() == KeyCode.P) {
                     // (Un-)Pause the game
