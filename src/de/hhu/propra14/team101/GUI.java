@@ -129,7 +129,6 @@ public class GUI {
         final ComboBox<String> themeSelection = new ComboBox<>();
         themeSelection.getItems().addAll("Normal", "Horror", "Oriental");
         themeSelection.setValue("Normal");
-        final String selectedTheme= themeSelection.getSelectionModel().getSelectedItem();
 
         inputButton.setMaxWidth(Double.MAX_VALUE);
         outputButton.setMaxWidth(Double.MAX_VALUE);
@@ -178,7 +177,10 @@ public class GUI {
         convertEditor.setOnAction(new EventHandler<ActionEvent>() {
             @Override
                 public void handle(ActionEvent event) {
-                LevelCreator.convert(levelCreatorInputPath,levelCreatoroutputPath,selectedTheme.toLowerCase());
+                LevelCreator.convert(
+                        levelCreatorInputPath,levelCreatoroutputPath,
+                        themeSelection.getSelectionModel().getSelectedItem().toLowerCase()
+                );
 
             }
         });

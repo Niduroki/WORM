@@ -12,7 +12,7 @@ public class Spring extends Item {
         this.destructible = true;
 
         if (!Main.headless) {
-            this.image = new Image("images/Shoe.gif");
+            this.image = new Image("images/Spring.gif");
         }
     }
 
