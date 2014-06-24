@@ -44,17 +44,22 @@ public class Main extends Application {
     public static float mvol;
     public static float svol;
 
+    /** Whether we're on a server and shouldn't play any sound, display graphics */
     public static boolean headless = false;
     /** Used for screen resizing. E.g. one TerrainBlock is AbstractTerrainBlock.baseSize*Main.sizeMultiplier big */
     public static double sizeMultiplier;
 
+    /**
+     *
+     * @param args
+     */
     public static void main (String[] args) {
         launch(args);
     }
 
     /**
-     * @param primaryStage
      * Shows the main GUI
+     * @param primaryStage
      */
     @Override
     public void start (final Stage primaryStage){
@@ -100,6 +105,9 @@ public class Main extends Application {
         grid.setStyle("-fx-background-color: #00BFFF");
     }
 
+    /**
+     *
+     */
     public void initializeHandlers() {
         final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
             @Override

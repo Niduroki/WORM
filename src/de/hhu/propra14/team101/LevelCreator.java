@@ -16,6 +16,12 @@ public class LevelCreator {
     private static int currentLine = 0;
     private static int currentChar = 0;
 
+    /**
+     * Convert a levelcreator textfile to a map
+     * @param input Input textfile
+     * @param output Output mapfile
+     * @param theme Theme
+     */
     public static void convert(String input, String output, String theme) {
         // Can't show any graphics
         Main.headless = true;

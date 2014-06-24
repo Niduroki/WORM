@@ -124,12 +124,12 @@ public class Terrain {
     /**
      * @return 2-dimensional array to use with snakeyaml
      */
-     public Object[][] serialize () {
+    public Object[][] serialize () {
         /** 2-dimensional array to store terrain in.*/
         Object[][] result = new Object[width][height];
 
-        for (int i=0; i<width; i++) {
-            for (int j=0; j<height; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 AbstractTerrainObject workingBlock = this.terrainObjects[i][j];
                 if (workingBlock != null) {
                     HashMap<String, Object> map = new HashMap<>();
@@ -147,6 +147,11 @@ public class Terrain {
         return result;
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     public static Terrain deserialize (ArrayList<ArrayList<Map>> input) {
         Terrain terrain = new Terrain();
         for (ArrayList<Map> xInput : input) {

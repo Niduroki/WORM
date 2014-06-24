@@ -49,6 +49,10 @@ public class BallisticMovement {
         startYCoordinate = startPosY;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasFinished() {
         return finished;
     }

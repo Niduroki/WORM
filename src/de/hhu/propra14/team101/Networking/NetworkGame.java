@@ -10,10 +10,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * Class that makes Game network capable
+ */
 public class NetworkGame {
+    /** Room the game is played in */
     public NetworkRoom room;
+    /** Game that's played */
     public Game game;
 
+    /**
+     * Construct a game
+     * @param room Room we're playing in
+     */
     public NetworkGame(NetworkRoom room) {
         this.room = room;
         ArrayList<Player> players = new ArrayList<>();
@@ -66,6 +75,11 @@ public class NetworkGame {
         this.game.startGameplay();
     }
 
+    /**
+     *
+     * @param user
+     * @param line
+     */
     public void doAction(NetworkUser user, String line) {
         System.out.println("Turn of:"+this.game.turnOfPlayer+",sender:"+this.room.users.indexOf(user));
         if (this.game.turnOfPlayer == this.room.users.indexOf(user)) {

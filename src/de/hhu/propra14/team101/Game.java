@@ -73,6 +73,10 @@ public class Game {
         }
     }
 
+    /**
+     *
+     * @param bullet
+     */
     public void fireBullet(Bullet bullet) {
         this.bullet = bullet;
         bulletFired = true;
@@ -89,6 +93,10 @@ public class Game {
         return level;
     }
 
+    /**
+     *
+     * @param levelName
+     */
     public void loadLevel(String levelName) {
         if (levelName.equals("Random")) {
             RandomLevel generator = new RandomLevel();
@@ -105,13 +113,16 @@ public class Game {
 
     /**
      * Gets the current terrain.
-     *
-     * @return the current terrain
+     * @return Current terrain
      */
     public Terrain getCurrentTerrain() {
         return currentTerrain;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isGameFinished() {
         return gameFinished;
     }
@@ -125,6 +136,10 @@ public class Game {
         this.currentTerrain = terrain;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getIsJumping() {
         return isJumping;
     }
@@ -140,8 +155,7 @@ public class Game {
 
     /**
      * Draw the level.
-     *
-     * @param gc GraphicsContext to draw the level.
+     * @param gc GraphicsContext to draw the level on
      */
     private void draw(GraphicsContext gc) {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
@@ -335,6 +349,9 @@ public class Game {
         }
     }
 
+    /**
+     *
+     */
     public void nextRound() {
         this.round += 1;
         this.getPlayers().get(turnOfPlayer).selectNextWorm();
@@ -469,6 +486,10 @@ public class Game {
         gc.fillText("Press Escape to return to main menu", 70, 200);
     }
 
+    /**
+     *
+     * @param action
+     */
     public void doAction(String action) {
         System.out.println("Do the action");
         if (action.equals("move_right")) {
@@ -512,6 +533,10 @@ public class Game {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Map<String, Object> serialize() {
         Map<String, Object> result = new HashMap<>();
         result.put("level", this.level.serialize());
@@ -522,6 +547,11 @@ public class Game {
         return result;
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public static Game deserialize(Map<String, Object> data) {
         Game game = new Game(Game.deserializePlayerArray((ArrayList<Map>) data.get("players")));
@@ -548,14 +578,24 @@ public class Game {
         return result;
     }
 
+    /**
+     *
+     */
     static class GameUpdateThread implements Runnable {
 
         private Game game;
 
+        /**
+         *
+         * @param game
+         */
         public GameUpdateThread(Game game) {
             this.game = game;
         }
 
+        /**
+         *
+         */
         @Override
         public void run() {
             // Will be set to false when interrupted, thus interrupt=stop

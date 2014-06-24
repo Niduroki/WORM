@@ -25,15 +25,28 @@ abstract public class AbstractWeapon {
     /** Graphic of the weapons bullet */
     public Image bulletImage;
 
-
+    /**
+     *
+     * @param physics
+     * @return
+     */
     abstract public Bullet fire (BallisticMovement physics);
 
+    /**
+     *
+     * @return
+     */
     public Map serialize() {
         Map<String, Object> data = new HashMap<>();
         data.put("name", this.name);
         return data;
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     public static AbstractWeapon deserialize(Map input) {
         String weaponName = input.get("name").toString();
         switch (weaponName) {

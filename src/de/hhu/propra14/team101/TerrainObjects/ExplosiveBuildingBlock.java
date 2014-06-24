@@ -7,6 +7,11 @@ import javafx.scene.image.Image;
  * An explosive terrain block
  */
 public class ExplosiveBuildingBlock extends AbstractTerrainObject {
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public ExplosiveBuildingBlock(int x, int y) {
         super(x, y);
         this.destructible = true;

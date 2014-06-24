@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
  * Class for a flying bullet
  */
 public class Bullet {
-
+    /** */
     public BallisticMovement physics;
 
     /** What weapon we are */
@@ -28,14 +28,26 @@ public class Bullet {
         this.weapon = weapon;
     }
 
-   public double getXCoordinate() {
-      return physics.getXCoordinate();
-   }
+    /**
+     *
+      * @return
+     */
+    public double getXCoordinate() {
+       return physics.getXCoordinate();
+    }
 
-   public double getYCoordinate() {
-       return physics.getYCoordinate();
-   }
+    /**
+     *
+     * @return
+     */
+    public double getYCoordinate() {
+        return physics.getYCoordinate();
+    }
 
+    /**
+     *
+     * @param gc
+     */
     public void draw (GraphicsContext gc) {
         if (this.weapon.bulletImage != null) {
             gc.drawImage(this.weapon.bulletImage, physics.getXCoordinate(), physics.getYCoordinate(), 5*Main.sizeMultiplier, 5*Main.sizeMultiplier);

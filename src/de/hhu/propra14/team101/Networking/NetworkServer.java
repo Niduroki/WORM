@@ -9,19 +9,24 @@ import java.util.*;
 /**
  * Class to do networking on the server side
  */
-
 public class NetworkServer {
-
+    /** Regex for matching an UUID */
     public static String uuidRegex = ".{8}-.{4}-.{4}-.{4}-.{12}";
 
     private Map<UUID, NetworkUser> userMap = new HashMap<>();
     private Map<String, NetworkRoom> roomMap = new HashMap<>();
 
-    public NetworkServer() {
-    }
+    /*public NetworkServer() {
+    }*/
 
     private int counter = 0;
 
+    /**
+     *
+     * @param line
+     * @param networkOutput
+     * @return
+     */
     public String interpret(String line, PrintWriter networkOutput) {
         String answer;
 

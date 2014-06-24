@@ -16,7 +16,10 @@ public class RandomLevel {
     private Random random = new Random();
     private ArrayList<int[]> wormSpawns = new ArrayList<>();
 
-
+    /**
+     *
+     * @return
+     */
     public Level generate() {
         Terrain terrain = new Terrain();
         /*While not done because of Terrain*/

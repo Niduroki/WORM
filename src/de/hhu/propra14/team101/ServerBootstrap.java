@@ -18,6 +18,10 @@ import java.util.regex.Pattern;
  */
 public class ServerBootstrap {
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         // Don't load any graphics
         Main.headless = true;
@@ -28,6 +32,10 @@ public class ServerBootstrap {
         }
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     public static void start() throws IOException {
         int port = 7601;
         ServerSocket server = new ServerSocket(port);
@@ -43,16 +51,27 @@ public class ServerBootstrap {
         }
     }
 
+    /**
+     *
+     */
     static class HandleConnectionThread implements Runnable {
 
         Socket client;
         NetworkServer networkServer;
 
+        /**
+         *
+         * @param client
+         * @param networkServer
+         */
         public HandleConnectionThread (Socket client, NetworkServer networkServer) {
             this.client = client;
             this.networkServer = networkServer;
         }
 
+        /**
+         *
+         */
         @Override
         public void run() {
             String line = "NIL";

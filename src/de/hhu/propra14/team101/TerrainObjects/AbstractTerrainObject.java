@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
  * Class to create terrain with
  */
 abstract public class AbstractTerrainObject {
+    /** Normal size in pixels of a terrain block */
     public static int baseSize = 10;
 
     protected boolean destructible;
@@ -27,8 +28,8 @@ abstract public class AbstractTerrainObject {
     }
 
     /**
-     * @param coords Coordinates [0] is X [1] is Y
      * Sets coordinates
+     * @param coords Coordinates [0] is X [1] is Y
      */
     public void setCoords (int[] coords) {
         this.xCoordinate = coords[0];
@@ -36,16 +37,16 @@ abstract public class AbstractTerrainObject {
     }
 
     /**
-     * @return Coordinates [0] is X [1] is Y
      * Gets coordinates
+     * @return Coordinates [0] is X [1] is Y
      */
     public int[] getCoords () {
         return new int[]{this.xCoordinate, this.yCoordinate};
     }
 
     /**
-     * @return Destructibility of the object
      * Gets the destructibility
+     * @return Destructibility of the object
      */
     public boolean getDestructible() {
         return this.destructible;
@@ -53,6 +54,7 @@ abstract public class AbstractTerrainObject {
 
     /**
      * Draws the object
+     * @param gc Canvas to draw on
      */
     public void draw (GraphicsContext gc) {
         gc.drawImage(

@@ -11,6 +11,7 @@ public class Level {
     private Terrain terrain;
     private ArrayList<int[]> wormStartPoints = new ArrayList<>();
 
+    /** Theme of the level we're playing */
     public String theme = "normal";
 
     /**
@@ -28,6 +29,7 @@ public class Level {
 
     /**
      * Count of all worm start positions.
+     * @return
      */
     public int getCountWormStartPositions()
     {
@@ -85,6 +87,10 @@ public class Level {
         //TODO: set positions randomized, when more worms than positions
     }
 
+    /**
+     *
+     * @return
+     */
     public Map<String, Object> serialize () {
         Map<String, Object> result = new HashMap<>();
         result.put("spawns", wormStartPoints);
@@ -93,6 +99,11 @@ public class Level {
         return result;
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     public static Level deserialize (Map<String, Object> input) {
         @SuppressWarnings("unchecked")
         Terrain terrain = Terrain.deserialize((ArrayList<ArrayList<Map>>) input.get("terrain"));

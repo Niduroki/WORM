@@ -10,7 +10,9 @@ import java.io.IOException;
 
 public class Grenade extends AbstractWeapon {
 
-
+    /**
+     *
+     */
     public Grenade() {
         this.name = "Grenade";
         this.damage = 20;
@@ -22,8 +24,13 @@ public class Grenade extends AbstractWeapon {
         }
     }
 
+    /**
+     *
+     * @param physics
+     * @return
+     */
     public Bullet fire(BallisticMovement physics) {
-        if (!Main.headless)
+        if (!Main.headless) {
             try {
                 OggClip doThisClip = new OggClip("sfx/weapons/Click.ogg");
                 doThisClip.setGain(Main.svol);
@@ -31,8 +38,7 @@ public class Grenade extends AbstractWeapon {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        {
-            return new Bullet(physics, this);
         }
+        return new Bullet(physics, this);
     }
 }

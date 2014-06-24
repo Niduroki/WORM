@@ -5,12 +5,17 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 /**
- * Class to create terrain with
+ * A sandy block where it's difficult to move on
  */
 public class SandBuildingBlock extends AbstractTerrainObject {
 
     private int color;
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public SandBuildingBlock (int x, int y) {
         super(x, y);
         this.color = 0xFFFF00; // Stone-ish html-color
@@ -19,6 +24,8 @@ public class SandBuildingBlock extends AbstractTerrainObject {
 
     /**
      * Draws the obstacle
+     * @deprecated Should be removed, when there's a graphic for SyndBuildingBlock
+     * @param gc Canvas to draw on
      */
     public void draw (GraphicsContext gc) {
         gc.setFill(Color.web(Integer.toHexString(this.color)));

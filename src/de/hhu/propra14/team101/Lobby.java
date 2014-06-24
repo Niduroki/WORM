@@ -35,10 +35,17 @@ public class Lobby {
     private Timeline globalTimeline;
     private Timeline roomTimeline;
 
+    /**
+     *
+     * @param main
+     */
     public Lobby(Main main) {
         this.main = main;
     }
 
+    /**
+     *
+     */
     public void addMpButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
@@ -641,6 +648,9 @@ public class Lobby {
         });
     }
 
+    /**
+     *
+     */
     public class IngameChat extends Application {
 
         private Timeline ingameTimeline;

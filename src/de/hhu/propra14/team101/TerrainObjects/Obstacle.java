@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 /**
- * Class to create terrain with
+ * An indestructible obstacle
  */
 public class Obstacle extends AbstractTerrainObject {
 

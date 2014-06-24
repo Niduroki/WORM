@@ -34,6 +34,10 @@ public class Worm {
     private ArrayList<Item> items  =new ArrayList<>();
     private Image image;
 
+    /**
+     *
+     * @param weapons
+     */
     public Worm (ArrayList weapons) {
         this.weaponList = new ArrayList<>();
         for (Object weapon : weapons) {
@@ -45,30 +49,54 @@ public class Worm {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public double getXCoordinate()
     {
         return xCoord;
     }
 
+    /**
+     *
+     * @param xCoordinate
+     */
     public void setXCoordinate(double xCoordinate)
     {
         xCoord = xCoordinate;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getYCoordinate()
     {
         return yCoord;
     }
 
+    /**
+     *
+     * @param yCoordinate
+     */
     public void setYCoordinate(double yCoordinate)
     {
         yCoord = yCoordinate;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Item> getItems() {
         return items;
     }
 
+    /**
+     *
+     * @param index
+     */
     public void useItem(int index) {
         if(index > 0 && index <= this.getItems().size()) {
             index--;
@@ -214,6 +242,9 @@ public class Worm {
         return false;
     }
 
+    /**
+     *
+     */
     public void nextWeapon() {
         if (this.currentWeapon == this.weaponList.size()-1) {
             this.currentWeapon = 0;
@@ -222,6 +253,9 @@ public class Worm {
         }
     }
 
+    /**
+     *
+     */
     public void prevWeapon() {
         if (this.currentWeapon == 0) {
             this.currentWeapon = this.weaponList.size()-1;
@@ -230,6 +264,12 @@ public class Worm {
         }
     }
 
+    /**
+     *
+     * @param xPos
+     * @param yPos
+     * @return
+     */
     public Bullet fireWeapon(double xPos, double yPos) {
         Bullet bullet = this.weaponList.get(this.currentWeapon).fire(
                 new BallisticMovement(this.getXCoordinate(),
@@ -239,6 +279,12 @@ public class Worm {
         return bullet;
     }
 
+    /**
+     *
+     * @param xCoordinate
+     * @param yCoordinate
+     * @return
+     */
     public boolean isHitted(double xCoordinate, double yCoordinate) {
         if (this.getXCoordinate() <= xCoordinate && this.getXCoordinate() + size >= xCoordinate) {
             if (this.getYCoordinate() <= yCoordinate && this.getYCoordinate() + size >= yCoordinate) {
@@ -249,6 +295,10 @@ public class Worm {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public Map serialize() {
         Map<String, Object> data = new HashMap<>();
         data.put("x", this.xCoord);
@@ -264,6 +314,11 @@ public class Worm {
         return data;
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     public static Worm deserialize(Map input) {
         @SuppressWarnings("unchecked")
         ArrayList<Map> rawWeapons = (ArrayList<Map>) input.get("weapons");

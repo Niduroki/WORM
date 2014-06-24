@@ -10,7 +10,9 @@ import java.io.IOException;
 
 public class AtomicBomb extends AbstractWeapon {
 
-
+    /**
+     *
+     */
     public AtomicBomb() {
         this.name = "Atomic bomb";
         this.damage = 25;
@@ -22,9 +24,14 @@ public class AtomicBomb extends AbstractWeapon {
         }
     }
 
+    /**
+     *
+     * @param physics
+     * @return
+     */
     public Bullet fire(BallisticMovement physics) {
 
-        if (!Main.headless)
+        if (!Main.headless) {
             try {
                 OggClip doThisClip = new OggClip("sfx/weapons/Rocket firing.ogg");
                 doThisClip.setGain(Main.svol);
@@ -32,9 +39,8 @@ public class AtomicBomb extends AbstractWeapon {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        {
-            return new Bullet(physics, this);
         }
+        return new Bullet(physics, this);
     }
 
 }

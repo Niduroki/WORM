@@ -30,10 +30,17 @@ public class GUI {
     protected String levelCreatorInputPath;
     protected String levelCreatoroutputPath;
 
+    /**
+     *
+     * @param main
+     */
     public GUI (Main main) {
         this.main = main;
     }
 
+    /**
+     *
+     */
     public void addMainButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
@@ -189,7 +196,7 @@ public class GUI {
 
     }
 
-    public void addOptionsButtons() {
+    private void addOptionsButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
 
@@ -299,16 +306,16 @@ public class GUI {
                 data.put("multiplayer_name", nameField.getText());
                 data.put("fps", fpsBox.getSelectionModel().getSelectedItem());
                 data.put("resstring", resBox.getSelectionModel().getSelectedItem());
-                if ((data.get("resstring").toString())=="600x400") {
+                if (data.get("resstring").toString().equals("600x400")) {
                     data.put("res", 1d);
                     Main.sizeMultiplier = 1;}
-                    else if ((data.get("resstring").toString())=="900x600") {
+                    else if (data.get("resstring").toString().equals("900x600")) {
                             data.put("res", 1.5d);
                             Main.sizeMultiplier = 1.5;}
-                            else if ((data.get("resstring").toString())=="1200x800") {
+                            else if (data.get("resstring").toString().equals("1200x800")) {
                                 data.put("res", 2d);
                                 Main.sizeMultiplier = 2;}
-                                else if ((data.get("resstring").toString())=="1500x1000") {
+                                else if (data.get("resstring").toString().equals("1500x1000")) {
                                     data.put("res", 2.5d);
                                     Main.sizeMultiplier = 2.5;}
                 data.put("musicvol", musicvol.getValue());
@@ -477,7 +484,7 @@ public class GUI {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                main.music.stop();
+                Main.music.stop();
                 main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
                 main.grid.getChildren().clear();
                 main.grid.add(main.field, 0, 0);

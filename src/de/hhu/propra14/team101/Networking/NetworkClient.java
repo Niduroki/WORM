@@ -17,16 +17,21 @@ import java.util.*;
 /**
  * Class to do networking on the client side
  */
-
 public class NetworkClient {
 
+    /** Current room the user is in */
     public String currentRoom;
     /** Map of room users. Map key is the user name, Map value is the users team */
     public Map<String, String> roomUsers = new HashMap<>();
+    /** Name of the client */
     public String ourName;
+    /** Whether the room we're in is ready to play */
     public boolean roomReady = false;
+    /** Whether we're owner of the room we're in */
     public boolean weAreOwner = false;
+    /** Whether we've been kicked from the room we're in */
     public boolean kicked = false;
+    /** Name of the color we'll use whe playing (or whether we're a spectator) */
     public String color;
 
     private UUID uuid;
@@ -40,6 +45,7 @@ public class NetworkClient {
 
     /**
      * Constructs a class for networking
+     * @param main Main class the app is running with
      */
     public NetworkClient(Main main) {
         int port = 7601;
@@ -200,9 +206,10 @@ public class NetworkClient {
     }
 
     /**
-     * @param name How to name the room
-     * @throws de.hhu.propra14.team101.Networking.Exceptions.RoomExistsException
-    */
+     * Creates a room
+     * @param name Name of the room
+     * @throws NetworkException RoomExistsException if a room with this name exists, or TimeoutException on timeout
+     */
     public void createRoom(String name) throws NetworkException {
         this.send("create_room " + name, true);
         if (!this.lastAnswer.equals("okay")) {
@@ -213,6 +220,12 @@ public class NetworkClient {
         this.switchReady();
     }
 
+    /**
+     * Join a room
+     * @param name Room to join
+     * @throws NetworkException RoomDoesNotExistException if there's no room, RoomFullException if the room is full
+     * TimeoutException on timeout
+     */
     public void joinRoom(String name) throws NetworkException {
         this.send("join_room " + name, true);
         if (this.lastAnswer.equals("does_not_exist")) {
@@ -223,6 +236,10 @@ public class NetworkClient {
         this.currentRoom = name;
     }
 
+    /**
+     * Leaves the current room
+     * @throws NetworkException TODO RoomExistsException???
+     */
     public void leaveRoom() throws NetworkException {
         this.send("leave_room", true);
         if (!this.lastAnswer.equals("okay")) {
@@ -231,6 +248,11 @@ public class NetworkClient {
         this.currentRoom = null;
     }
 
+    /**
+     * Gets existing rooms
+     * @return String array of existing rooms
+     * @throws TimeoutException On timeout
+     */
     public String[] getRooms() throws TimeoutException {
         this.send("list_rooms", true);
         if (this.lastAnswer.equals("none")) {
@@ -245,31 +267,62 @@ public class NetworkClient {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @throws TimeoutException On timeout
+     */
     public void changeRoomName(String name) throws TimeoutException {
         // TODO
     }
 
+    /**
+     *
+     * @param password
+     * @throws TimeoutException On timeout
+     */
     public void changePassword(String password) throws TimeoutException {
         // TODO
     }
 
+    /**
+     *
+     * @return
+     * @throws TimeoutException On timeout
+     */
     public String getOwner() throws TimeoutException {
         this.send("get_owner", true);
         return this.lastAnswer;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasGlobalMessages() {
         return !(globalMessages.size() == 0);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getLastGlobalMessage() {
         return globalMessages.poll();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasRoomMessages() {
         return !(roomMessages.size() == 0);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getLastRoomMessage() {
         return roomMessages.poll();
     }
@@ -279,6 +332,10 @@ public class NetworkClient {
         return this.lastAnswer.split(",");
     }*/
 
+    /**
+     *
+     * @throws TimeoutException On timeout
+     */
     public void loadRoomUsers() throws TimeoutException {
         this.send("list_room_users", true);
         for (String user : this.lastAnswer.split(",")) {
@@ -286,31 +343,65 @@ public class NetworkClient {
         }
     }
 
+    /**
+     *
+     * @param type
+     * @param message
+     * @throws TimeoutException On timeout
+     */
     public void chat(char type, String message) throws TimeoutException {
         this.send("chat " + type + " " + message, false);
     }
 
+    /**
+     *
+     * @throws TimeoutException On timeout
+     */
     public void switchReady() throws TimeoutException {
         this.send("ready", true);
     }
 
+    /**
+     *
+     * @param name
+     * @throws TimeoutException On timeout
+     */
     public void changeMap(String name) throws TimeoutException {
         this.send("change_map "+name, false);
     }
 
+    /**
+     *
+     * @throws TimeoutException On timeout
+     */
     public void nextWeapon() throws TimeoutException {
         this.send("game next_weapon", true);
     }
 
+    /**
+     *
+     * @throws TimeoutException On timeout
+     */
     public void prevWeapon() throws TimeoutException {
         this.send("game prev_weapon", true);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @throws TimeoutException On timeout
+     */
     public void fireWeapon(int x, int y) throws TimeoutException {
         // The network game needs the Main.sizeMultiplier==1 coordinates
         this.send("game fire "+String.valueOf(x/Main.sizeMultiplier)+" "+String.valueOf(y/Main.sizeMultiplier), true);
     }
 
+    /**
+     *
+     * @param direction
+     * @throws TimeoutException On timeout
+     */
     public void move(char direction) throws TimeoutException {
         if (direction == 'l') {
             this.send("game move_left", true);
@@ -319,35 +410,72 @@ public class NetworkClient {
         }
     }
 
+    /**
+     *
+     * @param number
+     * @throws TimeoutException On timeout
+     */
     public void useItem(int number) throws TimeoutException {
         this.send("game use_item" + number, true);
     }
 
+    /**
+     *
+     * @throws TimeoutException On timeout
+     */
     public void jump() throws  TimeoutException {
         this.send("game jump", true);
     }
 
+    /**
+     *
+     * @throws TimeoutException On timeout
+     */
     public void pause() throws TimeoutException {
         this.send("game pause", true);
     }
 
+    /**
+     *
+     * @throws TimeoutException On timeout
+     */
     public void startGame() throws TimeoutException {
         this.send("start_game", true);
     }
 
+    /**
+     *
+     * @param team
+     * @throws TimeoutException On timeout
+     */
     public void changeColor(String team) throws TimeoutException {
         this.send("change_team " + team, false);
         this.color = team;
     }
 
+    /**
+     *
+     * @param amount
+     * @throws TimeoutException On timeout
+     */
     public void changeMaxPlayers (int amount) throws TimeoutException {
         this.send("change_max_players "+String.valueOf(amount), true);
     }
 
+    /**
+     *
+     * @param name
+     * @throws TimeoutException On timeout
+     */
     public void kickUser (String name) throws TimeoutException {
         this.send("kick_user " + name, false);
     }
 
+    /**
+     *
+     * @return
+     * @throws TimeoutException On timeout
+     */
     @SuppressWarnings("unchecked")
     public Map<String, Object> getRoomProperties() throws TimeoutException {
         this.send("get_room_properties", true);
@@ -359,6 +487,7 @@ public class NetworkClient {
      * Sets a weapon enabled/disabled for the game
      * @param weaponName lowercase name of the weapon
      * @param active boolean whether the weapon should be enabled
+     * @throws TimeoutException On timeout
      */
     public void setWeapon(String weaponName, boolean active) throws TimeoutException {
         // Make sure weaponName is lowercase
@@ -375,6 +504,9 @@ public class NetworkClient {
         this.send("game sync", false);
     }
 
+    /**
+     * Logs the client out properly
+     */
     public void logoff() {
         try {
             this.send("logoff", false);
@@ -383,16 +515,27 @@ public class NetworkClient {
         }
     }
 
+    /**
+     * Thread to handle incoming data asynchronous
+     */
     static class HandleIncomingThread implements Runnable {
 
         Socket socket;
         NetworkClient client;
 
+        /**
+         *
+         * @param socket
+         * @param client
+         */
         public HandleIncomingThread(Socket socket, NetworkClient client) {
             this.socket = socket;
             this.client = client;
         }
 
+        /**
+         *
+         */
         @Override
         public void run() {
             try {

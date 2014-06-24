@@ -3,12 +3,16 @@ package de.hhu.propra14.team101.TerrainObjects;
 import de.hhu.propra14.team101.Main;
 import javafx.scene.image.Image;
 
-
 /**
- * Class to create terrain with
+ * Creates a square, dirt building block
  */
 public class SquareBuildingBlock extends AbstractTerrainObject {
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public SquareBuildingBlock (int x, int y) {
         super(x, y);
         this.destructible = true;

@@ -10,7 +10,9 @@ import java.io.IOException;
 
 public class Bazooka extends AbstractWeapon {
 
-
+    /**
+     *
+     */
     public Bazooka() {
         this.name = "Bazooka";
         this.damage = 10;
@@ -22,8 +24,13 @@ public class Bazooka extends AbstractWeapon {
         }
     }
 
+    /**
+     *
+     * @param physics
+     * @return
+     */
     public Bullet fire(BallisticMovement physics) {
-        if (!Main.headless)
+        if (!Main.headless) {
             try {
                 OggClip doThisClip = new OggClip("sfx/weapons/Bazooka fire.ogg");
                 doThisClip.setGain(Main.svol);
@@ -31,9 +38,7 @@ public class Bazooka extends AbstractWeapon {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        {
-            return new Bullet(physics, this);
         }
-
+        return new Bullet(physics, this);
     }
 }

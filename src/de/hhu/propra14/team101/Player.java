@@ -44,6 +44,10 @@ public class Player {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Map serialize() {
         Map<String, Object> map = new HashMap<>();
         map.put("type", this.type);
@@ -57,6 +61,11 @@ public class Player {
         return map;
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     public static Player deserialize(Map input) {
         @SuppressWarnings("unchecked")
         ArrayList<Map> rawWorms = (ArrayList<Map>) input.get("worm_array");
@@ -70,6 +79,11 @@ public class Player {
         return player;
     }
 
+    /**
+     *
+     * @param color
+     * @return
+     */
     public static String serializeColor(Color color) {
         if (color.equals(Color.RED)) {
             return "Red";
@@ -84,6 +98,11 @@ public class Player {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public static Color deseserializeColor(String name) {
         switch (name) {
             case "Red":
