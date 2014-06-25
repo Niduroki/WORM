@@ -14,13 +14,4 @@ public abstract class Item extends AbstractTerrainObject {
     public Item(int x, int y) {
         super(x, y);
     }
-
-    /**
-     *
-     * @deprecated Use the public property name instead
-     * @return
-     */
-    public String getName() {
-        return this.name;
-    }
 }

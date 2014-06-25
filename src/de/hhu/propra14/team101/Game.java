@@ -94,8 +94,8 @@ public class Game {
     }
 
     /**
-     *
-     * @param levelName
+     * Loads a level from the disk, or creates a random level
+     * @param levelName Name of the level or "Random" for a random map
      */
     public void loadLevel(String levelName) {
         if (levelName.equals("Random")) {
@@ -179,7 +179,7 @@ public class Game {
         }
         String itemText = "";
         for(int index = 0;index < currentWorm.getItems().size();index++) {
-            itemText += (index + 1)+" " +currentWorm.getItems().get(index).getName() + " :: ";
+            itemText += (index + 1)+" " +currentWorm.getItems().get(index).name + " :: ";
         }
         gc.setFill(Color.BLACK);
         gc.setFont(new Font(12*Main.sizeMultiplier));

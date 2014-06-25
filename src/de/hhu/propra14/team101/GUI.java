@@ -3,10 +3,7 @@ package de.hhu.propra14.team101;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
-import de.hhu.propra14.team101.Weapons.AbstractWeapon;
-import de.hhu.propra14.team101.Weapons.AtomicBomb;
-import de.hhu.propra14.team101.Weapons.Bazooka;
-import de.hhu.propra14.team101.Weapons.Grenade;
+import de.hhu.propra14.team101.Weapons.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -28,7 +25,7 @@ import java.util.Map;
 public class GUI {
     private Main main;
     protected String levelCreatorInputPath;
-    protected String levelCreatoroutputPath;
+    protected String levelCreatorOutputPath;
 
     /**
      *
@@ -177,7 +174,7 @@ public class GUI {
             public void handle(ActionEvent e) {
                 FileChooser fileChooser = new FileChooser();
                 File outputFile = fileChooser.showSaveDialog(main.primaryStage);
-                levelCreatoroutputPath = outputFile.toString();
+                levelCreatorOutputPath = outputFile.toString();
             }
         });
 
@@ -185,7 +182,7 @@ public class GUI {
             @Override
                 public void handle(ActionEvent event) {
                 LevelCreator.convert(
-                        levelCreatorInputPath,levelCreatoroutputPath,
+                        levelCreatorInputPath, levelCreatorOutputPath,
                         themeSelection.getSelectionModel().getSelectedItem().toLowerCase()
                 );
 
@@ -308,22 +305,23 @@ public class GUI {
                 data.put("resstring", resBox.getSelectionModel().getSelectedItem());
                 if (data.get("resstring").toString().equals("600x400")) {
                     data.put("res", 1d);
-                    Main.sizeMultiplier = 1;}
-                    else if (data.get("resstring").toString().equals("900x600")) {
-                            data.put("res", 1.5d);
-                            Main.sizeMultiplier = 1.5;}
-                            else if (data.get("resstring").toString().equals("1200x800")) {
-                                data.put("res", 2d);
-                                Main.sizeMultiplier = 2;}
-                                else if (data.get("resstring").toString().equals("1500x1000")) {
-                                    data.put("res", 2.5d);
-                                    Main.sizeMultiplier = 2.5;}
+                    Main.sizeMultiplier = 1;
+                } else if (data.get("resstring").toString().equals("900x600")) {
+                    data.put("res", 1.5d);
+                    Main.sizeMultiplier = 1.5;
+                } else if (data.get("resstring").toString().equals("1200x800")) {
+                    data.put("res", 2d);
+                    Main.sizeMultiplier = 2;
+                } else if (data.get("resstring").toString().equals("1500x1000")) {
+                    data.put("res", 2.5d);
+                    Main.sizeMultiplier = 2.5;
+                }
                 data.put("musicvol", musicvol.getValue());
                 data.put("soundvol", soundvol.getValue());
                 saver.save(data, "settings.gz");
                 // resize window
-                main.primaryStage.setHeight(400*Main.sizeMultiplier);
-                main.primaryStage.setWidth(600*Main.sizeMultiplier);
+                main.primaryStage.setHeight(Terrain.getHeightInPixel()+30);
+                main.primaryStage.setWidth(Terrain.getWidthInPixel()+10);
                 addMainButtons();
             }
         });

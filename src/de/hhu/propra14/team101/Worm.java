@@ -21,7 +21,7 @@ import java.util.Map;
 public class Worm {
 
     public ArrayList<AbstractWeapon> weaponList;
-    public static double size = 25*Main.sizeMultiplier;
+    public static double size = 25;
     public int armor = 0;
     public int health = 100;
     public int currentWeapon = 0;
@@ -100,7 +100,7 @@ public class Worm {
     public void useItem(int index) {
         if(index > 0 && index <= this.getItems().size()) {
             index--;
-            switch (this.getItems().get(index).getName()){
+            switch (this.getItems().get(index).name){
                 case "Elixir": this.health = this.health * 2; this.getItems().remove(index); break;
                 case "Shoe": shoeFactor = 2; this.getItems().remove(index); break;
                 case "Spring": springFactor = 1.3; this.getItems().remove(index); break;
@@ -113,9 +113,18 @@ public class Worm {
      * Draws the worm
      */
     public void draw (GraphicsContext gc, Color color) {
-        gc.drawImage(this.image, this.xCoord, this.yCoord, size, size);
+        gc.drawImage(this.image,
+                // Worms are huge, thus we can't start drawing them like a normal terrain block, otherwise they'd clip the ground
+                this.xCoord-(AbstractTerrainObject.baseSize/2)*Main.sizeMultiplier,
+                this.yCoord-AbstractTerrainObject.baseSize*Main.sizeMultiplier,
+                size*Main.sizeMultiplier, size*Main.sizeMultiplier
+        );
         gc.setFill(color);
-        gc.fillText("H" + String.valueOf(this.health), this.xCoord, this.yCoord - 4);
+        gc.fillText(
+                "H" + String.valueOf(this.health),
+                this.xCoord-(AbstractTerrainObject.baseSize/2)*Main.sizeMultiplier,
+                this.yCoord - AbstractTerrainObject.baseSize*Main.sizeMultiplier
+        );
         if (this.armor != 0) {
             gc.fillText("A" + String.valueOf(this.armor), this.xCoord, this.yCoord -14);
         }

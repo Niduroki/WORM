@@ -99,7 +99,7 @@ public class Main extends Application {
         //this.grid.setGridLinesVisible(true);
 
         this.primaryStage = primaryStage;
-        Scene scene = new Scene(grid, 600*Main.sizeMultiplier, 400*Main.sizeMultiplier);
+        Scene scene = new Scene(grid, Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
         primaryStage.setScene(scene);
         primaryStage.show();
         grid.setStyle("-fx-background-color: #00BFFF");
