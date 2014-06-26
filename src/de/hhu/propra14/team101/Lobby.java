@@ -395,6 +395,7 @@ public class Lobby {
                             main.game.gc = main.field.getGraphicsContext2D();
                             // Everyone needs the same fps, otherwise bullets fly at different speed
                             main.game.fps = 16;
+                            Main.music.stop();
                             main.game.startGameplay();
                         }
 
