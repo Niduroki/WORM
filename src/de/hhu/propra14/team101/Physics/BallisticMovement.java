@@ -7,7 +7,7 @@ import de.hhu.propra14.team101.Worm;
 import java.util.ArrayList;
 
 /**
- * Class to manage movement
+ * Class to manage ballistic movement
  */
 public class BallisticMovement {
     private Vector directionVector;
@@ -50,16 +50,15 @@ public class BallisticMovement {
     }
 
     /**
-     *
-     * @return
+     * Gets a value indicating whether movement is finished.
+     * @return true, if the movement is finished, otherwise false.
      */
-    public boolean hasFinished() {
+    public boolean isFinished() {
         return finished;
     }
 
     /**
      * Execute steps of the movement
-     *
      * @param speed count of movement steps
      */
     public void move(double speed) {
@@ -109,14 +108,14 @@ public class BallisticMovement {
     }
 
     /**
-     * Get the x-coordinate
+     * Gets the x-coordinate.
      */
     public double getXCoordinate() {
         return (xCoordinate);
     }
 
     /**
-     * Get the y-coordinate
+     * Gets the y-coordinate
      */
     public double getYCoordinate() {
         return (yCoordinate);
@@ -131,5 +130,4 @@ public class BallisticMovement {
                 new Vector(0, 0, -physics.directionVector.getXCoordinate(), physics.directionVector.getYCoordinate())
         );
     }
-
 }

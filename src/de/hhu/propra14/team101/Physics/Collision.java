@@ -1,13 +1,21 @@
 package de.hhu.propra14.team101.Physics;
 
+/**
+ * Represents a detected collision.
+ * {@code
+ * //When a collision was detected, then:
+ * Worm worm = new Worm(weaponList);
+ * Collision collision = new Collision(worm, CollisionType.Worm);
+ * }
+ */
 public class Collision {
     private Object collisionElement;
     private CollisionType collisionType;
 
     /**
-     *
-     * @param collisionElement
-     * @param type
+     *  Initialize a new collision.
+     * @param collisionElement element, which collided with moved element.
+     * @param type type of the collision.
      */
     public Collision(Object collisionElement, CollisionType type) {
         this.collisionElement = collisionElement;
@@ -15,16 +23,16 @@ public class Collision {
     }
 
     /**
-     *
-     * @return
+     * Gets element, which collided with moved element.
+     * @return collision element.
      */
     public Object getCollisionElement() {
         return this.collisionElement;
     }
 
     /**
-     *
-     * @return
+     * Gets type of the collision.
+     * @return type of the collision
      */
     public CollisionType getType() {
         return this.collisionType;
