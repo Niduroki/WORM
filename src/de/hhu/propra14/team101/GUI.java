@@ -121,7 +121,7 @@ public class GUI {
         });
     }
 
-    private void addEditorButtons() {
+    public void addEditorButtons() {
         this.main.grid.getChildren().clear();
         BorderPane border = new BorderPane();
         border.setPadding(new Insets(20, 0, 20, 20));
@@ -185,11 +185,8 @@ public class GUI {
         createButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                /*LevelCreator.convert(
-                        levelCreatorInputPath, levelCreatorOutputPath,
-                        themeSelection.getSelectionModel().getSelectedItem().toLowerCase()
-                );*/
-
+                levelCreator.setTheme(themeSelection.getSelectionModel().getSelectedItem().toLowerCase());
+                levelCreator.save(levelCreatorOutputPath);
             }
         });
 

@@ -294,8 +294,7 @@ public class Main extends Application {
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.ESCAPE) {
                     // Close the creator
-                    // TODO show the level creator overview again and pass the calling method creator, so we still have our progress
-                    //gui.addMainButtons();
+                    gui.addEditorButtons();
                     // Remove old handlers
                     primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
                     primaryStage.getScene().removeEventHandler(MouseEvent.ANY, mouseHandler);
