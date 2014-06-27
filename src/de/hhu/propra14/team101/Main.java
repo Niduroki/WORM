@@ -2,9 +2,11 @@ package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
+import de.hhu.propra14.team101.Savers.AbstractSaver;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.LevelSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
+import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -280,7 +282,7 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.isPrimaryButtonDown()) {
-                    creator.cycleBlock((int) mouseEvent.getX(), (int) mouseEvent.getY());
+                    creator.cycleBlock((int) (mouseEvent.getX()/(AbstractTerrainObject.baseSize*Main.sizeMultiplier)), (int) (mouseEvent.getY()/(AbstractTerrainObject.baseSize*Main.sizeMultiplier)));
                 } else if (mouseEvent.isSecondaryButtonDown()) {
                     creator.cycleSpawn((int) mouseEvent.getX(), (int) mouseEvent.getY());
                 }
