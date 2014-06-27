@@ -32,7 +32,12 @@ public class LevelCreator {
     }
 
     public void cycleBlock(int x, int y) {
-        AbstractTerrainObject currentBlock = this.level.getTerrain().isTerrain(x, y);
+        AbstractTerrainObject currentBlock = this.level.getTerrain().isTerrain(x*(Main.sizeMultiplier*AbstractTerrainObject.baseSize), y*(Main.sizeMultiplier*AbstractTerrainObject.baseSize));
+        try {
+            System.out.println(currentBlock.toString() + ":" + x + ":" + y);
+        } catch (NullPointerException e) {
+            System.out.println("Null:" + x + ":" + y);
+        }
         AbstractTerrainObject nextBlock;
         if (currentBlock == null) {
             nextBlock = new SquareBuildingBlock(x, y);
@@ -58,7 +63,9 @@ public class LevelCreator {
             nextBlock = null;
         }
         this.level.getTerrain().removeTerrainObject(currentBlock, false);
-        this.level.getTerrain().addTerrainObject(nextBlock);
+        if (nextBlock != null) {
+            this.level.getTerrain().addTerrainObject(nextBlock);
+        }
         this.draw();
     }
 
@@ -74,6 +81,8 @@ public class LevelCreator {
 
         // There isn't a worm here
         this.level.addWormStartPosition(x, y);
+
+        this.draw();
     }
 
     public void draw() {
@@ -81,13 +90,13 @@ public class LevelCreator {
 
         this.gc.clearRect(0, 0, this.gc.getCanvas().getWidth(), this.gc.getCanvas().getHeight());
 
-        this.gc.drawImage(new Image("resources/images/Background.jpg"), 0.0, 0.0, this.gc.getCanvas().getWidth(), this.gc.getCanvas().getHeight());
+        this.gc.drawImage(new Image("images/Background.jpg"), 0.0, 0.0, this.gc.getCanvas().getWidth(), this.gc.getCanvas().getHeight());
 
         this.level.getTerrain().draw(this.gc);
 
         for (int i = 0; i < this.level.getCountWormStartPositions(); i++) {
             int[] coords = this.level.getWormStartPosition(i);
-            this.gc.drawImage(new Image("resources/images/Worm.gif"), coords[0], coords[1], Worm.size*Main.sizeMultiplier, Worm.size*Main.sizeMultiplier);
+            this.gc.drawImage(new Image("images/Worm.gif"), coords[0], coords[1], Worm.size*Main.sizeMultiplier, Worm.size*Main.sizeMultiplier);
         }
 
     }

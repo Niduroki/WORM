@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class GUI {
     private Main main;
-    protected String levelCreatorInputPath;
+    protected LevelCreator levelCreator;
     protected String levelCreatorOutputPath;
 
     /**
@@ -108,6 +108,7 @@ public class GUI {
         levelEditor.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                levelCreator = new LevelCreator();
                 addEditorButtons();
             }
         });
@@ -120,35 +121,35 @@ public class GUI {
         });
     }
 
-    private void addEditorButtons() {
+    public void addEditorButtons() {
         this.main.grid.getChildren().clear();
         BorderPane border = new BorderPane();
         border.setPadding(new Insets(20, 0, 20, 20));
 
-        Button inputButton = new Button("Select Input ...");
+        Button showeditorbutton = new Button("Show Editor");
         Button outputButton = new Button("Select Output ...");
-        Button convertEditor = new Button("Convert");
-        Button returnButton = new Button("Return");
+        Button createButton = new Button("Create");
+        Button returnButton = new Button("Back");
 
         final ComboBox<String> themeSelection = new ComboBox<>();
         themeSelection.getItems().addAll("Normal", "Horror", "Oriental");
         themeSelection.setValue("Normal");
 
-        inputButton.setMaxWidth(Double.MAX_VALUE);
+        showeditorbutton.setMaxWidth(Double.MAX_VALUE);
         outputButton.setMaxWidth(Double.MAX_VALUE);
-        convertEditor.setMaxWidth(Double.MAX_VALUE);
+        createButton.setMaxWidth(Double.MAX_VALUE);
         returnButton.setMaxWidth(Double.MAX_VALUE);
         themeSelection.setMaxWidth(Double.MAX_VALUE);
 
         VBox vbButtons = new VBox();
         vbButtons.setSpacing(10);
         vbButtons.setPadding(new Insets(0, 20, 10, 20));
-        vbButtons.getChildren().addAll(inputButton, outputButton, convertEditor, returnButton);
+        vbButtons.getChildren().addAll(showeditorbutton, outputButton, createButton, returnButton);
 
-        this.main.grid.add(inputButton, 1, 2);
+        this.main.grid.add(showeditorbutton, 1, 2);
         this.main.grid.add(themeSelection, 1,6);
         this.main.grid.add(outputButton, 1, 4);
-        this.main.grid.add(convertEditor, 1, 8);
+        this.main.grid.add(createButton, 1, 8);
         this.main.grid.add(returnButton, 1, 10);
 
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -159,12 +160,15 @@ public class GUI {
             }
         });
 
-        inputButton.setOnAction(new EventHandler<ActionEvent>() {
+        showeditorbutton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                FileChooser fileChooser = new FileChooser();
-                File inputFile = fileChooser.showOpenDialog(main.primaryStage);
-                levelCreatorInputPath = inputFile.toString();
+                main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
+                main.grid.getChildren().clear();
+                main.grid.add(main.field, 0, 0);
+                main.initializeLevelCreatorHandlers(levelCreator);
+                levelCreator.gc = main.field.getGraphicsContext2D();
+                levelCreator.draw();
             }
         });
 
@@ -178,14 +182,11 @@ public class GUI {
             }
         });
 
-        convertEditor.setOnAction(new EventHandler<ActionEvent>() {
+        createButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-                public void handle(ActionEvent event) {
-                /*LevelCreator.convert(
-                        levelCreatorInputPath, levelCreatorOutputPath,
-                        themeSelection.getSelectionModel().getSelectedItem().toLowerCase()
-                );*/
-
+            public void handle(ActionEvent event) {
+                levelCreator.setTheme(themeSelection.getSelectionModel().getSelectedItem().toLowerCase());
+                levelCreator.save(levelCreatorOutputPath);
             }
         });
 
