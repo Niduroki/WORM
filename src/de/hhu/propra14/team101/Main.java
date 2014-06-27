@@ -235,7 +235,7 @@ public class Main extends Application {
                             //
                         }
                     } else {
-                        game.doAction("use_item" + digit);
+                        game.doAction("use_item " + digit);
                     }
                 } else if (keyEvent.getCode() == KeyCode.P) {
                     // (Un-)Pause the game

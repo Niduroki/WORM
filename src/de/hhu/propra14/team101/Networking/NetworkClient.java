@@ -505,7 +505,7 @@ public class NetworkClient {
      * @throws TimeoutException On timeout
      */
     public void useItem(int number) throws TimeoutException {
-        this.send("game use_item" + number, true);
+        this.send("game use_item " + number, true);
     }
 
     /**

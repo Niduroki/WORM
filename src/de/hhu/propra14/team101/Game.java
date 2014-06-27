@@ -529,7 +529,7 @@ public class Game {
                 this.fireBullet(currentWorm.fireWeapon(xCoordinate, yCoordinate));
             }
         } else {
-            System.out.println("Unknown action");
+            System.out.println("Unknown action: "+action);
         }
     }
 
