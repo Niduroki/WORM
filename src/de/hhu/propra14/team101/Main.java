@@ -79,7 +79,7 @@ public class Main extends Application {
         this.gui = new GUI(this);
         this.lobby = new Lobby(this);
 
-        primaryStage.setTitle("Name");
+        primaryStage.setTitle("Wreck Opponents Repeatedly Meaningless");
         this.grid = new GridPane();
         this.grid.setAlignment(Pos.CENTER);
         this.grid.setHgap(10);
