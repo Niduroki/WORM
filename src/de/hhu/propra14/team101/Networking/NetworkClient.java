@@ -16,6 +16,71 @@ import java.util.*;
 
 /**
  * Class to do networking on the client side
+ * @code
+ * <p>
+ * NetworkClient client = new NetworkClient(this);
+ * System.out.println("My name is: " + client.ourName);
+ * String[] existingRooms = client.getRooms();
+ * try {
+ *     client.createRoom("test");
+ * } catch (RoomExistsException e) {
+ *     System.out.println("Room exists! Joining instead!");
+ *     client.joinRoom("test");
+ * }
+ * System.out.println("We're in room "+client.currentRoom);
+ *
+ * Map props = client.getRoomProperties();
+ *
+ * if (client.weAreOwner) {
+ *     client.changeRoomName("test2");
+ *     client.changePassword("secret");
+ *     client.changeMap("Castle");
+ *     client.changeMaxPlayers(5);
+ *     client.kickUser("Troll");
+ *     client.setWeapon("bazooka", true);
+ * } else {
+ *     System.out.println("Owner is: " + client.getOwner());
+ * }
+ *
+ * client.changeColor("blue");
+ *
+ * if (client.hasGlobalMessages()) {
+ *     System.out.println("Message: "+client.getLastGlobalMessage());
+ * }
+ * if (client.hasRoomMessages()) {
+ *     System.out.println("Message: "+client.getLastRoomMessage());
+ * }
+ * client.loadRoomUsers();
+ * for (Map.Entry entry : client.roomUsers.entrySet()) {
+ *     System.out.println(entry.getValue());
+ * }
+ *
+ * client.chat('r', "Everyone, ready!");
+ * client.switchReady();
+ * if (client.roomReady) {
+ *     System.out.println("Everyone is ready");
+ * }
+ *
+ *
+ * client.startGame();
+ * // Ingame
+ * client.prevWeapon();
+ * client.nextWeapon();
+ * client.fireWeapon(100, 500);
+ * client.move('l');
+ * client.useItem(1);
+ * client.jump();
+ * client.pause();
+ * // Unpause
+ * client.pause();
+ *
+ * client.requestSyncGame();
+ *
+ * if (client.kicked) {
+ *     client.leaveRoom();
+ *     client.logoff();
+ * }
+ * </p>
  */
 public class NetworkClient {
 
@@ -34,13 +99,21 @@ public class NetworkClient {
     /** Name of the color we'll use whe playing (or whether we're a spectator) */
     public String color;
 
+    /** Our UUID */
     private UUID uuid;
+    /** PrintWriter to write to, for network output */
     private PrintWriter output;
+    /** How many messages we sent yet. Needed for waiting for answers on messages */
     private int sentCounter = 0;
+    /** Last received message */
     private int lastReceivedCounter = -1;
+    /** Last answer */
     private String lastAnswer = "";
+    /** Main class */
     private Main main;
+    /** Queue to save global chat messages on */
     private PriorityQueue<String> globalMessages = new PriorityQueue<>();
+    /** Queue to save room chat messages on */
     private PriorityQueue<String> roomMessages = new PriorityQueue<>();
 
     /**
@@ -83,6 +156,12 @@ public class NetworkClient {
         this.main = main;
     }
 
+    /**
+     * Send data to the server
+     * @param data String of data
+     * @param waitForAnswer Whether to wait for an answer
+     * @throws TimeoutException If there has been no answer after 2 seconds
+     */
     private void send(String data, boolean waitForAnswer) throws TimeoutException {
 
         // Reset last answer
@@ -113,6 +192,12 @@ public class NetworkClient {
         }
     }
 
+    /**
+     * Construct a line with uuid, if there is one, and number of the current message
+     * @param data String of data
+     * @param count Number of the message
+     * @return Constructed line
+     */
     private String constructLine(String data, int count) {
         String line = String.valueOf(count);
         line += " ";
@@ -125,6 +210,7 @@ public class NetworkClient {
 
     /**
      * Callback for socket to handle incoming data
+     * @param line Line to handle
      */
     private void handleIncomingData(String line) {
         System.out.println("Handled a " + line);
@@ -173,6 +259,10 @@ public class NetworkClient {
         this.lastAnswer = line;
     }
 
+    /**
+     * Sub-callback, to deal with game-related incoming data
+     * @param command Incoming game command
+     */
     @SuppressWarnings("unchecked")
     private void interpretGame(String command) {
         if (command.equals("started")) {
@@ -192,6 +282,10 @@ public class NetworkClient {
         }
     }
 
+    /**
+     * Sign in to the server and request an UUID
+     * @throws TimeoutException On timeout
+     */
     private void signIn() throws TimeoutException {
         SettingSaves loader = new SettingSaves();
 
@@ -268,8 +362,8 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @param name
+     * Changes the room name
+     * @param name Name to change to
      * @throws TimeoutException On timeout
      */
     public void changeRoomName(String name) throws TimeoutException {
@@ -277,8 +371,8 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @param password
+     * Changes the password
+     * @param password Password to change to
      * @throws TimeoutException On timeout
      */
     public void changePassword(String password) throws TimeoutException {
@@ -286,8 +380,8 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @return
+     * Gets the name of the current owner
+     * @return Name of the owner
      * @throws TimeoutException On timeout
      */
     public String getOwner() throws TimeoutException {
@@ -296,44 +390,39 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @return
+     * Checks whether there are global messages
+     * @return Whether there are global messages
      */
     public boolean hasGlobalMessages() {
         return !(globalMessages.size() == 0);
     }
 
     /**
-     *
-     * @return
+     * Gets the last global message
+     * @return Last global message
      */
     public String getLastGlobalMessage() {
         return globalMessages.poll();
     }
 
     /**
-     *
-     * @return
+     * Checks whether there are room messages
+     * @return Whether there are room messages
      */
     public boolean hasRoomMessages() {
         return !(roomMessages.size() == 0);
     }
 
     /**
-     *
-     * @return
+     * Gets the last room message
+     * @return Last room message
      */
     public String getLastRoomMessage() {
         return roomMessages.poll();
     }
 
-    /*public String[] getUsers() throws TimeoutException {
-        this.send("list_users", true);
-        return this.lastAnswer.split(",");
-    }*/
-
     /**
-     *
+     * Loads current users in the room
      * @throws TimeoutException On timeout
      */
     public void loadRoomUsers() throws TimeoutException {
@@ -344,9 +433,9 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @param type
-     * @param message
+     * Chat
+     * @param type Globally 'g' or in the room 'r'
+     * @param message Text to send
      * @throws TimeoutException On timeout
      */
     public void chat(char type, String message) throws TimeoutException {
@@ -354,7 +443,7 @@ public class NetworkClient {
     }
 
     /**
-     *
+     * Negate our ready state
      * @throws TimeoutException On timeout
      */
     public void switchReady() throws TimeoutException {
@@ -362,8 +451,8 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @param name
+     * Change the current map
+     * @param name Name of the new map
      * @throws TimeoutException On timeout
      */
     public void changeMap(String name) throws TimeoutException {
@@ -371,7 +460,7 @@ public class NetworkClient {
     }
 
     /**
-     *
+     * Change to the next weapon ingame
      * @throws TimeoutException On timeout
      */
     public void nextWeapon() throws TimeoutException {
@@ -379,7 +468,7 @@ public class NetworkClient {
     }
 
     /**
-     *
+     * Change to the previous weapon ingame
      * @throws TimeoutException On timeout
      */
     public void prevWeapon() throws TimeoutException {
@@ -387,9 +476,9 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @param x
-     * @param y
+     * Fire the current weapon
+     * @param x X coordinate to fire to
+     * @param y Y coordinate to fire to
      * @throws TimeoutException On timeout
      */
     public void fireWeapon(int x, int y) throws TimeoutException {
@@ -398,8 +487,8 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @param direction
+     * Move the worm
+     * @param direction Direction to move in, either 'l', for left
      * @throws TimeoutException On timeout
      */
     public void move(char direction) throws TimeoutException {
@@ -411,8 +500,8 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @param number
+     * Use an item
+     * @param number Item number to use
      * @throws TimeoutException On timeout
      */
     public void useItem(int number) throws TimeoutException {
@@ -420,7 +509,7 @@ public class NetworkClient {
     }
 
     /**
-     *
+     * Make the worm jump
      * @throws TimeoutException On timeout
      */
     public void jump() throws  TimeoutException {
@@ -428,7 +517,7 @@ public class NetworkClient {
     }
 
     /**
-     *
+     * (Un-)Pause the game
      * @throws TimeoutException On timeout
      */
     public void pause() throws TimeoutException {
@@ -436,7 +525,7 @@ public class NetworkClient {
     }
 
     /**
-     *
+     * Start the game
      * @throws TimeoutException On timeout
      */
     public void startGame() throws TimeoutException {
@@ -444,8 +533,8 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @param team
+     * Change our color/team
+     * @param team Color name (or "spectator")
      * @throws TimeoutException On timeout
      */
     public void changeColor(String team) throws TimeoutException {
@@ -454,8 +543,8 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @param amount
+     * Change maximum amounts of players in this room
+     * @param amount How many players are allowed
      * @throws TimeoutException On timeout
      */
     public void changeMaxPlayers (int amount) throws TimeoutException {
@@ -463,8 +552,8 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @param name
+     * Kicks an user
+     * @param name Name of the user to kick
      * @throws TimeoutException On timeout
      */
     public void kickUser (String name) throws TimeoutException {
@@ -472,8 +561,8 @@ public class NetworkClient {
     }
 
     /**
-     *
-     * @return
+     * Gets all room properties
+     * @return Map referencing every property with a string
      * @throws TimeoutException On timeout
      */
     @SuppressWarnings("unchecked")
@@ -524,9 +613,9 @@ public class NetworkClient {
         NetworkClient client;
 
         /**
-         *
-         * @param socket
-         * @param client
+         * Creates a thread to handle incoming data
+         * @param socket Socket to send data with
+         * @param client Parent Client
          */
         public HandleIncomingThread(Socket socket, NetworkClient client) {
             this.socket = socket;
@@ -534,7 +623,7 @@ public class NetworkClient {
         }
 
         /**
-         *
+         * Runs the thread
          */
         @Override
         public void run() {

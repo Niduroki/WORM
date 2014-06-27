@@ -8,6 +8,11 @@ import javafx.scene.control.TextField;
  * with some slight modifications
  *
  * TextField that only accepts positive integers
+ * @code
+ * <p>
+ * NumberTextField numberField = new NumberTextField();
+ * int number = Integer.parseInt(numberField.getText());
+ * </p>
  */
 public class NumberTextField extends TextField {
 
@@ -37,8 +42,8 @@ public class NumberTextField extends TextField {
 
     /**
      * Validates input text
-     * @param text
-     * @return
+     * @param text Text to validate
+     * @return Validated text
      */
     private boolean validate(String text) {
         return text.matches("[0-9]") || text.equals("");
