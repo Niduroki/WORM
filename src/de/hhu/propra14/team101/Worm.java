@@ -241,7 +241,7 @@ public class Worm {
                 return true;
             }
         }
-        if(jumpPhysic.hasFinished()) {
+        if(jumpPhysic.isFinished()) {
             jumpPhysic = null;
             this.setYCoordinate(this.getYCoordinate()-AbstractTerrainObject.baseSize*Main.sizeMultiplier);
             freeFall(terrain);
