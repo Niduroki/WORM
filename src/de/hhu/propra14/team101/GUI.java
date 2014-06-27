@@ -181,10 +181,10 @@ public class GUI {
         convertEditor.setOnAction(new EventHandler<ActionEvent>() {
             @Override
                 public void handle(ActionEvent event) {
-                LevelCreator.convert(
+                /*LevelCreator.convert(
                         levelCreatorInputPath, levelCreatorOutputPath,
                         themeSelection.getSelectionModel().getSelectedItem().toLowerCase()
-                );
+                );*/
 
             }
         });

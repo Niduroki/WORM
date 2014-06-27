@@ -50,8 +50,8 @@ public class Main extends Application {
     public static double sizeMultiplier;
 
     /**
-     *
-     * @param args
+     * Starts the program
+     * @param args CLI arguments
      */
     public static void main (String[] args) {
         launch(args);
@@ -59,7 +59,7 @@ public class Main extends Application {
 
     /**
      * Shows the main GUI
-     * @param primaryStage
+     * @param primaryStage Stage to display GUI in
      */
     @Override
     public void start (final Stage primaryStage){
@@ -269,5 +269,37 @@ public class Main extends Application {
         this.primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keypressHandler);
         this.primaryStage.getScene().addEventHandler(MouseEvent.ANY, mouseHandler);
         this.primaryStage.getScene().addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+    }
+
+    /**
+     * Initializes handlers for level editing
+     * @param creator Current LevelCreator
+     */
+    public void initializeLevelCreatorHandlers(final LevelCreator creator) {
+        final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (mouseEvent.isPrimaryButtonDown()) {
+                    creator.cycleBlock((int) mouseEvent.getX(), (int) mouseEvent.getY());
+                }
+            }
+        };
+
+        final EventHandler<KeyEvent> keypressHandler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                    // Close the creator
+                    // TODO show the level creator overview again and pass the calling method creator, so we still have our progress
+                    //gui.addMainButtons();
+                    // Remove old handlers
+                    primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
+                    primaryStage.getScene().removeEventHandler(MouseEvent.ANY, mouseHandler);
+                }
+            }
+        };
+
+        this.primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keypressHandler);
+        this.primaryStage.getScene().addEventHandler(MouseEvent.ANY, mouseHandler);
     }
 }
