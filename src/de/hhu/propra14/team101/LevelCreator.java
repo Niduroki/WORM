@@ -62,6 +62,20 @@ public class LevelCreator {
         this.draw();
     }
 
+    public void cycleSpawn(int x, int y) {
+        for (int i = 0; i < this.level.getCountWormStartPositions(); i++) {
+            int[] coords = this.level.getWormStartPosition(i);
+            if (coords[0] == x && coords[1] == y) {
+                this.level.removeWormStartPosition(i);
+                // Removed the spawn - Done
+                return;
+            }
+        }
+
+        // There isn't a worm here
+        this.level.addWormStartPosition(x, y);
+    }
+
     public void draw() {
         assert this.gc != null;
 

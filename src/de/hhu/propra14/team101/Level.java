@@ -47,6 +47,14 @@ public class Level {
     }
 
     /**
+     * Remove a specific start position
+     * @param index Number to remove
+     */
+    public void removeWormStartPosition(int index) {
+        wormStartPoints.remove(index);
+    }
+
+    /**
      * Add a worm start position.
      * @param xPosition x coordinate
      * @param yPosition y coordinate

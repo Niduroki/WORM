@@ -281,6 +281,8 @@ public class Main extends Application {
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.isPrimaryButtonDown()) {
                     creator.cycleBlock((int) mouseEvent.getX(), (int) mouseEvent.getY());
+                } else if (mouseEvent.isSecondaryButtonDown()) {
+                    creator.cycleSpawn((int) mouseEvent.getX(), (int) mouseEvent.getY());
                 }
             }
         };
