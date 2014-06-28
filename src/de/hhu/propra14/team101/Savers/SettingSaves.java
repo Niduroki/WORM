@@ -5,6 +5,12 @@ import java.util.Map;
 
 /**
  * Class to load and save settings
+ * @code
+ * SettingSaves settingSaves = new SettingSaves();
+ * Map settings = settingSaves.load("settings.gz");
+ * System.out.println(settings.get("name"));
+ * settings.put("name", "myname");
+ * settingSaves.save("settings.gz");
  */
 
 public class SettingSaves extends AbstractSaver {

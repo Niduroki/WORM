@@ -6,6 +6,12 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * Class to gzip data
+ * @code
+ * GZipper zipper = new GZipper();
+ * String longString = "Lorem ipsum dolor sit amet consetetur ..."
+ * byte[] gzipped = zipper.gzip(longString);
+ * // Write gzipped into a file now, or do something else
+ * String unzipped = zipper.gunzip("path/to/file.gz");
  */
 public class GZipper {
     /**
@@ -27,7 +33,7 @@ public class GZipper {
     }
 
     /**
-     * Uncompresses a string
+     * Decompresses a file
      * @param path Path to uncompress
      * @return Uncompressed String
      * @throws FileNotFoundException If file not found
@@ -37,7 +43,7 @@ public class GZipper {
     }
 
     /**
-     * Uncompresses a String
+     * Decompresses a stream
      * @param stream Stream to uncompress
      * @return Uncompressed String
      * @throws FileNotFoundException If file not found

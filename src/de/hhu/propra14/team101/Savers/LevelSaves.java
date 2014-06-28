@@ -7,6 +7,11 @@ import java.util.Map;
 
 /**
  * Class to load and save levels
+ * @code
+ * LevelSaves levelSaver = new LevelSaves();
+ * Level loaded = levelSaver.load("path/to/level1.gz");
+ * // Do something with the level here
+ * levelSaver.save(loaded, "path/to/new_level1.gz");
  */
 
 public class LevelSaves extends AbstractSaver {

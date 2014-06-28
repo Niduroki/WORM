@@ -8,6 +8,11 @@ import java.util.Map;
 
 /**
  * Class to load and save games
+ * @code
+ * GameSaves gameSaver = new GameSaves();
+ * Game loaded = gameSaver.load("path/to/game_save.gz");
+ * // Do something with the game here
+ * gameSaver.save(loaded, "path/to/save_to.gz");
  */
 
 public class GameSaves extends AbstractSaver {
