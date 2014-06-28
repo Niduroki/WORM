@@ -5,18 +5,21 @@ import javafx.scene.image.Image;
 
 /**
  * Creates a triangle, dirt building block, either sloped left or right
+ *
+ * @see de.hhu.propra14.team101.Terrain
  */
 public class TriangleBuildingBlock extends AbstractTerrainObject {
 
     protected boolean slopedLeft;
 
     /**
+     * Initialize a new AbstractTerrainObject.
      *
-     * @param x
-     * @param y
-     * @param slopedLeft
+     * @param x          x-coordinate of the object
+     * @param y          y-coordinate of the object
+     * @param slopedLeft true, if the block is left sloped, otherwise false
      */
-    public TriangleBuildingBlock (int x, int y, boolean slopedLeft) {
+    public TriangleBuildingBlock(int x, int y, boolean slopedLeft) {
         super(x, y);
         this.slopedLeft = slopedLeft;
         this.destructible = true;
@@ -31,16 +34,9 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
     }
 
     /**
+     * Gets a value indicating whether the block is left sloped.
      *
-     * @param slopedLeft
-     */
-    public void setSlopedLeft (boolean slopedLeft) {
-        this.slopedLeft = slopedLeft;
-    }
-
-    /**
-     *
-     * @return
+     * @return true, if the block is left sloped, otherwise false.
      */
     public boolean getSlopedLeft() {
         return this.slopedLeft;

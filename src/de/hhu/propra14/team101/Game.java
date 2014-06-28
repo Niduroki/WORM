@@ -179,7 +179,7 @@ public class Game {
         }
         String itemText = "";
         for(int index = 0;index < currentWorm.getItems().size();index++) {
-            itemText += (index + 1)+" " +currentWorm.getItems().get(index).name + " :: ";
+            itemText += (index + 1)+" " +currentWorm.getItems().get(index).getName() + " :: ";
         }
         gc.setFill(Color.BLACK);
         gc.setFont(new Font(12*Main.sizeMultiplier));

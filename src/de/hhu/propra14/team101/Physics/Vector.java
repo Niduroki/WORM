@@ -2,6 +2,9 @@ package de.hhu.propra14.team101.Physics;
 
 /**
  * Represents a 2d vector.
+ * <p/>
+ * Code example:
+ * <pre>
  * {@code
  * //Initialize a new Vector
  * Vector vector1 = new Vector(0, 0, 1, 1);
@@ -12,7 +15,7 @@ package de.hhu.propra14.team101.Physics;
  * System.out.println(vector1.getXCoordinate());
  * System.out.println(vector1.getYCoordinate());
  * System.out.println(Vector.internalAngle(vector1, new Vector(1, 0, 0, 0)));
- * <p>
+ *
  * //==Output==
  * 1.0
  * 1.0
@@ -20,7 +23,7 @@ package de.hhu.propra14.team101.Physics;
  * 0.7071067811865475
  * 0.7071067811865475
  * 2.356194490192345
- * }
+ * }</pre>
  */
 public class Vector {
     private double xCoordinate;

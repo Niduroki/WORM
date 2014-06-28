@@ -2,11 +2,15 @@ package de.hhu.propra14.team101.Physics;
 
 /**
  * Represents a detected collision.
+ * <p/>
+ * Code example:
+ * <pre>
  * {@code
  * //When a collision was detected, then:
  * Worm worm = new Worm(weaponList);
  * Collision collision = new Collision(worm, CollisionType.Worm);
  * }
+ * </pre>
  */
 public class Collision {
     private Object collisionElement;

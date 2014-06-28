@@ -100,7 +100,7 @@ public class Worm {
     public void useItem(int index) {
         if(index > 0 && index <= this.getItems().size()) {
             index--;
-            switch (this.getItems().get(index).name){
+            switch (this.getItems().get(index).getName()){
                 case "Elixir": this.health = this.health * 2; this.getItems().remove(index); break;
                 case "Shoe": shoeFactor = 2; this.getItems().remove(index); break;
                 case "Spring": springFactor = 1.3; this.getItems().remove(index); break;

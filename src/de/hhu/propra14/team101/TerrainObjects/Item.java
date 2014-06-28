@@ -2,16 +2,29 @@ package de.hhu.propra14.team101.TerrainObjects;
 
 /**
  * Class to create terrain with
+ *
+ * @see de.hhu.propra14.team101.Terrain
  */
 public abstract class Item extends AbstractTerrainObject {
-    /** Name of the item */
-    public String name;
+
+    protected String name;
 
     /**
-     * @param x X-Coordinate of the object
-     * @param y Y-Coordinate of the object
+     * Initialize a new Item
+     *
+     * @param x x-coordinate of the object
+     * @param y y-coordinate of the object
      */
     public Item(int x, int y) {
         super(x, y);
+    }
+
+    /**
+     * Gets the name.
+     *
+     * @return name of the item
+     */
+    public String getName() {
+        return name;
     }
 }
