@@ -8,10 +8,21 @@ import org.newdawn.easyogg.OggClip;
 
 import java.io.IOException;
 
+/**
+ Represent a bazooka.
+ <p/>
+ Code example:
+ * <pre>
+ * {@code
+ * Bazooka weapon = Bazooka();
+ * Bullet bullet = weapon.fire(movement);
+ * }
+ * </pre>
+ */
 public class Bazooka extends AbstractWeapon {
 
     /**
-     *
+     * Initialize a new bazooka.
      */
     public Bazooka() {
         this.name = "Bazooka";
@@ -25,9 +36,9 @@ public class Bazooka extends AbstractWeapon {
     }
 
     /**
-     *
-     * @param physics
-     * @return
+     * Use this weapon and create a bullet.
+     * @param physics BallisticMovement, which describe the movement path of bullet.
+     * @return bullet of the shoot
      */
     public Bullet fire(BallisticMovement physics) {
         if (!Main.headless) {

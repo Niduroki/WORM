@@ -8,10 +8,21 @@ import org.newdawn.easyogg.OggClip;
 
 import java.io.IOException;
 
+/**
+ Represent a grenade.
+ <p/>
+ Code example:
+ * <pre>
+ * {@code
+ * Grenade weapon = Grenade();
+ * Bullet bullet = weapon.fire(movement);
+ * }
+ * </pre>
+ */
 public class Grenade extends AbstractWeapon {
 
     /**
-     *
+     * Initialize a new grenade.
      */
     public Grenade() {
         this.name = "Grenade";
@@ -24,10 +35,10 @@ public class Grenade extends AbstractWeapon {
         }
     }
 
-    /**
-     *
-     * @param physics
-     * @return
+     /**
+     * Use this weapon and create a bullet.
+     * @param physics BallisticMovement, which describe the movement path of bullet.
+     * @return bullet of the shoot
      */
     public Bullet fire(BallisticMovement physics) {
         if (!Main.headless) {

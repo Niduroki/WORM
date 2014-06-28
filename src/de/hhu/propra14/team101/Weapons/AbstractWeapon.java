@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * Class to supply weapons
  */
-
 abstract public class AbstractWeapon {
     /** Name of the weapon */
     public String name;
@@ -26,15 +25,15 @@ abstract public class AbstractWeapon {
     public Image bulletImage;
 
     /**
-     *
-     * @param physics
-     * @return
+     * Use this weapon and create a bullet.
+     * @param physics BallisticMovement, which describe the movement path of bullet.
+     * @return bullet of the shoot
      */
     abstract public Bullet fire (BallisticMovement physics);
 
     /**
-     *
-     * @return
+     * Serialize weapon.
+     * @return serialized data
      */
     public Map serialize() {
         Map<String, Object> data = new HashMap<>();
@@ -43,9 +42,10 @@ abstract public class AbstractWeapon {
     }
 
     /**
+     * Deserializes weapon.
      *
-     * @param input
-     * @return
+     * @param input serialized data
+     * @return deserialized weapon
      */
     public static AbstractWeapon deserialize(Map input) {
         String weaponName = input.get("name").toString();

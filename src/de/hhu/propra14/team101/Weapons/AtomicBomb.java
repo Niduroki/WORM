@@ -8,10 +8,19 @@ import org.newdawn.easyogg.OggClip;
 
 import java.io.IOException;
 
+/**
+ * Represent a atomic bomb.
+ * <pre>
+ * {@code
+ * AtomicBomb weapon = AtomicBomb();
+ * Bullet bullet = weapon.fire(movement);
+ * }
+ * </pre>
+ */
 public class AtomicBomb extends AbstractWeapon {
 
     /**
-     *
+     * Initialize a new atomic bomb.
      */
     public AtomicBomb() {
         this.name = "Atomic bomb";
@@ -25,9 +34,9 @@ public class AtomicBomb extends AbstractWeapon {
     }
 
     /**
-     *
-     * @param physics
-     * @return
+     * Use this weapon and create a bullet.
+     * @param physics BallisticMovement, which describe the movement path of bullet.
+     * @return bullet of the shoot
      */
     public Bullet fire(BallisticMovement physics) {
 
