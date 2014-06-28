@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * Represent a bazooka.
- *
+ * <p>
  * Code example:
  * <pre>
  * {@code
@@ -37,6 +37,7 @@ public class Bazooka extends AbstractWeapon {
 
     /**
      * Use this weapon and create a bullet.
+     *
      * @param physics BallisticMovement, which describe the movement path of bullet.
      * @return bullet of the shoot
      */

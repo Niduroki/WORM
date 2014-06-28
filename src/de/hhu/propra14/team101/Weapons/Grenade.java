@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * Represent a grenade.
- *
+ * <p>
  * Code example:
  * <pre>
  * {@code
@@ -35,8 +35,9 @@ public class Grenade extends AbstractWeapon {
         }
     }
 
-     /**
+    /**
      * Use this weapon and create a bullet.
+     *
      * @param physics BallisticMovement, which describe the movement path of bullet.
      * @return bullet of the shoot
      */

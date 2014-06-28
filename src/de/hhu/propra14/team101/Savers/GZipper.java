@@ -6,10 +6,12 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * Class to gzip data
- *
+ * </p>
+ * Code example:
  * <pre>
  * {@code
- * GZipper zipper = new GZipper();
+ *  GZipper zipper = new GZipper();
+>>>>>>> Stashed changes
  * String longString = "Lorem ipsum dolor sit amet consetetur ..."
  * byte[] gzipped = zipper.gzip(longString);
  * // Write gzipped into a file now, or do something else
@@ -20,6 +22,7 @@ import java.util.zip.GZIPOutputStream;
 public class GZipper {
     /**
      * Compresses a string
+     *
      * @param input String to compress
      * @return Compressed data in a byte array
      */
@@ -38,21 +41,23 @@ public class GZipper {
 
     /**
      * Decompresses a file
+     *
      * @param path Path to uncompress
      * @return Uncompressed String
      * @throws FileNotFoundException If file not found
      */
-    public static String gunzip (String path) throws FileNotFoundException {
+    public static String gunzip(String path) throws FileNotFoundException {
         return GZipper.gunzip(new FileInputStream(path));
     }
 
     /**
      * Decompresses a stream
+     *
      * @param stream Stream to uncompress
      * @return Uncompressed String
      * @throws FileNotFoundException If file not found
      */
-    public static String gunzip (InputStream stream) throws FileNotFoundException {
+    public static String gunzip(InputStream stream) throws FileNotFoundException {
         try {
             GZIPInputStream zipper = new GZIPInputStream(stream);
             BufferedReader reader = new BufferedReader(new InputStreamReader(zipper, "UTF-8"));

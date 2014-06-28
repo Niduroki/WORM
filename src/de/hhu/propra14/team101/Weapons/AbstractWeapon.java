@@ -11,35 +11,30 @@ import java.util.Map;
  * Class to supply weapons
  */
 abstract public class AbstractWeapon {
-    /** Name of the weapon */
+    /**
+     * Name of the weapon
+     */
     public String name;
-    /** Damage of the weapon */
+    /**
+     * Damage of the weapon
+     */
     public double damage;
-    /** Radius of the weapon */
+    /**
+     * Radius of the weapon
+     */
     public double radius;
-    /** Weight of the weapons bullet */
+    /**
+     * Weight of the weapons bullet
+     */
     public double weight;
-    /** Graphic of the weapon itself */
+    /**
+     * Graphic of the weapon itself
+     */
     public Image weaponImage;
-    /** Graphic of the weapons bullet */
+    /**
+     * Graphic of the weapons bullet
+     */
     public Image bulletImage;
-
-    /**
-     * Use this weapon and create a bullet.
-     * @param physics BallisticMovement, which describe the movement path of bullet.
-     * @return bullet of the shoot
-     */
-    abstract public Bullet fire (BallisticMovement physics);
-
-    /**
-     * Serialize weapon.
-     * @return serialized data
-     */
-    public Map serialize() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", this.name);
-        return data;
-    }
 
     /**
      * Deserializes weapon.
@@ -60,5 +55,24 @@ abstract public class AbstractWeapon {
                 System.out.println("AbstractWeapon.deserialize: Unknown weapon");
                 return null;
         }
+    }
+
+    /**
+     * Use this weapon and create a bullet.
+     *
+     * @param physics BallisticMovement, which describe the movement path of bullet.
+     * @return bullet of the shoot
+     */
+    abstract public Bullet fire(BallisticMovement physics);
+
+    /**
+     * Serialize weapon.
+     *
+     * @return serialized data
+     */
+    public Map serialize() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", this.name);
+        return data;
     }
 }

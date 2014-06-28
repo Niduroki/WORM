@@ -18,7 +18,6 @@ import java.util.Map;
  * }
  * </pre>
  */
-
 public class GameSaves extends AbstractSaver {
 
     /**

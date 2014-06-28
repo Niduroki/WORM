@@ -14,7 +14,6 @@ public abstract class AbstractSaver {
     /**
      * Initializes with a yaml object
      */
-
     public AbstractSaver() {
         this.yaml = new Yaml();
     }

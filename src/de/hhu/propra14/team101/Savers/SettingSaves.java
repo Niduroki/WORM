@@ -16,7 +16,6 @@ import java.util.Map;
  * }
  * </pre>
  */
-
 public class SettingSaves extends AbstractSaver {
 
     /**

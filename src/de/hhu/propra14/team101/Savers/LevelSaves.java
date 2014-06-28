@@ -17,7 +17,6 @@ import java.util.Map;
  * }
  * </pre>
  */
-
 public class LevelSaves extends AbstractSaver {
 
     /**
@@ -26,7 +25,6 @@ public class LevelSaves extends AbstractSaver {
      * @return loaded Level
      * @throws java.io.FileNotFoundException If file not found
      */
-
     public Level load (String path) throws FileNotFoundException {
         String data;
         try {
