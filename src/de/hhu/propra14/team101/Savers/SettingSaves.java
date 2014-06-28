@@ -5,12 +5,16 @@ import java.util.Map;
 
 /**
  * Class to load and save settings
- * @code
+ *
+ * <pre>
+ * {@code
  * SettingSaves settingSaves = new SettingSaves();
  * Map settings = settingSaves.load("settings.gz");
  * System.out.println(settings.get("name"));
  * settings.put("name", "myname");
  * settingSaves.save("settings.gz");
+ * }
+ * </pre>
  */
 
 public class SettingSaves extends AbstractSaver {
@@ -36,6 +40,7 @@ public class SettingSaves extends AbstractSaver {
      * Loaded Settings
      * @param path Path to settings file
      * @return Map with Settings data
+     * @throws java.io.FileNotFoundException If file not found
      */
     @SuppressWarnings("unchecked")
     public Map<String, Object> load(String path) throws FileNotFoundException {

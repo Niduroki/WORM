@@ -4,20 +4,20 @@ import javafx.scene.control.ListCell;
 
 /**
  * List cell with a background color
- * @code
- * <p>
- * final ListView<String[]> list = new ListView<>();
- * ObservableList<String[]> data = FXCollections.observableArrayList();
+ *
+ * <pre><code>
+ * final ListView&lt;String[]&gt; list = new ListView&lt;&gt;();
+ * ObservableList&lt;String[]&gt; data = FXCollections.observableArrayList();
  * list.setItems(data);
  * list.setCellFactory(
- *     new Callback<ListView<String[]>, ListCell<String[]>>() {
- *         @Override
- *         public ListCell<String[]> call(ListView<String[]> list) {
+ *     new Callback&lt;ListView&lt;String[]&gt;, ListCell&lt;String[]&gt;&gt;() {
+ *         \@Override
+ *         public ListCell&lt;String[]&gt; call(ListView&lt;String[]&gt; list) {
  *            return new ColoredListCell();
  *         }
  *     }
  * );
- * </p>
+ * </code></pre>
  */
 public class ColoredListCell extends ListCell<String[]> {
     @Override

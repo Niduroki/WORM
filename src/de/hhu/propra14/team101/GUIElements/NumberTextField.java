@@ -4,15 +4,16 @@ import javafx.scene.control.TextField;
 
 /**
  * Took from
- * https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx#answer-18959399
+ * <a href="https://stackoverflow.com/questions/7555564/what-is-the-recommended-way-to-make-a-numeric-textfield-in-javafx#answer-18959399">here</a>
  * with some slight modifications
  *
  * TextField that only accepts positive integers
- * @code
- * <p>
+ * <pre>
+ * {@code
  * NumberTextField numberField = new NumberTextField();
  * int number = Integer.parseInt(numberField.getText());
- * </p>
+ * }
+ * </pre>
  */
 public class NumberTextField extends TextField {
 

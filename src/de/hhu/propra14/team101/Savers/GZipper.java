@@ -6,12 +6,16 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * Class to gzip data
- * @code
+ *
+ * <pre>
+ * {@code
  * GZipper zipper = new GZipper();
  * String longString = "Lorem ipsum dolor sit amet consetetur ..."
  * byte[] gzipped = zipper.gzip(longString);
  * // Write gzipped into a file now, or do something else
  * String unzipped = zipper.gunzip("path/to/file.gz");
+ * }
+ * </pre>
  */
 public class GZipper {
     /**

@@ -16,8 +16,9 @@ import java.util.*;
 
 /**
  * Class to do networking on the client side
- * @code
- * <p>
+ *
+ * <pre>
+ * {@code
  * NetworkClient client = new NetworkClient(this);
  * System.out.println("My name is: " + client.ourName);
  * String[] existingRooms = client.getRooms();
@@ -80,7 +81,8 @@ import java.util.*;
  *     client.leaveRoom();
  *     client.logoff();
  * }
- * </p>
+ * }
+ * </pre>
  */
 public class NetworkClient {
 

@@ -9,9 +9,9 @@ import org.newdawn.easyogg.OggClip;
 import java.io.IOException;
 
 /**
- Represent a bazooka.
- <p/>
- Code example:
+ * Represent a bazooka.
+ *
+ * Code example:
  * <pre>
  * {@code
  * Bazooka weapon = Bazooka();

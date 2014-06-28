@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Class to create terrain
- *<p/>
+ *
  * Code example:
  * <pre>
  * {@code

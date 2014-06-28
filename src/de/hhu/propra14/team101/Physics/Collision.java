@@ -2,7 +2,7 @@ package de.hhu.propra14.team101.Physics;
 
 /**
  * Represents a detected collision.
- * <p/>
+ *
  * Code example:
  * <pre>
  * {@code

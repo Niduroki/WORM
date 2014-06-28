@@ -9,9 +9,9 @@ import org.newdawn.easyogg.OggClip;
 import java.io.IOException;
 
 /**
- Represent a grenade.
- <p/>
- Code example:
+ * Represent a grenade.
+ *
+ * Code example:
  * <pre>
  * {@code
  * Grenade weapon = Grenade();

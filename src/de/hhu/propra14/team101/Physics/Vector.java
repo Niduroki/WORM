@@ -2,7 +2,7 @@ package de.hhu.propra14.team101.Physics;
 
 /**
  * Represents a 2d vector.
- * <p/>
+ *
  * Code example:
  * <pre>
  * {@code
