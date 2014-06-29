@@ -159,55 +159,310 @@ public class NetworkClient {
     }
 
     /**
-     * Send data to the server
-     * @param data String of data
-     * @param waitForAnswer Whether to wait for an answer
-     * @throws TimeoutException If there has been no answer after 2 seconds
+     * Checks whether there are room messages
+     * @return Whether there are room messages
      */
-    private void send(String data, boolean waitForAnswer) throws TimeoutException {
+    public boolean hasRoomMessages() {
+        return !(roomMessages.size() == 0);
+    }
 
-        // Reset last answer
-        this.lastAnswer = "";
+    /**
+     * Checks whether there are global messages
+     * @return Whether there are global messages
+     */
+    public boolean hasGlobalMessages() {
+        return !(globalMessages.size() == 0);
+    }
 
-        int ourCount = this.sentCounter;
-        this.sentCounter += 1;
-        String line = constructLine(data, ourCount);
-        this.output.println(line);
-        System.out.println("client send::" + line);
-        this.output.flush();
-        if (waitForAnswer) {
-            int waitCounter = 0;
-            while (this.lastReceivedCounter < ourCount) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    System.out.println("InterruptedException while waiting!");
-                    e.printStackTrace();
-                }
-                waitCounter += 1;
-                // Wait 2s at most
-                if (waitCounter > 40) {
-                    System.out.println("TIMEOUT");
-                    throw (new TimeoutException());
-                }
+    /**
+     * Creates a room
+     * @param name Name of the room
+     * @throws NetworkException RoomExistsException if a room with this name exists, or TimeoutException on timeout
+     */
+    public void createRoom(String name) throws NetworkException {
+        this.send("create_room " + name, true);
+        if (!this.lastAnswer.equals("okay")) {
+            throw (new RoomExistsException());
+        }
+        this.currentRoom = name;
+        // The first user is always ready
+        this.switchReady();
+    }
+
+    /**
+     * Change our color/team
+     * @param team Color name (or "spectator")
+     * @throws TimeoutException On timeout
+     */
+    public void changeColor(String team) throws TimeoutException {
+        this.send("change_team " + team, false);
+        this.color = team;
+    }
+
+    /**
+     * Change the current map
+     * @param name Name of the new map
+     * @throws TimeoutException On timeout
+     */
+    public void changeMap(String name) throws TimeoutException {
+        this.send("change_map "+name, false);
+    }
+
+    /**
+     * Change maximum amounts of players in this room
+     * @param amount How many players are allowed
+     * @throws TimeoutException On timeout
+     */
+    public void changeMaxPlayers (int amount) throws TimeoutException {
+        this.send("change_max_players "+String.valueOf(amount), true);
+    }
+
+    /**
+     * Changes the room name
+     * @param name Name to change to
+     * @throws TimeoutException On timeout
+     */
+    public void changeRoomName(String name) throws TimeoutException {
+        // TODO
+    }
+
+    /**
+     * Changes the password
+     * @param password Password to change to
+     * @throws TimeoutException On timeout
+     */
+    public void changePassword(String password) throws TimeoutException {
+        // TODO
+    }
+
+    /**
+     * Chat
+     * @param type Globally 'g' or in the room 'r'
+     * @param message Text to send
+     * @throws TimeoutException On timeout
+     */
+    public void chat(char type, String message) throws TimeoutException {
+        this.send("chat " + type + " " + message, false);
+    }
+
+    /**
+     * Fire the current weapon
+     * @param x X coordinate to fire to
+     * @param y Y coordinate to fire to
+     * @throws TimeoutException On timeout
+     */
+    public void fireWeapon(int x, int y) throws TimeoutException {
+        // The network game needs the Main.sizeMultiplier==1 coordinates
+        this.send("game fire "+String.valueOf(x/Main.sizeMultiplier)+" "+String.valueOf(y/Main.sizeMultiplier), true);
+    }
+
+    /**
+     * Join a room
+     * @param name Room to join
+     * @throws NetworkException RoomDoesNotExistException if there's no room, RoomFullException if the room is full
+     * TimeoutException on timeout
+     */
+    public void joinRoom(String name) throws NetworkException {
+        this.send("join_room " + name, true);
+        if (this.lastAnswer.equals("does_not_exist")) {
+            throw new RoomDoesNotExistException();
+        } else if (this.lastAnswer.equals("room_full")) {
+            throw new RoomFullException();
+        }
+        this.currentRoom = name;
+    }
+
+    /**
+     * Make the worm jump
+     * @throws TimeoutException On timeout
+     */
+    public void jump() throws  TimeoutException {
+        this.send("game jump", true);
+    }
+
+
+    /**
+     * Kicks an user
+     * @param name Name of the user to kick
+     * @throws TimeoutException On timeout
+     */
+    public void kickUser (String name) throws TimeoutException {
+        this.send("kick_user " + name, false);
+    }
+
+    /**
+     * Leaves the current room
+     * @throws NetworkException TODO RoomExistsException???
+     */
+    public void leaveRoom() throws NetworkException {
+        this.send("leave_room", true);
+        if (!this.lastAnswer.equals("okay")) {
+            throw (new RoomExistsException());
+        }
+        this.currentRoom = null;
+    }
+
+    /**
+     * Loads current users in the room
+     * @throws TimeoutException On timeout
+     */
+    public void loadRoomUsers() throws TimeoutException {
+        this.send("list_room_users", true);
+        for (String user : this.lastAnswer.split(",")) {
+            roomUsers.put(user.split("\\|")[0], user.split("\\|")[1]);
+        }
+    }
+
+    /**
+     * Logs the client out properly
+     */
+    public void logoff() {
+        try {
+            this.send("logoff", false);
+        } catch (TimeoutException e) {
+            //
+        }
+    }
+
+    /**
+     * Move the worm
+     * @param direction Direction to move in, either 'l', for left
+     * @throws TimeoutException On timeout
+     */
+    public void move(char direction) throws TimeoutException {
+        if (direction == 'l') {
+            this.send("game move_left", true);
+        } else if (direction == 'r') {
+            this.send("game move_right", true);
+        }
+    }
+
+    /**
+     * Change to the next weapon ingame
+     * @throws TimeoutException On timeout
+     */
+    public void nextWeapon() throws TimeoutException {
+        this.send("game next_weapon", true);
+    }
+
+    /**
+     * (Un-)Pause the game
+     * @throws TimeoutException On timeout
+     */
+    public void pause() throws TimeoutException {
+        this.send("game pause", true);
+    }
+
+    /**
+     * Change to the previous weapon ingame
+     * @throws TimeoutException On timeout
+     */
+    public void prevWeapon() throws TimeoutException {
+        this.send("game prev_weapon", true);
+    }
+
+    /**
+     * Hard resyncs the game by asking the server to send the current game state as a save and substitutes the current game with that
+     * @throws TimeoutException On timeout
+     */
+    public void requestSyncGame() throws TimeoutException {
+        this.send("game sync", false);
+    }
+
+    /**
+     * Sets a weapon enabled/disabled for the game
+     * @param weaponName lowercase name of the weapon
+     * @param active boolean whether the weapon should be enabled
+     * @throws TimeoutException On timeout
+     */
+    public void setWeapon(String weaponName, boolean active) throws TimeoutException {
+        // Make sure weaponName is lowercase
+        weaponName = weaponName.toLowerCase();
+
+        this.send("change_weapon " + weaponName + " " + String.valueOf(active), true);
+    }
+
+    /**
+     * Start the game
+     * @throws TimeoutException On timeout
+     */
+    public void startGame() throws TimeoutException {
+        this.send("start_game", true);
+    }
+
+    /**
+     * Negate our ready state
+     * @throws TimeoutException On timeout
+     */
+    public void switchReady() throws TimeoutException {
+        this.send("ready", true);
+    }
+
+    /**
+     * Use an item
+     * @param number Item number to use
+     * @throws TimeoutException On timeout
+     */
+    public void useItem(int number) throws TimeoutException {
+        this.send("game use_item " + number, true);
+    }
+
+
+    /**
+     * Gets the last global message
+     * @return Last global message
+     */
+    public String getLastGlobalMessage() {
+        return globalMessages.poll();
+    }
+
+    /**
+     * Gets the last room message
+     * @return Last room message
+     */
+    public String getLastRoomMessage() {
+        return roomMessages.poll();
+    }
+
+    /**
+     * Gets the name of the current owner
+     * @return Name of the owner
+     * @throws TimeoutException On timeout
+     */
+    public String getOwner() throws TimeoutException {
+        this.send("get_owner", true);
+        return this.lastAnswer;
+    }
+
+    /**
+     * Gets existing rooms
+     * @return String array of existing rooms
+     * @throws TimeoutException On timeout
+     */
+    public String[] getRooms() throws TimeoutException {
+        this.send("list_rooms", true);
+        if (this.lastAnswer.equals("none")) {
+            return new String[0];
+        } else {
+            if(this.lastAnswer.startsWith("rooms")) {
+                String rooms = this.lastAnswer.substring(6);
+                return rooms.split(",");
+            } else {
+                return new String[0];
             }
         }
     }
 
     /**
-     * Construct a line with uuid, if there is one, and number of the current message
-     * @param data String of data
-     * @param count Number of the message
-     * @return Constructed line
+     * Gets all room properties
+     * @return Map referencing every property with a string
+     * @throws TimeoutException On timeout
      */
-    private String constructLine(String data, int count) {
-        String line = String.valueOf(count);
-        line += " ";
-        if (this.uuid != null) {
-            line += this.uuid.toString() + " ";
-        }
-        line += data;
-        return line;
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getRoomProperties() throws TimeoutException {
+        this.send("get_room_properties", true);
+        Yaml yaml = new Yaml();
+        return (Map<String, Object>) yaml.load(this.lastAnswer.replace(';', '\n'));
     }
 
     /**
@@ -285,6 +540,42 @@ public class NetworkClient {
     }
 
     /**
+     * Send data to the server
+     * @param data String of data
+     * @param waitForAnswer Whether to wait for an answer
+     * @throws TimeoutException If there has been no answer after 2 seconds
+     */
+    private void send(String data, boolean waitForAnswer) throws TimeoutException {
+
+        // Reset last answer
+        this.lastAnswer = "";
+
+        int ourCount = this.sentCounter;
+        this.sentCounter += 1;
+        String line = constructLine(data, ourCount);
+        this.output.println(line);
+        System.out.println("client send::" + line);
+        this.output.flush();
+        if (waitForAnswer) {
+            int waitCounter = 0;
+            while (this.lastReceivedCounter < ourCount) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    System.out.println("InterruptedException while waiting!");
+                    e.printStackTrace();
+                }
+                waitCounter += 1;
+                // Wait 2s at most
+                if (waitCounter > 40) {
+                    System.out.println("TIMEOUT");
+                    throw (new TimeoutException());
+                }
+            }
+        }
+    }
+
+    /**
      * Sign in to the server and request an UUID
      * @throws TimeoutException On timeout
      */
@@ -301,309 +592,21 @@ public class NetworkClient {
         this.send("hello " + this.ourName, true);
     }
 
+
     /**
-     * Creates a room
-     * @param name Name of the room
-     * @throws NetworkException RoomExistsException if a room with this name exists, or TimeoutException on timeout
+     * Construct a line with uuid, if there is one, and number of the current message
+     * @param data String of data
+     * @param count Number of the message
+     * @return Constructed line
      */
-    public void createRoom(String name) throws NetworkException {
-        this.send("create_room " + name, true);
-        if (!this.lastAnswer.equals("okay")) {
-            throw (new RoomExistsException());
+    private String constructLine(String data, int count) {
+        String line = String.valueOf(count);
+        line += " ";
+        if (this.uuid != null) {
+            line += this.uuid.toString() + " ";
         }
-        this.currentRoom = name;
-        // The first user is always ready
-        this.switchReady();
-    }
-
-    /**
-     * Join a room
-     * @param name Room to join
-     * @throws NetworkException RoomDoesNotExistException if there's no room, RoomFullException if the room is full
-     * TimeoutException on timeout
-     */
-    public void joinRoom(String name) throws NetworkException {
-        this.send("join_room " + name, true);
-        if (this.lastAnswer.equals("does_not_exist")) {
-            throw new RoomDoesNotExistException();
-        } else if (this.lastAnswer.equals("room_full")) {
-            throw new RoomFullException();
-        }
-        this.currentRoom = name;
-    }
-
-    /**
-     * Leaves the current room
-     * @throws NetworkException TODO RoomExistsException???
-     */
-    public void leaveRoom() throws NetworkException {
-        this.send("leave_room", true);
-        if (!this.lastAnswer.equals("okay")) {
-            throw (new RoomExistsException());
-        }
-        this.currentRoom = null;
-    }
-
-    /**
-     * Gets existing rooms
-     * @return String array of existing rooms
-     * @throws TimeoutException On timeout
-     */
-    public String[] getRooms() throws TimeoutException {
-        this.send("list_rooms", true);
-        if (this.lastAnswer.equals("none")) {
-            return new String[0];
-        } else {
-            if(this.lastAnswer.startsWith("rooms")) {
-                String rooms = this.lastAnswer.substring(6);
-                return rooms.split(",");
-            } else {
-                return new String[0];
-            }
-        }
-    }
-
-    /**
-     * Changes the room name
-     * @param name Name to change to
-     * @throws TimeoutException On timeout
-     */
-    public void changeRoomName(String name) throws TimeoutException {
-        // TODO
-    }
-
-    /**
-     * Changes the password
-     * @param password Password to change to
-     * @throws TimeoutException On timeout
-     */
-    public void changePassword(String password) throws TimeoutException {
-        // TODO
-    }
-
-    /**
-     * Gets the name of the current owner
-     * @return Name of the owner
-     * @throws TimeoutException On timeout
-     */
-    public String getOwner() throws TimeoutException {
-        this.send("get_owner", true);
-        return this.lastAnswer;
-    }
-
-    /**
-     * Checks whether there are global messages
-     * @return Whether there are global messages
-     */
-    public boolean hasGlobalMessages() {
-        return !(globalMessages.size() == 0);
-    }
-
-    /**
-     * Gets the last global message
-     * @return Last global message
-     */
-    public String getLastGlobalMessage() {
-        return globalMessages.poll();
-    }
-
-    /**
-     * Checks whether there are room messages
-     * @return Whether there are room messages
-     */
-    public boolean hasRoomMessages() {
-        return !(roomMessages.size() == 0);
-    }
-
-    /**
-     * Gets the last room message
-     * @return Last room message
-     */
-    public String getLastRoomMessage() {
-        return roomMessages.poll();
-    }
-
-    /**
-     * Loads current users in the room
-     * @throws TimeoutException On timeout
-     */
-    public void loadRoomUsers() throws TimeoutException {
-        this.send("list_room_users", true);
-        for (String user : this.lastAnswer.split(",")) {
-            roomUsers.put(user.split("\\|")[0], user.split("\\|")[1]);
-        }
-    }
-
-    /**
-     * Chat
-     * @param type Globally 'g' or in the room 'r'
-     * @param message Text to send
-     * @throws TimeoutException On timeout
-     */
-    public void chat(char type, String message) throws TimeoutException {
-        this.send("chat " + type + " " + message, false);
-    }
-
-    /**
-     * Negate our ready state
-     * @throws TimeoutException On timeout
-     */
-    public void switchReady() throws TimeoutException {
-        this.send("ready", true);
-    }
-
-    /**
-     * Change the current map
-     * @param name Name of the new map
-     * @throws TimeoutException On timeout
-     */
-    public void changeMap(String name) throws TimeoutException {
-        this.send("change_map "+name, false);
-    }
-
-    /**
-     * Change to the next weapon ingame
-     * @throws TimeoutException On timeout
-     */
-    public void nextWeapon() throws TimeoutException {
-        this.send("game next_weapon", true);
-    }
-
-    /**
-     * Change to the previous weapon ingame
-     * @throws TimeoutException On timeout
-     */
-    public void prevWeapon() throws TimeoutException {
-        this.send("game prev_weapon", true);
-    }
-
-    /**
-     * Fire the current weapon
-     * @param x X coordinate to fire to
-     * @param y Y coordinate to fire to
-     * @throws TimeoutException On timeout
-     */
-    public void fireWeapon(int x, int y) throws TimeoutException {
-        // The network game needs the Main.sizeMultiplier==1 coordinates
-        this.send("game fire "+String.valueOf(x/Main.sizeMultiplier)+" "+String.valueOf(y/Main.sizeMultiplier), true);
-    }
-
-    /**
-     * Move the worm
-     * @param direction Direction to move in, either 'l', for left
-     * @throws TimeoutException On timeout
-     */
-    public void move(char direction) throws TimeoutException {
-        if (direction == 'l') {
-            this.send("game move_left", true);
-        } else if (direction == 'r') {
-            this.send("game move_right", true);
-        }
-    }
-
-    /**
-     * Use an item
-     * @param number Item number to use
-     * @throws TimeoutException On timeout
-     */
-    public void useItem(int number) throws TimeoutException {
-        this.send("game use_item " + number, true);
-    }
-
-    /**
-     * Make the worm jump
-     * @throws TimeoutException On timeout
-     */
-    public void jump() throws  TimeoutException {
-        this.send("game jump", true);
-    }
-
-    /**
-     * (Un-)Pause the game
-     * @throws TimeoutException On timeout
-     */
-    public void pause() throws TimeoutException {
-        this.send("game pause", true);
-    }
-
-    /**
-     * Start the game
-     * @throws TimeoutException On timeout
-     */
-    public void startGame() throws TimeoutException {
-        this.send("start_game", true);
-    }
-
-    /**
-     * Change our color/team
-     * @param team Color name (or "spectator")
-     * @throws TimeoutException On timeout
-     */
-    public void changeColor(String team) throws TimeoutException {
-        this.send("change_team " + team, false);
-        this.color = team;
-    }
-
-    /**
-     * Change maximum amounts of players in this room
-     * @param amount How many players are allowed
-     * @throws TimeoutException On timeout
-     */
-    public void changeMaxPlayers (int amount) throws TimeoutException {
-        this.send("change_max_players "+String.valueOf(amount), true);
-    }
-
-    /**
-     * Kicks an user
-     * @param name Name of the user to kick
-     * @throws TimeoutException On timeout
-     */
-    public void kickUser (String name) throws TimeoutException {
-        this.send("kick_user " + name, false);
-    }
-
-    /**
-     * Gets all room properties
-     * @return Map referencing every property with a string
-     * @throws TimeoutException On timeout
-     */
-    @SuppressWarnings("unchecked")
-    public Map<String, Object> getRoomProperties() throws TimeoutException {
-        this.send("get_room_properties", true);
-        Yaml yaml = new Yaml();
-        return (Map<String, Object>) yaml.load(this.lastAnswer.replace(';', '\n'));
-    }
-
-    /**
-     * Sets a weapon enabled/disabled for the game
-     * @param weaponName lowercase name of the weapon
-     * @param active boolean whether the weapon should be enabled
-     * @throws TimeoutException On timeout
-     */
-    public void setWeapon(String weaponName, boolean active) throws TimeoutException {
-        // Make sure weaponName is lowercase
-        weaponName = weaponName.toLowerCase();
-
-        this.send("change_weapon " + weaponName + " " + String.valueOf(active), true);
-    }
-
-    /**
-     * Hard resyncs the game by asking the server to send the current game state as a save and substitutes the current game with that
-     * @throws TimeoutException On timeout
-     */
-    public void requestSyncGame() throws TimeoutException {
-        this.send("game sync", false);
-    }
-
-    /**
-     * Logs the client out properly
-     */
-    public void logoff() {
-        try {
-            this.send("logoff", false);
-        } catch (TimeoutException e) {
-            //
-        }
+        line += data;
+        return line;
     }
 
     /**
