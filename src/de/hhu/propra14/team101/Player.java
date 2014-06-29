@@ -7,11 +7,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents a player of the game.
+ * <pre>
+ * {@code
+ * Worm worm = new Worm();
+ * ArrayList<Worm> worms = new ArrayList<Worm>();
+ * worms.add(worm);
+ * Player player = new Player(worms,"Local");
+ * player.selectNextWorm();
+ * }
+ * </pre>
+ */
 public class Player {
-
+    /**
+     * list of worms
+     */
     public ArrayList<Worm> wormList;
+    /**
+     * index of current worm (zero-based)
+     */
     public int currentWorm = 0;
+    /**
+     * name ot the player
+     */
     public String name;
+    /**
+     * color of the player
+     */
     public Color color;
 
     /**
@@ -21,6 +44,7 @@ public class Player {
     public String type;
 
     /**
+     * Initialize a new player.
      * @param wormList Worms that belong to the player wrapped in an ArrayList
      * @param type Possible values: "AI", "Local", "Network"
      */
@@ -45,8 +69,8 @@ public class Player {
     }
 
     /**
-     *
-     * @return
+     *  Serialize a player.
+     * @return serialized worm
      */
     public Map serialize() {
         Map<String, Object> map = new HashMap<>();
@@ -62,9 +86,9 @@ public class Player {
     }
 
     /**
-     *
-     * @param input
-     * @return
+     * Deserialize a player
+     * @param input serialized data
+     * @return deserialize player
      */
     public static Player deserialize(Map input) {
         @SuppressWarnings("unchecked")
@@ -80,9 +104,8 @@ public class Player {
     }
 
     /**
-     *
-     * @param color
-     * @return
+     * Serialize  color of player
+     * @return String value of color
      */
     public static String serializeColor(Color color) {
         if (color.equals(Color.RED)) {
@@ -99,9 +122,9 @@ public class Player {
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Deserialize  color of player
+     * @param name String, which represents a color
+     * @return color
      */
     public static Color deseserializeColor(String name) {
         switch (name) {

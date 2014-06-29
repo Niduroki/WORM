@@ -34,9 +34,18 @@ import java.util.Map;
  * System.out.println(worm.getCurrentWeapon().name);
  * System.out.println(worm.isHitted(3,10));
  * worm.draw(graphicsContext);
- * worm.move('l',terrain,players);
+ * worm.move('r',terrain,players);
  * System.out.println(worm.getXCoordinate());
  * System.out.println(worm.getYCoordinate());
+ *
+ * ==Output==
+ * 2.5
+ * 10
+ * AtomicBomb
+ * Bazooka
+ * true
+ * 7.5
+ * 10
  * }
  * </pre>
  */
