@@ -5,8 +5,8 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * Class to gzip data
- * </p>
+ * Class to gzip data <br><br>
+ *
  * Code example:
  * <pre>
  * {@code

@@ -589,7 +589,7 @@ public class NetworkClient {
 
     /**
      * Hard resyncs the game by asking the server to send the current game state as a save and substitutes the current game with that
-     * @throws TimeoutException
+     * @throws TimeoutException On timeout
      */
     public void requestSyncGame() throws TimeoutException {
         this.send("game sync", false);

@@ -22,21 +22,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class that shows the GUI
+ *
+ * <pre>
+ * {@code
+ * // From Main
+ * GUI gui = new GUI(this);
+ * gui.addMainButtons();
+ * gui.addEditorButtons();
+ * }
+ * </pre>
+ */
 public class GUI {
     private Main main;
     protected LevelCreator levelCreator;
     protected String levelCreatorOutputPath;
 
     /**
-     *
-     * @param main
+     * Creates a new GUI class
+     * @param main Main class the application was started with
      */
     public GUI (Main main) {
         this.main = main;
     }
 
     /**
-     *
+     * Adds main menu buttons
      */
     public void addMainButtons() {
         // Clean up
@@ -121,6 +133,9 @@ public class GUI {
         });
     }
 
+    /**
+     * Adds the level editor buttons
+     */
     public void addEditorButtons() {
         this.main.grid.getChildren().clear();
         BorderPane border = new BorderPane();
@@ -190,10 +205,11 @@ public class GUI {
             }
         });
 
-
-
     }
 
+    /**
+     * Adds the option menu buttons
+     */
     private void addOptionsButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
@@ -328,6 +344,9 @@ public class GUI {
         });
     }
 
+    /**
+     * Add player selection buttons
+     */
     private void addPlayerButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
@@ -451,6 +470,9 @@ public class GUI {
         }
     }
 
+    /**
+     * Add map selection buttons
+     */
     private void addMapSelectionButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
@@ -496,6 +518,13 @@ public class GUI {
         });
     }
 
+    /**
+     * Creates from several objects a player
+     * @param weaponMap Weapons for the player
+     * @param colorName Color for the player
+     * @param playerName Name for the player
+     * @return Created player
+     */
     private Player parsePlayerSelection(Map<String, Boolean> weaponMap, String colorName, String playerName) {
         ArrayList<AbstractWeapon> weapons = new ArrayList<>();
         if (weaponMap.get("AtomicBomb")) {

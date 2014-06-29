@@ -9,15 +9,30 @@ import java.util.Map;
 
 /**
  * An online room
+ *
+ * <pre>
+ * {@code
+ * NetworkRoom room = new NetworkRoom("test", "Plains");
+ * try {
+ *     room.addUser(user2);
+ * } catch (RoomFullException e) {
+ *     System.out.println("Room is full!");
+ * }
+ * room.removeUser(user2);
+ * room.setReady(true);
+ * room.setWeapon("bazooka", false);
+ * room.propagate("chat r Username Hey there!");
+ * }
+ * </pre>
  */
 public class NetworkRoom {
     /** Name of the room */
     public String name;
-    /** Arraylist of NetworkUsers that are in this room */
+    /** Array list of NetworkUsers that are in this room */
     public ArrayList<NetworkUser> users = new ArrayList<>();
     /** Owner of this room */
     public NetworkUser owner;
-    /** Arraylist of available colors */
+    /** Array list of available colors */
     public ArrayList<String> availableColors = new ArrayList<>();
     /** Whether this room is empty */
     public boolean empty = false;
@@ -33,9 +48,9 @@ public class NetworkRoom {
     public int maxUsers = 0;
 
     /**
-     *
-     * @param name
-     * @param selectedMap
+     * Creates a room for online games
+     * @param name Name of the room
+     * @param selectedMap Name of the selected map
      */
     public NetworkRoom(String name, String selectedMap) {
         this.name = name;
@@ -44,9 +59,9 @@ public class NetworkRoom {
     }
 
     /**
-     *
-     * @param user
-     * @throws RoomFullException
+     * Add an user to this room
+     * @param user User to add
+     * @throws RoomFullException if the room is full
      */
     public void addUser(NetworkUser user) throws RoomFullException {
         if (this.maxUsers != 0 && this.users.size() == this.maxUsers) {
@@ -57,8 +72,8 @@ public class NetworkRoom {
     }
 
     /**
-     *
-     * @param user
+     * Remove an user from this room
+     * @param user User to remove
      */
     public void removeUser(NetworkUser user) {
         this.users.remove(user);
@@ -70,8 +85,8 @@ public class NetworkRoom {
     }
 
     /**
-     *
-     * @param state
+     * Set the room ready
+     * @param state State of readiness
      */
     public void setRoomReady(boolean state) {
         if (state != this.roomReady) {
@@ -108,10 +123,16 @@ public class NetworkRoom {
         }
     }
 
+    /**
+     * Updates the owner of the room
+     */
     private void updateOwner() {
         this.owner = this.users.get(0);
     }
 
+    /**
+     * Updates the empty state of the room
+     */
     private void updateEmpty() {
         this.empty = this.users.size() == 0;
     }

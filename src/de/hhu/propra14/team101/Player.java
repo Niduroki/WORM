@@ -124,7 +124,7 @@ public class Player {
     /**
      * Deserialize  color of player
      * @param name String, which represents a color
-     * @return color
+     * @return color Color object
      */
     public static Color deseserializeColor(String name) {
         switch (name) {

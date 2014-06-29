@@ -8,24 +8,31 @@ import java.util.*;
 
 /**
  * Class to do networking on the server side
+ *
+ * <pre>
+ * {@code
+ * NetworkServer server = new NetworkServer();
+ * server.interpret("hello username", client.output);
+ * server.cleanUp(client.uuid);
+ * }
+ * </pre>
  */
 public class NetworkServer {
     /** Regex for matching an UUID */
     public static String uuidRegex = ".{8}-.{4}-.{4}-.{4}-.{12}";
 
+    /** Map saving the users and UUIDs */
     private Map<UUID, NetworkUser> userMap = new HashMap<>();
+    /** Map saving roomnames and rooms */
     private Map<String, NetworkRoom> roomMap = new HashMap<>();
-
-    /*public NetworkServer() {
-    }*/
-
+    /** Used to check every 30 interprets, whether everyone is still alive */
     private int counter = 0;
 
     /**
-     *
-     * @param line
-     * @param networkOutput
-     * @return
+     * Interprets a line
+     * @param line Line to interpret
+     * @param networkOutput Where to write output to (used when creating a new user)
+     * @return Resulting answer
      */
     public String interpret(String line, PrintWriter networkOutput) {
         String answer;
@@ -262,6 +269,12 @@ public class NetworkServer {
         }
     }
 
+    /**
+     * Subfunction of interpret to deal with game interpretation
+     * @param user User that send the command
+     * @param command Command that has been send
+     * @return Resulting answer
+     */
     private String interpretGame(NetworkUser user, String command) {
         if (command.equals("sync")) {
             Yaml yaml = new Yaml();
@@ -275,6 +288,9 @@ public class NetworkServer {
         }
     }
 
+    /**
+     * Sends every user a ping and removes these players that didn't answer them
+     */
     private void checkAlive() {
         ArrayList<UUID> toRemove = new ArrayList<>();
         for (NetworkUser user: userMap.values()) {
