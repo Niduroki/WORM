@@ -9,6 +9,15 @@ import java.util.Random;
 
 /**
  * Creates RandomLevel
+ * <p/>
+ * Code example:
+ * <pre>
+ * {@code
+ * RandomLevel level = new RandomLevel();
+ * Level newLevel = level.generate();
+ * //use newLevel
+ * }
+ * </pre>
  */
 public class RandomLevel {
     private int height = Terrain.height - 10;
@@ -17,8 +26,8 @@ public class RandomLevel {
     private ArrayList<int[]> wormSpawns = new ArrayList<>();
 
     /**
-     *
-     * @return
+     * Generate a new level.
+     * @return a new level
      */
     public Level generate() {
         Terrain terrain = new Terrain();
