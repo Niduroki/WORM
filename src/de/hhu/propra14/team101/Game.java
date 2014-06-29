@@ -69,7 +69,8 @@ public class Game {
         }
 
         if (!Main.headless) {
-            this.background = new Image("images/Background.jpg");
+            String capitalizedTheme = Level.theme.substring(0, 1).toUpperCase() + Level.theme.substring(1);
+            this.background = new Image("images/"+capitalizedTheme+"-Background.jpg");
         }
     }
 

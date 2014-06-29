@@ -90,7 +90,7 @@ public class LevelCreator {
 
         this.gc.clearRect(0, 0, this.gc.getCanvas().getWidth(), this.gc.getCanvas().getHeight());
 
-        this.gc.drawImage(new Image("images/Background.jpg"), 0.0, 0.0, this.gc.getCanvas().getWidth(), this.gc.getCanvas().getHeight());
+        this.gc.drawImage(new Image("images/Normal-Background.jpg"), 0.0, 0.0, this.gc.getCanvas().getWidth(), this.gc.getCanvas().getHeight());
 
         this.level.getTerrain().draw(this.gc);
 

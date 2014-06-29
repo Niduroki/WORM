@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101.TerrainObjects;
 
+import de.hhu.propra14.team101.Level;
 import de.hhu.propra14.team101.Main;
 import javafx.scene.image.Image;
 
@@ -21,7 +22,8 @@ public class ExplosiveBuildingBlock extends AbstractTerrainObject {
         this.destructible = true;
 
         if (!Main.headless) {
-            this.image = new Image("images/Normal-Ground-Square.jpg");
+            String capitalizedTheme = Level.theme.substring(0, 1).toUpperCase() + Level.theme.substring(1);
+            this.image = new Image("images/"+capitalizedTheme+"-Ground-Explosive.jpg");
         }
     }
 }

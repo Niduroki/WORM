@@ -1,8 +1,8 @@
 package de.hhu.propra14.team101.TerrainObjects;
 
+import de.hhu.propra14.team101.Level;
 import de.hhu.propra14.team101.Main;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 
 /**
  * An indestructible obstacle
@@ -10,8 +10,6 @@ import javafx.scene.paint.Color;
  * @see de.hhu.propra14.team101.Terrain
  */
 public class Obstacle extends AbstractTerrainObject {
-
-    private int color;
 
     /**
      * Initialize a new obstacle.
@@ -21,22 +19,11 @@ public class Obstacle extends AbstractTerrainObject {
      */
     public Obstacle(int x, int y) {
         super(x, y);
-        this.color = 0x777777; // Stone-ish html-color
         this.destructible = false;
-    }
 
-    /**
-     * Draws the obstacle
-     *
-     * @param gc graphics context of the game.
-     */
-    public void draw(GraphicsContext gc) {
-        gc.setFill(Color.web(Integer.toHexString(this.color)));
-        gc.fillOval(
-                this.xCoordinate * (AbstractTerrainObject.baseSize * Main.sizeMultiplier),
-                this.yCoordinate * (AbstractTerrainObject.baseSize * Main.sizeMultiplier),
-                (AbstractTerrainObject.baseSize * Main.sizeMultiplier),
-                (AbstractTerrainObject.baseSize * Main.sizeMultiplier)
-        );
+        if (!Main.headless) {
+            String capitalizedTheme = Level.theme.substring(0, 1).toUpperCase() + Level.theme.substring(1);
+            this.image = new Image("images/"+capitalizedTheme+"-Obstacle.png");
+        }
     }
 }

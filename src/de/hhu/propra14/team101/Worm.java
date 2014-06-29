@@ -84,7 +84,8 @@ public class Worm {
         }
 
         if (!Main.headless) {
-            this.image = new Image("images/Worm.gif");
+            String capitalizedTheme = Level.theme.substring(0, 1).toUpperCase() + Level.theme.substring(1);
+            this.image = new Image("images/worm-"+capitalizedTheme+".gif");
         }
     }
 

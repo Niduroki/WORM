@@ -12,7 +12,7 @@ public class Level {
     private ArrayList<int[]> wormStartPoints = new ArrayList<>();
 
     /** Theme of the level we're playing */
-    public String theme = "normal";
+    public static String theme = "normal";
 
     /**
      * Initialized a new level.
@@ -113,11 +113,11 @@ public class Level {
      * @return
      */
     public static Level deserialize (Map<String, Object> input) {
+        Level.theme = input.get("theme").toString();
         @SuppressWarnings("unchecked")
         Terrain terrain = Terrain.deserialize((ArrayList<ArrayList<Map>>) input.get("terrain"));
         ArrayList spawns = (ArrayList) input.get("spawns");
         Level result = new Level(terrain);
-        result.theme = input.get("theme").toString();
         for (Object spawn : spawns) {
             ArrayList currentSpawn = (ArrayList) spawn;
             result.addWormStartPosition((int) currentSpawn.get(0), (int) currentSpawn.get(1));

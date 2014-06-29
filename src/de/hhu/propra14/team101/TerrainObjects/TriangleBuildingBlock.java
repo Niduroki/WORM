@@ -26,9 +26,9 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
 
         if (!Main.headless) {
             if (this.getSlopedLeft()) {
-                this.image = new Image("images/Normal-Ground-Triangle-Right.png");
+                this.image = new Image("images/Normal-Ground-Triangle-Right.jpg");
             } else {
-                this.image = new Image("images/Normal-Ground-Triangle-Left.png");
+                this.image = new Image("images/Normal-Ground-Triangle-Left.jpg");
             }
         }
     }
