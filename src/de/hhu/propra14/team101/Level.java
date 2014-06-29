@@ -29,7 +29,7 @@ public class Level {
 
     /**
      * Count of all worm start positions.
-     * @return
+     * @return count of worm start positions
      */
     public int getCountWormStartPositions()
     {
@@ -78,7 +78,7 @@ public class Level {
 
     /**
      * Initialize worms with their start positions.
-     * @param players
+     * @param players players with worms
      */
     public void setWormsStartPosition(ArrayList<Player> players)
     {
@@ -96,8 +96,8 @@ public class Level {
     }
 
     /**
-     *
-     * @return
+     * Serialize a level.
+     * @return serialized data
      */
     public Map<String, Object> serialize () {
         Map<String, Object> result = new HashMap<>();
@@ -108,9 +108,9 @@ public class Level {
     }
 
     /**
-     *
-     * @param input
-     * @return
+     * Deserialize a level.
+     * @param input serialized data
+     * @return deserialzed level
      */
     public static Level deserialize (Map<String, Object> input) {
         Level.theme = input.get("theme").toString();

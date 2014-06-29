@@ -27,19 +27,46 @@ import java.util.*;
  * Game class to manage players, levels etc.
  */
 public class Game {
+    /**
+     * true if game paused, otherwise false
+      */
     public boolean paused = false;
+    /**
+     * true if a bullet is fired
+     */
     public boolean bulletFired = false;
     private boolean isJumping = false;
+    /**
+     * true, if game is a network game
+     */
     public boolean online = false;
     public boolean loaded = false;
+    /**
+     * number of current round
+     */
     public int round = 0;
+    /**
+     * index of current player
+     */
     public int turnOfPlayer = 0;
+    /**
+     * round timer
+     */
     public int roundTimer = 20;
+    /**
+     * games frame of seconds
+     */
     public int fps;
+    /**
+     * graphics context of game field
+     */
     public GraphicsContext gc;
     public Queue<String> onlineCommandQueue = new PriorityQueue<>();
     // Necessary to tell the lobby javafx process to start the game now
     public static boolean startMe = false;
+    /**
+     * current music clip of the game
+     */
     public OggClip music;
 
     private ArrayList<Player> players = new ArrayList<>();
@@ -75,8 +102,8 @@ public class Game {
     }
 
     /**
-     *
-     * @param bullet
+     * Fire a bullet.
+     * @param bullet bullet, which is fired
      */
     public void fireBullet(Bullet bullet) {
         this.bullet = bullet;
@@ -121,8 +148,8 @@ public class Game {
     }
 
     /**
-     *
-     * @return
+     * Gets a value indicating whether game is finished
+     * @return true, if game is finished, otherwise false
      */
     public boolean isGameFinished() {
         return gameFinished;
@@ -138,8 +165,8 @@ public class Game {
     }
 
     /**
-     *
-     * @return
+     * Gets a value indicating whether a worm is jumping
+     * @return true, if a worm is jumping otherwise false
      */
     public boolean getIsJumping() {
         return isJumping;
@@ -351,7 +378,7 @@ public class Game {
     }
 
     /**
-     *
+     * Start next round.
      */
     public void nextRound() {
         this.round += 1;
@@ -488,8 +515,8 @@ public class Game {
     }
 
     /**
-     *
-     * @param action
+     * Perform a action.
+     * @param action action, which is performed
      */
     public void doAction(String action) {
         System.out.println("Do the action");
@@ -535,8 +562,8 @@ public class Game {
     }
 
     /**
-     *
-     * @return
+     * Serialize game.
+     * @return serialized data
      */
     public Map<String, Object> serialize() {
         Map<String, Object> result = new HashMap<>();
@@ -549,9 +576,9 @@ public class Game {
     }
 
     /**
-     *
-     * @param data
-     * @return
+     * Deserialize a game.
+     * @param data serialized data.
+     * @return Deserialized game.
      */
     @SuppressWarnings("unchecked")
     public static Game deserialize(Map<String, Object> data) {
