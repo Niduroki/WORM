@@ -27,7 +27,33 @@ public class NetworkServer {
     private Map<String, NetworkRoom> roomMap = new HashMap<>();
     /** Used to check every 30 interprets, whether everyone is still alive */
     private int counter = 0;
+    
+    /**
+     * Cleans up, when an user hard-quits with by closing the application
+     * @param uuid UUID of the user (took from the last line received from the user)
+     */
+    public void cleanUp(UUID uuid) {
+        NetworkUser user = userMap.get(uuid);
+        try {
+            NetworkRoom oldRoom = user.currentRoom;
 
+            user.leaveRoom();
+            // If the room is empty delete it
+            if (oldRoom.empty) {
+                roomMap.remove(oldRoom.name);
+            }
+
+            // If the user was in a game, and the room he was in is empty: stop the game, too
+            if (user.game != null && oldRoom.empty) {
+                user.game.game.gameUpdateThread.interrupt();
+            }
+        } catch (NullPointerException e) {
+            System.out.println("User was in no room");
+        }
+
+        // Remove the user himself
+        userMap.remove(uuid);
+    }
     /**
      * Interprets a line
      * @param line Line to interpret
@@ -270,25 +296,6 @@ public class NetworkServer {
     }
 
     /**
-     * Subfunction of interpret to deal with game interpretation
-     * @param user User that send the command
-     * @param command Command that has been send
-     * @return Resulting answer
-     */
-    private String interpretGame(NetworkUser user, String command) {
-        if (command.equals("sync")) {
-            Yaml yaml = new Yaml();
-            // Send everything over the wire
-            // Problem: everything right now is line-based - solution:
-            // Replace every newline with an unused char (';') for sending and on receiving undo the replacement
-            return "game sync " + yaml.dump(user.game.game.serialize()).replace('\n', ';');
-        } else {
-            user.game.doAction(user, command);
-            return "okay";
-        }
-    }
-
-    /**
      * Sends every user a ping and removes these players that didn't answer them
      */
     private void checkAlive() {
@@ -308,31 +315,26 @@ public class NetworkServer {
         }
     }
 
+
+
     /**
-     * Cleans up, when an user hard-quits with by closing the application
-     * @param uuid UUID of the user (took from the last line received from the user)
+     * Subfunction of interpret to deal with game interpretation
+     * @param user User that send the command
+     * @param command Command that has been send
+     * @return Resulting answer
      */
-    public void cleanUp(UUID uuid) {
-        NetworkUser user = userMap.get(uuid);
-        try {
-            NetworkRoom oldRoom = user.currentRoom;
-
-            user.leaveRoom();
-            // If the room is empty delete it
-            if (oldRoom.empty) {
-                roomMap.remove(oldRoom.name);
-            }
-
-            // If the user was in a game, and the room he was in is empty: stop the game, too
-            if (user.game != null && oldRoom.empty) {
-                user.game.game.gameUpdateThread.interrupt();
-            }
-        } catch (NullPointerException e) {
-            System.out.println("User was in no room");
+    private String interpretGame(NetworkUser user, String command) {
+        if (command.equals("sync")) {
+            Yaml yaml = new Yaml();
+            // Send everything over the wire
+            // Problem: everything right now is line-based - solution:
+            // Replace every newline with an unused char (';') for sending and on receiving undo the replacement
+            return "game sync " + yaml.dump(user.game.game.serialize()).replace('\n', ';');
+        } else {
+            user.game.doAction(user, command);
+            return "okay";
         }
-
-        // Remove the user himself
-        userMap.remove(uuid);
     }
+
 
 }
