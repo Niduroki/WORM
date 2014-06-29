@@ -17,7 +17,7 @@ import java.io.IOException;
  * Grenade weapon = Grenade();
  * Bullet bullet = weapon.fire(movement);
  * }
- * </pre>
+ * </pre> unnecessary
  */
 public class Grenade extends AbstractWeapon {
 

@@ -19,8 +19,9 @@ import java.util.regex.Pattern;
 public class ServerBootstrap {
 
     /**
+     * Main method; entry point
      *
-     * @param args
+     * @param args command line args
      */
     public static void main(String[] args) {
         // Don't load any graphics
@@ -33,6 +34,7 @@ public class ServerBootstrap {
     }
 
     /**
+     * Start server.
      *
      * @throws IOException
      */
@@ -52,7 +54,19 @@ public class ServerBootstrap {
     }
 
     /**
-     *
+     * Handles incoming connections
+     * <p></p>
+     * Code example:
+     * <pre>
+     * {@code
+     * try {
+     *  Socket client = server.accept();
+     *  new Thread(new HandleConnectionThread(client, networkServer)).start();
+     * } catch (InterruptedIOException e) {
+     *  System.out.println("Timeout on a client!");
+     * }
+     * }
+     * </pre>
      */
     static class HandleConnectionThread implements Runnable {
 
@@ -60,17 +74,18 @@ public class ServerBootstrap {
         NetworkServer networkServer;
 
         /**
+         * Start handling.
          *
-         * @param client
-         * @param networkServer
+         * @param client        client socket
+         * @param networkServer game server
          */
-        public HandleConnectionThread (Socket client, NetworkServer networkServer) {
+        public HandleConnectionThread(Socket client, NetworkServer networkServer) {
             this.client = client;
             this.networkServer = networkServer;
         }
 
         /**
-         *
+         * Entry point of thread, which handled each client connection.
          */
         @Override
         public void run() {
@@ -93,7 +108,7 @@ public class ServerBootstrap {
                 e.printStackTrace();
             } catch (NoSuchElementException e) {
                 // Search for an UUID in the last line, to clean up the associated user
-                Pattern pattern = Pattern.compile("("+NetworkServer.uuidRegex+")");
+                Pattern pattern = Pattern.compile("(" + NetworkServer.uuidRegex + ")");
                 Matcher matcher = pattern.matcher(line);
                 if (matcher.find()) {
                     String uuid = matcher.group(1);

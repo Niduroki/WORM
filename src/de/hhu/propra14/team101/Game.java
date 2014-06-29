@@ -175,7 +175,7 @@ public class Game {
         if (currentWorm.weaponList.size() == 0) {
             weaponText = "No weapon";
         } else {
-            weaponText = currentWorm.weaponList.get(currentWorm.currentWeapon).name;
+            weaponText = currentWorm.getCurrentWeapon().name;
         }
         String itemText = "";
         for(int index = 0;index < currentWorm.getItems().size();index++) {

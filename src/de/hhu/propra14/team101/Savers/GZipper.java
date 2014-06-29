@@ -11,7 +11,6 @@ import java.util.zip.GZIPOutputStream;
  * <pre>
  * {@code
  *  GZipper zipper = new GZipper();
->>>>>>> Stashed changes
  * String longString = "Lorem ipsum dolor sit amet consetetur ..."
  * byte[] gzipped = zipper.gzip(longString);
  * // Write gzipped into a file now, or do something else
