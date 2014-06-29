@@ -12,6 +12,15 @@ import java.util.Map;
 
 /**
  * Class that makes Game network capable
+ * <pre>
+ * {@code
+ * NetworkGame game = new NetworkGame(room);
+ * game.doAction(user1, "jump");
+ * game.doAction(user2, "pause");
+ * }
+ * </pre>
+ *
+ * @see Game
  */
 public class NetworkGame {
     /** Room the game is played in */
@@ -76,9 +85,9 @@ public class NetworkGame {
     }
 
     /**
-     *
-     * @param user
-     * @param line
+     * Do an action and propagate it, if the sending user has a turn now
+     * @param user Sending user
+     * @param line Action to do
      */
     public void doAction(NetworkUser user, String line) {
         System.out.println("Turn of:"+this.game.turnOfPlayer+",sender:"+this.room.users.indexOf(user));

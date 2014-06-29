@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Start the server in here
+ * Start the server with this
  */
 public class ServerBootstrap {
 
@@ -36,7 +36,7 @@ public class ServerBootstrap {
     /**
      * Start server.
      *
-     * @throws IOException
+     * @throws IOException On errors when accessing sockets
      */
     public static void start() throws IOException {
         int port = 7601;

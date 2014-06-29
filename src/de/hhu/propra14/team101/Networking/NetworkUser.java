@@ -6,7 +6,16 @@ import java.io.PrintWriter;
 import java.util.UUID;
 
 /**
- * Class to create an online user
+ * Class to create an online user, for use with the NetworkServer class
+ *
+ * <pre>
+ * {@code
+ * NetworkUser user = new NetworkUser("Username", uuid, client.output);
+ * user.joinRoom("test");
+ * user.leaveRoom();
+ * user.send("okay");
+ * }
+ * </pre>
  */
 public class NetworkUser {
     /** Name of the user */
@@ -27,10 +36,10 @@ public class NetworkUser {
     public NetworkRoom currentRoom;
 
     /**
-     *
-     * @param name
-     * @param uuid
-     * @param networkOutput
+     * Creates a new network user
+     * @param name Name of the user
+     * @param uuid UUID of the user
+     * @param networkOutput Output to write to
      */
     public NetworkUser(String name, UUID uuid, PrintWriter networkOutput) {
         this.name = name;
@@ -39,9 +48,9 @@ public class NetworkUser {
     }
 
     /**
-     *
-     * @param room
-     * @throws RoomFullException
+     * User joins a room
+     * @param room Room to join
+     * @throws RoomFullException If the room is full
      */
     public void joinRoom(NetworkRoom room) throws RoomFullException {
         if (this.currentRoom != null) {
