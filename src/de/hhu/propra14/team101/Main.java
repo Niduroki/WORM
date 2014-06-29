@@ -2,7 +2,6 @@ package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
-import de.hhu.propra14.team101.Savers.AbstractSaver;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.LevelSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
@@ -30,19 +29,30 @@ import java.util.ArrayList;
  * Main class, that starts the program
  */
 public class Main extends Application {
-
+    /**
+     * field of main window
+     */
     public Canvas field;
+    /**
+     * current game
+     */
     public Game game;
+    /**
+     * grid of main window
+     */
     public GridPane grid;
+
     protected Stage primaryStage;
-    //private int jumping = 0;
-    //private Worm jumpingWorm;
     protected ArrayList<Player> players;
     protected ArrayList<String> availableColors;
     protected NetworkClient client;
     protected GUI gui;
     protected Lobby lobby;
+    /**
+     * current music
+     */
     public static OggClip music;
+
     public static float mvol;
     public static float svol;
 
@@ -108,7 +118,7 @@ public class Main extends Application {
     }
 
     /**
-     *
+     * Initialize handlers.
      */
     public void initializeHandlers() {
         final EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
