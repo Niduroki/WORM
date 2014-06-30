@@ -137,6 +137,13 @@ public class Game {
                 System.out.println("Couldn't find level-file");
             }
         }
+
+        // The theme is loaded now, so we need to update each players worm-graphic
+        for (Player player : this.players) {
+            for (Worm worm : player.wormList) {
+                worm.updateImage();
+            }
+        }
     }
 
     /**

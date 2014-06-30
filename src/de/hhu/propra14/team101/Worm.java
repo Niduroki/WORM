@@ -90,6 +90,16 @@ public class Worm {
     }
 
     /**
+     * Updates the image – necessary for loading the proper themed worm
+     */
+    public void updateImage() {
+        if (!Main.headless) {
+            String capitalizedTheme = Level.theme.substring(0, 1).toUpperCase() + Level.theme.substring(1);
+            this.image = new Image("images/worm-"+capitalizedTheme+".gif");
+        }
+    }
+
+    /**
      * Gets x-coordinate of worm.
      *
      * @return value of x-coordinate
