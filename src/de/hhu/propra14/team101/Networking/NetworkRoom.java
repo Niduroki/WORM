@@ -106,9 +106,6 @@ public class NetworkRoom {
      * @param active boolean whether the weapon should be enabled
      */
     public void setWeapon(String weaponName, boolean active) {
-        // Make sure weaponName is lowercase TODO this is a bit dumb …
-        weaponName = weaponName.toLowerCase();
-
         this.selectedWeapons.remove(weaponName);
         this.selectedWeapons.put(weaponName, active);
     }

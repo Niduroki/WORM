@@ -283,13 +283,10 @@ public class NetworkClient {
 
     /**
      * Leaves the current room
-     * @throws NetworkException TODO RoomExistsException???
+     * @throws TimeoutException On timeout
      */
-    public void leaveRoom() throws NetworkException {
+    public void leaveRoom() throws TimeoutException {
         this.send("leave_room", true);
-        if (!this.lastAnswer.equals("okay")) {
-            throw (new RoomExistsException());
-        }
         this.currentRoom = null;
     }
 
