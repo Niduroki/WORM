@@ -39,7 +39,7 @@ public class Game {
     /**
      * true, if game is a network game
      */
-    public boolean online = false;
+    public static boolean online = false;
     public boolean loaded = false;
     /**
      * number of current round
@@ -250,7 +250,7 @@ public class Game {
      * Update game
      */
     public void updateGame() {
-        if (this.online && !this.onlineCommandQueue.isEmpty()) {
+        if (Game.online && !this.onlineCommandQueue.isEmpty()) {
             this.doAction(this.onlineCommandQueue.poll());
         }
 
@@ -452,7 +452,7 @@ public class Game {
             }
         }
 
-        if (!this.online && !this.loaded) {
+        if (!Game.online && !this.loaded) {
             this.currentTerrain = level.getTerrain();
             level.setWormsStartPosition(this.getPlayers());
         }
@@ -560,7 +560,7 @@ public class Game {
                 double xCoordinate = Double.parseDouble(action.split(" ")[1]);
                 double yCoordinate = Double.parseDouble(action.split(" ")[2]);
                 // Network fired weapon coordinates are with Main.sizeMultiplier = 1, scale it up if needed
-                if (this.online) {
+                if (Game.online) {
                     xCoordinate *= Main.sizeMultiplier;
                     yCoordinate *= Main.sizeMultiplier;
                 }

@@ -59,7 +59,7 @@ public class Main extends Application {
     /** Whether we're on a server and shouldn't play any sound, display graphics */
     public static boolean headless = false;
     /** Used for screen resizing. E.g. one TerrainBlock is AbstractTerrainBlock.baseSize*Main.sizeMultiplier big */
-    public static double sizeMultiplier;
+    public static double sizeMultiplier = 1.0;
 
     /**
      * Starts the program
@@ -130,7 +130,7 @@ public class Main extends Application {
                 }
                 if (mouseEvent.isSecondaryButtonDown()) {
                     if (game.turnOfPlayer < game.getPlayers().size()) {
-                        if (game.online) {
+                        if (Game.online) {
                             try {
                                 client.fireWeapon((int) mouseEvent.getX(), (int) mouseEvent.getY());
                             } catch (TimeoutException e) {
@@ -153,7 +153,7 @@ public class Main extends Application {
                 }
                 // Scrolled up
                 if (scrollEvent.getDeltaY() > 0) {
-                    if (game.online) {
+                    if (Game.online) {
                         try {
                             client.nextWeapon();
                         } catch (TimeoutException e) {
@@ -163,7 +163,7 @@ public class Main extends Application {
                         game.doAction("next_weapon");
                     }
                 } else if (scrollEvent.getDeltaY() < 0) { // Scrolled down
-                    if (game.online) {
+                    if (Game.online) {
                         try {
                             client.prevWeapon();
                         } catch (TimeoutException e) {
@@ -185,7 +185,7 @@ public class Main extends Application {
                     return;
                 }
                 // Only allow this when we're not online, but if we're online allow it when the game is finished
-                if (keyEvent.getCode() == KeyCode.ESCAPE && (game.isGameFinished() || !game.online)) {
+                if (keyEvent.getCode() == KeyCode.ESCAPE && (game.isGameFinished() || !Game.online)) {
                     // Close the game
                     game.music.stop();
                     music.loop();
@@ -196,7 +196,7 @@ public class Main extends Application {
                     primaryStage.getScene().removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
                     primaryStage.getScene().removeEventHandler(MouseEvent.ANY, mouseHandler);
                 } else if (keyEvent.getCode() == KeyCode.UP) {
-                    if(game.online) {
+                    if(Game.online) {
                         try {
                             client.jump();
                         } catch(TimeoutException ex) {
@@ -206,7 +206,7 @@ public class Main extends Application {
                         game.doAction("jump");
                     }
                 } else if (keyEvent.getCode() == KeyCode.LEFT) {
-                    if (game.online) {
+                    if (Game.online) {
                         try {
                             client.move('l');
                         } catch (TimeoutException e) {
@@ -216,7 +216,7 @@ public class Main extends Application {
                         game.doAction("move_left");
                     }
                 } else if (keyEvent.getCode() == KeyCode.RIGHT) {
-                    if (game.online) {
+                    if (Game.online) {
                         try {
                             client.move('r');
                         } catch (TimeoutException e) {
@@ -238,7 +238,7 @@ public class Main extends Application {
                       case DIGIT8: digit = 8; break;
                       case DIGIT9: digit = 9; break;
                   }
-                    if (game.online) {
+                    if (Game.online) {
                         try {
                             client.useItem(digit);
                         } catch (TimeoutException e) {
@@ -249,7 +249,7 @@ public class Main extends Application {
                     }
                 } else if (keyEvent.getCode() == KeyCode.P) {
                     // (Un-)Pause the game
-                    if (game.online) {
+                    if (Game.online) {
                         try {
                             client.pause();
                         } catch (TimeoutException e) {
@@ -258,15 +258,15 @@ public class Main extends Application {
                     } else {
                         game.doAction("pause");
                     }
-                } else if (keyEvent.getCode() == KeyCode.T && game.online) {
+                } else if (keyEvent.getCode() == KeyCode.T && Game.online) {
                     // Show the chat ingame here
-                } else if (keyEvent.getCode() == KeyCode.X && game.online) {
+                } else if (keyEvent.getCode() == KeyCode.X && Game.online) {
                     try {
                         client.requestSyncGame();
                     } catch (TimeoutException e) {
                         //
                     }
-                } else if (keyEvent.getCode() == KeyCode.S && !game.online) {
+                } else if (keyEvent.getCode() == KeyCode.S && !Game.online) {
                     // Save a game
                     GameSaves saver = new GameSaves();
                     saver.save(game, "GameSave.gz");

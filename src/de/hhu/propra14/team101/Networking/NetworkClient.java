@@ -531,8 +531,8 @@ public class NetworkClient {
             }
         } else if (command.matches("sync .+")) {
             Yaml yaml = new Yaml();
+            Game.online = true;
             this.main.game = Game.deserialize((Map<String, Object>) yaml.load(command.substring(5).replace(';', '\n')));
-            this.main.game.online = true;
             Game.startMe = true;
         } else {
             this.main.game.doAction(command);

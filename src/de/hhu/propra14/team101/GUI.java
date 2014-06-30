@@ -405,6 +405,7 @@ public class GUI {
                     main.initializeHandlers();
                     main.game.gc = main.field.getGraphicsContext2D();
                     main.game.loaded = true;
+                    Game.online = false;
                     main.game.startGameplay();
                 }
             });
@@ -509,6 +510,7 @@ public class GUI {
                 main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
                 main.grid.getChildren().clear();
                 main.grid.add(main.field, 0, 0);
+                Game.online = false;
                 main.game = new Game(main.players);
                 main.game.loadLevel(mapSelection.getValue());
                 main.initializeHandlers();

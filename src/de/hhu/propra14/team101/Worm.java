@@ -413,6 +413,12 @@ public class Worm {
         Worm result = new Worm(weaponList);
         result.xCoord = ((Double) input.get("x")).intValue();
         result.yCoord = ((Double) input.get("y")).intValue();
+
+        // When this is an online sync request these values need to be scaled
+        if (Game.online) {
+            result.xCoord *= Main.sizeMultiplier;
+            result.yCoord *= Main.sizeMultiplier;
+        }
         result.health = (Integer) input.get("health");
         result.orientation = input.get("orientation").toString().charAt(0);
         return result;
