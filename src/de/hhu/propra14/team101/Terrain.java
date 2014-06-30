@@ -61,6 +61,7 @@ public class Terrain {
 
     /**
      * Get the height of the terrain.
+     * @return Height of the terrain in pixel
      */
     public static double getHeightInPixel() {
         return height * AbstractTerrainObject.baseSize * Main.sizeMultiplier;
@@ -68,6 +69,7 @@ public class Terrain {
 
     /**
      * Get the width of the terrain.
+     * @return Width of the terrain in pixel
      */
     public static double getWidthInPixel() {
         return width * AbstractTerrainObject.baseSize * Main.sizeMultiplier;

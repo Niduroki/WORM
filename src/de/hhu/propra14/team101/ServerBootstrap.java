@@ -54,8 +54,7 @@ public class ServerBootstrap {
     }
 
     /**
-     * Handles incoming connections
-     * <p></p>
+     * Handles incoming connections<br><br>
      * Code example:
      * <pre>
      * {@code

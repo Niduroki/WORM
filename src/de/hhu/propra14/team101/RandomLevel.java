@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Creates RandomLevel </br></br>
+ * Creates RandomLevel<br><br>
  * Code example:
  * <pre>
  * {@code

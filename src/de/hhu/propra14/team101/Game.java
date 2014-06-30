@@ -81,6 +81,7 @@ public class Game {
 
     /**
      * Initialize a new game.
+     * @param players Players that are playing
      */
     public Game(ArrayList players) {
         // Load fps from settings
@@ -112,9 +113,7 @@ public class Game {
 
     /**
      * Gets a level.
-     *
      * @return a specific level
-     * @throws java.lang.IllegalArgumentException
      */
     @Nullable
     public Level getLevel() {
@@ -621,8 +620,8 @@ public class Game {
         private Game game;
 
         /**
-         *
-         * @param game
+         * Creates a game updating thread
+         * @param game Game that's played
          */
         public GameUpdateThread(Game game) {
             this.game = game;

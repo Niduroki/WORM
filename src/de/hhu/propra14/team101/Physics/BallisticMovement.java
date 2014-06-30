@@ -29,6 +29,7 @@ public class BallisticMovement {
      * @param startPosY     y-coordinate of the start point
      * @param posXDirection x-coordinate of the direction vector
      * @param posYDirection y-coordinate of the direction vector
+     * @param autoStop Whether movement should stop automatically
      */
     public BallisticMovement(double startPosX, double startPosY, double posXDirection, double posYDirection, boolean autoStop) {
         directionVector = new Vector(startPosX, startPosY, posXDirection, posYDirection);
@@ -109,6 +110,7 @@ public class BallisticMovement {
 
     /**
      * Gets the x-coordinate.
+     * @return x coordinate
      */
     public double getXCoordinate() {
         return (xCoordinate);
@@ -116,6 +118,7 @@ public class BallisticMovement {
 
     /**
      * Gets the y-coordinate
+     * @return y coordinate
      */
     public double getYCoordinate() {
         return (yCoordinate);
@@ -123,6 +126,8 @@ public class BallisticMovement {
 
     /**
      * Revert the given movement.
+     * @param physics Physics to revert
+     * @return Reverted movement
      */
     public static BallisticMovement revert(BallisticMovement physics) {
         return new BallisticMovement(

@@ -69,7 +69,7 @@ public class Player {
     }
 
     /**
-     *  Serialize a player.
+     * Serialize a player.
      * @return serialized worm
      */
     public Map serialize() {
@@ -105,6 +105,7 @@ public class Player {
 
     /**
      * Serialize  color of player
+     * @param color Color object
      * @return String value of color
      */
     public static String serializeColor(Color color) {

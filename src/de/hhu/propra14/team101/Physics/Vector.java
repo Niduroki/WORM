@@ -52,7 +52,8 @@ public class Vector {
     }
 
     /**
-     * @return
+     * Get the y coordinate
+     * @return Y Coordinate
      */
     public double getYCoordinate() {
         return this.yCoordinate;

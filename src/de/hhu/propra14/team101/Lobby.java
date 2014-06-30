@@ -36,15 +36,15 @@ public class Lobby {
     private Timeline roomTimeline;
 
     /**
-     *
-     * @param main
+     * Creates a lobby
+     * @param main Main class the app runs with
      */
     public Lobby(Main main) {
         this.main = main;
     }
 
     /**
-     *
+     * Adds multiplayer buttons
      */
     public void addMpButtons() {
         // Clean up
@@ -165,6 +165,9 @@ public class Lobby {
         this.globalTimeline.play();
     }
 
+    /**
+     * Adds room buttons
+     */
     private void addRoomButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
@@ -414,6 +417,9 @@ public class Lobby {
         this.roomTimeline.play();
     }
 
+    /**
+     * Adds buttons to create a room
+     */
     private void addCreateGameButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
@@ -502,6 +508,9 @@ public class Lobby {
         });
     }
 
+    /**
+     * Adds buttons to edit a room
+     */
     private void addAdvancedButtons() {
         // Clean up
         this.main.grid.getChildren().clear();
@@ -650,13 +659,17 @@ public class Lobby {
     }
 
     /**
-     *
+     * Class to create an ingame chat
      */
     public class IngameChat extends Application {
 
         private Timeline ingameTimeline;
         private TextArea ingameChatArea;
 
+        /**
+         * Shows the chat
+         * @param primaryStage Stage to show window on
+         */
         @Override
         public void start(Stage primaryStage) {
             primaryStage.setTitle("Chat");

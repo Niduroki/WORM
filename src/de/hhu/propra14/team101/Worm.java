@@ -181,8 +181,8 @@ public class Worm {
 
     /**
      * Draws the worm
-     *
      * @param gc Canvas to draw on
+     * @param color Color of the worms team
      */
     public void draw(GraphicsContext gc, Color color) {
         gc.drawImage(this.image,
