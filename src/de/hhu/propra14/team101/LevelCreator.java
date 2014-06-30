@@ -129,7 +129,7 @@ public class LevelCreator {
 
         for (int i = 0; i < this.level.getCountWormStartPositions(); i++) {
             int[] coords = this.level.getWormStartPosition(i);
-            this.gc.drawImage(new Image("images/Worm.gif"), coords[0], coords[1], Worm.size*Main.sizeMultiplier, Worm.size*Main.sizeMultiplier);
+            this.gc.drawImage(new Image("images/worm-Normal.gif"), coords[0], coords[1], Worm.size*Main.sizeMultiplier, Worm.size*Main.sizeMultiplier);
         }
 
     }

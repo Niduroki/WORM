@@ -103,7 +103,7 @@ public class Level {
         Map<String, Object> result = new HashMap<>();
         result.put("spawns", wormStartPoints);
         result.put("terrain", this.terrain.serialize());
-        result.put("theme", this.theme);
+        result.put("theme", Level.theme);
         return result;
     }
 

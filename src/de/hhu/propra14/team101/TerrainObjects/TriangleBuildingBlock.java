@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101.TerrainObjects;
 
+import de.hhu.propra14.team101.Level;
 import de.hhu.propra14.team101.Main;
 import javafx.scene.image.Image;
 
@@ -25,10 +26,11 @@ public class TriangleBuildingBlock extends AbstractTerrainObject {
         this.destructible = true;
 
         if (!Main.headless) {
+            String capitalizedTheme = Level.theme.substring(0, 1).toUpperCase() + Level.theme.substring(1);
             if (this.getSlopedLeft()) {
-                this.image = new Image("images/Normal-Ground-Triangle-Right.jpg");
+                this.image = new Image("images/"+capitalizedTheme+"-Ground-Triangle-Right.png");
             } else {
-                this.image = new Image("images/Normal-Ground-Triangle-Left.jpg");
+                this.image = new Image("images/"+capitalizedTheme+"-Ground-Triangle-Left.png");
             }
         }
     }

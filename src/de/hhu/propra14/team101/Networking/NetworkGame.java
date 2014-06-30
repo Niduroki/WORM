@@ -54,7 +54,8 @@ public class NetworkGame {
                 }
                 // Add three worms for each team with the created weapons
                 Collections.addAll(worms, new Worm(weapons), new Worm(weapons), new Worm(weapons));
-                Player tmpPlayer = new Player(worms, user.name);
+                Player tmpPlayer = new Player(worms);
+                tmpPlayer.name = user.name;
 
                 // Assign a color
                 switch (user.team) {

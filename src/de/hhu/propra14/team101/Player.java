@@ -38,23 +38,11 @@ public class Player {
     public Color color;
 
     /**
-     * Whether the player is playing _this_ game, is on a network, or an AI
-     * Possible values: "AI", "Local", "Network"
-     */
-    public String type;
-
-    /**
      * Initialize a new player.
      * @param wormList Worms that belong to the player wrapped in an ArrayList
-     * @param type Possible values: "AI", "Local", "Network"
      */
-    public Player(ArrayList<Worm> wormList, String type) {
+    public Player(ArrayList<Worm> wormList) {
         this.wormList = wormList;
-        if (type.equals("AI") || type.equals("Local") || type.equals("Network")) {
-            this.type = type;
-        } else {
-            this.type = "Local";
-        }
     }
 
     /**
@@ -74,7 +62,6 @@ public class Player {
      */
     public Map serialize() {
         Map<String, Object> map = new HashMap<>();
-        map.put("type", this.type);
         map.put("current_worm", this.currentWorm);
         map.put("color", Player.serializeColor(this.color));
         ArrayList<Map> wormArray = new ArrayList<>();
@@ -97,7 +84,7 @@ public class Player {
         for (Map rawWorm : rawWorms) {
             wormList.add(Worm.deserialize(rawWorm));
         }
-        Player player = new Player(wormList, (String)input.get("type"));
+        Player player = new Player(wormList);
         player.currentWorm = (Integer) input.get("current_worm");
         player.color = Player.deseserializeColor((String) input.get("color"));
         return player;

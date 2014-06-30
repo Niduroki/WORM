@@ -541,7 +541,7 @@ public class GUI {
         for (int i = 0; i < 3; i++) {
             wormsList.add(new Worm(weapons));
         }
-        Player tmpPlayer = new Player(wormsList, "Local");
+        Player tmpPlayer = new Player(wormsList);
         tmpPlayer.color = Player.deseserializeColor(colorName);
         this.main.availableColors.remove(this.main.availableColors.indexOf(colorName));
         tmpPlayer.name = playerName;

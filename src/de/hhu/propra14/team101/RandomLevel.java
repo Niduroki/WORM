@@ -29,6 +29,20 @@ public class RandomLevel {
      * @return a new level
      */
     public Level generate() {
+        // Select a theme
+        int theme = random.nextInt(3);
+        switch (theme) {
+            case 0:
+                Level.theme = "normal";
+                break;
+            case 1:
+                Level.theme = "horror";
+                break;
+            case 2:
+                Level.theme = "oriental";
+                break;
+        }
+
         Terrain terrain = new Terrain();
         /*While not done because of Terrain*/
         while (width < Terrain.width) {
@@ -36,7 +50,7 @@ public class RandomLevel {
             // Fill a row
             for (int i = Terrain.height - 1; i > height; i--) {
                 AbstractTerrainObject toAdd;
-          /*If its a 10 the block is explosive*/
+                /*If its a 10 the block is explosive*/
                 if (random.nextInt(10) == 9) {
                     toAdd = new ExplosiveBuildingBlock(width, i);
 
@@ -45,7 +59,7 @@ public class RandomLevel {
                 }
                 terrain.addTerrainObject(toAdd);
             }
-       /* If Random is a 5 */
+            /* If Random is a 5 */
             if (random.nextInt(6) == 5) {
                 wormSpawns.add(new int[]{width, height});
             }
@@ -63,18 +77,7 @@ public class RandomLevel {
         for (int[] spawn : wormSpawns) {
             level.addWormStartPosition(spawn[0], spawn[1]);
         }
-        int theme = random.nextInt(3);
-        switch (theme) {
-            case 0:
-                level.theme = "normal";
-                break;
-            case 1:
-                level.theme = "horror";
-                break;
-            case 2:
-                level.theme = "oriental";
-                break;
-        }
+
         return level;
     }
 }

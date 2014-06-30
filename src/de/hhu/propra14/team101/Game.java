@@ -137,11 +137,17 @@ public class Game {
             }
         }
 
-        // The theme is loaded now, so we need to update each players worm-graphic
-        for (Player player : this.players) {
-            for (Worm worm : player.wormList) {
-                worm.updateImage();
+        if (!Main.headless) {
+            // The theme is loaded now, so we need to update each players worm-graphic
+            for (Player player : this.players) {
+                for (Worm worm : player.wormList) {
+                    worm.updateImage();
+                }
             }
+
+            // Also update the background
+            String capitalizedTheme = Level.theme.substring(0, 1).toUpperCase() + Level.theme.substring(1);
+            this.background = new Image("images/"+capitalizedTheme+"-Background.jpg");
         }
     }
 
@@ -431,9 +437,9 @@ public class Game {
             try {
                 // Default music: Normal
                 String musicPath = "Normal-Game.ogg";
-                if (level.theme.equals("oriental")) {
+                if (Level.theme.equals("oriental")) {
                     musicPath = "Oriental-Game.ogg";
-                } else if (level.theme.equals("horror")) {
+                } else if (Level.theme.equals("horror")) {
                     musicPath = "Horror-Game.ogg";
                 }
                 music = new OggClip("music/"+musicPath);
@@ -497,9 +503,7 @@ public class Game {
         if (Main.headless) {
             // If we're using a thread instead of a timeline interrupt (i.e. stop) it
             gameUpdateThread.interrupt();
-        }
-
-        if (!Main.headless) {
+        } else {
             try {
                 music = new OggClip("music/Victory.ogg");
                 music.setGain(Main.mvol);
