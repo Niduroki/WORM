@@ -430,11 +430,9 @@ public class Lobby {
         Button startButton = new Button("Start");
 
         Text nameTitle = new Text("Name");
-        Text passwordTitle = new Text("Password");
         Text mapTitle = new Text("Map");
         Text maxPlayersTitle = new Text("Maximum players");
         final TextField nameField = new TextField("");
-        final TextField passwordField = new TextField("");
 
         final ComboBox<String> mapSelection = new ComboBox<>();
         mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle","Random");
@@ -452,9 +450,7 @@ public class Lobby {
         // Add the objects
         this.main.grid.add(sceneTitle, 0, 0, 3, 1);
         this.main.grid.add(nameField, 1, 1);
-        this.main.grid.add(passwordField, 1, 2);
         this.main.grid.add(nameTitle, 0, 1);
-        this.main.grid.add(passwordTitle, 0, 2);
         this.main.grid.add(mapTitle, 0, 3);
         this.main.grid.add(maxPlayersTitle, 0, 4);
         this.main.grid.add(mapSelection, 1, 3);
@@ -483,10 +479,6 @@ public class Lobby {
                 )) {
                     try {
                         main.client.createRoom(nameField.getText());
-                        // If there's a password: Use it
-                        if (!passwordField.getText().isEmpty()) {
-                            main.client.changePassword(passwordField.getText());
-                        }
                         main.client.changeMap(mapSelection.getSelectionModel().getSelectedItem());
                         // If the owner defined a max player amount: Use it
                         if (!maxPlayersField.getText().isEmpty()) {
@@ -521,11 +513,9 @@ public class Lobby {
         Button submitButton = new Button("Change Properties");
 
         Text nameTitle = new Text("Name");
-        Text passwordTitle = new Text("Password");
         Text mapTitle = new Text("Map");
         Text maxPlayersTitle = new Text("Maximum Players");
         final TextField nameField = new TextField("");
-        final TextField passwordField = new TextField("");
 
         final ComboBox<String> mapSelection = new ComboBox<>();
         mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle","Random");
@@ -542,9 +532,7 @@ public class Lobby {
         // Add the objects
         this.main.grid.add(sceneTitle, 0, 0, 3, 1);
         this.main.grid.add(nameField, 1, 1);
-        this.main.grid.add(passwordField, 1, 2);
         this.main.grid.add(nameTitle, 0, 1);
-        this.main.grid.add(passwordTitle, 0, 2);
         this.main.grid.add(mapTitle, 0, 3);
         this.main.grid.add(maxPlayersTitle, 0, 4);
         this.main.grid.add(mapSelection, 1, 3);
@@ -563,7 +551,6 @@ public class Lobby {
         }
 
         final String oldName = (String) roomProperties.get("name");
-        final String oldPassword = (String) roomProperties.get("password");
         final String oldMap = (String) roomProperties.get("map");
         final int oldMaxPlayers = (int) roomProperties.get("max_players");
 
@@ -571,7 +558,6 @@ public class Lobby {
         final Map<String, Boolean> oldWeapons = (Map<String, Boolean>) roomProperties.get("weapons");
 
         nameField.setText(oldName);
-        passwordField.setText(oldPassword);
         mapSelection.getSelectionModel().select(oldMap);
         // Don't prefill maxPlayers with a 0
         if (oldMaxPlayers != 0) {
@@ -611,11 +597,6 @@ public class Lobby {
                         // Change the room name
                         if (!nameField.getText().equals(oldName)) {
                             main.client.changeRoomName(nameField.getText());
-                        }
-
-                        // Change the password
-                        if (!passwordField.getText().isEmpty() && !passwordField.getText().equals(oldPassword)) {
-                            main.client.changePassword(passwordField.getText());
                         }
 
                         // Change the map

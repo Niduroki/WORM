@@ -227,15 +227,6 @@ public class NetworkClient {
     }
 
     /**
-     * Changes the password
-     * @param password Password to change to
-     * @throws TimeoutException On timeout
-     */
-    public void changePassword(String password) throws TimeoutException {
-        // TODO
-    }
-
-    /**
      * Chat
      * @param type Globally 'g' or in the room 'r'
      * @param message Text to send
