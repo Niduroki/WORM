@@ -359,12 +359,14 @@ public class Game {
                                         this.getCurrentTerrain().removeTerrainObject(terrainObject, false);
                                     }
                                 }
-                                try {
-                                    OggClip doThisClip = new OggClip("sfx/weapons/Explosion.ogg");
-                                    doThisClip.setGain(Main.svol);
-                                    doThisClip.play();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                if (!Main.headless) {
+                                    try {
+                                        OggClip doThisClip = new OggClip("sfx/weapons/Explosion.ogg");
+                                        doThisClip.setGain(Main.svol);
+                                        doThisClip.play();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             case TopOrDown:
                                 bulletFired = false;

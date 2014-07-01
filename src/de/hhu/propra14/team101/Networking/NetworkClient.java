@@ -192,7 +192,10 @@ public class NetworkClient {
      * @throws TimeoutException On timeout
      */
     public void changeRoomName(String name) throws TimeoutException {
-        // TODO
+        this.send("change_room_name "+name, true);
+        if (this.lastAnswer.equals("okay")) {
+            this.currentRoom = name;
+        }
     }
 
     /**

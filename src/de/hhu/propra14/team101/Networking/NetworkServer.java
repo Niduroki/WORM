@@ -96,6 +96,12 @@ public class NetworkServer {
                         currentUser.currentRoom.selectedMap = command.split(" ")[1];
                     } else if (command.matches("change_max_players .+") && currentUser == currentUser.currentRoom.owner) {
                         currentUser.currentRoom.maxUsers = Integer.parseInt(command.split(" ")[1]);
+                    } else if (command.matches("change_room_name .+") && currentUser == currentUser.currentRoom.owner) {
+                        String newName = command.substring(17);
+                        String oldName = currentUser.currentRoom.name;
+                        this.roomMap.remove(oldName);
+                        this.roomMap.put(newName, currentUser.currentRoom);
+                        currentUser.currentRoom.name = newName;
                     } else if (command.matches("change_team .+")) {
                         String team = command.substring(12);
                         if (
