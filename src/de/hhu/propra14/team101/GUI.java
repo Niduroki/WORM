@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101;
 
+import de.hhu.propra14.team101.GUIElements.DisallowedCharTextField;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
@@ -290,7 +291,7 @@ public class GUI {
         });
 
         final TextField serverField = new TextField(initialValue1);
-        final TextField nameField = new TextField(initialValue2);
+        final DisallowedCharTextField nameField = new DisallowedCharTextField(' ', initialValue2);
 
         // Configure each object
         sceneTitle.setFont(new Font(20));

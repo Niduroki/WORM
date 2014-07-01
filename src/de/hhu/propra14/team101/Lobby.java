@@ -432,7 +432,7 @@ public class Lobby {
         Text nameTitle = new Text("Name");
         Text mapTitle = new Text("Map");
         Text maxPlayersTitle = new Text("Maximum players");
-        final TextField nameField = new TextField("");
+        final DisallowedCharTextField nameField = new DisallowedCharTextField(',', "");
 
         final ComboBox<String> mapSelection = new ComboBox<>();
         mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle","Random");
@@ -515,7 +515,7 @@ public class Lobby {
         Text nameTitle = new Text("Name");
         Text mapTitle = new Text("Map");
         Text maxPlayersTitle = new Text("Maximum Players");
-        final TextField nameField = new TextField("");
+        final DisallowedCharTextField nameField = new DisallowedCharTextField(',', "");
 
         final ComboBox<String> mapSelection = new ComboBox<>();
         mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle","Random");

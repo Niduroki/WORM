@@ -26,7 +26,7 @@ public class NetworkUser {
     public boolean gameReady = false;
     /** NetworkGame the user is playing in */
     public NetworkGame game;
-    /** Last time we received a pong from the user TODO does this have any use? */
+    /** Last time we received a pong from the user */
     public long lastPong = System.currentTimeMillis();
     /** UUID of the user */
     public UUID uuid;

@@ -78,7 +78,6 @@ public class NetworkServer {
             System.out.println(requestCount);
         }
 
-        // TODO sanitizing: room names must not have a "," user names must not have a " "
         try {
             System.out.println(line);
             if (line.startsWith("hello ")) {
@@ -299,6 +298,7 @@ public class NetworkServer {
         // This is needed to avoid ConcurrentModificationException
         for (UUID uuid: toRemove) {
             userMap.remove(uuid);
+            this.cleanUp(uuid);
         }
     }
 
