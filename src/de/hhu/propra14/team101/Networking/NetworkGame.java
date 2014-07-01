@@ -80,8 +80,14 @@ public class NetworkGame {
         }
         this.game = new Game(players);
         this.game.loadLevel(room.selectedMap);
-        // TODO check who's got the lowest fps and use that, instead of 16
-        this.game.fps = 16;
+        // Check for lowest fps
+        int lowest = 60; // 60 is highest available fps
+        for (NetworkUser user : this.room.users) {
+            if (user.fps < lowest) {
+                lowest = user.fps;
+            }
+        }
+        this.game.fps = lowest;
         this.game.startGameplay();
     }
 

@@ -117,14 +117,20 @@ public class NetworkServer {
                     } else if (command.matches("change_weapon .+ .+") && currentUser == currentUser.currentRoom.owner) {
                         currentUser.currentRoom.setWeapon(command.split(" ")[1], Boolean.parseBoolean(command.split(" ")[2]));
                     } else if (command.matches("create_room .+")) {
-                        String roomName = command.substring(command.indexOf(" ")+1);
+                        String roomName = command.substring(command.indexOf(" ") + 1);
                         if (this.roomMap.containsKey(roomName)) {
                             answer = "exists";
                         } else {
                             this.roomMap.put(roomName,
-                                new NetworkRoom(roomName, "Map1") // Map1 is a placeholder
+                                    new NetworkRoom(roomName, "Map1") // Map1 is a placeholder
                             );
                             currentUser.joinRoom(this.roomMap.get(roomName));
+                        }
+                    } else if (command.matches("fps .+")) {
+                        if (currentUser.currentRoom != null) {
+                            currentUser.fps = Integer.parseInt(command.substring(4));
+                        } else {
+                            answer = "error client no_room";
                         }
                     } else if (command.matches("game .+")) {
                         if (currentUser.game != null) {
@@ -240,7 +246,7 @@ public class NetworkServer {
                                 NetworkGame game = new NetworkGame(currentUser.currentRoom);
                                 for (NetworkUser user : currentUser.currentRoom.users) {
                                     user.game = game;
-                                    user.send("game started");
+                                    user.send("game started "+game.game.fps);
                                 }
                             } else {
                                 answer = "not_ready";

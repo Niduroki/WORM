@@ -34,6 +34,8 @@ public class NetworkUser {
     public String team;
     /** Room the user is currently in */
     public NetworkRoom currentRoom;
+    /** FPS of the user */
+    public int fps = 16;
 
     /**
      * Creates a new network user

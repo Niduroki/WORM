@@ -101,6 +101,8 @@ public class NetworkClient {
     /** Whether we're owner of the room we're in */
     public boolean weAreOwner = false;
 
+    /** Fps of the online game */
+    private int gameFps;
     /** Queue to save global chat messages on */
     private PriorityQueue<String> globalMessages = new PriorityQueue<>();
     /** Last answer */
@@ -221,6 +223,8 @@ public class NetworkClient {
         this.currentRoom = name;
         // The first user is always ready
         this.switchReady();
+
+        this.sendFps();
     }
 
     /**
@@ -323,6 +327,8 @@ public class NetworkClient {
             throw new RoomFullException();
         }
         this.currentRoom = name;
+
+        this.sendFps();
     }
 
     /**
@@ -529,9 +535,10 @@ public class NetworkClient {
      */
     @SuppressWarnings("unchecked")
     private void interpretGame(String command) {
-        if (command.equals("started")) {
+        if (command.matches("started .+")) {
             try {
                 main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
+                this.gameFps = Integer.parseInt(command.substring(8));
                 this.requestSyncGame();
             } catch (TimeoutException e) {
                 System.out.println("Timeout!");
@@ -540,6 +547,7 @@ public class NetworkClient {
             Yaml yaml = new Yaml();
             Game.online = true;
             this.main.game = Game.deserialize((Map<String, Object>) yaml.load(command.substring(5).replace(';', '\n')));
+            this.main.game.fps = this.gameFps;
             Game.startMe = true;
         } else {
             this.main.game.doAction(command);
@@ -580,6 +588,23 @@ public class NetworkClient {
                 }
             }
         }
+    }
+
+    /**
+     * Send fps of the user
+     * @throws TimeoutException On timeout
+     */
+    private void sendFps() throws TimeoutException {
+        // Send our fps
+        SettingSaves loader = new SettingSaves();
+        int fps;
+        try {
+            fps = Integer.parseInt((String) ((Map) loader.load("settings.gz")).get("fps"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            fps = 16;
+        }
+        this.send("fps "+fps, true);
     }
 
     /**
