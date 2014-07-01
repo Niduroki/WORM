@@ -250,7 +250,7 @@ public class Game {
      * Update game
      */
     public void updateGame() {
-        if (Game.online && !this.onlineCommandQueue.isEmpty()) {
+        if (Main.headless && !this.onlineCommandQueue.isEmpty()) {
             this.doAction(this.onlineCommandQueue.poll());
         }
 
@@ -318,33 +318,36 @@ public class Game {
                         switch (collision.getType()) {
                             case Worm:
                                 ((Worm) collision.getCollisionElement()).health -= bullet.weapon.damage;
-                                Random random = new Random();
-                                int randomInt = random.nextInt(3);
 
-                                // Play a random sound, if a worm is hit
-                                OggClip damageClip = null;
-                                if (randomInt == 0) {
-                                    try {
-                                        damageClip = new OggClip("sfx/worms/Fleshwound.ogg");
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
+                                if (!Main.headless) {
+                                    Random random = new Random();
+                                    int randomInt = random.nextInt(3);
+
+                                    // Play a random sound, if a worm is hit
+                                    OggClip damageClip = null;
+                                    if (randomInt == 0) {
+                                        try {
+                                            damageClip = new OggClip("sfx/worms/Fleshwound.ogg");
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else if (randomInt == 1) {
+                                        try {
+                                            damageClip = new OggClip("sfx/worms/Oh no.ogg");
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        try {
+                                            damageClip = new OggClip("sfx/worms/You'll pay.ogg");
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
-                                } else if (randomInt == 1) {
-                                    try {
-                                        damageClip = new OggClip("sfx/worms/Oh no.ogg");
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
+                                    if (damageClip != null) {
+                                        damageClip.setGain(Main.svol);
+                                        damageClip.play();
                                     }
-                                } else {
-                                    try {
-                                        damageClip = new OggClip("sfx/worms/You'll pay.ogg");
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                if (damageClip != null) {
-                                    damageClip.setGain(Main.svol);
-                                    damageClip.play();
                                 }
 
                                 bulletFired = false;
