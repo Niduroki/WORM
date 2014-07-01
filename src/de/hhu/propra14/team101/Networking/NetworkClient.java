@@ -86,37 +86,37 @@ import java.util.*;
  */
 public class NetworkClient {
 
+    /** Name of the color we'll use whe playing (or whether we're a spectator) */
+    public String color;
     /** Current room the user is in */
     public String currentRoom;
-    /** Map of room users. Map key is the user name, Map value is the users team */
-    public Map<String, String> roomUsers = new HashMap<>();
+    /** Whether we've been kicked from the room we're in */
+    public boolean kicked = false;
     /** Name of the client */
     public String ourName;
     /** Whether the room we're in is ready to play */
     public boolean roomReady = false;
+    /** Map of room users. Map key is the user name, Map value is the users team */
+    public Map<String, String> roomUsers = new HashMap<>();
     /** Whether we're owner of the room we're in */
     public boolean weAreOwner = false;
-    /** Whether we've been kicked from the room we're in */
-    public boolean kicked = false;
-    /** Name of the color we'll use whe playing (or whether we're a spectator) */
-    public String color;
 
-    /** Our UUID */
-    private UUID uuid;
-    /** PrintWriter to write to, for network output */
-    private PrintWriter output;
-    /** How many messages we sent yet. Needed for waiting for answers on messages */
-    private int sentCounter = 0;
-    /** Last received message */
-    private int lastReceivedCounter = -1;
-    /** Last answer */
-    private String lastAnswer = "";
-    /** Main class */
-    private Main main;
     /** Queue to save global chat messages on */
     private PriorityQueue<String> globalMessages = new PriorityQueue<>();
+    /** Last answer */
+    private String lastAnswer = "";
+    /** Last received message */
+    private int lastReceivedCounter = -1;
+    /** Main class */
+    private Main main;
+    /** PrintWriter to write to, for network output */
+    private PrintWriter output;
     /** Queue to save room chat messages on */
     private PriorityQueue<String> roomMessages = new PriorityQueue<>();
+    /** How many messages we sent yet. Needed for waiting for answers on messages */
+    private int sentCounter = 0;
+    /** Our UUID */
+    private UUID uuid;
 
     /**
      * Constructs a class for networking
@@ -156,37 +156,6 @@ public class NetworkClient {
         }
 
         this.main = main;
-    }
-
-    /**
-     * Checks whether there are room messages
-     * @return Whether there are room messages
-     */
-    public boolean hasRoomMessages() {
-        return !(roomMessages.size() == 0);
-    }
-
-    /**
-     * Checks whether there are global messages
-     * @return Whether there are global messages
-     */
-    public boolean hasGlobalMessages() {
-        return !(globalMessages.size() == 0);
-    }
-
-    /**
-     * Creates a room
-     * @param name Name of the room
-     * @throws NetworkException RoomExistsException if a room with this name exists, or TimeoutException on timeout
-     */
-    public void createRoom(String name) throws NetworkException {
-        this.send("create_room " + name, true);
-        if (!this.lastAnswer.equals("okay")) {
-            throw (new RoomExistsException());
-        }
-        this.currentRoom = name;
-        // The first user is always ready
-        this.switchReady();
     }
 
     /**
@@ -237,6 +206,21 @@ public class NetworkClient {
     }
 
     /**
+     * Creates a room
+     * @param name Name of the room
+     * @throws NetworkException RoomExistsException if a room with this name exists, or TimeoutException on timeout
+     */
+    public void createRoom(String name) throws NetworkException {
+        this.send("create_room " + name, true);
+        if (!this.lastAnswer.equals("okay")) {
+            throw (new RoomExistsException());
+        }
+        this.currentRoom = name;
+        // The first user is always ready
+        this.switchReady();
+    }
+
+    /**
      * Fire the current weapon
      * @param x X coordinate to fire to
      * @param y Y coordinate to fire to
@@ -246,6 +230,81 @@ public class NetworkClient {
         // The network game needs the Main.sizeMultiplier==1 coordinates
         this.send("game fire "+String.valueOf(x/Main.sizeMultiplier)+" "+String.valueOf(y/Main.sizeMultiplier), true);
     }
+
+
+    /**
+     * Gets the last global message
+     * @return Last global message
+     */
+    public String getLastGlobalMessage() {
+        return globalMessages.poll();
+    }
+
+    /**
+     * Gets the last room message
+     * @return Last room message
+     */
+    public String getLastRoomMessage() {
+        return roomMessages.poll();
+    }
+
+    /**
+     * Gets the name of the current owner
+     * @return Name of the owner
+     * @throws TimeoutException On timeout
+     */
+    public String getOwner() throws TimeoutException {
+        this.send("get_owner", true);
+        return this.lastAnswer;
+    }
+
+    /**
+     * Gets existing rooms
+     * @return String array of existing rooms
+     * @throws TimeoutException On timeout
+     */
+    public String[] getRooms() throws TimeoutException {
+        this.send("list_rooms", true);
+        if (this.lastAnswer.equals("none")) {
+            return new String[0];
+        } else {
+            if(this.lastAnswer.startsWith("rooms")) {
+                String rooms = this.lastAnswer.substring(6);
+                return rooms.split(",");
+            } else {
+                return new String[0];
+            }
+        }
+    }
+
+    /**
+     * Gets all room properties
+     * @return Map referencing every property with a string
+     * @throws TimeoutException On timeout
+     */
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getRoomProperties() throws TimeoutException {
+        this.send("get_room_properties", true);
+        Yaml yaml = new Yaml();
+        return (Map<String, Object>) yaml.load(this.lastAnswer.replace(';', '\n'));
+    }
+
+    /**
+     * Checks whether there are global messages
+     * @return Whether there are global messages
+     */
+    public boolean hasGlobalMessages() {
+        return !(globalMessages.size() == 0);
+    }
+
+    /**
+     * Checks whether there are room messages
+     * @return Whether there are room messages
+     */
+    public boolean hasRoomMessages() {
+        return !(roomMessages.size() == 0);
+    }
+
 
     /**
      * Join a room
@@ -270,7 +329,6 @@ public class NetworkClient {
     public void jump() throws  TimeoutException {
         this.send("game jump", true);
     }
-
 
     /**
      * Kicks an user
@@ -395,62 +453,20 @@ public class NetworkClient {
         this.send("game use_item " + number, true);
     }
 
-
     /**
-     * Gets the last global message
-     * @return Last global message
+     * Construct a line with uuid, if there is one, and number of the current message
+     * @param data String of data
+     * @param count Number of the message
+     * @return Constructed line
      */
-    public String getLastGlobalMessage() {
-        return globalMessages.poll();
-    }
-
-    /**
-     * Gets the last room message
-     * @return Last room message
-     */
-    public String getLastRoomMessage() {
-        return roomMessages.poll();
-    }
-
-    /**
-     * Gets the name of the current owner
-     * @return Name of the owner
-     * @throws TimeoutException On timeout
-     */
-    public String getOwner() throws TimeoutException {
-        this.send("get_owner", true);
-        return this.lastAnswer;
-    }
-
-    /**
-     * Gets existing rooms
-     * @return String array of existing rooms
-     * @throws TimeoutException On timeout
-     */
-    public String[] getRooms() throws TimeoutException {
-        this.send("list_rooms", true);
-        if (this.lastAnswer.equals("none")) {
-            return new String[0];
-        } else {
-            if(this.lastAnswer.startsWith("rooms")) {
-                String rooms = this.lastAnswer.substring(6);
-                return rooms.split(",");
-            } else {
-                return new String[0];
-            }
+    private String constructLine(String data, int count) {
+        String line = String.valueOf(count);
+        line += " ";
+        if (this.uuid != null) {
+            line += this.uuid.toString() + " ";
         }
-    }
-
-    /**
-     * Gets all room properties
-     * @return Map referencing every property with a string
-     * @throws TimeoutException On timeout
-     */
-    @SuppressWarnings("unchecked")
-    public Map<String, Object> getRoomProperties() throws TimeoutException {
-        this.send("get_room_properties", true);
-        Yaml yaml = new Yaml();
-        return (Map<String, Object>) yaml.load(this.lastAnswer.replace(';', '\n'));
+        line += data;
+        return line;
     }
 
     /**
@@ -578,23 +594,6 @@ public class NetworkClient {
         }
 
         this.send("hello " + this.ourName, true);
-    }
-
-
-    /**
-     * Construct a line with uuid, if there is one, and number of the current message
-     * @param data String of data
-     * @param count Number of the message
-     * @return Constructed line
-     */
-    private String constructLine(String data, int count) {
-        String line = String.valueOf(count);
-        line += " ";
-        if (this.uuid != null) {
-            line += this.uuid.toString() + " ";
-        }
-        line += data;
-        return line;
     }
 
     /**
