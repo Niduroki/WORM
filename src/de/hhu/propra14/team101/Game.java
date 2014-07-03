@@ -1,6 +1,7 @@
 package de.hhu.propra14.team101;
 
 import com.sun.istack.internal.Nullable;
+import de.hhu.propra14.team101.GUIElements.Popup;
 import de.hhu.propra14.team101.Physics.*;
 import de.hhu.propra14.team101.Savers.LevelSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
@@ -133,6 +134,7 @@ public class Game {
             try {
                 level = loader.load("maps/" + levelName + ".gz");
             } catch (FileNotFoundException e) {
+                Popup.popup("Couldn't find level file", "Error Message");
                 System.out.println("Couldn't find level-file");
             }
         }

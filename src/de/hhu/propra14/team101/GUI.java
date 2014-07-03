@@ -1,10 +1,14 @@
 package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.GUIElements.DisallowedCharTextField;
+import de.hhu.propra14.team101.GUIElements.Popup;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
 import de.hhu.propra14.team101.Savers.SettingSaves;
-import de.hhu.propra14.team101.Weapons.*;
+import de.hhu.propra14.team101.Weapons.AbstractWeapon;
+import de.hhu.propra14.team101.Weapons.AtomicBomb;
+import de.hhu.propra14.team101.Weapons.Bazooka;
+import de.hhu.propra14.team101.Weapons.Grenade;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -260,6 +264,7 @@ public class GUI {
             musicvol.setValue(((double) data.get("musicvol")));
             soundvol.setValue(((double) data.get("soundvol")));
         } catch (FileNotFoundException e) {
+            Popup.popup("Couldn't find settings file!", "Error Message");
             System.out.println("Couldn't find settings file!");
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
@@ -268,6 +273,7 @@ public class GUI {
             musicvol.setValue(50);
             soundvol.setValue(50);
         } catch (NullPointerException e) {
+            Popup.popup ("Missing setting!", "Error Message");
             System.out.println("Missing setting!");
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
