@@ -31,8 +31,16 @@ public class LevelSaves extends AbstractSaver {
             // If we're not in a jar the maps are under resources
             data = GZipper.gunzip("resources/" + path);
         } catch (FileNotFoundException e) {
-            // Read from a jar
-            data = GZipper.gunzip(this.getClass().getResourceAsStream("/"+path));
+            if (path.matches("maps.*\\.gz")) {
+                // Local map (map editor) – they already have a prepended "maps/" and a appended ".gz"
+                // We need to get rid of these
+                path = path.substring(5);
+                path = path.replaceAll("\\.gz", "");
+                data = GZipper.gunzip(path+".gz");
+            } else {
+                // Last stand: read from a jar
+                data = GZipper.gunzip(this.getClass().getResourceAsStream("/" + path));
+            }
         }
         @SuppressWarnings("unchecked")
         Map<String, Object> raw = (Map<String, Object>) this.yaml.load(data);

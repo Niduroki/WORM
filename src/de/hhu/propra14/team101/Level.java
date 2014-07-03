@@ -2,6 +2,7 @@ package de.hhu.propra14.team101;
 
 import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -122,6 +123,23 @@ public class Level {
         for (Object spawn : spawns) {
             ArrayList currentSpawn = (ArrayList) spawn;
             result.addWormStartPosition((int) currentSpawn.get(0), (int) currentSpawn.get(1));
+        }
+        return result;
+    }
+
+    /**
+     * Loads levels from a local level directory
+     * @return Array of local map names
+     */
+    public static String[] loadLocalLevels() {
+        File[] f = (new File("maps/")).listFiles();
+        if (f == null) {
+            return new String[0];
+        }
+
+        String[] result = new String[f.length];
+        for (int i=0; i<result.length; i++) {
+            result[i] = f[i].toString();
         }
         return result;
     }

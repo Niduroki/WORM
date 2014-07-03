@@ -11,22 +11,36 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class Popup extends Application {
+/**
+ * Shows a popup window
+ */
 
+public class Popup extends Application {
+    /** Message to show */
     private String message;
+    /** Title of the opening popup */
     private String title;
 
+    /**
+     * Opens a popup
+     * @param message Message to display
+     * @param title Title of the opening popup
+     */
     public static void popup (String message, String title) {
         Stage stage = new Stage();
         Popup popup = new Popup(message, title);
         popup.start(stage);
     }
 
+    /**
+     * Creates a popup
+     * @param message Message to display
+     * @param title Title of the displayed popup
+     */
     public Popup (String message, String title) {
         this.message = message;
         this.title = title;
     }
-
 
     /**
      * Shows the popup
