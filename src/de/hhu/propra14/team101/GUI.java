@@ -265,7 +265,6 @@ public class GUI {
             soundvol.setValue(((double) data.get("soundvol")));
         } catch (FileNotFoundException e) {
             Popup.popup("Couldn't find settings file!", "Error Message");
-            System.out.println("Couldn't find settings file!");
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
             fpsBox.getSelectionModel().select("20");
@@ -274,7 +273,6 @@ public class GUI {
             soundvol.setValue(50);
         } catch (NullPointerException e) {
             Popup.popup ("Missing setting!", "Error Message");
-            System.out.println("Missing setting!");
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
             fpsBox.getSelectionModel().select("20");

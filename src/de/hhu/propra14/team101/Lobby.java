@@ -87,12 +87,9 @@ public class Lobby {
                         addRoomButtons();
                     }
                 } catch (RoomFullException e) {
-                    // TODO show this in the GUI
                     Popup.popup ("Room is full!", "Error Message");
-                    System.out.println("Room full!");
                 } catch (RoomDoesNotExistException e) {
                     Popup.popup ("Room does not exist!", "Error Message");
-                    System.out.println("Room does not exist!");
                 } catch (NetworkException e) {
                     System.out.println(e.getMessage());
                 }
@@ -550,7 +547,6 @@ public class Lobby {
             roomProperties = this.main.client.getRoomProperties();
         } catch (TimeoutException e) {
             Popup.popup ("Timeout while loading room properties!", "Error Message");
-            System.out.println("Timeout while loading room properties!");
         }
 
         final String oldName = (String) roomProperties.get("name");
