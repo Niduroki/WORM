@@ -48,7 +48,7 @@ public class LevelCreator {
      * @param theme theme value
      */
     public void setTheme(String theme) {
-        this.level.theme = theme;
+        Level.theme = theme;
     }
 
     /**
@@ -100,17 +100,20 @@ public class LevelCreator {
      * @param y y-coordinate
      */
     public void cycleSpawn(int x, int y) {
+        int roundedX = (int) Math.round(x/(AbstractTerrainObject.baseSize*Main.sizeMultiplier));
+        int roundedY = (int) Math.round(y/(AbstractTerrainObject.baseSize*Main.sizeMultiplier));
         for (int i = 0; i < this.level.getCountWormStartPositions(); i++) {
             int[] coords = this.level.getWormStartPosition(i);
-            if (coords[0] == x && coords[1] == y) {
+            if (coords[0] == roundedX && coords[1] == roundedY) {
                 this.level.removeWormStartPosition(i);
                 // Removed the spawn - Done
+                this.draw();
                 return;
             }
         }
 
         // There isn't a worm here
-        this.level.addWormStartPosition(x, y);
+        this.level.addWormStartPosition(roundedX, roundedY);
 
         this.draw();
     }
@@ -129,7 +132,13 @@ public class LevelCreator {
 
         for (int i = 0; i < this.level.getCountWormStartPositions(); i++) {
             int[] coords = this.level.getWormStartPosition(i);
-            this.gc.drawImage(new Image("images/worm-Normal.gif"), coords[0], coords[1], Worm.size*Main.sizeMultiplier, Worm.size*Main.sizeMultiplier);
+            this.gc.drawImage(
+                    new Image("images/worm-Normal.gif"),
+                    coords[0]*AbstractTerrainObject.baseSize*Main.sizeMultiplier,
+                    coords[1]*AbstractTerrainObject.baseSize*Main.sizeMultiplier,
+                    Worm.size*Main.sizeMultiplier,
+                    Worm.size*Main.sizeMultiplier
+            );
         }
 
     }
