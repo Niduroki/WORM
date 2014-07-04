@@ -175,7 +175,6 @@ public class GUI {
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
                 addMainButtons();
             }
         });
@@ -198,9 +197,7 @@ public class GUI {
             public void handle(ActionEvent e) {
                 FileChooser fileChooser = new FileChooser();
                 File outputFile = fileChooser.showSaveDialog(main.primaryStage);
-                if (levelCreatorOutputPath != null) {
-                    levelCreatorOutputPath = outputFile.toString();
-                }
+                levelCreatorOutputPath = outputFile.toString();
             }
         });
 
@@ -208,7 +205,10 @@ public class GUI {
             @Override
             public void handle(ActionEvent event) {
                 levelCreator.setTheme(themeSelection.getSelectionModel().getSelectedItem().toLowerCase());
-                levelCreator.save(levelCreatorOutputPath);
+                if (levelCreatorOutputPath != null) {
+                    levelCreator.save(levelCreatorOutputPath);
+                    addMainButtons();
+                }
             }
         });
 
@@ -395,15 +395,17 @@ public class GUI {
             startButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
-                    main.grid.getChildren().clear();
-                    main.grid.add(main.field, 0, 0);
-                    GameSaves loader = new GameSaves();
                     //Show FileSelection for Savegame
                     FileChooser fileChooser = new FileChooser();
                     //fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Maps", "gz"));
                     File gameSave = fileChooser.showOpenDialog(main.primaryStage);
+
                     if (gameSave != null) {
+                        main.field = new Canvas(Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
+                        main.grid.getChildren().clear();
+                        main.grid.add(main.field, 0, 0);
+                        GameSaves loader = new GameSaves();
+
                         try {
                             main.game = loader.load(gameSave.toString());
                         } catch (FileNotFoundException ex) {
