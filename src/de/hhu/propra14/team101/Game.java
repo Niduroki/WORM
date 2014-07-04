@@ -135,7 +135,6 @@ public class Game {
                 level = loader.load("maps/" + levelName + ".gz");
             } catch (FileNotFoundException e) {
                 Popup.popup("Couldn't find level file", "Error Message");
-                System.out.println("Couldn't find level-file");
             }
         }
 
@@ -536,7 +535,6 @@ public class Game {
      * @param action action, which is performed
      */
     public void doAction(String action) {
-        System.out.println("Do the action");
         if (action.equals("move_right")) {
             int currentWorm = players.get(this.turnOfPlayer).currentWorm;
             players.get(this.turnOfPlayer).wormList.get(currentWorm).move('r', this.getCurrentTerrain(), this.getPlayers());

@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101.Networking;
 
+import de.hhu.propra14.team101.GUIElements.Popup;
 import de.hhu.propra14.team101.Game;
 import de.hhu.propra14.team101.Main;
 import de.hhu.propra14.team101.Networking.Exceptions.*;
@@ -147,7 +148,7 @@ public class NetworkClient {
             thread.setDaemon(true);
             thread.start();
         } catch (IOException | NullPointerException e) {
-            System.out.println("Can't connect to server");
+            Popup.popup("Can't connect to server", "Error message");
             e.printStackTrace();
         }
 
@@ -483,7 +484,6 @@ public class NetworkClient {
      * @param line Line to handle
      */
     private void handleIncomingData(String line) {
-        System.out.println("Handled a " + line);
         if (line.matches("[0-9]+ .+")) {
             lastReceivedCounter = Integer.parseInt(line.split(" ")[0]);
             line = line.substring(line.indexOf(" ") + 1);
@@ -569,7 +569,6 @@ public class NetworkClient {
         this.sentCounter += 1;
         String line = constructLine(data, ourCount);
         this.output.println(line);
-        System.out.println("client send::" + line);
         this.output.flush();
         if (waitForAnswer) {
             int waitCounter = 0;
@@ -577,13 +576,11 @@ public class NetworkClient {
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
-                    System.out.println("InterruptedException while waiting!");
                     e.printStackTrace();
                 }
                 waitCounter += 1;
                 // Wait 2s at most
                 if (waitCounter > 40) {
-                    System.out.println("TIMEOUT");
                     throw (new TimeoutException());
                 }
             }
@@ -657,10 +654,11 @@ public class NetworkClient {
                     client.handleIncomingData(line);
                 }
             } catch (IOException e) {
-                System.out.println("Error while communicating with server");
+                Popup.popup("Error while communicating with server", "Error message");
                 e.printStackTrace();
             } catch (NoSuchElementException e) {
-                System.out.println("Server seemed to quit");
+                Popup.popup("Server seemed to quit", "Error message");
+                e.printStackTrace();
             }
         }
     }

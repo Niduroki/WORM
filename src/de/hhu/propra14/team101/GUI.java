@@ -198,7 +198,9 @@ public class GUI {
             public void handle(ActionEvent e) {
                 FileChooser fileChooser = new FileChooser();
                 File outputFile = fileChooser.showSaveDialog(main.primaryStage);
-                levelCreatorOutputPath = outputFile.toString();
+                if (levelCreatorOutputPath != null) {
+                    levelCreatorOutputPath = outputFile.toString();
+                }
             }
         });
 
@@ -272,7 +274,7 @@ public class GUI {
             musicvol.setValue(50);
             soundvol.setValue(50);
         } catch (NullPointerException e) {
-            Popup.popup ("Missing setting!", "Error Message");
+            Popup.popup("Missing setting!", "Error Message");
             initialValue1 = "schaepers.it";
             initialValue2 = "Worms-player";
             fpsBox.getSelectionModel().select("20");
@@ -401,17 +403,18 @@ public class GUI {
                     FileChooser fileChooser = new FileChooser();
                     //fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Maps", "gz"));
                     File gameSave = fileChooser.showOpenDialog(main.primaryStage);
-                    System.out.println(gameSave.toString());
-                    try {
-                        main.game = loader.load(gameSave.toString());
-                    } catch (FileNotFoundException ex) {
-                        //
+                    if (gameSave != null) {
+                        try {
+                            main.game = loader.load(gameSave.toString());
+                        } catch (FileNotFoundException ex) {
+                            //
+                        }
+                        main.initializeHandlers();
+                        main.game.gc = main.field.getGraphicsContext2D();
+                        main.game.loaded = true;
+                        Game.online = false;
+                        main.game.startGameplay();
                     }
-                    main.initializeHandlers();
-                    main.game.gc = main.field.getGraphicsContext2D();
-                    main.game.loaded = true;
-                    Game.online = false;
-                    main.game.startGameplay();
                 }
             });
         } else {

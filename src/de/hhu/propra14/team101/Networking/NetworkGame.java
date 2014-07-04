@@ -97,7 +97,6 @@ public class NetworkGame {
      * @param line Action to do
      */
     public void doAction(NetworkUser user, String line) {
-        System.out.println("Turn of:"+this.game.turnOfPlayer+",sender:"+this.room.users.indexOf(user));
         if (this.game.turnOfPlayer == this.room.users.indexOf(user)) {
             Worm currentWorm = this.game.getPlayers().get(this.game.turnOfPlayer).wormList.get(this.game.getPlayers().get(this.game.turnOfPlayer).currentWorm);
             if (line.equals("move_left")) {

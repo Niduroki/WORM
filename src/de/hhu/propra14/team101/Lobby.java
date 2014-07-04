@@ -70,7 +70,7 @@ public class Lobby {
             String[] rooms = this.main.client.getRooms();
             roomList.setItems(FXCollections.observableArrayList(rooms));
         } catch (TimeoutException exceptionName) {
-            System.out.println(exceptionName.getMessage());
+            exceptionName.printStackTrace();
         }
 
         roomList.setPrefWidth(400);
@@ -91,7 +91,7 @@ public class Lobby {
                 } catch (RoomDoesNotExistException e) {
                     Popup.popup ("Room does not exist!", "Error Message");
                 } catch (NetworkException e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -110,7 +110,7 @@ public class Lobby {
                         chatField.clear();
                     }
                 } catch (TimeoutException ex) {
-                    System.out.println(ex.getMessage());
+                    ex.printStackTrace();
                 }
             }
         };
@@ -152,7 +152,7 @@ public class Lobby {
                             String[] rooms = main.client.getRooms();
                             roomList.setItems(FXCollections.observableArrayList(rooms));
                         } catch (TimeoutException exceptionName) {
-                            System.out.println(exceptionName.getMessage());
+                            exceptionName.printStackTrace();
                         }
                     }
                 }
@@ -241,7 +241,7 @@ public class Lobby {
                     }
             );
         } catch (TimeoutException exceptionName) {
-            System.out.println(exceptionName.getMessage());
+            exceptionName.printStackTrace();
         }
 
         list.setPrefWidth(250);
@@ -279,7 +279,7 @@ public class Lobby {
                         chatField.clear();
                     }
                 } catch (TimeoutException ex) {
-                    System.out.println(ex.getMessage());
+                    ex.printStackTrace();
                 }
             }
         };
@@ -573,7 +573,6 @@ public class Lobby {
                 bazookaBox.selectedProperty().set(entry.getValue());
             } else {
                 Popup.popup ("Unknown Weapon:" + entry.getKey(), "Error Message");
-                System.out.println("Unknown weapon: " + entry.getKey());
             }
         }
 
@@ -700,7 +699,7 @@ public class Lobby {
                         }
                 );
             } catch (TimeoutException exceptionName) {
-                System.out.println(exceptionName.getMessage());
+                exceptionName.printStackTrace();
             }
 
             userList.setMaxWidth(150);
@@ -720,7 +719,7 @@ public class Lobby {
                             chatField.clear();
                         }
                     } catch (TimeoutException ex) {
-                        System.out.println(ex.getMessage());
+                        ex.printStackTrace();
                     }
                 }
             };

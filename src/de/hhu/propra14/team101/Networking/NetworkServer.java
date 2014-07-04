@@ -75,11 +75,9 @@ public class NetworkServer {
         if (line.matches("[0-9]+ .+")) {
             requestCount = Integer.parseInt(line.split(" ")[0]);
             line = line.substring(line.indexOf(" ")+1);
-            System.out.println(requestCount);
         }
 
         try {
-            System.out.println(line);
             if (line.startsWith("hello ")) {
                 String name = line.substring(6);
                 UUID uuid = UUID.randomUUID();

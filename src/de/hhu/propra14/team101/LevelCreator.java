@@ -57,12 +57,10 @@ public class LevelCreator {
      * @param y y-coordinate
      */
     public void cycleBlock(int x, int y) {
-        AbstractTerrainObject currentBlock = this.level.getTerrain().isTerrain(x*(Main.sizeMultiplier*AbstractTerrainObject.baseSize), y*(Main.sizeMultiplier*AbstractTerrainObject.baseSize));
-        try {
-            System.out.println(currentBlock.toString() + ":" + x + ":" + y);
-        } catch (NullPointerException e) {
-            System.out.println("Null:" + x + ":" + y);
-        }
+        AbstractTerrainObject currentBlock = this.level.getTerrain().isTerrain(
+                x*(Main.sizeMultiplier*AbstractTerrainObject.baseSize),
+                y*(Main.sizeMultiplier*AbstractTerrainObject.baseSize)
+        );
         AbstractTerrainObject nextBlock;
         if (currentBlock == null) {
             nextBlock = new SquareBuildingBlock(x, y);
