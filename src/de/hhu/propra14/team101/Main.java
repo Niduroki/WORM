@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101;
 
+import de.hhu.propra14.team101.GUIElements.IngameChat;
 import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import de.hhu.propra14.team101.Networking.NetworkClient;
 import de.hhu.propra14.team101.Savers.GameSaves;
@@ -34,6 +35,10 @@ public class Main extends Application {
      */
     public Canvas field;
     /**
+     * Networking
+     */
+    public NetworkClient client;
+    /**
      * current game
      */
     public Game game;
@@ -45,7 +50,7 @@ public class Main extends Application {
     protected Stage primaryStage;
     protected ArrayList<Player> players;
     protected ArrayList<String> availableColors;
-    protected NetworkClient client;
+
     protected GUI gui;
     protected Lobby lobby;
     /**

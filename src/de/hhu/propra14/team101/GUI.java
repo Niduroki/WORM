@@ -12,7 +12,6 @@ import de.hhu.propra14.team101.Weapons.Grenade;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -75,11 +74,11 @@ public class GUI {
 
 
 
-        startButton.setMaxWidth(Double.valueOf(150));
-        multiButton.setMaxWidth(Double.valueOf(150));
-        levelEditor.setMaxWidth(Double.valueOf(150));
-        optionsButton.setMaxWidth(Double.valueOf(150));
-        exitButton.setMaxWidth(Double.valueOf(150));
+        startButton.setMaxWidth(150);
+        multiButton.setMaxWidth(150);
+        levelEditor.setMaxWidth(150);
+        optionsButton.setMaxWidth(150);
+        exitButton.setMaxWidth(150);
 
         VBox vbButtons = new VBox();
         vbButtons.setSpacing(10);
