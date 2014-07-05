@@ -12,6 +12,7 @@ import de.hhu.propra14.team101.Weapons.Grenade;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -26,6 +27,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static javafx.geometry.Pos.*;
 
 /**
  * Class that shows the GUI
@@ -71,11 +74,12 @@ public class GUI {
         Button exitButton = new Button("Exit");
 
 
-        startButton.setMaxWidth(Double.MAX_VALUE);
-        multiButton.setMaxWidth(Double.MAX_VALUE);
-        levelEditor.setMaxWidth(Double.MAX_VALUE);
-        optionsButton.setMaxWidth(Double.MAX_VALUE);
-        exitButton.setMaxWidth(Double.MAX_VALUE);
+
+        startButton.setMaxWidth(Double.valueOf(150));
+        multiButton.setMaxWidth(Double.valueOf(150));
+        levelEditor.setMaxWidth(Double.valueOf(150));
+        optionsButton.setMaxWidth(Double.valueOf(150));
+        exitButton.setMaxWidth(Double.valueOf(150));
 
         VBox vbButtons = new VBox();
         vbButtons.setSpacing(10);
@@ -87,7 +91,7 @@ public class GUI {
         sceneTitle.setFont(new Font(20));
 
         // Add the objects
-        this.main.grid.add(sceneTitle, 0, 0, 2, 1);
+        this.main.grid.add(sceneTitle, 0, 0, 2, 2);
         this.main.grid.add(startButton, 1, 2);
         this.main.grid.add(multiButton, 1, 4);
         this.main.grid.add(levelEditor,1,6);

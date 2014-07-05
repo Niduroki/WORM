@@ -175,7 +175,7 @@ public class Main extends Application {
                 }
             }
         };
-
+        final Main mainClass = this;
         final EventHandler<KeyEvent> keypressHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -259,7 +259,9 @@ public class Main extends Application {
                         game.doAction("pause");
                     }
                 } else if (keyEvent.getCode() == KeyCode.T && Game.online) {
-                    // Show the chat ingame here
+                    Stage stage = new Stage();
+                    IngameChat sw = new IngameChat(mainClass);
+                    sw.start(stage);
                 } else if (keyEvent.getCode() == KeyCode.X && Game.online) {
                     try {
                         client.requestSyncGame();
