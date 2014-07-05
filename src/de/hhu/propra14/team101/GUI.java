@@ -63,7 +63,7 @@ public class GUI {
         BorderPane border = new BorderPane();
         border.setPadding(new Insets(20, 0, 20, 20));
 
-        Text sceneTitle = new Text("W.O.R.M.");
+        Text sceneTitle = new Text("Wreck Opponents Repeatedly Meaningless");
         Button startButton = new Button("Start");
         Button multiButton= new Button("Multiplayer");
         Button levelEditor=new Button ("Level Editor");
