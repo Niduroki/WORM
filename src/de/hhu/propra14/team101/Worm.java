@@ -54,14 +54,17 @@ public class Worm {
      * Contains weapons of the worm.
      */
     public ArrayList<AbstractWeapon> weaponList;
+
     /**
      * width and height of worm
      */
     public static double size = 25;
+
     /**
      * health point of worm.
-     */
+    */
     public int health = 100;
+
     private int currentWeapon = 0;
     private BallisticMovement jumpPhysic = null;
     private double shoeFactor = 1;
@@ -249,6 +252,16 @@ public class Worm {
                 Item item = (Item) terrainObject;
                 items.add(item);
                 terrain.removeTerrainObject(terrainObject, false);
+            } else {
+                if (terrainObject.getClass() == TriangleBuildingBlock.class) {
+                    if (direction == 'l' && ((TriangleBuildingBlock) terrainObject).getSlopedLeft() == false) {
+                        this.xCoord = this.xCoord -AbstractTerrainObject.baseSize * Main.sizeMultiplier;
+                        this.yCoord = this.yCoord -AbstractTerrainObject.baseSize * Main.sizeMultiplier;
+                    } else {
+                        this.xCoord = this.xCoord +AbstractTerrainObject.baseSize * Main.sizeMultiplier;
+                        this.yCoord = this.yCoord -AbstractTerrainObject.baseSize * Main.sizeMultiplier;
+                    }
+                }
             }
         }
         this.orientation = direction;

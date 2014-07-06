@@ -34,6 +34,7 @@ public class Main extends Application {
      * field of main window
      */
     public Canvas field;
+
     /**
      * Networking
      */
@@ -42,6 +43,7 @@ public class Main extends Application {
      * current game
      */
     public Game game;
+
     /**
      * grid of main window
      */
