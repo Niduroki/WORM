@@ -186,7 +186,7 @@ public class Worm {
      * @param gc Canvas to draw on
      * @param color Color of the worms team
      */
-    public void draw(GraphicsContext gc, Color color) {
+    public void draw(GraphicsContext gc, Color color, boolean currentWorm) {
         gc.drawImage(this.image,
                 // Worms are huge, thus we can't start drawing them like a normal terrain block, otherwise they'd clip the ground
                 this.xCoord - (AbstractTerrainObject.baseSize / 2) * Main.sizeMultiplier,
@@ -194,11 +194,19 @@ public class Worm {
                 size * Main.sizeMultiplier, size * Main.sizeMultiplier
         );
         gc.setFill(color);
-        gc.fillText(
-                "H" + String.valueOf(this.health),
-                this.xCoord - (AbstractTerrainObject.baseSize / 2) * Main.sizeMultiplier,
-                this.yCoord - AbstractTerrainObject.baseSize * Main.sizeMultiplier
-        );
+        if (currentWorm) {
+            gc.fillText(
+                    ">H" + String.valueOf(this.health) + "<",
+                    this.xCoord - (AbstractTerrainObject.baseSize / 2) * Main.sizeMultiplier,
+                    this.yCoord - AbstractTerrainObject.baseSize * Main.sizeMultiplier
+            );
+        } else {
+            gc.fillText(
+                    "H" + String.valueOf(this.health),
+                    this.xCoord - (AbstractTerrainObject.baseSize / 2) * Main.sizeMultiplier,
+                    this.yCoord - AbstractTerrainObject.baseSize * Main.sizeMultiplier
+            );
+        }
     }
 
     /**

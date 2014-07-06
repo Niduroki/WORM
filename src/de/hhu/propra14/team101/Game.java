@@ -233,7 +233,10 @@ public class Game {
 
         for (int i = 0; i < this.getPlayers().size(); i++) {
             for (int indexWorms = 0; indexWorms < this.getPlayers().get(i).wormList.size(); indexWorms++) {
-                this.getPlayers().get(i).wormList.get(indexWorms).draw(gc, this.getPlayers().get(i).color);
+                this.getPlayers().get(i).wormList.get(indexWorms).draw(
+                        gc, this.getPlayers().get(i).color,
+                        this.getPlayers().get(i).wormList.get(indexWorms) == currentWorm
+                );
             }
         }
         if (bulletFired) {
