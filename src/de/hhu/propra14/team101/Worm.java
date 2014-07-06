@@ -305,10 +305,7 @@ public class Worm {
                 jumpPhysic = new BallisticMovement(this.getXCoordinate(), this.getYCoordinate(), this.getXCoordinate() + 50 * springFactor * Main.sizeMultiplier, this.getYCoordinate() - 50 * springFactor * Main.sizeMultiplier, true);
             }
         }
-        jumpPhysic.move(1);
-        this.setXCoordinate(jumpPhysic.getXCoordinate());
-        this.setYCoordinate(jumpPhysic.getYCoordinate());
-        Collision collision = jumpPhysic.hasCollision(this, worms, terrain, Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
+        Collision collision = jumpPhysic.move(1,this, worms, terrain, Terrain.getWidthInPixel(), Terrain.getHeightInPixel());
         if (collision != null) {
             if (collision.getType() == CollisionType.Terrain) {
                 jumpPhysic = null;
@@ -325,6 +322,9 @@ public class Worm {
                 this.health = 0;
                 return true;
             }
+        } else {
+            this.setXCoordinate(jumpPhysic.getXCoordinate());
+            this.setYCoordinate(jumpPhysic.getYCoordinate());
         }
         if (jumpPhysic.isFinished()) {
             jumpPhysic = null;

@@ -61,16 +61,30 @@ public class BallisticMovement {
     /**
      * Execute steps of the movement
      * @param speed count of movement steps
+     * @return detected collision
      */
-    public void move(double speed) {
+    public Collision move(double speed, Worm currentWorm, ArrayList<Worm> worms, Terrain terrain, double width, double height) {
         if(!finished) {
-            time += speed;
-            xCoordinate = startXCoordinate + (startVelocityX * time);
-            yCoordinate = startYCoordinate + (startVelocityY * time + ((g / 2) * Math.pow(time, 2)));
+            double stepSpeed = speed / 10;
+            for(int i = 0;i < 10;i++)
+            {
+                time += stepSpeed;
+                xCoordinate = startXCoordinate + (startVelocityX * time);
+                yCoordinate = startYCoordinate + (startVelocityY * time + ((g / 2) * Math.pow(time, 2)));
+                Collision collision = hasCollision(currentWorm,worms, terrain,width,height);
+                if(collision != null) {
+                    time -= stepSpeed;
+                    xCoordinate = startXCoordinate + (startVelocityX * time);
+                    yCoordinate = startYCoordinate + (startVelocityY * time + ((g / 2) * Math.pow(time, 2)));
+                    return collision;
+                }
+            }
+
             if(autoStop) {
                 if(yCoordinate > startYCoordinate) finished = true;
             }
-        }
+       }
+        return null;
     }
 
     /**
@@ -83,7 +97,7 @@ public class BallisticMovement {
      * @param height      height of the game field
      * @return Collision
      */
-    public Collision hasCollision(Worm currentWorm, ArrayList<Worm> worms, Terrain terrain, double width, double height) {
+    private Collision hasCollision(Worm currentWorm, ArrayList<Worm> worms, Terrain terrain, double width, double height) {
         if (this.getXCoordinate() < 0 || this.getXCoordinate() > width) {
             return new Collision(null, CollisionType.LeftOrRight);
         }
