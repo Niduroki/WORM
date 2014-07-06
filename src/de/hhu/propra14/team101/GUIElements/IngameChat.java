@@ -46,7 +46,7 @@ public class IngameChat extends Application {
      * @param primaryStage Stage to show window on
      */
     @Override
-    public void start(Stage primaryStage) {
+    public void start(final Stage primaryStage) {
         primaryStage.setTitle("Chat");
 
         GridPane grid = new GridPane();
@@ -163,7 +163,7 @@ public class IngameChat extends Application {
 
                         if (main.client.kicked) {
                             ingameTimeline.stop();
-                            //addMpButtons();
+                            primaryStage.close();
                             main.client.kicked = false;
                         }
                     }
