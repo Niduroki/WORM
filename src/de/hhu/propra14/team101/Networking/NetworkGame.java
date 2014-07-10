@@ -104,7 +104,7 @@ public class NetworkGame {
             } else if (line.equals("move_right")) {
                 currentWorm.move('r', game.getCurrentTerrain(), game.getPlayers());
             } else if (line.equals("jump")) {
-                //TODO: Complete jump
+               //do nothing
             } else if (line.equals("next_weapon")) {
                 currentWorm.nextWeapon();
             } else if (line.equals("prev_weapon")) {
