@@ -31,7 +31,7 @@ public class LevelSaves extends AbstractSaver {
             // If we're not in a jar the maps are under resources
             data = GZipper.gunzip("resources/" + path);
         } catch (FileNotFoundException e) {
-            if (path.matches("maps/maps/.*\\.gz\\.gz")) {
+            if (path.matches(".*\\.gz\\.gz")) {
                 // Local map (map editor) – they already have a prepended "maps/" and a appended ".gz"
                 // We need to get rid of these
                 path = path.substring(5);
