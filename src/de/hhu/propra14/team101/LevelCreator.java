@@ -134,8 +134,8 @@ public class LevelCreator {
                     new Image("images/worm-Normal.gif"),
                     coords[0]*AbstractTerrainObject.baseSize*Main.sizeMultiplier,
                     coords[1]*AbstractTerrainObject.baseSize*Main.sizeMultiplier,
-                    Worm.size*Main.sizeMultiplier,
-                    Worm.size*Main.sizeMultiplier
+                    Worm.size,
+                    Worm.size
             );
         }
 

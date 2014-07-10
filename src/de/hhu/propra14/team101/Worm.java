@@ -81,6 +81,8 @@ public class Worm {
      * @param weapons weapons of new worm
      */
     public Worm(ArrayList weapons) {
+        size = 25 * Main.sizeMultiplier;
+
         this.weaponList = new ArrayList<>();
         for (Object weapon : weapons) {
             this.weaponList.add((AbstractWeapon) weapon);
@@ -187,24 +189,19 @@ public class Worm {
      * @param color Color of the worms team
      */
     public void draw(GraphicsContext gc, Color color, boolean currentWorm) {
-        gc.drawImage(this.image,
-                // Worms are huge, thus we can't start drawing them like a normal terrain block, otherwise they'd clip the ground
-                this.xCoord - (AbstractTerrainObject.baseSize / 2) * Main.sizeMultiplier,
-                this.yCoord - AbstractTerrainObject.baseSize * Main.sizeMultiplier,
-                size * Main.sizeMultiplier, size * Main.sizeMultiplier
-        );
+        gc.drawImage(this.image, this.xCoord, this.yCoord, size, size);
         gc.setFill(color);
         if (currentWorm) {
             gc.fillText(
                     ">H" + String.valueOf(this.health) + "<",
                     this.xCoord - (AbstractTerrainObject.baseSize / 2) * Main.sizeMultiplier,
-                    this.yCoord - AbstractTerrainObject.baseSize * Main.sizeMultiplier
+                    this.yCoord - 2 * Main.sizeMultiplier
             );
         } else {
             gc.fillText(
                     "H" + String.valueOf(this.health),
                     this.xCoord - (AbstractTerrainObject.baseSize / 2) * Main.sizeMultiplier,
-                    this.yCoord - AbstractTerrainObject.baseSize * Main.sizeMultiplier
+                    this.yCoord - 2 * Main.sizeMultiplier
             );
         }
     }

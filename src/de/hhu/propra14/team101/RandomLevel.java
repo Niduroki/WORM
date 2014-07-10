@@ -61,7 +61,7 @@ public class RandomLevel {
             }
             /* If Random is a 5 */
             if (random.nextInt(6) == 5) {
-                wormSpawns.add(new int[]{width, height});
+                wormSpawns.add(new int[]{width, height-1});
             }
             int nextAction = random.nextInt(5);
             /* If its a 5 or 1 we go down */

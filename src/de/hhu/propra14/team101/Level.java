@@ -93,7 +93,7 @@ public class Level {
                 }
             }
         }
-        //TODO: set positions randomized, when more worms than positions
+
     }
 
     /**

@@ -207,8 +207,6 @@ public class Game {
         try {
             currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
         } catch (IndexOutOfBoundsException e) {
-            // FIXME when a player has 0 worms left he isn't removed now, in that case just draw nothing this frame for now
-            System.out.println("FIXME IndexOutOfBoundsException in Game.draw()");
             return;
         }
 
