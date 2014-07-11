@@ -1,5 +1,6 @@
 package de.hhu.propra14.team101.Physics;
 
+import de.hhu.propra14.team101.Main;
 import de.hhu.propra14.team101.Terrain;
 import de.hhu.propra14.team101.TerrainObjects.AbstractTerrainObject;
 import de.hhu.propra14.team101.Worm;
@@ -21,6 +22,7 @@ public class BallisticMovement {
     private double time = 0;
     private boolean finished = false;
     private boolean autoStop;
+    private boolean isWorm;
 
     /**
      * Initialize a new movement
@@ -29,9 +31,9 @@ public class BallisticMovement {
      * @param startPosY     y-coordinate of the start point
      * @param posXDirection x-coordinate of the direction vector
      * @param posYDirection y-coordinate of the direction vector
-     * @param autoStop Whether movement should stop automatically
+     * @param autoStop      Whether movement should stop automatically
      */
-    public BallisticMovement(double startPosX, double startPosY, double posXDirection, double posYDirection, boolean autoStop) {
+    public BallisticMovement(double startPosX, double startPosY, double posXDirection, double posYDirection, boolean autoStop, boolean isWorm) {
         directionVector = new Vector(startPosX, startPosY, posXDirection, posYDirection);
         startVelocityX = (posXDirection - startPosX) * 0.1;
         startVelocityY = (posYDirection - startPosY) * 0.1;
@@ -40,6 +42,7 @@ public class BallisticMovement {
         startXCoordinate = startPosX;
         startYCoordinate = startPosY;
         this.autoStop = autoStop;
+        this.isWorm = isWorm;
     }
 
     private BallisticMovement(double startPosX, double startPosY, Vector vector) {
@@ -52,6 +55,7 @@ public class BallisticMovement {
 
     /**
      * Gets a value indicating whether movement is finished.
+     *
      * @return true, if the movement is finished, otherwise false.
      */
     public boolean isFinished() {
@@ -60,19 +64,19 @@ public class BallisticMovement {
 
     /**
      * Execute steps of the movement
+     *
      * @param speed count of movement steps
      * @return detected collision
      */
     public Collision move(double speed, Worm currentWorm, ArrayList<Worm> worms, Terrain terrain, double width, double height) {
-        if(!finished) {
+        if (!finished) {
             double stepSpeed = speed / 10;
-            for(int i = 0;i < 10;i++)
-            {
+            for (int i = 0; i < 10; i++) {
                 time += stepSpeed;
                 xCoordinate = startXCoordinate + (startVelocityX * time);
                 yCoordinate = startYCoordinate + (startVelocityY * time + ((g / 2) * Math.pow(time, 2)));
-                Collision collision = hasCollision(currentWorm,worms, terrain,width,height);
-                if(collision != null) {
+                Collision collision = hasCollision(currentWorm, worms, terrain, width, height);
+                if (collision != null) {
                     time -= stepSpeed;
                     xCoordinate = startXCoordinate + (startVelocityX * time);
                     yCoordinate = startYCoordinate + (startVelocityY * time + ((g / 2) * Math.pow(time, 2)));
@@ -80,10 +84,10 @@ public class BallisticMovement {
                 }
             }
 
-            if(autoStop) {
-                if(yCoordinate > startYCoordinate) finished = true;
+            if (autoStop) {
+                if (yCoordinate > startYCoordinate) finished = true;
             }
-       }
+        }
         return null;
     }
 
@@ -106,9 +110,29 @@ public class BallisticMovement {
         }
 
         try {
-            AbstractTerrainObject obj = terrain.isTerrain(this.getXCoordinate(), this.getYCoordinate());
-            if(obj != null) {
-                return new Collision(obj, CollisionType.Terrain);
+            if (isWorm) {
+                AbstractTerrainObject obj1 = terrain.isTerrain(this.getXCoordinate() + 5 * Main.sizeMultiplier, this.getYCoordinate() + 5 * Main.sizeMultiplier);
+                AbstractTerrainObject obj2 = terrain.isTerrain(this.getXCoordinate() + currentWorm.size - 5 * Main.sizeMultiplier, this.getYCoordinate()+5*Main.sizeMultiplier);
+                AbstractTerrainObject obj3 = terrain.isTerrain(this.getXCoordinate() + 5 *Main.sizeMultiplier, this.getYCoordinate() + currentWorm.size - 10 * Main.sizeMultiplier);
+                AbstractTerrainObject obj4 = terrain.isTerrain(this.getXCoordinate() + currentWorm.size - 5 * Main.sizeMultiplier, this.getYCoordinate() + currentWorm.size - 10 * Main.sizeMultiplier);
+                if (obj1 != null) {
+                    return new Collision(obj1, CollisionType.Terrain);
+                }
+                if (obj2 != null) {
+                    return new Collision(obj2, CollisionType.Terrain);
+                }
+                if (obj3 != null) {
+                    return new Collision(obj3, CollisionType.Terrain);
+                }
+                if (obj4 != null) {
+                    return new Collision(obj4, CollisionType.Terrain);
+                }
+            } else {
+                AbstractTerrainObject obj1 = terrain.isTerrain(this.getXCoordinate(), this.getYCoordinate());
+
+                if (obj1 != null) {
+                    return new Collision(obj1, CollisionType.Terrain);
+                }
             }
         } catch (IllegalArgumentException ex) {
             System.out.println(ex.getMessage());
@@ -124,6 +148,7 @@ public class BallisticMovement {
 
     /**
      * Gets the x-coordinate.
+     *
      * @return x coordinate
      */
     public double getXCoordinate() {
@@ -132,6 +157,7 @@ public class BallisticMovement {
 
     /**
      * Gets the y-coordinate
+     *
      * @return y coordinate
      */
     public double getYCoordinate() {
@@ -139,7 +165,27 @@ public class BallisticMovement {
     }
 
     /**
+     * Gets the x-coordinate.
+     *
+     * @return x coordinate
+     */
+    public double getStartXCoordinate() {
+        return (startXCoordinate);
+    }
+
+    /**
+     * Gets the y-coordinate
+     *
+     * @return y coordinate
+     */
+    public double getStartYCoordinate() {
+        return (startYCoordinate);
+    }
+
+
+    /**
      * Revert the given movement.
+     *
      * @param physics Physics to revert
      * @return Reverted movement
      */

@@ -388,7 +388,7 @@ public class Game {
                     wormArrayList.addAll(playerItem.wormList);
                 }
                 Worm currentWorm = this.getPlayers().get(turnOfPlayer).wormList.get(this.getPlayers().get(turnOfPlayer).currentWorm);
-                if (currentWorm.jump(this.getCurrentTerrain(), wormArrayList)) {
+                if (currentWorm.jump(this.getCurrentTerrain(),wormArrayList)) {
                     isJumping = false;
                 }
             }
