@@ -197,8 +197,15 @@ public class GUI {
             @Override
             public void handle(ActionEvent e) {
                 FileChooser fileChooser = new FileChooser();
+                fileChooser.setInitialFileName("map.gz");
                 File outputFile = fileChooser.showSaveDialog(main.primaryStage);
-                levelCreatorOutputPath = outputFile.toString();
+                if (outputFile != null) {
+                    levelCreatorOutputPath = outputFile.toString();
+                    // Level names have to end with ".gz" – Append it, if the user didn't say .gz
+                    if (!levelCreatorOutputPath.endsWith(".gz")) {
+                        levelCreatorOutputPath += ".gz";
+                    }
+                }
             }
         });
 
