@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static javafx.geometry.Pos.*;
-
 /**
  * Class that shows the GUI
  *
@@ -499,8 +497,7 @@ public class GUI {
         final ComboBox<String> mapSelection = new ComboBox<>();
         mapSelection.getItems().addAll("Map1", "Map2", "Map3", "Map4", "Mountain", "Plains", "Castle","Random");
         mapSelection.setValue("Map1");
-        String[] localMaps = Level.loadLocalLevels();
-        mapSelection.getItems().addAll(localMaps);
+        mapSelection.getItems().addAll(Level.loadLocalLevels());
 
         // Configure each object
         sceneTitle.setFont(new Font(20));

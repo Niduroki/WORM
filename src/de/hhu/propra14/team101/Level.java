@@ -137,15 +137,18 @@ public class Level {
      * Loads levels from a local level directory
      * @return Array of local map names
      */
-    public static String[] loadLocalLevels() {
+    public static ArrayList<String> loadLocalLevels() {
         File[] f = (new File("maps/")).listFiles();
         if (f == null) {
-            return new String[0];
+            return new ArrayList<>();
         }
 
-        String[] result = new String[f.length];
-        for (int i=0; i<result.length; i++) {
-            result[i] = f[i].toString();
+        ArrayList<String> result = new ArrayList<>();
+        for (File aFile : f) {
+            String filename = aFile.toString();
+            if (filename.endsWith(".gz")) {
+                result.add(aFile.toString());
+            }
         }
         return result;
     }
