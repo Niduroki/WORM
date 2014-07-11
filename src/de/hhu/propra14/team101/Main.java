@@ -266,6 +266,7 @@ public class Main extends Application {
                         game.doAction("pause");
                     }
                 } else if (keyEvent.getCode() == KeyCode.T && Game.online) {
+                    System.out.println("User pressed T, create a new chat");
                     Stage stage = new Stage();
                     IngameChat sw = new IngameChat(mainClass);
                     sw.start(stage);

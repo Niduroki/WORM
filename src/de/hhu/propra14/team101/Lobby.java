@@ -387,7 +387,7 @@ public class Lobby {
                         teamSelection.getSelectionModel().select(selection);
 
                         if (Game.startMe) {
-                            System.out.println("Show the chat");
+                            System.out.println("Game starts - Show the chat");
                             roomTimeline.stop();
                             Stage stage = new Stage();
                             IngameChat sw = new IngameChat();
