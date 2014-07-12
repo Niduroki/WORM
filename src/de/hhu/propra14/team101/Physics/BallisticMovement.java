@@ -112,9 +112,9 @@ public class BallisticMovement {
         try {
             if (isWorm) {
                 AbstractTerrainObject obj1 = terrain.isTerrain(this.getXCoordinate() + 5 * Main.sizeMultiplier, this.getYCoordinate() + 5 * Main.sizeMultiplier);
-                AbstractTerrainObject obj2 = terrain.isTerrain(this.getXCoordinate() + currentWorm.size - 5 * Main.sizeMultiplier, this.getYCoordinate()+5*Main.sizeMultiplier);
-                AbstractTerrainObject obj3 = terrain.isTerrain(this.getXCoordinate() + 5 *Main.sizeMultiplier, this.getYCoordinate() + currentWorm.size - 10 * Main.sizeMultiplier);
-                AbstractTerrainObject obj4 = terrain.isTerrain(this.getXCoordinate() + currentWorm.size - 5 * Main.sizeMultiplier, this.getYCoordinate() + currentWorm.size - 10 * Main.sizeMultiplier);
+                AbstractTerrainObject obj2 = terrain.isTerrain(this.getXCoordinate() + Worm.size - 5 * Main.sizeMultiplier, this.getYCoordinate()+5*Main.sizeMultiplier);
+                AbstractTerrainObject obj3 = terrain.isTerrain(this.getXCoordinate() + 5 *Main.sizeMultiplier, this.getYCoordinate() + Worm.size - 10 * Main.sizeMultiplier);
+                AbstractTerrainObject obj4 = terrain.isTerrain(this.getXCoordinate() + Worm.size - 5 * Main.sizeMultiplier, this.getYCoordinate() + Worm.size - 10 * Main.sizeMultiplier);
                 if (obj1 != null) {
                     return new Collision(obj1, CollisionType.Terrain);
                 }

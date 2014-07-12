@@ -88,7 +88,7 @@ public class Level {
 
         int indexStartPosition = 0;
         for (Player player : players) {
-            ArrayList<Worm> wormsToRemove = new ArrayList<Worm>();
+            ArrayList<Worm> wormsToRemove = new ArrayList<>();
             for (int indexWorm = 0; indexWorm < player.wormList.size(); indexWorm++) {
                 if (indexStartPosition < wormStartPoints.size() && indexWorm < wormsPerPlayer) {
                     player.wormList.get(indexWorm).setXCoordinate(wormStartPoints.get(indexStartPosition)[0] * (int) (AbstractTerrainObject.baseSize * Main.sizeMultiplier));

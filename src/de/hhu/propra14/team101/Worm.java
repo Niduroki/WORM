@@ -261,7 +261,7 @@ public class Worm {
                     terrain.removeTerrainObject(terrainObject, false);
                 } else {
                     if (terrainObject.getClass() == TriangleBuildingBlock.class) {
-                        if (direction == 'l' && ((TriangleBuildingBlock) terrainObject).getSlopedLeft() == false) {
+                        if (direction == 'l' && !((TriangleBuildingBlock) terrainObject).getSlopedLeft()) {
                             this.xCoord = this.xCoord - AbstractTerrainObject.baseSize * Main.sizeMultiplier;
                             this.yCoord = this.yCoord - AbstractTerrainObject.baseSize * Main.sizeMultiplier;
                         } else {
@@ -290,12 +290,14 @@ public class Worm {
 
         if (height > size * 1.5) {
             health -= height / 4;
-            try {
-                OggClip goodbyeClip = new OggClip("sfx/worms/Bones.ogg");
-                goodbyeClip.setGain(Main.svol);
-                goodbyeClip.play();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (!Main.headless) {
+                try {
+                    OggClip goodbyeClip = new OggClip("sfx/worms/Bones.ogg");
+                    goodbyeClip.setGain(Main.svol);
+                    goodbyeClip.play();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -376,12 +378,11 @@ public class Worm {
      * @return bullet of the shoot
      */
     public Bullet fireWeapon(double xPos, double yPos) {
-        Bullet bullet = this.weaponList.get(this.currentWeapon).fire(
+        return this.weaponList.get(this.currentWeapon).fire(
                 new BallisticMovement(this.getXCoordinate(),
                         this.getYCoordinate(),
                         xPos, yPos, false, false)
         );
-        return bullet;
     }
 
     /**

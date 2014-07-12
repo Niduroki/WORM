@@ -1,6 +1,5 @@
 package de.hhu.propra14.team101.GUIElements;
 
-import de.hhu.propra14.team101.GUIElements.ColoredListCell;
 import de.hhu.propra14.team101.Main;
 import de.hhu.propra14.team101.Networking.Exceptions.TimeoutException;
 import javafx.animation.Animation;
